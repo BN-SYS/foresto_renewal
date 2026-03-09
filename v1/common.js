@@ -88,6 +88,7 @@ const App = {
           { label: '숲해설 강사 신청', href: 'member-instructor.html' },
           { label: '사공단 소식', href: 'member-sagongdan.html' },
           { label: '동아리 소식', href: 'member-club.html' },
+          { label: '이게뭐예요', href: 'qna.html' },
         ]
       },
       {
