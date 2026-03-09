@@ -4,31 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지 - 한국숲해설가협회</title>
+    <title>마이페이지 | 한국숲해설가협회</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <style>
+        /* ── 전체 레이아웃 ── */
         .my-layout {
             display: grid;
-            grid-template-columns: 240px 1fr;
+            grid-template-columns: 220px 1fr;
             gap: 24px;
-            align-items: start
+            align-items: start;
+            padding: 32px 0 60px;
         }
 
+        /* ── 사이드바 ── */
         .my-sidebar {
             background: #fff;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
             position: sticky;
-            top: 90px
+            top: 90px;
         }
 
         .my-profile {
             text-align: center;
             padding-bottom: 20px;
             border-bottom: 1px solid #dfe6e9;
-            margin-bottom: 16px
+            margin-bottom: 16px;
         }
 
         .my-avatar {
@@ -40,23 +43,23 @@
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            margin: 0 auto 10px
+            margin: 0 auto 10px;
         }
 
         .my-name {
             font-size: 17px;
             font-weight: 700;
-            margin-bottom: 4px
+            margin-bottom: 4px;
         }
 
         .my-grade {
-            font-size: 13px;
+            font-size: 12px;
             padding: 3px 10px;
             background: #d8f3dc;
             color: #1b4332;
             border-radius: 12px;
             display: inline-block;
-            font-weight: 600
+            font-weight: 600;
         }
 
         .side-nav a {
@@ -67,397 +70,896 @@
             border-radius: 8px;
             font-size: 14px;
             color: #636e72;
-            transition: all 0.2s;
-            margin-bottom: 2px
+            transition: all .2s;
+            margin-bottom: 2px;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         .side-nav a:hover,
         .side-nav a.active {
             background: #d8f3dc;
             color: #2d6a4f;
-            font-weight: 700
-        }
-
-        .side-nav .nav-group {
-            font-size: 11px;
             font-weight: 700;
-            color: #b2bec3;
-            padding: 12px 12px 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px
         }
 
-        /* 수료증 카드 */
-        .cert-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
+        /* ── 패널 공통 ── */
+        .my-panel {
+            display: none;
+        }
+
+        .my-panel.active {
+            display: block;
+        }
+
+        /* ── 카드 섹션 ── */
+        .info-card {
             background: #fff;
-            border-radius: 10px;
-            border: 1px solid #dfe6e9;
-            margin-bottom: 10px;
-            transition: box-shadow 0.2s;
+            border-radius: 12px;
+            padding: 24px 28px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .07);
+            margin-bottom: 20px;
         }
 
-        .cert-item:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08)
-        }
-
-        .cert-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 10px;
+        .info-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #2d6a4f;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e8f0eb;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0
+            gap: 6px;
         }
 
-        .cert-info {
-            flex: 1
+        /* ── 폼 그리드 ── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 20px;
         }
 
-        .cert-name {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 4px
+        .form-grid.col1 {
+            grid-template-columns: 1fr;
         }
 
-        .cert-meta {
-            font-size: 12px;
-            color: #636e72
-        }
-
-        .cert-actions {
+        .form-row {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            align-items: flex-end
+            gap: 5px;
         }
 
-        /* PDF 수료증 미리보기 스타일 */
+        .form-row label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #74a18a;
+        }
+
+        .form-row .form-control {
+            height: 40px;
+            font-size: 14px;
+            border: 1px solid #dfe6e9;
+            border-radius: 6px;
+            padding: 0 12px;
+            color: #2d3436;
+            background: #fff;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-row .form-control:read-only {
+            background: #f7faf8;
+            color: #636e72;
+        }
+
+        .form-row .form-control:focus {
+            outline: none;
+            border-color: #40916c;
+            box-shadow: 0 0 0 3px rgba(64, 145, 108, .12);
+        }
+
+        .input-with-btn {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-with-btn .form-control {
+            flex: 1;
+        }
+
+        .btn-sub {
+            height: 40px;
+            padding: 0 14px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #fff;
+            color: #2d6a4f;
+            border: 1px solid #2d6a4f;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all .15s;
+        }
+
+        .btn-sub:hover {
+            background: #2d6a4f;
+            color: #fff;
+        }
+
+        /* ── 약관동의 ── */
+        .terms-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .terms-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: #f7faf8;
+            border-radius: 8px;
+            gap: 10px;
+        }
+
+        .terms-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terms-chk {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d6a4f;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .terms-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #2d3436;
+        }
+
+        .terms-req {
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            background: #2d6a4f;
+            padding: 2px 7px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .terms-opt {
+            font-size: 11px;
+            font-weight: 700;
+            color: #636e72;
+            background: #dfe6e9;
+            padding: 2px 7px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .terms-date {
+            font-size: 11px;
+            color: #b2bec3;
+        }
+
+        .terms-view {
+            font-size: 11px;
+            color: #40916c;
+            text-decoration: underline;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* ── 비밀번호 변경 섹션 ── */
+        .pw-inline {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px 20px;
+            align-items: end;
+        }
+
+        /* ── 저장/탈퇴 버튼 ── */
+        .action-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn-withdraw {
+            padding: 10px 22px;
+            font-size: 13px;
+            background: #fff;
+            color: #e17055;
+            border: 1px solid #e17055;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .btn-withdraw:hover {
+            background: #e17055;
+            color: #fff;
+        }
+
+        .btn-save {
+            padding: 10px 28px;
+            font-size: 13px;
+            background: #2d6a4f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .btn-save:hover {
+            background: #1b4332;
+        }
+
+        /* ── 교육이수 탭/테이블 ── */
+        .edu-filter-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid #dfe6e9;
+            margin-bottom: 16px;
+        }
+
+        .edu-tab {
+            padding: 9px 18px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #b2bec3;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            cursor: pointer;
+            transition: color .2s, border-color .2s;
+        }
+
+        .edu-tab:hover {
+            color: #40916c;
+        }
+
+        .edu-tab.active {
+            color: #2d6a4f;
+            font-weight: 700;
+            border-bottom-color: #2d6a4f;
+        }
+
+        .edu-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .edu-stat-card {
+            background: #f7faf8;
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .edu-stat-card .num {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d6a4f;
+        }
+
+        .edu-stat-card .lbl {
+            font-size: 11px;
+            color: #74a18a;
+            margin-top: 2px;
+        }
+
+        .edu-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .edu-badge.done {
+            background: #d8f3dc;
+            color: #1b4332;
+        }
+
+        .edu-badge.progress {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .edu-badge.cancel {
+            background: #f4f6f4;
+            color: #b2bec3;
+            border: 1px solid #dfe6e9;
+        }
+
+        .edu-badge.applied {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .btn-cert {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #2d6a4f;
+            border: 1px solid #2d6a4f;
+            border-radius: 4px;
+            background: #fff;
+            cursor: pointer;
+            transition: background .15s, color .15s;
+            text-decoration: none;
+        }
+
+        .btn-cert:hover {
+            background: #2d6a4f;
+            color: #fff;
+        }
+
+        .edu-page-btn {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #dfe6e9;
+            border-radius: 4px;
+            background: #fff;
+            font-size: 13px;
+            color: #636e72;
+            cursor: pointer;
+        }
+
+        .edu-page-btn:hover {
+            border-color: #40916c;
+            color: #40916c;
+        }
+
+        .edu-page-btn.active {
+            background: #2d6a4f;
+            color: #fff;
+            border-color: #2d6a4f;
+            font-weight: 700;
+        }
+
+        /* ── 모달 ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .45);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px 32px;
+            width: 400px;
+            max-width: 90vw;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, .18);
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* ── 수료증 모달 ── */
         .cert-preview {
             border: 3px solid #2d6a4f;
             border-radius: 8px;
-            padding: 32px 40px;
+            padding: 28px 36px;
             text-align: center;
-            max-width: 500px;
-            margin: 0 auto;
             background: linear-gradient(180deg, #f9fbf9, #fff);
         }
 
-        .cert-preview .header-bar {
-            background: #2d6a4f;
-            height: 8px;
-            border-radius: 4px;
-            margin-bottom: 24px
-        }
-
-        .cert-preview .cert-org {
-            font-size: 13px;
-            color: #636e72;
-            margin-bottom: 8px
-        }
-
         .cert-preview .cert-doc-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: #2d6a4f;
-            margin-bottom: 24px;
-            letter-spacing: 2px
+            margin: 16px 0;
+            letter-spacing: 2px;
         }
 
         .cert-preview .cert-body {
-            font-size: 15px;
+            font-size: 14px;
             line-height: 2;
             color: #2d3436;
-            margin-bottom: 24px;
             border-top: 1px solid #dfe6e9;
             border-bottom: 1px solid #dfe6e9;
-            padding: 16px 0
+            padding: 14px 0;
+            margin: 12px 0;
         }
 
-        .cert-preview .cert-date {
-            font-size: 14px;
-            color: #636e72;
-            margin-bottom: 20px
-        }
-
-        .cert-preview .cert-sign {
-            font-size: 14px;
-            color: #2d3436;
-            font-weight: 700
-        }
-
-        @media(max-width:800px) {
+        /* ── 반응형 ── */
+        @media(max-width:900px) {
             .my-layout {
-                grid-template-columns: 1fr
+                grid-template-columns: 1fr;
             }
 
             .my-sidebar {
-                position: static
+                position: static;
+            }
+        }
+
+        @media(max-width:640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pw-inline {
+                grid-template-columns: 1fr;
+            }
+
+            .edu-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .edu-th-hide,
+            .edu-td-hide {
+                display: none;
             }
         }
     </style>
 </head>
 
 <body>
+
     <div id="header-wrap"></div>
+
     <div class="page-header">
         <div class="container">
             <h1>마이페이지</h1>
-            <p>내 활동 내역 및 정보를 관리할 수 있습니다.</p>
+            <p></p>
         </div>
     </div>
-
-    <main class="container section">
-        <div class="my-layout">
-            <!-- 사이드바 -->
-            <div class="my-sidebar">
-                <div class="my-profile">
-                    <div class="my-avatar">🌿</div>
-                    <div class="my-name">김숲해설</div>
-                    <div class="my-grade">정회원</div>
-                    <div style="font-size:12px;color:#b2bec3;margin-top:6px">가입일 2023.05.12</div>
-                </div>
-                <nav class="side-nav">
-                    <div class="nav-group">내 정보</div>
-                    <a href="#" onclick="showPanel('info')" class="active" id="nav-info">회원정보수정</a>
-                    <a href="#" onclick="showPanel('cert')" id="nav-cert">교육이수내역</a>
-                </nav>
+    <div class="container">
+    <div class="my-layout">
+        <!-- ── 사이드바 ── -->
+        <aside class="my-sidebar">
+            <div class="my-profile">
+                <div class="my-avatar">🌿</div>
+                <div class="my-name" id="sidebarName">김숲해</div>
+                <div class="my-grade">정회원</div>
+                <div style="font-size:11px;color:#b2bec3;margin-top:6px;" id="sidebarJoin">2022.03.15 가입</div>
             </div>
+            <nav class="side-nav">
+                <a onclick="showPanel('info')" id="nav-info">회원정보 수정</a>
+                <a onclick="showPanel('cert')" id="nav-cert">교육이수내역</a>
+            </nav>
+        </aside>
 
-            <!-- 콘텐츠 -->
-            <div>
-                <!-- 회원정보 수정 -->
-                <div id="panel-info" class="card">
-                    <div class="card-header"><span class="card-title">👤 회원정보 수정</span></div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                        <div class="form-group">
-                            <label class="form-label">이름 <span class="required">*</span></label>
-                            <input type="text" class="form-control" value="김숲해설">
+        <!-- ── 메인 콘텐츠 ── -->
+        <main>
+
+            <!-- ══ 패널: 회원정보 수정 ══ -->
+            <div class="my-panel" id="panel-info">
+
+                <!-- 기본 정보 -->
+                <div class="info-card">
+                    <div class="info-card-title">기본 정보</div>
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <label>이름</label>
+                            <input class="form-control" id="infoName" value="김숲해">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">회원 ID</label>
-                            <input type="text" class="form-control" value="forest2023" disabled
-                                style="background:#f4f6f4">
+                        <div class="form-row">
+                            <label>아이디</label>
+                            <input class="form-control" id="infoId" value="forest2022" readonly>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">이메일</label>
-                            <input type="email" class="form-control" value="forest@example.com">
+                        <div class="form-row">
+                            <label>생년월일</label>
+                            <input class="form-control" id="infoBirth" value="1990-03-15" readonly>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">연락처 <span class="required">*</span></label>
-                            <input type="tel" class="form-control" value="010-1234-5678">
+                        <div class="form-row">
+                            <label>성별</label>
+                            <input class="form-control" id="infoGender" value="여성" readonly>
                         </div>
-                        <div class="form-group" style="grid-column:1/-1">
-                            <label class="form-label">주소</label>
-                            <input type="text" class="form-control" value="서울특별시 OO구 OO로 OO아파트 OOO호">
+                        <div class="form-row">
+                            <label>이메일</label>
+                            <input class="form-control" type="email" id="infoEmail" value="forest@example.com">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">소속 지역 협회</label>
-                            <select class="form-control">
-                                <option selected>서울숲해설가협회</option>
-                                <option>경기협회</option>
-                                <option>인천협회</option>
-                            </select>
+                        <div class="form-row">
+                            <label>연락처 <span style="color:#e17055;font-size:10px;">(본인인증 필요)</span></label>
+                            <div class="input-with-btn">
+                                <input class="form-control" id="infoPhone" value="010-1234-5678" readonly>
+                                <button class="btn-sub" onclick="App.toast('본인인증 서비스 준비 중입니다.')">본인인증</button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">기수</label>
-                            <input type="text" class="form-control" value="52기" disabled style="background:#f4f6f4">
-                            <div class="form-hint">기수는 관리자에 의해 설정됩니다.</div>
+                        <div class="form-row" style="grid-column:1/-1;">
+                            <label>주소 <span style="color:#e17055;font-size:10px;">(도로명주소)</span></label>
+                            <div class="input-with-btn">
+                                <input class="form-control" id="infoPostcode" value="03152" style="max-width:120px;"
+                                    readonly placeholder="우편번호">
+                                <button class="btn-sub" onclick="App.toast('주소 API 서비스 준비 중입니다.')">주소 검색</button>
+                            </div>
+                            <input class="form-control" id="infoAddr1" value="서울특별시 종로구 삼청로 00" readonly
+                                style="margin-top:6px;">
+                            <input class="form-control" id="infoAddr2" placeholder="상세주소" style="margin-top:6px;">
                         </div>
                     </div>
-                    <div style="text-align:right;margin-top:8px">
-                        <button class="btn btn-primary" onclick="App.toast('회원정보가 수정되었습니다.')">저장하기</button>
+                </div>
+
+                <!-- 협회 정보 -->
+                <div class="info-card">
+                    <div class="info-card-title">협회 정보</div>
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <label>가입일</label>
+                            <input class="form-control" id="infoJoinDate" value="2022-03-15" readonly>
+                        </div>
+                        <div class="form-row">
+                            <label>기수</label>
+                            <input class="form-control" id="infoBatch" value="15기" readonly>
+                        </div>
+                        <div class="form-row">
+                            <label>소속 지역협회</label>
+                            <select class="form-control" id="infoRegion">
+                                <option>서울</option>
+                                <option>경기</option>
+                                <option selected>인천</option>
+                                <option>강원</option>
+                                <option>충북</option>
+                                <option>충남</option>
+                                <option>전북</option>
+                                <option>전남</option>
+                                <option>경북</option>
+                                <option>경남</option>
+                                <option>제주</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>소속 동아리</label>
+                            <select class="form-control" id="infoClub">
+                                <option value="">동아리 미가입</option>
+                                <option selected>나무반지</option>
+                                <option>초록발자국</option>
+                                <option>숲소리</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 비밀번호 변경 -->
-                <div id="panel-pw" class="card" style="display:none">
-                    <div class="card-header"><span class="card-title">🔒 비밀번호 변경</span></div>
-                    <div style="max-width:400px">
-                        <div class="form-group">
-                            <label class="form-label">현재 비밀번호 <span class="required">*</span></label>
-                            <input type="password" class="form-control" placeholder="현재 비밀번호를 입력하세요">
+                <div class="info-card">
+                    <div class="info-card-title">비밀번호 변경</div>
+                    <div class="pw-inline">
+                        <div class="form-row">
+                            <label>현재 비밀번호</label>
+                            <input class="form-control" type="password" id="pwCurrent" placeholder="현재 비밀번호">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">새 비밀번호 <span class="required">*</span></label>
-                            <input type="password" class="form-control" placeholder="새 비밀번호 (8자 이상)">
+                        <div class="form-row">
+                            <label>새 비밀번호</label>
+                            <input class="form-control" type="password" id="pwNew" placeholder="영문+숫자+특수 8자 이상">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">새 비밀번호 확인 <span class="required">*</span></label>
-                            <input type="password" class="form-control" placeholder="새 비밀번호를 한 번 더 입력하세요">
+                        <div class="form-row">
+                            <label>새 비밀번호 확인</label>
+                            <div class="input-with-btn">
+                                <input class="form-control" type="password" id="pwConfirm" placeholder="비밀번호 재입력">
+                                <button class="btn-sub" onclick="changePw()">변경</button>
+                            </div>
                         </div>
-                        <button class="btn btn-primary" onclick="App.toast('비밀번호가 변경되었습니다.')">변경하기</button>
                     </div>
+                    <p id="pwMsg" style="font-size:12px;margin-top:8px;"></p>
                 </div>
 
-                <!-- 교육이수내역 -->
-                <div id="panel-cert" class="card" style="display:none">
-                    <div class="card-header">
-                        <span class="card-title">🎓 교육이수내역</span>
-                        <span class="badge badge-green">총 4건</span>
-                    </div>
-                    <div class="alert alert-info" style="margin-bottom:16px">
-                        💡 <span>수료 처리된 강좌에 한해 수료증을 다운로드 받을 수 있습니다.</span>
-                    </div>
-                    <div id="certList"></div>
+                <!-- 약관동의 -->
+                <div class="info-card">
+                    <div class="info-card-title">약관동의 내역</div>
+                    <div class="terms-list" id="termsList"></div>
                 </div>
 
-                <!-- 탈퇴 -->
-                <div id="panel-withdraw" class="card" style="display:none">
-                    <div class="card-header"><span class="card-title">🚪 탈퇴하기</span></div>
-                    <div class="alert alert-warning" style="margin-bottom:16px">
-                        ⚠️ <span>탈퇴 시 모든 활동 내역 및 수료증 정보가 삭제됩니다. 신중히 결정해주세요.</span>
-                    </div>
-                    <div style="max-width:400px">
-                        <div class="form-group">
-                            <label class="form-label">탈퇴 사유</label>
-                            <textarea class="form-control" rows="4" placeholder="탈퇴 사유를 입력해주세요 (선택)."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label style="display:flex;gap:8px;align-items:center;cursor:pointer;font-size:14px">
-                                <input type="checkbox"> 위 내용을 확인하였으며 탈퇴에 동의합니다.
-                            </label>
-                        </div>
-                        <button class="btn btn-danger" onclick="App.toast('탈퇴 처리가 완료되었습니다.', 'error')">탈퇴하기</button>
-                    </div>
+                <!-- 저장/탈퇴 -->
+                <div class="action-row">
+                    <button class="btn-withdraw" onclick="openWithdraw()">탈퇴하기</button>
+                    <button class="btn-save" onclick="saveInfo()">저장하기</button>
                 </div>
+            </div><!-- /panel-info -->
 
-                <!-- 내가 쓴 글 -->
-                <div id="panel-myposts" class="card" style="display:none">
-                    <div class="card-header"><span class="card-title">📝 내가 쓴 글</span></div>
-                    <div class="table-wrap">
-                        <table>
+            <!-- ══ 패널: 교육이수내역 ══ -->
+            <div class="my-panel" id="panel-cert">
+                <div class="info-card">
+                    <div class="info-card-title">📋 교육이수내역</div>
+
+                    <div class="edu-stats">
+                        <div class="edu-stat-card">
+                            <div class="num" id="statTotal">0</div>
+                            <div class="lbl">전체</div>
+                        </div>
+                        <div class="edu-stat-card">
+                            <div class="num" id="statDone">0</div>
+                            <div class="lbl">이수완료</div>
+                        </div>
+                        <div class="edu-stat-card">
+                            <div class="num" id="statProgress">0</div>
+                            <div class="lbl">수강중</div>
+                        </div>
+                        <div class="edu-stat-card">
+                            <div class="num" id="statApplied">0</div>
+                            <div class="lbl">신청완료</div>
+                        </div>
+                    </div>
+
+                    <div class="edu-filter-tabs">
+                        <button class="edu-tab active" onclick="filterEdu('all',this)">전체</button>
+                        <button class="edu-tab" onclick="filterEdu('done',this)">이수완료</button>
+                        <button class="edu-tab" onclick="filterEdu('progress',this)">수강중</button>
+                        <button class="edu-tab" onclick="filterEdu('applied',this)">신청완료</button>
+                        <button class="edu-tab" onclick="filterEdu('cancel',this)">취소</button>
+                    </div>
+
+                    <div style="overflow-x:auto;">
+                        <table class="board-table" style="min-width:640px;width:100%;">
                             <thead>
                                 <tr>
-                                    <th>번호</th>
-                                    <th>게시판</th>
-                                    <th>제목</th>
-                                    <th>작성일</th>
+                                    <th style="width:44px;">NO.</th>
+                                    <th>강좌명</th>
+                                    <th style="width:120px;" class="edu-th-hide">구분</th>
+                                    <th style="width:110px;" class="edu-th-hide">수강일자</th>
+                                    <th style="width:80px;">이수시간</th>
+                                    <th style="width:80px;">상태</th>
+                                    <th style="width:80px;">수료증</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="eduTableBody">
                                 <tr>
-                                    <td>5</td>
-                                    <td><span class="badge badge-green">동아리소식</span></td>
-                                    <td>3월 정기모임 후기 공유합니다</td>
-                                    <td>2026.03.07</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td><span class="badge badge-blue">자유게시판</span></td>
-                                    <td>봄 숲 탐방 추천 코스 공유</td>
-                                    <td>2026.02.28</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><span class="badge badge-orange">사공단소식</span></td>
-                                    <td>2월 봉사 후기</td>
-                                    <td>2026.02.20</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><span class="badge badge-green">동아리소식</span></td>
-                                    <td>신입 회원 환영합니다!</td>
-                                    <td>2026.02.10</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td><span class="badge badge-blue">자유게시판</span></td>
-                                    <td>처음 인사드립니다 :)</td>
-                                    <td>2023.05.15</td>
+                                    <td colspan="7" style="text-align:center;padding:32px;color:#b2bec3;">데이터를 불러오는
+                                        중...</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                    <div id="eduPagination"
+                        style="display:flex;justify-content:center;gap:4px;margin-top:16px;flex-wrap:wrap;"></div>
                 </div>
-            </div>
-        </div>
-    </main>
+            </div><!-- /panel-cert -->
 
-    <!-- 수료증 미리보기 모달 -->
-    <div class="modal-overlay" id="certModal">
-        <div class="modal" style="max-width:560px">
-            <div class="modal-header">
-                <h3>📄 수료증 미리보기</h3>
-                <button class="modal-close" onclick="App.closeModal('certModal')">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="cert-preview" id="certPreviewContent"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary"
-                    onclick="App.toast('수료증 PDF 다운로드를 시작합니다.', 'success');App.closeModal('certModal')">
-                    ⬇️ PDF 다운로드
-                </button>
-                <button class="btn btn-gray" onclick="App.closeModal('certModal')">닫기</button>
-            </div>
-        </div>
+        </main>
+    </div>
     </div>
 
     <div id="footer-wrap"></div>
+
+    <!-- ── 탈퇴 모달 ── -->
+    <div class="modal-overlay" id="withdrawModal">
+        <div class="modal-box">
+            <div class="modal-title">회원 탈퇴</div>
+            <p style="font-size:14px;color:#636e72;line-height:1.7;margin-bottom:14px;">탈퇴 시 모든 정보가 삭제되며 복구가
+                불가능합니다.<br>탈퇴 사유를 입력해주세요.</p>
+            <textarea id="withdrawReason" rows="4"
+                style="width:100%;border:1px solid #dfe6e9;border-radius:6px;padding:10px;font-size:13px;resize:none;box-sizing:border-box;"
+                placeholder="탈퇴 사유를 입력하세요."></textarea>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:12px;cursor:pointer;">
+                <input type="checkbox" id="withdrawAgree" style="accent-color:#e17055;"> 위 내용을 확인하였으며 탈퇴에 동의합니다.
+            </label>
+            <div class="modal-actions">
+                <button class="btn-sub" onclick="closeWithdraw()">취소</button>
+                <button class="btn-withdraw" onclick="doWithdraw()">탈퇴하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 수료증 모달 ── -->
+    <div class="modal-overlay" id="certModal">
+        <div class="modal-box" style="width:520px;">
+            <div id="certPreviewArea"></div>
+            <div class="modal-actions">
+                <button class="btn-sub"
+                    onclick="document.getElementById('certModal').classList.remove('open')">닫기</button>
+                <button class="btn-save" onclick="App.toast('수료증 다운로드가 준비 중입니다.')">다운로드</button>
+            </div>
+        </div>
+    </div>
     <script src="common.js"></script>
     <script>
-        document.getElementById('header-wrap').innerHTML = App.renderHeader();
+        /* ── 헤더/푸터 ── */
+        document.getElementById('header-wrap').innerHTML = App.renderHeader('마이페이지');
         document.getElementById('footer-wrap').innerHTML = App.renderFooter();
 
-        const CERTS = [
-            { id: 1, name: '숲해설가 전문가과정 52기', period: '2023.04.01 ~ 2023.06.30', status: '수료', date: '2023.07.05', cat: 'edu' },
-            { id: 2, name: '직무교육 - 안전관리과정', period: '2024.03.15 (1일)', status: '수료', date: '2024.03.15', cat: 'job' },
-            { id: 3, name: '역량강화특강 - 해설기법 심화', period: '2025.04.10 ~ 2025.04.11', status: '수료', date: '2025.04.12', cat: 'special' },
-            { id: 4, name: '시민아카데미 봄 숲 이야기', period: '2026.03.22 (예정)', status: '신청완료', date: '-', cat: 'academy' },
-        ];
-        const CAT_ICON = { edu: '🌲', job: '📋', special: '📚', academy: '🌿' };
-        const CAT_BG = { edu: '#d8f3dc', job: '#e3f2fd', special: '#f3e5f5', academy: '#fff3e0' };
+        /* ── 패널 전환 ── */
+        function showPanel(name) {
+            document.querySelectorAll('.my-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.side-nav a').forEach(a => a.classList.remove('active'));
+            document.getElementById('panel-' + name).classList.add('active');
+            document.getElementById('nav-' + name).classList.add('active');
+            if (name === 'cert') renderEdu();
+        }
 
-        document.getElementById('certList').innerHTML = CERTS.map(c => `
-    <div class="cert-item">
-      <div class="cert-icon" style="background:${CAT_BG[c.cat]}">${CAT_ICON[c.cat]}</div>
-      <div class="cert-info">
-        <div class="cert-name">${c.name}</div>
-        <div class="cert-meta">📅 교육 기간: ${c.period}</div>
-        ${c.status === '수료' ? `<div class="cert-meta" style="color:#40916c">✅ 수료일: ${c.date}</div>` : ''}
+        /* ── 약관 데이터 ── */
+        const TERMS = [
+            { id: 't1', label: '이용약관 동의', req: true, agreed: true, date: '2022-03-15' },
+            { id: 't2', label: '개인정보 수집·이용 동의', req: true, agreed: true, date: '2022-03-15' },
+            { id: 't3', label: '개인정보 제3자 제공 동의', req: false, agreed: false, date: null },
+            { id: 't4', label: '마케팅 정보 수신 동의 (이메일)', req: false, agreed: true, date: '2023-01-10' },
+            { id: 't5', label: '마케팅 정보 수신 동의 (SMS)', req: false, agreed: false, date: null },
+        ];
+
+        function renderTerms() {
+            const el = document.getElementById('termsList');
+            el.innerHTML = TERMS.map(t => `
+    <div class="terms-item">
+      <div class="terms-item-left">
+        <input type="checkbox" class="terms-chk" id="${t.id}" ${t.agreed ? 'checked' : ''} ${t.req ? 'disabled' : ''}>
+        <label for="${t.id}" class="terms-label" style="cursor:pointer;">${t.label}</label>
+        <span class="${t.req ? 'terms-req' : 'terms-opt'}">${t.req ? '필수' : '선택'}</span>
       </div>
-      <div class="cert-actions">
-        <span class="badge ${c.status === '수료' ? 'badge-green' : 'badge-orange'}">${c.status}</span>
-        ${c.status === '수료' ?
-                `<button class="btn btn-primary btn-sm" onclick="openCertModal(${c.id})">📄 수료증 보기</button>` :
-                `<span style="font-size:12px;color:#b2bec3">수료 후 발급</span>`
-            }
+      <div style="display:flex;align-items:center;gap:10px;">
+        ${t.date ? `<span class="terms-date">동의일: ${t.date}</span>` : '<span class="terms-date">미동의</span>'}
+        <span class="terms-view">내용 보기</span>
       </div>
     </div>
   `).join('');
+        }
+        renderTerms();
 
-        function openCertModal(certId) {
-            const c = CERTS.find(x => x.id === certId);
-            document.getElementById('certPreviewContent').innerHTML = `
-      <div class="header-bar"></div>
-      <div class="cert-org">사단법인 한국숲해설가협회</div>
+        /* ── 비밀번호 변경 ── */
+        function changePw() {
+            const cur = document.getElementById('pwCurrent').value.trim();
+            const nw = document.getElementById('pwNew').value.trim();
+            const cf = document.getElementById('pwConfirm').value.trim();
+            const msg = document.getElementById('pwMsg');
+            if (!cur || !nw || !cf) { msg.style.color = '#e17055'; msg.textContent = '모든 비밀번호 항목을 입력해주세요.'; return; }
+            if (nw !== cf) { msg.style.color = '#e17055'; msg.textContent = '새 비밀번호가 일치하지 않습니다.'; return; }
+            if (nw.length < 8) { msg.style.color = '#e17055'; msg.textContent = '비밀번호는 8자 이상이어야 합니다.'; return; }
+            msg.style.color = '#2d6a4f';
+            msg.textContent = '비밀번호가 변경되었습니다.';
+            document.getElementById('pwCurrent').value = '';
+            document.getElementById('pwNew').value = '';
+            document.getElementById('pwConfirm').value = '';
+        }
+
+        /* ── 저장 ── */
+        function saveInfo() { App.toast('회원정보가 저장되었습니다.'); }
+
+        /* ── 탈퇴 모달 ── */
+        function openWithdraw() { document.getElementById('withdrawModal').classList.add('open'); }
+        function closeWithdraw() { document.getElementById('withdrawModal').classList.remove('open'); }
+        function doWithdraw() {
+            if (!document.getElementById('withdrawAgree').checked) { App.toast('탈퇴 동의 체크박스를 선택해주세요.'); return; }
+            App.toast('탈퇴 처리 완료 (샘플)');
+            closeWithdraw();
+        }
+
+        /* ── 교육이수 데이터 ── */
+        const ALL_EDU = [
+            { id: 1, title: '숲해설가 전문과정 1기', type: '전문과정', date: '2024-03-01', hours: 40, status: 'done', cert: true },
+            { id: 2, title: '식물생태 심화 특강', type: '시민아카데미', date: '2024-05-10', hours: 8, status: 'done', cert: true },
+            { id: 3, title: '숲치유 전문가 과정', type: '직무교육', date: '2024-07-20', hours: 16, status: 'done', cert: true },
+            { id: 4, title: '생태 해설 기법 워크숍', type: '역량강화', date: '2024-09-05', hours: 8, status: 'done', cert: false },
+            { id: 5, title: '산림교육 전문가 특강', type: '전문과정', date: '2024-11-01', hours: 24, status: 'done', cert: true },
+            { id: 6, title: '조류 생태 관찰 실습', type: '시민아카데미', date: '2025-01-15', hours: 6, status: 'done', cert: false },
+            { id: 7, title: '2025 숲해설 직무역량 강화', type: '직무교육', date: '2025-03-10', hours: 16, status: 'progress', cert: false },
+            { id: 8, title: '곤충 생태계 해설 워크숍', type: '역량강화', date: '2025-04-01', hours: 8, status: 'applied', cert: false },
+            { id: 9, title: '숲 환경 교육 지도사 과정', type: '전문과정', date: '2025-05-15', hours: 32, status: 'applied', cert: false },
+            { id: 10, title: '맹그로브 해설 기법 특강', type: '시민아카데미', date: '2024-02-20', hours: 4, status: 'cancel', cert: false },
+            { id: 11, title: '산림치유지도사 전문과정', type: '전문과정', date: '2023-09-01', hours: 40, status: 'done', cert: true },
+            { id: 12, title: '식용식물 해설 실습', type: '역량강화', date: '2023-06-15', hours: 8, status: 'done', cert: false },
+        ];
+
+        const EDU_STATUS = {
+            done: { label: '이수완료', cls: 'done' },
+            progress: { label: '수강중', cls: 'progress' },
+            applied: { label: '신청완료', cls: 'applied' },
+            cancel: { label: '취소', cls: 'cancel' },
+        };
+
+        let eduFilter = 'all';
+        let eduPage = 1;
+        const EDU_PAGE_SIZE = 8;
+
+        function filterEdu(type, btn) {
+            eduFilter = type;
+            eduPage = 1;
+            document.querySelectorAll('.edu-tab').forEach(t => t.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderEduTable();
+        }
+
+        function renderEdu() {
+            /* 통계 */
+            document.getElementById('statTotal').textContent = ALL_EDU.length;
+            document.getElementById('statDone').textContent = ALL_EDU.filter(e => e.status === 'done').length;
+            document.getElementById('statProgress').textContent = ALL_EDU.filter(e => e.status === 'progress').length;
+            document.getElementById('statApplied').textContent = ALL_EDU.filter(e => e.status === 'applied').length;
+            renderEduTable();
+        }
+
+        function renderEduTable() {
+            const filtered = eduFilter === 'all' ? ALL_EDU : ALL_EDU.filter(e => e.status === eduFilter);
+            const total = filtered.length;
+            const start = (eduPage - 1) * EDU_PAGE_SIZE;
+            const rows = filtered.slice(start, start + EDU_PAGE_SIZE);
+            const tbody = document.getElementById('eduTableBody');
+
+            if (rows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:#b2bec3;">해당 내역이 없습니다.</td></tr>`;
+            } else {
+                tbody.innerHTML = rows.map((e, i) => {
+                    const s = EDU_STATUS[e.status] || { label: e.status, cls: '' };
+                    return `
+        <tr>
+          <td style="text-align:center;">${start + i + 1}</td>
+          <td>${e.title}</td>
+          <td class="edu-td-hide" style="text-align:center;">${e.type}</td>
+          <td class="edu-td-hide" style="text-align:center;">${e.date}</td>
+          <td style="text-align:center;">${e.hours}시간</td>
+          <td style="text-align:center;"><span class="edu-badge ${s.cls}">${s.label}</span></td>
+          <td style="text-align:center;">${e.cert ? `<button class="btn-cert" onclick="openCertModal(${e.id})">PDF</button>` : '-'}</td>
+        </tr>`;
+                }).join('');
+            }
+
+            /* 페이지네이션 */
+            const totalPages = Math.ceil(total / EDU_PAGE_SIZE);
+            const pg = document.getElementById('eduPagination');
+            if (totalPages <= 1) { pg.innerHTML = ''; return; }
+            let html = '';
+            for (let p = 1; p <= totalPages; p++) {
+                html += `<button class="edu-page-btn${p === eduPage ? ' active' : ''}" onclick="goEduPage(${p})">${p}</button>`;
+            }
+            pg.innerHTML = html;
+        }
+
+        function goEduPage(p) { eduPage = p; renderEduTable(); }
+
+        /* ── 수료증 모달 ── */
+        function openCertModal(id) {
+            const e = ALL_EDU.find(x => x.id === id);
+            if (!e) return;
+            document.getElementById('certPreviewArea').innerHTML = `
+    <div class="cert-preview">
+      <div style="font-size:13px;color:#636e72;margin-bottom:4px;">한국숲해설가협회</div>
       <div class="cert-doc-title">수 료 증</div>
       <div class="cert-body">
-        성&nbsp;&nbsp;&nbsp;&nbsp;명: <strong>김 숲 해 설</strong><br>
-        과&nbsp;&nbsp;&nbsp;&nbsp;정: <strong>${c.name}</strong><br>
-        교육기간: <strong>${c.period}</strong><br><br>
-        위 사람은 상기 과정을 성실히 이수하였으므로<br>이 증서를 수여합니다.
+        위 사람은 <strong>${e.title}</strong> 과정을<br>
+        성실히 이수하였기에 이 증서를 드립니다.<br>
+        이수시간: <strong>${e.hours}시간</strong>
       </div>
-      <div class="cert-date">2026년 03월 09일</div>
-      <div class="cert-sign">
-        사단법인 한국숲해설가협회<br>상임대표이사 홍 길 동
-      </div>
-    `;
-            App.openModal('certModal');
+      <div style="font-size:13px;color:#636e72;margin-bottom:8px;">수료일: ${e.date}</div>
+      <div style="font-size:14px;font-weight:700;color:#2d3436;">한국숲해설가협회장</div>
+    </div>`;
+            document.getElementById('certModal').classList.add('open');
         }
 
-        function showPanel(name) {
-            ['info', 'pw', 'cert', 'withdraw', 'myposts'].forEach(p => {
-                document.getElementById(`panel-${p}`).style.display = p === name ? 'block' : 'none';
-                document.getElementById(`nav-${p}`).classList.toggle('active', p === name);
-            });
-        }
+        /* ── 초기화 ── */
+        showPanel('info');
     </script>
 </body>
+
 </html>
