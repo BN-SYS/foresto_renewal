@@ -58,14 +58,14 @@ const App = {
       {
         label: '협회소개', href: '#',
         children: [
-          { label: '인사말',          href: '#' },
-          { label: '미션 & 비전',     href: '#' },
-          { label: '주요사업',        href: '#' },
-          { label: '연혁',            href: '#' },
-          { label: '조직도 & 임원진', href: '#' },
-          { label: '전국 지역협회',   href: '#' },
-          { label: '정관',            href: '#' },
-          { label: '오시는 길',       href: '#' },
+          { label: '인사말',          href: 'about.html' },
+          { label: '미션 & 비전',     href: 'about-vision.html' },
+          { label: '주요사업',        href: 'about-project.html' },
+          { label: '연혁',            href: 'about-history.html' },
+          { label: '조직도 & 임원진', href: 'about-members.html' },
+          { label: '전국 지역협회',   href: 'about-regions.html' },
+          { label: '정관',            href: 'about-constitution.html' },
+          { label: '오시는 길',       href: 'about-contact.html' },
         ]
       },
       {

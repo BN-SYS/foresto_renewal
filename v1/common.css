@@ -165,6 +165,23 @@ a.nav-item.active {
   white-space:nowrap;
 }
 
+/* ── 공통 페이지 히어로 (전 페이지 공용) */
+.page-hero {
+  background: var(--green-main);
+  padding: 36px 0;
+}
+.page-hero h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.page-hero p {
+  font-size: 14px;
+  color: rgba(255,255,255,.8);
+}
+
+
 /* =============================================
    버튼
    ============================================= */
