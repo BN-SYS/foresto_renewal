@@ -1,5 +1,8 @@
 # 한국숲해설가협회 홈페이지 구축 기획문서
 
+## [사이트맵](https://bn-sys.github.io/foresto_renewal/v1/sitemap.html)
+## [전체 프로토타입 보기](https://bn-sys.github.io/foresto_renewal/v1)
+
 > **프로젝트명** 한국숲해설가협회 홈페이지 구축_재견적  
 > **문서버전** V0.1  
 > **작성일** 2026-03-05 / **최종수정** 2026-03-09  
