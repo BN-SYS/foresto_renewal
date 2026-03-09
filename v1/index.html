@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,289 +8,388 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="common.css">
   <style>
-    /* 히어로 */
+    /* ── 히어로 */
     .hero {
-      background:linear-gradient(135deg,#1b4332 0%,#2d6a4f 55%,#40916c 100%);
-      color:#fff; min-height:380px; display:flex; align-items:center;
-      position:relative; overflow:hidden;
+      background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 55%, #40916c 100%);
+      color: #fff;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
     }
-    .hero::before {
-      content:'🌲🌿🍃🌳'; position:absolute;
-      font-size:90px; opacity:.05; white-space:nowrap;
-      top:50%; transform:translateY(-50%); left:-10px; letter-spacing:30px;
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      padding: 48px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
     }
-    .hero-inner { position:relative; z-index:1; padding:48px 24px; max-width:1200px; margin:0 auto; width:100%; }
-    .hero h2    { font-size:34px; font-weight:700; line-height:1.3; margin-bottom:14px; }
-    .hero p     { font-size:15px; opacity:.85; margin-bottom:28px; }
-    .hero-btns  { display:flex; gap:12px; flex-wrap:wrap; }
+    .hero h2   { font-size: 34px; font-weight: 700; line-height: 1.3; margin-bottom: 14px; }
+    .hero p    { font-size: 15px; opacity: .85; margin-bottom: 28px; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
 
-    /* 빠른 링크 */
-    .quick-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; padding:20px 0; }
+    /* ── 빠른 링크 */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      padding: 20px 0;
+    }
     .quick-item {
-      background:#fff; border-radius:12px; padding:20px 10px;
-      text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.06);
-      cursor:pointer; transition:all .22s;
-      border:2px solid transparent;
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      cursor: pointer;
+      transition: all .22s;
+      border: 2px solid transparent;
     }
-    .quick-item:hover { border-color:var(--green-main); transform:translateY(-3px); box-shadow:0 8px 20px rgba(64,145,108,.15); }
-    .quick-item .qi-icon { font-size:28px; margin-bottom:8px; }
-    .quick-item span     { font-size:13px; font-weight:600; color:var(--green-dark); }
+    .quick-item:hover {
+      border-color: var(--green-main);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(64,145,108,.15);
+    }
+    .quick-item span { font-size: 13px; font-weight: 600; color: var(--green-dark); }
 
-    /* 메인 그리드 */
-    .main-grid  { display:grid; grid-template-columns:2fr 1fr; gap:24px; }
-    .board-cols { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+    /* ── 메인 그리드 */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
 
-    /* 팝업 */
+    /* ── 왼쪽 컬럼 */
+    .left-col  { display: flex; flex-direction: column; gap: 16px; }
+    .board-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── 오른쪽 컬럼 */
+    .right-col { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── 팝업 */
     .popup-wrap {
-      position:fixed; bottom:80px; right:24px; z-index:200;
-      width:290px; background:#fff; border-radius:12px;
-      box-shadow:0 8px 32px rgba(0,0,0,.14);
-      border-top:4px solid var(--green-main); overflow:hidden;
+      position: fixed; bottom: 80px; right: 24px; z-index: 200;
+      width: 290px; background: #fff; border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.14);
+      border-top: 4px solid var(--green-main); overflow: hidden;
     }
     .popup-head {
-      background:var(--green-main); color:#fff; padding:11px 16px;
-      display:flex; justify-content:space-between; align-items:center;
-      font-size:14px; font-weight:700;
+      background: var(--green-main); color: #fff; padding: 11px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 14px; font-weight: 700;
     }
-    .popup-head button { background:none; border:none; color:#fff; font-size:18px; cursor:pointer; line-height:1; }
-    .popup-body { padding:14px 16px; font-size:13px; line-height:1.7; color:var(--gray-dark); }
+    .popup-head button { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; line-height: 1; }
+    .popup-body { padding: 14px 16px; font-size: 13px; line-height: 1.7; color: var(--gray-dark); }
     .popup-foot {
-      padding:9px 16px; background:var(--gray-bg);
-      display:flex; justify-content:space-between; align-items:center;
+      padding: 9px 16px; background: var(--gray-bg);
+      display: flex; justify-content: space-between; align-items: center;
     }
 
-    /* 미니 캘린더 */
-    .cal-nav  { background:var(--green-dark); color:#fff; padding:13px 16px; display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:15px; }
-    .cal-nav button { background:none; border:none; color:#fff; font-size:18px; cursor:pointer; }
-    .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); }
-    .cal-dh   { text-align:center; font-size:11px; font-weight:700; padding:7px 3px; background:var(--green-pale); color:var(--green-dark); }
-    .cal-dh:first-child { color:var(--danger); }
-    .cal-dh:last-child  { color:#1565c0; }
-    .cal-cell { text-align:center; padding:5px 3px; font-size:12px; cursor:pointer; min-height:32px; }
-    .cal-cell:hover { background:var(--green-pale); border-radius:4px; }
-    .cal-cell.today { background:var(--green-main); color:#fff; border-radius:50%; font-weight:700; }
-    .cal-cell.has-event::after { content:'•'; display:block; color:var(--accent); font-size:10px; line-height:1; }
-    .cal-cell.sun { color:var(--danger); }
-    .cal-cell.sat { color:#1565c0; }
-
-    /* SNS */
-    .sns-row { display:flex; gap:8px; }
-    .sns-btn { flex:1; padding:9px; border-radius:8px; border:none; cursor:pointer; font-size:12px; font-weight:700; transition:opacity .2s; }
-    .sns-btn:hover { opacity:.85; }
-    .sns-naver { background:#03c75a; color:#fff; }
-    .sns-yt    { background:#ff0000; color:#fff; }
-    .sns-insta { background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:#fff; }
-
-    @media(max-width:900px){
-      .main-grid  { grid-template-columns:1fr; }
-      .board-cols { grid-template-columns:1fr; }
-      .quick-grid { grid-template-columns:repeat(3,1fr); }
+    /* ── 미니 캘린더 */
+    .cal-nav {
+      background: var(--green-dark); color: #fff;
+      padding: 13px 16px; display: flex;
+      justify-content: space-between; align-items: center;
+      font-weight: 700; font-size: 15px;
     }
-    @media(max-width:480px){
-      .hero h2    { font-size:22px; }
-      .quick-grid { grid-template-columns:repeat(2,1fr); }
+    .cal-nav button { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+    .cal-dh {
+      text-align: center; font-size: 11px; font-weight: 700;
+      padding: 7px 3px; background: var(--green-pale); color: var(--green-dark);
+    }
+    .cal-dh:first-child { color: var(--danger); }
+    .cal-dh:last-child  { color: #1565c0; }
+    .cal-cell {
+      text-align: center; padding: 5px 3px;
+      font-size: 12px; cursor: pointer; min-height: 32px;
+    }
+    .cal-cell:hover     { background: var(--green-pale); border-radius: 4px; }
+    .cal-cell.today     { background: var(--green-main); color: #fff; border-radius: 50%; font-weight: 700; }
+    .cal-cell.has-event::after { content: '•'; display: block; color: var(--accent); font-size: 10px; line-height: 1; }
+    .cal-cell.sun { color: var(--danger); }
+    .cal-cell.sat { color: #1565c0; }
+
+    /* ── SNS 카드 */
+    .sns-card { display: flex; flex-direction: column; }
+    .sns-card .card-header { margin-bottom: 0; }
+    .sns-col {
+      display: flex;
+      flex-direction: row;   /* 가로 일렬 */
+      gap: 8px;
+      padding-top: 12px;
+    }
+    .sns-btn {
+      flex: 1;
+      padding: 40px 4px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: opacity .2s;
+      white-space: nowrap;
+    }
+    .sns-btn:hover { opacity: .85; }
+    .sns-naver { background: #03c75a; color: #fff; }
+    .sns-yt    { background: #ff0000; color: #fff; }
+    .sns-insta {
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: #fff;
+    }
+
+    /* ── 반응형 */
+    @media (max-width: 900px) {
+      .main-grid  { grid-template-columns: 1fr; }
+      .board-cols { grid-template-columns: 1fr; }
+      .quick-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .hero h2    { font-size: 22px; }
+      .quick-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
+
 <body>
 
-<!-- 헤더 -->
-<div id="hdr"></div>
+  <!-- 헤더 -->
+  <div id="hdr"></div>
 
-<!-- 팝업 공지 -->
-<div class="popup-wrap" id="popup">
-  <div class="popup-head">
-    공지사항
-    <button onclick="document.getElementById('popup').style.display='none'">×</button>
-  </div>
-  <div class="popup-body">
-    <strong>2026년 55기 전문가과정 모집</strong><br>
-    접수: 2026.03.01 ~ 03.20<br>
-    교육: 2026.04.01 ~ 06.30<br>
-    <a href="course-list.html" style="color:var(--green-main);font-weight:700">자세히 보기 →</a>
-  </div>
-  <div class="popup-foot">
-    <label style="font-size:12px;cursor:pointer"><input type="checkbox"> 오늘 하루 보지 않기</label>
-    <button class="btn btn-primary btn-xs" onclick="document.getElementById('popup').style.display='none'">닫기</button>
-  </div>
-</div>
-
-<!-- 히어로 -->
-<div class="hero">
-  <div class="hero-inner">
-    <h2>숲이 주는 이야기를<br>함께 나누는 사람들</h2>
-    <p>한국숲해설가협회는 숲과 사람을 잇는 전문 해설가를 양성하고<br>자연과 함께하는 다양한 활동을 이어갑니다.</p>
-    <div class="hero-btns">
-      <a href="course-list.html" class="btn btn-accent">전문가과정 신청</a>
-      <a href="#" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.5)">협회 소개</a>
+  <!-- 팝업 공지 -->
+  <div class="popup-wrap" id="popup">
+    <div class="popup-head">
+      공지사항
+      <button onclick="document.getElementById('popup').style.display='none'">x</button>
+    </div>
+    <div class="popup-body">
+      <strong>2026년 55기 전문가과정 모집</strong><br>
+      접수: 2026.03.01 ~ 03.20<br>
+      교육: 2026.04.01 ~ 06.30<br>
+      <a href="course-list.html" style="color:var(--green-main);font-weight:700">자세히 보기</a>
+    </div>
+    <div class="popup-foot">
+      <label style="font-size:12px;cursor:pointer">
+        <input type="checkbox"> 오늘 하루 보지 않기
+      </label>
+      <button class="btn btn-primary btn-xs"
+              onclick="document.getElementById('popup').style.display='none'">닫기</button>
     </div>
   </div>
-</div>
 
-<main>
-  <div class="container">
-
-    <!-- 빠른 링크 -->
-    <div class="quick-grid">
-      <div class="quick-item" onclick="location.href='course-list.html'">
-        <div class="qi-icon"></div><span>교육전문가과정</span>
-      </div>
-      <div class="quick-item" onclick="App.toast('사회공헌단 페이지로 이동합니다.')">
-        <div class="qi-icon"></div><span>사회공헌단</span>
-      </div>
-      <div class="quick-item" onclick="App.toast('교육특강 페이지로 이동합니다.')">
-        <div class="qi-icon"></div><span>교육특강</span>
-      </div>
-      <div class="quick-item" onclick="App.toast('동아리 페이지로 이동합니다.')">
-        <div class="qi-icon"></div><span>숲동아리단</span>
-      </div>
-      <div class="quick-item" onclick="App.toast('숲해설 신청 페이지로 이동합니다.')">
-        <div class="qi-icon"></div><span>숲해설 신청</span>
+  <!-- 히어로 -->
+  <div class="hero">
+    <div class="hero-inner">
+      <h2>숲이 주는 이야기를<br>함께 나누는 사람들</h2>
+      <p>한국숲해설가협회는 숲과 사람을 잇는 전문 해설가를 양성하고<br>자연과 함께하는 다양한 활동을 이어갑니다.</p>
+      <div class="hero-btns">
+        <a href="course-list.html" class="btn btn-accent">전문가과정 신청</a>
+        <a href="#" class="btn btn-outline"
+           style="color:#fff;border-color:rgba(255,255,255,.5)">협회 소개</a>
       </div>
     </div>
+  </div>
 
-    <!-- 메인 그리드 -->
-    <div class="main-grid section">
+  <main>
+    <div class="container">
 
-      <!-- 좌: 게시판 3개 -->
-      <div>
-        <div class="board-cols">
+      <!-- 빠른 링크 -->
+      <div class="quick-grid">
+        <div class="quick-item" onclick="location.href='course-list.html'">
+          <span>교육전문가과정</span>
+        </div>
+        <div class="quick-item" onclick="App.toast('사회공헌단 페이지로 이동합니다.')">
+          <span>사회공헌단</span>
+        </div>
+        <div class="quick-item" onclick="App.toast('교육특강 페이지로 이동합니다.')">
+          <span>교육특강</span>
+        </div>
+        <div class="quick-item" onclick="App.toast('동아리 페이지로 이동합니다.')">
+          <span>숲동아리단</span>
+        </div>
+        <div class="quick-item" onclick="App.toast('숲해설 신청 페이지로 이동합니다.')">
+          <span>숲해설 신청</span>
+        </div>
+      </div>
+
+      <!-- 메인 그리드 -->
+      <div class="main-grid section">
+
+        <!-- 왼쪽: 게시판 3개 -->
+        <div class="left-col">
+          <div class="board-cols">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">공지사항</span>
+                <a href="#" class="btn btn-outline btn-xs">전체</a>
+              </div>
+              <div id="noticeList"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">동아리단 활동</span>
+                <a href="#" class="btn btn-outline btn-xs">전체</a>
+              </div>
+              <div id="clubList"></div>
+            </div>
+          </div>
           <div class="card">
             <div class="card-header">
-              <span class="card-title">공지사항</span>
+              <span class="card-title">사회공헌단 활동</span>
               <a href="#" class="btn btn-outline btn-xs">전체</a>
             </div>
-            <div id="noticeList"></div>
+            <div id="socialList"></div>
           </div>
-          <div class="card">
+        </div>
+
+        <!-- 오른쪽: 캘린더 + SNS -->
+        <div class="right-col">
+
+          <!-- 캘린더 카드 -->
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="card-header" style="padding:14px 18px;margin:0;border-radius:0">
+              <span class="card-title">협회 일정</span>
+              <a href="calendar.html" class="btn btn-outline btn-xs">전체</a>
+            </div>
+            <div class="cal-nav">
+              <button onclick="App.toast('이전 달')">‹</button>
+              <span>2026년 3월</span>
+              <button onclick="App.toast('다음 달')">›</button>
+            </div>
+            <div class="cal-grid" id="miniCal"></div>
+            <div style="padding:12px 16px;font-size:13px;color:var(--gray-mid)">
+              <div style="font-weight:700;color:var(--green-dark);margin-bottom:6px">이번 달 주요 일정</div>
+              <div style="padding:5px 0;border-bottom:1px solid var(--gray-light)">
+                <span style="color:var(--accent)">●</span> 03.15 전문가과정 접수 마감
+              </div>
+              <div style="padding:5px 0;border-bottom:1px solid var(--gray-light)">
+                <span style="color:var(--green-main)">●</span> 03.20 동아리 정기모임
+              </div>
+              <div style="padding:5px 0">
+                <span style="color:#1976d2">●</span> 03.28 사공단 봉사활동
+              </div>
+            </div>
+          </div>
+
+          <!-- SNS 카드 -->
+          <div class="card sns-card">
             <div class="card-header">
-              <span class="card-title">동아리단 활동</span>
-              <a href="#" class="btn btn-outline btn-xs">전체</a>
+              <span class="card-title">SNS 채널</span>
             </div>
-            <div id="clubList"></div>
+            <div class="sns-col">
+              <button class="sns-btn sns-naver"
+                      onclick="App.toast('블로그로 이동합니다.')">N 블로그</button>
+              <button class="sns-btn sns-yt"
+                      onclick="App.toast('유튜브로 이동합니다.')">유튜브</button>
+              <button class="sns-btn sns-insta"
+                      onclick="App.toast('인스타그램으로 이동합니다.')">인스타</button>
+            </div>
           </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">사회공헌단 활동</span>
-            <a href="#" class="btn btn-outline btn-xs">전체</a>
-          </div>
-          <div id="socialList"></div>
-        </div>
-      </div>
 
-      <!-- 우: 캘린더 + SNS -->
-      <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="card" style="padding:0;overflow:hidden">
-          <div class="card-header" style="padding:14px 18px;margin:0;border-radius:0">
-            <span class="card-title">협회 일정</span>
-            <a href="calendar.html" class="btn btn-outline btn-xs">전체</a>
-          </div>
-          <div class="cal-nav">
-            <button onclick="App.toast('이전 달')">‹</button>
-            <span>2026년 3월</span>
-            <button onclick="App.toast('다음 달')">›</button>
-          </div>
-          <div class="cal-grid" id="miniCal"></div>
-          <div style="padding:12px 16px;font-size:13px;color:var(--gray-mid)">
-            <div style="font-weight:700;color:var(--green-dark);margin-bottom:6px">이번 달 주요 일정</div>
-            <div style="padding:5px 0;border-bottom:1px solid var(--gray-light)"><span style="color:var(--accent)">●</span> 03.15 전문가과정 접수 마감</div>
-            <div style="padding:5px 0;border-bottom:1px solid var(--gray-light)"><span style="color:var(--green-main)">●</span> 03.20 동아리 정기모임</div>
-            <div style="padding:5px 0"><span style="color:#1976d2">●</span> 03.28 사공단 봉사활동</div>
-          </div>
+        </div><!-- /right-col -->
+
+      </div><!-- /main-grid -->
+    </div><!-- /container -->
+  </main>
+
+  <!-- 유관기관 배너 -->
+  <div style="background:#fff;padding:30px 0;border-top:1px solid var(--gray-light);overflow:hidden; margin:0;">
+    <div class="container">
+      <div style="font-size:12px;font-weight:700;color:var(--gray-mid);margin-bottom:20px;text-align:center">
+        유관기관 바로가기
+      </div>
+      <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:3px">
+        <div class="quick-item" style="min-width:120px;padding:10px"
+             onclick="App.toast('산림청으로 이동합니다.')">
+          <span style="font-size:12px">산림청</span>
         </div>
-
-        <div class="card">
-          <div class="card-header"><span class="card-title">📱 SNS 채널</span></div>
-          <div class="sns-row">
-            <button class="sns-btn sns-naver" onclick="App.toast('블로그로 이동합니다.')">N 블로그</button>
-            <button class="sns-btn sns-yt"    onclick="App.toast('유튜브로 이동합니다.')">▶ 유튜브</button>
-            <button class="sns-btn sns-insta" onclick="App.toast('인스타그램으로 이동합니다.')">📷 인스타</button>
-          </div>
+        <div class="quick-item" style="min-width:120px;padding:10px"
+             onclick="App.toast('국립수목원으로 이동합니다.')">
+          <span style="font-size:12px">국립수목원</span>
         </div>
-      </div>
-
-    </div>
-  </div>
-</main>
-
-<!-- 유관기관 배너 -->
-<div style="background:#fff;padding:20px 0;border-top:1px solid var(--gray-light);overflow:hidden">
-  <div class="container">
-    <div style="font-size:12px;font-weight:700;color:var(--gray-mid);margin-bottom:10px;text-align:center">유관기관 바로가기</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:6px">
-      <div class="quick-item" style="min-width:120px;padding:10px" onclick="App.toast('산림청으로 이동합니다.')">
-        <div class="qi-icon" style="font-size:20px"></div><span style="font-size:12px">산림청</span>
-      </div>
-      <div class="quick-item" style="min-width:120px;padding:10px" onclick="App.toast('국립수목원으로 이동합니다.')">
-        <div class="qi-icon" style="font-size:20px"></div><span style="font-size:12px">국립수목원</span>
-      </div>
-      <div class="quick-item" style="min-width:120px;padding:10px" onclick="App.toast('산림복지진흥원으로 이동합니다.')">
-        <div class="qi-icon" style="font-size:20px"></div><span style="font-size:12px">산림복지진흥원</span>
-      </div>
-      <div class="quick-item" style="min-width:120px;padding:10px" onclick="App.toast('숲해설가 자격으로 이동합니다.')">
-        <div class="qi-icon" style="font-size:20px"></div><span style="font-size:12px">숲해설가 자격</span>
+        <div class="quick-item" style="min-width:120px;padding:10px"
+             onclick="App.toast('산림복지진흥원으로 이동합니다.')">
+          <span style="font-size:12px">산림복지진흥원</span>
+        </div>
+        <div class="quick-item" style="min-width:120px;padding:10px"
+             onclick="App.toast('숲해설가 자격으로 이동합니다.')">
+          <span style="font-size:12px">숲해설가 자격</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- 푸터 -->
-<div id="ftr"></div>
+  <!-- 푸터 -->
+  <div id="ftr"></div>
 
-<script src="common.js"></script>
-<script>
-  document.getElementById('hdr').innerHTML = App.renderHeader('홈');
-  document.getElementById('ftr').innerHTML = App.renderFooter();
+  <script src="common.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = App.renderHeader('홈');
+    document.getElementById('ftr').innerHTML = App.renderFooter();
 
-  /* 게시판 샘플 데이터 (5건) */
-  const NOTICES = [
-    { n:5, t:'55기 전문가과정 모집 안내',          d:'2026.03.08' },
-    { n:4, t:'[긴급] 3월 이사회 일정 변경',        d:'2026.03.05' },
-    { n:3, t:'2026년 협회비 납부 안내',             d:'2026.03.01' },
-    { n:2, t:'홈페이지 개편 작업 예고',             d:'2026.02.15' },
-    { n:1, t:'2025년 우수회원 표창 결과',           d:'2026.02.10' },
-  ];
-  const CLUBS = [
-    { n:5, t:'[숲사랑단] 3월 정기모임 후기',       d:'2026.03.07' },
-    { n:4, t:'[초록나무] 봄맞이 탐방 활동',         d:'2026.03.05' },
-    { n:3, t:'[산들바람] 2월 활동 정리',            d:'2026.03.01' },
-    { n:2, t:'[숲사랑단] 겨울숲 사진전',            d:'2026.02.22' },
-    { n:1, t:'[초록나무] 신입회원 환영모임',         d:'2026.02.18' },
-  ];
-  const SOCIAL = [
-    { n:5, t:'도봉구 숲 정화 봉사 완료',            d:'2026.03.08' },
-    { n:4, t:'3월 초등학교 숲 체험 교육',           d:'2026.03.03' },
-    { n:3, t:'다문화가족 숲 힐링 프로그램',          d:'2026.02.25' },
-    { n:2, t:'노인복지관 자연치유 특강',             d:'2026.02.17' },
-    { n:1, t:'장애인시설 숲 나들이 봉사',            d:'2026.02.10' },
-  ];
+    /* ── 게시판 샘플 데이터 */
+    const NOTICES = [
+      { n:5, t:'55기 전문가과정 모집 안내',     d:'2026.03.08' },
+      { n:4, t:'[긴급] 3월 이사회 일정 변경',   d:'2026.03.05' },
+      { n:3, t:'2026년 협회비 납부 안내',        d:'2026.03.01' },
+      { n:2, t:'홈페이지 개편 작업 예고',        d:'2026.02.15' },
+      { n:1, t:'2025년 우수회원 표창 결과',      d:'2026.02.10' },
+    ];
+    const CLUBS = [
+      { n:5, t:'[숲사랑단] 3월 정기모임 후기',  d:'2026.03.07' },
+      { n:4, t:'[초록나무] 봄맞이 탐방 활동',   d:'2026.03.05' },
+      { n:3, t:'[산들바람] 2월 활동 정리',       d:'2026.03.01' },
+      { n:2, t:'[숲사랑단] 겨울숲 사진전',       d:'2026.02.22' },
+      { n:1, t:'[초록나무] 신입회원 환영모임',   d:'2026.02.18' },
+    ];
+    const SOCIAL = [
+      { n:5, t:'도봉구 숲 정화 봉사 완료',       d:'2026.03.08' },
+      { n:4, t:'3월 초등학교 숲 체험 교육',      d:'2026.03.03' },
+      { n:3, t:'다문화가족 숲 힐링 프로그램',    d:'2026.02.25' },
+      { n:2, t:'노인복지관 자연치유 특강',        d:'2026.02.17' },
+      { n:1, t:'장애인시설 숲 나들이 봉사',       d:'2026.02.10' },
+    ];
 
-  function renderBoard(data, id) {
-    document.getElementById(id).innerHTML = data.map(r => `
-      <div class="board-row">
-        <span class="board-num">${r.n}</span>
-        <span class="board-title" onclick="App.toast('${r.t}')">${r.t}</span>
-        <span class="board-date">${r.d}</span>
-      </div>`).join('');
-  }
-  renderBoard(NOTICES, 'noticeList');
-  renderBoard(CLUBS,   'clubList');
-  renderBoard(SOCIAL,  'socialList');
-
-  /* 미니 캘린더 */
-  (function() {
-    const yr=2026, mo=2, first=new Date(yr,mo,1).getDay(), last=new Date(yr,mo+1,0).getDate();
-    const eventDays=[5,15,20,28], days=['일','월','화','수','목','금','토'];
-    let html = days.map((d,i)=>`<div class="cal-dh">${d}</div>`).join('');
-    for(let i=0;i<first;i++) html+=`<div class="cal-cell"></div>`;
-    for(let d=1;d<=last;d++){
-      const dow=(first+d-1)%7;
-      const cls=['cal-cell', d===9?'today':'', eventDays.includes(d)?'has-event':'', dow===0?'sun':'', dow===6?'sat':''].filter(Boolean).join(' ');
-      html+=`<div class="${cls}" onclick="App.toast('2026.03.${String(d).padStart(2,'0')} 일정')">${d}</div>`;
+    function renderBoard(data, id) {
+      document.getElementById(id).innerHTML = data.map(r => `
+        <div class="board-row">
+          <span class="board-num">${r.n}</span>
+          <span class="board-title" onclick="App.toast('${r.t}')">${r.t}</span>
+          <span class="board-date">${r.d}</span>
+        </div>`).join('');
     }
-    document.getElementById('miniCal').innerHTML = html;
-  })();
-</script>
+    renderBoard(NOTICES, 'noticeList');
+    renderBoard(CLUBS,   'clubList');
+    renderBoard(SOCIAL,  'socialList');
+
+    /* ── 미니 캘린더 */
+    (function () {
+      const yr = 2026, mo = 2;
+      const first = new Date(yr, mo, 1).getDay();
+      const last  = new Date(yr, mo + 1, 0).getDate();
+      const eventDays = [5, 15, 20, 28];
+      const days = ['일','월','화','수','목','금','토'];
+
+      let html = days.map(d => `<div class="cal-dh">${d}</div>`).join('');
+      for (let i = 0; i < first; i++) html += `<div class="cal-cell"></div>`;
+      for (let d = 1; d <= last; d++) {
+        const dow = (first + d - 1) % 7;
+        const cls = [
+          'cal-cell',
+          d === 9               ? 'today'     : '',
+          eventDays.includes(d) ? 'has-event' : '',
+          dow === 0             ? 'sun'       : '',
+          dow === 6             ? 'sat'       : '',
+        ].filter(Boolean).join(' ');
+        html += `<div class="${cls}"
+                      onclick="App.toast('2026.03.${String(d).padStart(2,'0')} 일정')">${d}</div>`;
+      }
+      document.getElementById('miniCal').innerHTML = html;
+    })();
+  </script>
 </body>
+
 </html>

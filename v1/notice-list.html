@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공지사항 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="common.css">
+  <style>
+    /* ── 페이지 헤더 */
+    .page-header {
+      background: linear-gradient(135deg, var(--green-dark), var(--green-main));
+      color: #fff;
+      padding: 36px 0;
+    }
+    .page-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .page-header p  { font-size: 14px; opacity: .8; }
+
+    /* ── 검색 바 */
+    .search-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .search-bar select {
+      width: 110px;
+      flex-shrink: 0;
+    }
+    .search-bar input {
+      flex: 1;
+    }
+    .search-bar button {
+      flex-shrink: 0;
+    }
+
+    /* ── 공지 테이블 */
+    .notice-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      font-size: 14px;
+    }
+    .notice-table thead tr {
+      background: var(--green-dark);
+      color: #fff;
+    }
+    .notice-table th {
+      padding: 12px 16px;
+      font-weight: 600;
+      text-align: center;
+      font-size: 13px;
+    }
+    .notice-table th.col-title { text-align: left; }
+    .notice-table td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--gray-light);
+      vertical-align: middle;
+    }
+    .notice-table tr:last-child td { border-bottom: none; }
+    .notice-table tr:hover td      { background: var(--gray-bg); }
+
+    .col-num    { width: 60px;  text-align: center; color: var(--gray-mid); font-size: 13px; }
+    .col-title  { cursor: pointer; }
+    .col-title:hover { color: var(--green-main); text-decoration: underline; }
+    .col-author { width: 90px;  text-align: center; color: var(--gray-mid); font-size: 13px; }
+    .col-date   { width: 110px; text-align: center; color: var(--gray-mid); font-size: 13px; }
+    .col-views  { width: 70px;  text-align: center; color: var(--gray-mid); font-size: 13px; }
+
+    /* 공지 고정 행 */
+    .notice-table tr.pinned td        { background: #f0faf4; }
+    .notice-table tr.pinned:hover td  { background: #e4f5eb; }
+
+    /* ── 페이지네이션 */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 24px;
+    }
+    .page-btn {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius);
+      font-size: 14px; font-weight: 600;
+      color: var(--gray-mid);
+      background: #fff;
+      border: 1px solid var(--gray-light);
+      cursor: pointer;
+      transition: var(--trans);
+    }
+    .page-btn:hover,
+    .page-btn.active {
+      background: var(--green-main);
+      color: #fff;
+      border-color: var(--green-main);
+    }
+    .page-arrow { font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<div id="hdr"></div>
+
+<!-- 페이지 헤더 -->
+<div class="page-header">
+  <div class="container">
+    <h1>공지사항</h1>
+    <p>협회의 공지 및 주요 안내사항을 확인하세요.</p>
+  </div>
+</div>
+
+<main class="section">
+  <div class="container">
+
+    <!-- 검색 바 -->
+    <div class="search-bar">
+      <select class="form-control">
+        <option>제목</option>
+        <option>내용</option>
+        <option>제목+내용</option>
+      </select>
+      <input type="text" class="form-control" placeholder="검색어를 입력하세요">
+      <button class="btn btn-primary">검색</button>
+    </div>
+
+    <!-- 테이블 -->
+    <table class="notice-table" id="noticeTable"></table>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination" id="pagination"></div>
+
+  </div>
+</main>
+
+<div id="ftr"></div>
+
+<script src="common.js"></script>
+<script>
+  document.getElementById('hdr').innerHTML = App.renderHeader('커뮤니티');
+  document.getElementById('ftr').innerHTML = App.renderFooter();
+
+  /* ── 샘플 데이터 20건 */
+  const DATA = [
+    { id:20, pin:true,  title:'[필독] 2026년 개인정보 처리방침 개정 안내',   author:'관리자', date:'2026.03.08', views:312 },
+    { id:19, pin:true,  title:'[필독] 홈페이지 개편 일정 안내',               author:'관리자', date:'2026.03.05', views:245 },
+    { id:18, pin:false, title:'55기 전문가과정 모집 안내',                     author:'관리자', date:'2026.03.08', views:187 },
+    { id:17, pin:false, title:'[긴급] 3월 이사회 일정 변경',                  author:'관리자', date:'2026.03.05', views:134 },
+    { id:16, pin:false, title:'2026년 협회비 납부 안내',                       author:'관리자', date:'2026.03.01', views:210 },
+    { id:15, pin:false, title:'홈페이지 개편 작업 예고',                       author:'관리자', date:'2026.02.15', views:98  },
+    { id:14, pin:false, title:'2025년 우수회원 표창 결과',                     author:'관리자', date:'2026.02.10', views:156 },
+    { id:13, pin:false, title:'2026년 상반기 교육 일정 공지',                  author:'관리자', date:'2026.02.05', views:203 },
+    { id:12, pin:false, title:'정기총회 결과 보고',                            author:'관리자', date:'2026.01.28', views:178 },
+    { id:11, pin:false, title:'설 연휴 사무국 휴무 안내',                      author:'관리자', date:'2026.01.20', views:89  },
+    { id:10, pin:false, title:'2025년 연간 활동 보고서 발간',                  author:'관리자', date:'2026.01.15', views:234 },
+    { id:9,  pin:false, title:'12월 정기모임 장소 변경 안내',                  author:'관리자', date:'2025.12.10', views:112 },
+    { id:8,  pin:false, title:'2025년 송년 행사 안내',                         author:'관리자', date:'2025.12.01', views:145 },
+    { id:7,  pin:false, title:'54기 전문가과정 수료식 일정',                   author:'관리자', date:'2025.11.20', views:198 },
+    { id:6,  pin:false, title:'11월 사공단 봉사활동 결과 보고',                author:'관리자', date:'2025.11.10', views:87  },
+    { id:5,  pin:false, title:'2025년 하반기 역량강화 교육 모집',              author:'관리자', date:'2025.10.15', views:176 },
+    { id:4,  pin:false, title:'협회 창립기념일 행사 안내',                     author:'관리자', date:'2025.10.01', views:223 },
+    { id:3,  pin:false, title:'53기 전문가과정 모집 안내',                     author:'관리자', date:'2025.09.01', views:267 },
+    { id:2,  pin:false, title:'개인정보 취급방침 개정 안내',                   author:'관리자', date:'2025.08.01', views:134 },
+    { id:1,  pin:false, title:'한국숲해설가협회 홈페이지 오픈 안내',           author:'관리자', date:'2025.07.01', views:456 },
+  ];
+
+  const PAGE_SIZE = 10;
+  let currentPage = 1;
+
+  /* 핀 고정 분리 */
+  const PINNED = DATA.filter(d => d.pin);
+  const NORMAL = DATA.filter(d => !d.pin);
+  const totalPages = Math.ceil(NORMAL.length / PAGE_SIZE);
+
+  function render(page) {
+    currentPage = page;
+    const start = (page - 1) * PAGE_SIZE;
+    const slice = NORMAL.slice(start, start + PAGE_SIZE);
+    const rows  = [...PINNED, ...slice];
+
+    const tbody = rows.map(r => `
+      <tr class="${r.pin ? 'pinned' : ''}">
+        <td class="col-num">
+          ${r.pin
+            ? `<span class="badge badge-green" style="font-size:11px">공지</span>`
+            : r.id}
+        </td>
+        <td class="col-title"
+            onclick="location.href='notice-detail.html?id=${r.id}'">
+          ${r.title}
+        </td>
+        <td class="col-author">${r.author}</td>
+        <td class="col-date">${r.date}</td>
+        <td class="col-views">${r.views}</td>
+      </tr>`).join('');
+
+    document.getElementById('noticeTable').innerHTML = `
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th class="col-title">제목</th>
+          <th>작성자</th>
+          <th>날짜</th>
+          <th>조회</th>
+        </tr>
+      </thead>
+      <tbody>${tbody}</tbody>`;
+
+    /* 페이지네이션 */
+    let pHtml = `<button class="page-btn page-arrow"
+                         onclick="if(${page}>1) render(${page}-1)">&#8249;</button>`;
+    for (let i = 1; i <= totalPages; i++) {
+      pHtml += `<button class="page-btn ${i === page ? 'active' : ''}"
+                        onclick="render(${i})">${i}</button>`;
+    }
+    pHtml += `<button class="page-btn page-arrow"
+                      onclick="if(${page}<${totalPages}) render(${page}+1)">&#8250;</button>`;
+    document.getElementById('pagination').innerHTML = pHtml;
+  }
+
+  render(1);
+</script>
+</body>
+</html>

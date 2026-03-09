@@ -55,21 +55,82 @@ const App = {
   /* ── 공통 헤더 렌더 */
   renderHeader(activePage = '') {
     const NAV = [
-      { label:'홈',          href:'index.html'   },
-      { label:'협회소개',    href:'#'            },
-      { label:'숲해설가교육', href:'course-list.html'  },
-      { label:'회원활동',    href:'#'            },
-      { label:'커뮤니티',    href:'calendar.html'},
-      { label:'참여',        href:'#'            },
+      {
+        label: '협회소개', href: '#',
+        children: [
+          { label: '인사말',          href: '#' },
+          { label: '미션 & 비전',     href: '#' },
+          { label: '주요사업',        href: '#' },
+          { label: '연혁',            href: '#' },
+          { label: '조직도 & 임원진', href: '#' },
+          { label: '전국 지역협회',   href: '#' },
+          { label: '정관',            href: '#' },
+          { label: '오시는 길',       href: '#' },
+        ]
+      },
+      {
+        label: '숲해설가교육', href: 'course-list.html',
+        children: [
+          { label: '숲해설가란',      href: '#' },
+          { label: '자주 묻는 질문',  href: '#' },
+          { label: '전문과정 안내',   href: '#' },
+          { label: '전문과정 신청',   href: 'course-list.html' },
+          { label: '시민아카데미',    href: '#' },
+          { label: '직무교육',        href: '#' },
+        ]
+      },
+      {
+        label: '회원활동', href: '#',
+        children: [
+          { label: '역량강화 교육강좌',  href: '#' },
+          { label: '멘토링 숲학교',      href: '#' },
+          { label: '수시숲해설 모집',    href: '#' },
+          { label: '숲해설 강사 신청',   href: '#' },
+          { label: '사공단 소식',        href: '#' },
+          { label: '동아리 소식',        href: '#' },
+        ]
+      },
+      {
+        label: '커뮤니티', href: 'calendar.html',
+        children: [
+          { label: '공지사항',           href: 'notice-list.html' },
+          { label: '협회일정',           href: 'calendar.html' },
+          { label: '자유게시판',         href: '#' },
+          { label: '언론보도',           href: '#' },
+          { label: '일자리 및 교육정보', href: '#' },
+          { label: '갤러리',             href: '#' },
+          { label: '협회소식지',         href: '#' },
+          { label: '자료실',             href: '#' },
+        ]
+      },
+      {
+        label: '참여', href: '#',
+        children: [
+          { label: '정회원 가입안내',  href: '#' },
+          { label: '후원안내',         href: '#' },
+          { label: '후원하기',         href: '#' },
+        ]
+      },
     ];
-    const navHtml = NAV.map(n =>
-      `<a href="${n.href}" class="${activePage===n.label?'active':''}">${n.label}</a>`
-    ).join('');
+
+    const navHtml = NAV.map(n => {
+      if (!n.children) {
+        return `<a href="${n.href}" class="nav-item ${activePage === n.label ? 'active' : ''}">${n.label}</a>`;
+      }
+      const subHtml = n.children.map(c =>
+        `<a href="${c.href}" class="sub-item">${c.label}</a>`
+      ).join('');
+      return `
+        <div class="nav-item has-dropdown ${activePage === n.label ? 'active' : ''}">
+          <a href="${n.href}">${n.label}<span class="arrow"></span></a>
+          <div class="dropdown">${subHtml}</div>
+        </div>`;
+    }).join('');
 
     const actHtml = this.user.isLoggedIn
-      ? `<span style="font-size:13px;color:var(--gray-mid)">👤 ${this.user.name} (${this.user.grade})</span>
-         <a href="mypage.html"  class="btn btn-outline btn-sm">마이페이지</a>
-         <a href="admin.html"   class="btn btn-gray    btn-sm">관리자</a>
+      ? `<span class="header-username">${this.user.name} (${this.user.grade})</span>
+         <a href="mypage.html" class="btn btn-outline btn-sm">마이페이지</a>
+         <a href="admin.html"  class="btn btn-gray btn-sm">관리자</a>
          <button class="btn btn-gray btn-sm" onclick="App.toast('로그아웃 되었습니다.')">로그아웃</button>`
       : `<button class="btn btn-outline btn-sm">로그인</button>
          <button class="btn btn-primary btn-sm">회원가입</button>`;
@@ -78,7 +139,6 @@ const App = {
     <header class="site-header">
       <div class="header-inner">
         <a href="index.html" class="logo">
-          <div class="logo-icon">🌲</div>
           <div class="logo-text">
             <strong>한국숲해설가협회</strong>
             <span>Korea Forest Interpreter Association</span>
