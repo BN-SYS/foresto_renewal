@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>숲해설가란 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="common.css">
+  <style>
+
+    /* ── 서브 탭 내비 */
+    .sub-nav {
+      background: #fff;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .sub-nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+    }
+    .sub-nav-item {
+      padding: 18px 28px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-mid);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: var(--trans);
+      white-space: nowrap;
+      text-decoration: none;
+      display: block;
+    }
+    .sub-nav-item:hover  { color: var(--green-dark); }
+    .sub-nav-item.active {
+      color: var(--green-dark);
+      font-weight: 700;
+      border-bottom-color: var(--green-dark);
+    }
+
+    /* ── 섹션 공통 */
+    .content-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .content-section:last-child { border-bottom: none; }
+
+    .section-label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green-main);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+    .section-desc {
+      font-size: 15px;
+      color: var(--gray-mid);
+      line-height: 1.85;
+      max-width: 680px;
+      word-break: keep-all;
+    }
+    .section-head { margin-bottom: 36px; }
+
+    /* ── 정의 섹션: 2단 레이아웃 */
+    .intro-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .intro-img {
+      background: var(--green-pale);
+      border-radius: 16px;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .intro-img svg { width: 80px; height: 80px; opacity: .35; }
+
+    .intro-text h2 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+    .intro-text p {
+      font-size: 15px;
+      color: var(--gray-dark);
+      line-height: 1.95;
+      margin-bottom: 16px;
+      word-break: keep-all;
+    }
+    .intro-text p:last-child { margin-bottom: 0; }
+
+    /* ── 역할 카드 3개 */
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .role-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 24px;
+      border-top: 4px solid var(--green-main);
+    }
+    .role-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--green-pale);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .role-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 10px;
+    }
+    .role-card p {
+      font-size: 14px;
+      color: var(--gray-mid);
+      line-height: 1.8;
+      word-break: keep-all;
+    }
+
+    /* ── 과정 스텝 */
+    .process-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      position: relative;
+    }
+    .process-step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      padding: 0 8px;
+    }
+    /* 연결선 */
+    .process-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 28px;
+      right: -12px;
+      width: 24px;
+      height: 2px;
+      background: var(--green-light);
+      z-index: 1;
+    }
+    .step-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--green-main);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+    .process-step.highlight .step-circle {
+      background: var(--green-dark);
+      box-shadow: 0 4px 16px rgba(45,106,79,.35);
+    }
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 6px;
+    }
+    .step-desc {
+      font-size: 12px;
+      color: var(--gray-mid);
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    /* ── 자격증 카드 */
+    .cert-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .cert-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .cert-card-head {
+      padding: 20px 24px;
+      background: var(--green-dark);
+      color: #fff;
+    }
+    .cert-card-head h4 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .cert-card-head p  { font-size: 13px; opacity: .8; }
+    .cert-card-body {
+      padding: 20px 24px;
+    }
+    .cert-row {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-light);
+      font-size: 14px;
+      align-items: flex-start;
+    }
+    .cert-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .cert-label {
+      width: 80px;
+      flex-shrink: 0;
+      font-weight: 700;
+      color: var(--gray-mid);
+      font-size: 13px;
+    }
+    .cert-value {
+      flex: 1;
+      color: var(--gray-dark);
+      line-height: 1.7;
+    }
+
+    /* ── 활동 분야 태그 */
+    .activity-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .act-tag {
+      padding: 10px 20px;
+      background: #fff;
+      border: 1.5px solid var(--green-light);
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--green-dark);
+      box-shadow: var(--shadow);
+    }
+
+    /* ── CTA 배너 */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--green-dark), var(--green-main));
+      border-radius: 16px;
+      padding: 48px 40px;
+      text-align: center;
+      color: #fff;
+      margin-bottom: 56px;
+    }
+    .cta-banner h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .cta-banner p {
+      font-size: 15px;
+      opacity: .85;
+      margin-bottom: 28px;
+    }
+    .cta-btns {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-white {
+      background: #fff;
+      color: var(--green-dark);
+      font-weight: 700;
+    }
+    .btn-white:hover { background: var(--green-pale); }
+    .btn-white-outline {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,.6);
+      font-weight: 700;
+    }
+    .btn-white-outline:hover { background: rgba(255,255,255,.1); }
+
+    /* ── 반응형 */
+    @media (max-width: 900px) {
+      .role-grid     { grid-template-columns: 1fr 1fr; }
+      .cert-layout   { grid-template-columns: 1fr; }
+      .process-steps { flex-wrap: wrap; gap: 24px; }
+      .process-step::after { display: none; }
+      .process-step  { flex: 0 0 calc(50% - 12px); }
+    }
+    @media (max-width: 768px) {
+      .intro-layout  { grid-template-columns: 1fr; }
+      .intro-img     { aspect-ratio: 16 / 9; }
+      .role-grid     { grid-template-columns: 1fr; }
+      .sub-nav-item  { padding: 14px 16px; font-size: 14px; }
+      .cta-banner    { padding: 36px 20px; }
+    }
+    @media (max-width: 480px) {
+      .sub-nav-inner { overflow-x: auto; }
+      .sub-nav-item  { padding: 12px 14px; font-size: 13px; }
+      .process-step  { flex: 0 0 100%; }
+      .section-title { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="hdr"></div>
+
+<!-- 페이지 헤더 -->
+<div class="page-header">
+  <div class="container">
+    <h1>숲해설가 교육</h1>
+    <p>숲해설가가 되기 위한 다양한 교육과정을 안내합니다.</p>
+  </div>
+</div>
+
+<!-- 서브 탭 내비 -->
+<div class="sub-nav">
+  <div class="sub-nav-inner">
+    <a href="about-forester.html" class="sub-nav-item active">숲해설가란</a>
+    <a href="faq.html"            class="sub-nav-item">자주 묻는 질문</a>
+    <a href="course-intro.html"   class="sub-nav-item">전문과정 안내</a>
+    <a href="course-list.html"    class="sub-nav-item">전문과정 신청</a>
+    <a href="academy.html"        class="sub-nav-item">시민아카데미</a>
+    <a href="job-training.html"   class="sub-nav-item">직무교육</a>
+  </div>
+</div>
+
+<main>
+
+  <!-- 1. 숲해설가 정의 -->
+  <div class="content-section">
+    <div class="container">
+      <div class="intro-layout">
+        <div class="intro-img">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="28" r="14" stroke="#2d6a4f" stroke-width="3"/>
+            <path d="M26 90 C26 68 74 68 74 90" stroke="#2d6a4f" stroke-width="3" stroke-linecap="round"/>
+            <path d="M50 44 L50 68" stroke="#2d6a4f" stroke-width="3" stroke-linecap="round"/>
+            <path d="M38 56 L62 56" stroke="#2d6a4f" stroke-width="3" stroke-linecap="round"/>
+            <path d="M14 72 Q22 52 30 60 Q36 44 44 54" stroke="#40916c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M86 72 Q78 52 70 60 Q64 44 56 54" stroke="#40916c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="intro-text">
+          <h2>숲과 사람을 잇는<br>전문 안내자</h2>
+          <p>
+            숲해설가는 숲을 찾는 사람들에게 자연 생태계의 다양한 이야기를 전달하고,
+            숲과 인간이 건강하게 공존할 수 있도록 안내하는 전문 해설 활동가입니다.
+          </p>
+          <p>
+            단순한 안내를 넘어, 자연의 가치와 중요성을 체험으로 알리며
+            심리적 안정과 치유의 공간으로서 숲을 활용하는 다양한 프로그램을 기획하고 운영합니다.
+          </p>
+          <p>
+            산림청에서 공인하는 국가 자격증 제도와 함께, 전국 각지의 국립공원·자연휴양림·
+            학교 숲·복지기관 등 다양한 현장에서 활동하고 있습니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 숲해설가의 역할 -->
+  <div class="content-section" style="background: var(--gray-bg)">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Role</span>
+        <h2 class="section-title">숲해설가의 역할</h2>
+        <p class="section-desc">
+          숲해설가는 자연 생태 해설부터 심리 치유, 사회공헌 활동까지
+          다양한 역할을 수행합니다.
+        </p>
+      </div>
+      <div class="role-grid">
+        <div class="role-card">
+          <div class="role-num">01</div>
+          <h4>생태 해설 및 교육</h4>
+          <p>숲의 동식물, 생태계 순환 구조, 계절별 변화 등을 쉽고 재미있게 해설합니다. 어린이부터 어른까지 눈높이에 맞는 교육 프로그램을 운영합니다.</p>
+        </div>
+        <div class="role-card">
+          <div class="role-num">02</div>
+          <h4>산림 치유 프로그램 운영</h4>
+          <p>스트레스 해소, 심신 안정, 자연을 통한 회복을 목적으로 숲 치유 활동을 기획하고 진행합니다. 노인·장애인·취약계층 대상 사회공헌 활동도 포함합니다.</p>
+        </div>
+        <div class="role-card">
+          <div class="role-num">03</div>
+          <h4>환경 보전 인식 제고</h4>
+          <p>기후 위기와 생물 다양성의 중요성을 현장에서 직접 전달하며, 지속 가능한 자연과의 관계를 형성하는 데 앞장섭니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 숲해설가가 되는 과정 -->
+  <div class="content-section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Process</span>
+        <h2 class="section-title">숲해설가가 되는 과정</h2>
+        <p class="section-desc">
+          교육 신청부터 현장 활동까지, 숲해설가로 성장하는 단계를 확인하세요.
+        </p>
+      </div>
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-circle">1</div>
+          <div class="step-title">교육 신청</div>
+          <div class="step-desc">전문가과정 또는 시민아카데미 온라인 신청</div>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">2</div>
+          <div class="step-title">이론 교육</div>
+          <div class="step-desc">생태학·식물학·해설 기법 등 전문 이론 수강</div>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">3</div>
+          <div class="step-title">현장 실습</div>
+          <div class="step-desc">국립공원·자연휴양림 등 실제 현장 실습 진행</div>
+        </div>
+        <div class="process-step highlight">
+          <div class="step-circle">4</div>
+          <div class="step-title">수료 및 수료증 발급</div>
+          <div class="step-desc">전 과정 이수 후 협회 수료증 PDF 발급</div>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">5</div>
+          <div class="step-title">정회원 전환</div>
+          <div class="step-desc">수료 + 연회비 납부 후 관리자 승인으로 정회원 전환</div>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">6</div>
+          <div class="step-title">현장 활동</div>
+          <div class="step-desc">협회 연계 기관에서 숲해설 활동 시작</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 국가 자격증 안내 -->
+  <div class="content-section" style="background: var(--gray-bg)">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Certification</span>
+        <h2 class="section-title">국가 자격증 안내</h2>
+        <p class="section-desc">
+          숲해설가 관련 국가 자격증은 산림청에서 시행하며,
+          협회 교육 수료 후 응시하시는 분들이 많습니다.
+        </p>
+      </div>
+      <div class="cert-layout">
+        <div class="cert-card">
+          <div class="cert-card-head">
+            <h4>숲해설가 자격증</h4>
+            <p>산림청 공인 국가 자격</p>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-row">
+              <span class="cert-label">주관기관</span>
+              <span class="cert-value">산림청 / 한국산림복지진흥원</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">응시 자격</span>
+              <span class="cert-value">숲해설가 양성 교육과정 이수자</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">시험 과목</span>
+              <span class="cert-value">산림생태, 산림복지, 해설 기법, 현장 실습 평가</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">시험 일정</span>
+              <span class="cert-value">연 2회 (상·하반기, 산림청 공고 기준)</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">자격 효력</span>
+              <span class="cert-value">국립공원·자연휴양림 등 공공기관 활동 인정</span>
+            </div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-card-head">
+            <h4>협회 수료증</h4>
+            <p>한국숲해설가협회 발행</p>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-row">
+              <span class="cert-label">발급 기관</span>
+              <span class="cert-value">사단법인 한국숲해설가협회</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">발급 조건</span>
+              <span class="cert-value">전문가과정 전 과정 이수 완료</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">발급 방식</span>
+              <span class="cert-value">마이페이지 &gt; 교육이수내역에서 PDF 다운로드</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">포함 내용</span>
+              <span class="cert-value">성명, 과정명, 교육기간, 기수, 발급일</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">활용</span>
+              <span class="cert-value">국가 자격시험 응시 서류, 활동 이력 증빙</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 활동 분야 -->
+  <div class="content-section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Activity</span>
+        <h2 class="section-title">숲해설가 활동 분야</h2>
+        <p class="section-desc">
+          수료 후 다양한 기관과 현장에서 숲해설 활동에 참여하실 수 있습니다.
+        </p>
+      </div>
+      <div class="activity-tags">
+        <span class="act-tag">국립공원</span>
+        <span class="act-tag">자연휴양림</span>
+        <span class="act-tag">국립수목원</span>
+        <span class="act-tag">도시 숲</span>
+        <span class="act-tag">학교 숲</span>
+        <span class="act-tag">생태공원</span>
+        <span class="act-tag">노인복지관</span>
+        <span class="act-tag">장애인 시설</span>
+        <span class="act-tag">다문화가족 지원센터</span>
+        <span class="act-tag">어린이집 · 유치원</span>
+        <span class="act-tag">초·중등학교</span>
+        <span class="act-tag">사회적 약자 대상 봉사</span>
+        <span class="act-tag">탄소중립 환경 교육</span>
+        <span class="act-tag">산림 치유 프로그램</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA 배너 -->
+  <div class="container">
+    <div class="cta-banner">
+      <h3>지금 바로 숲해설가의 첫걸음을 시작하세요</h3>
+      <p>전문가과정 신청부터 수료까지, 협회가 함께 합니다.</p>
+      <div class="cta-btns">
+        <a href="course-list.html" class="btn btn-white btn-lg">전문가과정 신청</a>
+        <a href="faq.html"         class="btn btn-white-outline btn-lg">자주 묻는 질문</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="ftr"></div>
+
+<script src="common.js"></script>
+<script>
+  document.getElementById('hdr').innerHTML = App.renderHeader('숲해설가교육');
+  document.getElementById('ftr').innerHTML = App.renderFooter();
+</script>
+</body>
+</html>

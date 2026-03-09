@@ -56,7 +56,7 @@ const App = {
   renderHeader(activePage = '') {
     const NAV = [
       {
-        label: '협회소개', href: '#',
+        label: '협회소개', href: 'about.html',
         children: [
           { label: '인사말',          href: 'about.html' },
           { label: '미션 & 비전',     href: 'about-vision.html' },
@@ -69,10 +69,10 @@ const App = {
         ]
       },
       {
-        label: '숲해설가교육', href: 'course-list.html',
+        label: '숲해설가교육', href: 'about-forester.html',
         children: [
-          { label: '숲해설가란',      href: '#' },
-          { label: '자주 묻는 질문',  href: '#' },
+          { label: '숲해설가란',      href: 'about-forester.html' },
+          { label: '자주 묻는 질문',  href: 'faq.html' },
           { label: '전문과정 안내',   href: '#' },
           { label: '전문과정 신청',   href: 'course-list.html' },
           { label: '시민아카데미',    href: '#' },
@@ -91,7 +91,7 @@ const App = {
         ]
       },
       {
-        label: '커뮤니티', href: 'calendar.html',
+        label: '커뮤니티', href: 'notice-list.html',
         children: [
           { label: '공지사항',           href: 'notice-list.html' },
           { label: '협회일정',           href: 'calendar.html' },

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자주 묻는 질문 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="common.css">
+  <style>
+
+    /* ── 서브 탭 내비 */
+    .sub-nav {
+      background: #fff;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .sub-nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+    }
+    .sub-nav-item {
+      padding: 18px 28px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-mid);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: var(--trans);
+      white-space: nowrap;
+      text-decoration: none;
+      display: block;
+    }
+    .sub-nav-item:hover  { color: var(--green-dark); }
+    .sub-nav-item.active {
+      color: var(--green-dark);
+      font-weight: 700;
+      border-bottom-color: var(--green-dark);
+    }
+
+    /* ── FAQ 카테고리 탭 */
+    .faq-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .faq-tab {
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1.5px solid var(--gray-light);
+      background: #fff;
+      color: var(--gray-mid);
+      cursor: pointer;
+      transition: var(--trans);
+    }
+    .faq-tab:hover  { border-color: var(--green-main); color: var(--green-main); }
+    .faq-tab.active {
+      background: var(--green-main);
+      border-color: var(--green-main);
+      color: #fff;
+    }
+
+    /* ── 아코디언 */
+    .accordion-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .accordion-item {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    /* 질문 헤더 */
+    .accordion-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: background .18s;
+      user-select: none;
+    }
+    .accordion-head:hover { background: var(--gray-bg); }
+    .accordion-item.open .accordion-head {
+      background: var(--green-pale);
+    }
+
+    .acc-q-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--green-main);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .accordion-item.open .acc-q-mark {
+      background: var(--green-dark);
+    }
+
+    .acc-question {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-dark);
+      line-height: 1.5;
+    }
+    .accordion-item.open .acc-question {
+      color: var(--green-dark);
+    }
+
+    /* 화살표 (CSS 삼각형) */
+    .acc-arrow {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--gray-mid);
+      flex-shrink: 0;
+      transition: transform .25s;
+    }
+    .accordion-item.open .acc-arrow {
+      transform: rotate(180deg);
+      border-top-color: var(--green-dark);
+    }
+
+    /* 답변 패널 */
+    .accordion-body {
+      display: none;
+      padding: 0 20px 20px 62px;
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--gray-dark);
+      border-top: 1px solid var(--green-pale);
+    }
+    .accordion-item.open .accordion-body {
+      display: block;
+    }
+    .accordion-body p   { margin-bottom: 10px; }
+    .accordion-body p:last-child { margin-bottom: 0; }
+    .accordion-body strong { color: var(--green-dark); }
+    .accordion-body ul {
+      list-style: disc;
+      padding-left: 18px;
+      margin-top: 6px;
+    }
+    .accordion-body ul li { margin-bottom: 4px; }
+
+    .acc-a-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--green-pale);
+      color: var(--green-dark);
+      font-size: 14px;
+      font-weight: 700;
+      margin-right: 8px;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+    .acc-answer-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding-top: 16px;
+    }
+    .acc-answer-text { flex: 1; }
+
+    /* ── 문의 배너 */
+    .faq-contact {
+      margin-top: 40px;
+      background: var(--green-pale);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .faq-contact-text h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 6px;
+    }
+    .faq-contact-text p {
+      font-size: 13px;
+      color: var(--gray-mid);
+    }
+
+    /* ── 반응형 */
+    @media (max-width: 768px) {
+      .accordion-body   { padding-left: 20px; }
+      .sub-nav-item     { padding: 14px 16px; font-size: 14px; }
+      .faq-contact      { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .sub-nav-inner    { overflow-x: auto; }
+      .sub-nav-item     { padding: 12px 14px; font-size: 13px; }
+      .faq-tab          { font-size: 13px; padding: 7px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="hdr"></div>
+
+<!-- 페이지 헤더 -->
+<div class="page-header">
+  <div class="container">
+    <h1>숲해설가 교육</h1>
+    <p>숲해설가가 되기 위한 다양한 교육과정을 안내합니다.</p>
+  </div>
+</div>
+
+<!-- 서브 탭 내비 -->
+<div class="sub-nav">
+  <div class="sub-nav-inner">
+    <a href="about-forester.html" class="sub-nav-item">숲해설가란</a>
+    <a href="faq.html"            class="sub-nav-item active">자주 묻는 질문</a>
+    <a href="course-intro.html"   class="sub-nav-item">전문과정 안내</a>
+    <a href="course-list.html"    class="sub-nav-item">전문과정 신청</a>
+    <a href="academy.html"        class="sub-nav-item">시민아카데미</a>
+    <a href="job-training.html"   class="sub-nav-item">직무교육</a>
+  </div>
+</div>
+
+<main class="section">
+  <div class="container">
+
+    <!-- 카테고리 탭 -->
+    <div class="faq-tabs" id="faqTabs"></div>
+
+    <!-- 아코디언 목록 -->
+    <div class="accordion-list" id="accordionList"></div>
+
+    <!-- 하단 문의 배너 -->
+    <div class="faq-contact">
+      <div class="faq-contact-text">
+        <h4>원하시는 답변을 찾지 못하셨나요?</h4>
+        <p>직접 문의하시면 친절하게 안내해 드리겠습니다.</p>
+      </div>
+      <a href="mailto:info@forest-guide.or.kr" class="btn btn-primary">문의하기</a>
+    </div>
+
+  </div>
+</main>
+
+<div id="ftr"></div>
+
+<script src="common.js"></script>
+<script>
+  document.getElementById('hdr').innerHTML = App.renderHeader('숲해설가교육');
+  document.getElementById('ftr').innerHTML = App.renderFooter();
+
+  /* ── FAQ 데이터 */
+  const FAQ = [
+    {
+      cat: '전체',
+      items: []   /* 전체는 별도 필터로 처리 */
+    }
+  ];
+
+  const FAQ_DATA = [
+    {
+      cat: '교육과정',
+      q: '숲해설가 전문가과정은 어떤 분들이 들을 수 있나요?',
+      a: `<p>만 18세 이상 성인이라면 누구나 신청하실 수 있습니다.</p>
+          <p>자연과 숲에 관심이 있으신 분, 제2의 직업을 준비하시는 분, 자원봉사 활동을 원하시는 분 등 다양한 분들이 참여하고 있습니다.</p>`
+    },
+    {
+      cat: '교육과정',
+      q: '전문가과정 교육 기간과 일정은 어떻게 되나요?',
+      a: `<p>전문가과정은 약 3개월(12주) 과정으로 운영됩니다.</p>
+          <p><strong>상반기</strong>: 4월 ~ 6월 / <strong>하반기</strong>: 9월 ~ 11월 (연 2회 운영)</p>
+          <p>이론 교육과 현장 실습이 병행되며, 주 1~2회 진행됩니다.</p>`
+    },
+    {
+      cat: '교육과정',
+      q: '교육 수료 후 자격증이 발급되나요?',
+      a: `<p>협회에서 발행하는 수료증이 발급됩니다.</p>
+          <p>단, 국가 공인 자격증은 산림청에서 별도 시행하는 <strong>숲해설가 자격시험</strong>을 통해 취득하실 수 있습니다. 협회 교육 수료 후 자격시험에 응시하시는 분들이 많습니다.</p>`
+    },
+    {
+      cat: '교육과정',
+      q: '시민아카데미와 전문가과정의 차이가 무엇인가요?',
+      a: `<p>두 과정의 주요 차이는 아래와 같습니다.</p>
+          <ul>
+            <li><strong>전문가과정</strong>: 3개월 집중 교육, 수료 후 정회원 자격 취득 가능, 현장 활동 연계</li>
+            <li><strong>시민아카데미</strong>: 단기(1~2일) 체험 중심 교육, 일반 시민 대상, 부담 없이 참여 가능</li>
+          </ul>
+          <p>숲해설가로 활동하고 싶으신 분은 전문가과정을, 숲에 대한 관심과 교양을 쌓고 싶으신 분은 시민아카데미를 추천드립니다.</p>`
+    },
+    {
+      cat: '신청·접수',
+      q: '교육 신청은 어떻게 하나요?',
+      a: `<p>홈페이지 상단 메뉴 <strong>숲해설가교육 > 전문과정 신청</strong>에서 온라인으로 신청하실 수 있습니다.</p>
+          <p>신청 절차: 교육안내 확인 → 개인정보 동의 → 신청서 작성 → 제출 완료</p>
+          <p>신청서 제출 후 사무국에서 개별 안내 연락을 드립니다.</p>`
+    },
+    {
+      cat: '신청·접수',
+      q: '정원이 초과된 경우 대기 신청이 가능한가요?',
+      a: `<p>현재는 별도 대기 신청 기능을 운영하고 있지 않습니다.</p>
+          <p>정원 초과 시 해당 기수 신청이 마감되며, 다음 기수 모집 공지를 확인하시어 재신청해 주시기 바랍니다.</p>
+          <p>다음 기수 모집 알림은 <strong>공지사항</strong>에서 확인하실 수 있습니다.</p>`
+    },
+    {
+      cat: '신청·접수',
+      q: '접수 후 취소나 환불이 가능한가요?',
+      a: `<p>교육 시작 전에는 취소가 가능합니다. 사무국(02-000-0000)으로 연락 주시기 바랍니다.</p>
+          <p>교육 시작 후에는 환불이 어려울 수 있으며, 세부 규정은 신청 시 안내되는 환불 정책을 참고해 주세요.</p>`
+    },
+    {
+      cat: '회원·정회원',
+      q: '정회원이 되려면 어떻게 해야 하나요?',
+      a: `<p>정회원 전환 조건은 아래 두 가지를 모두 충족해야 합니다.</p>
+          <ul>
+            <li>전문가과정 교육 수료</li>
+            <li>연회비 납부</li>
+          </ul>
+          <p>두 조건 충족 후 관리자가 수동으로 등급을 변경하며, 변경 완료 시 안내 드립니다.</p>`
+    },
+    {
+      cat: '회원·정회원',
+      q: '일반회원과 정회원의 차이가 무엇인가요?',
+      a: `<p>주요 차이는 접근 가능한 메뉴와 활동 범위입니다.</p>
+          <ul>
+            <li><strong>일반회원</strong>: 공지사항, 자유게시판, 일자리정보, 교육 신청 가능</li>
+            <li><strong>정회원</strong>: 일반회원 권한 + 역량강화 교육, 사공단 활동, 동아리 게시판 등 정회원 전용 콘텐츠 이용 가능</li>
+          </ul>`
+    },
+    {
+      cat: '회원·정회원',
+      q: '회비는 얼마이며 어떻게 납부하나요?',
+      a: `<p>연회비는 사무국으로 문의해 주시기 바랍니다.</p>
+          <p>납부 방법은 계좌이체이며, 납부 확인 후 관리자가 정회원으로 등급을 변경해 드립니다.</p>
+          <p>문의: 사무국 02-000-0000 / info@forest-guide.or.kr</p>`
+    },
+    {
+      cat: '수료증',
+      q: '수료증은 어떻게 발급받나요?',
+      a: `<p>교육 수료 처리가 완료되면 마이페이지 > 교육이수내역에서 PDF로 다운로드하실 수 있습니다.</p>
+          <p>수료 처리는 관리자가 진행하며, 완료 후 마이페이지에서 자동으로 활성화됩니다.</p>`
+    },
+    {
+      cat: '수료증',
+      q: '수료증을 분실했을 때 재발급이 가능한가요?',
+      a: `<p>마이페이지에서 언제든지 재다운로드 하실 수 있습니다.</p>
+          <p>마이페이지 접근이 어려우신 경우 사무국으로 문의해 주시면 안내해 드리겠습니다.</p>`
+    },
+  ];
+
+  /* ── 카테고리 목록 추출 */
+  const CATS = ['전체', ...new Set(FAQ_DATA.map(d => d.cat))];
+
+  let activeCat = '전체';
+
+  /* ── 탭 렌더 */
+  function renderTabs() {
+    document.getElementById('faqTabs').innerHTML = CATS.map(c => `
+      <button class="faq-tab ${c === activeCat ? 'active' : ''}"
+              onclick="setCat('${c}')">${c}</button>
+    `).join('');
+  }
+
+  /* ── 아코디언 렌더 */
+  function renderAccordion() {
+    const filtered = activeCat === '전체'
+      ? FAQ_DATA
+      : FAQ_DATA.filter(d => d.cat === activeCat);
+
+    document.getElementById('accordionList').innerHTML = filtered.map((d, i) => `
+      <div class="accordion-item" id="acc-${i}">
+        <div class="accordion-head" onclick="toggleAcc(${i})">
+          <span class="acc-q-mark">Q</span>
+          <span class="acc-question">${d.q}</span>
+          <span class="acc-arrow"></span>
+        </div>
+        <div class="accordion-body">
+          <div class="acc-answer-inner">
+            <span class="acc-a-mark">A</span>
+            <div class="acc-answer-text">${d.a}</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /* ── 카테고리 변경 */
+  function setCat(cat) {
+    activeCat = cat;
+    renderTabs();
+    renderAccordion();
+  }
+
+  /* ── 아코디언 토글 */
+  function toggleAcc(i) {
+    const el = document.getElementById('acc-' + i);
+    const isOpen = el.classList.contains('open');
+    /* 다른 항목 모두 닫기 */
+    document.querySelectorAll('.accordion-item').forEach(a => a.classList.remove('open'));
+    /* 클릭한 항목 토글 */
+    if (!isOpen) el.classList.add('open');
+  }
+
+  /* ── 초기 렌더 */
+  renderTabs();
+  renderAccordion();
+</script>
+</body>
+</html>
