@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미션 & 비전 | 한국숲해설가협회</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* ── 본문 래퍼 */
+        .content-wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 64px 24px 88px;
+        }
+
+        /* ── 공통 섹션 간격 */
+        .v-section {
+            margin-bottom: 72px;
+        }
+
+        .v-section:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ── 섹션 레이블 + 타이틀 */
+        .v-label {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--green-main);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .v-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--green-dark);
+            margin-bottom: 14px;
+            line-height: 1.35;
+        }
+
+        .v-desc {
+            font-size: 15px;
+            color: var(--gray-mid);
+            line-height: 1.85;
+            word-break: keep-all;
+            max-width: 700px;
+        }
+
+        .v-head {
+            margin-bottom: 36px;
+        }
+
+        /* ══════════════════════════════
+       미션 섹션
+    ══════════════════════════════ */
+        .mission-box {
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-main) 100%);
+            border-radius: 16px;
+            padding: 52px 48px;
+            color: #fff;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 배경 장식 원 */
+        .mission-box::before,
+        .mission-box::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .mission-box::before {
+            width: 300px;
+            height: 300px;
+            top: -80px;
+            right: -60px;
+        }
+
+        .mission-box::after {
+            width: 200px;
+            height: 200px;
+            bottom: -60px;
+            left: -40px;
+        }
+
+        .mission-badge {
+            display: inline-block;
+            border: 1.5px solid rgba(255, 255, 255, .5);
+            border-radius: 20px;
+            padding: 5px 18px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .85);
+            margin-bottom: 20px;
+        }
+
+        .mission-text {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+            word-break: keep-all;
+        }
+
+        .mission-sub {
+            font-size: 15px;
+            opacity: .8;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+            word-break: keep-all;
+        }
+
+        /* ══════════════════════════════
+       비전 섹션
+    ══════════════════════════════ */
+        .vision-box {
+            border: 2px solid var(--green-main);
+            border-radius: 16px;
+            padding: 40px 48px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .vision-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--green-dark);
+            line-height: 1.6;
+            margin-bottom: 12px;
+            word-break: keep-all;
+        }
+
+        .vision-sub {
+            font-size: 14px;
+            color: var(--gray-mid);
+            line-height: 1.8;
+        }
+
+        /* ══════════════════════════════
+       핵심가치 카드
+    ══════════════════════════════ */
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .value-card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px 20px;
+            text-align: center;
+            border-top: 4px solid var(--green-main);
+            transition: var(--trans);
+        }
+
+        .value-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, .12);
+        }
+
+        .value-icon {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 14px;
+            background: var(--green-pale);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .value-icon svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .value-keyword {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--green-dark);
+            margin-bottom: 8px;
+        }
+
+        .value-desc {
+            font-size: 13px;
+            color: var(--gray-mid);
+            line-height: 1.7;
+            word-break: keep-all;
+        }
+
+        /* ══════════════════════════════
+       전략목표
+    ══════════════════════════════ */
+        .strategy-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .strategy-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 22px 24px;
+        }
+
+        .strategy-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--green-dark);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .strategy-body {
+            flex: 1;
+        }
+
+        .strategy-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--green-dark);
+            margin-bottom: 5px;
+        }
+
+        .strategy-desc {
+            font-size: 14px;
+            color: var(--gray-mid);
+            line-height: 1.75;
+            word-break: keep-all;
+        }
+
+        /* ══════════════════════════════
+       슬로건 배너
+    ══════════════════════════════ */
+        .slogan-banner {
+            background: var(--green-pale);
+            border-radius: 16px;
+            padding: 44px 40px;
+            text-align: center;
+        }
+
+        .slogan-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--green-main);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .slogan-text {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--green-dark);
+            line-height: 1.5;
+            margin-bottom: 12px;
+            word-break: keep-all;
+        }
+
+        .slogan-text em {
+            font-style: normal;
+            border-bottom: 3px solid var(--green-main);
+            padding-bottom: 2px;
+        }
+
+        .slogan-sub {
+            font-size: 14px;
+            color: var(--gray-mid);
+            line-height: 1.8;
+        }
+
+        /* ── 반응형 */
+        @media (max-width: 900px) {
+            .value-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mission-box {
+                padding: 36px 24px;
+            }
+
+            .vision-box {
+                padding: 32px 24px;
+            }
+
+            .slogan-banner {
+                padding: 36px 20px;
+            }
+
+            .slogan-text {
+                font-size: 20px;
+            }
+
+            .sub-nav-item {
+                padding: 14px 16px;
+                font-size: 14px;
+            }
+
+            .mission-text {
+                font-size: 18px;
+            }
+
+            .v-title {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sub-nav-inner {
+                overflow-x: auto;
+            }
+
+            .sub-nav-item {
+                padding: 12px 14px;
+                font-size: 13px;
+            }
+
+            .value-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .strategy-item {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .content-wrap {
+                padding: 40px 16px 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="hdr"></div>
+
+    <!-- 페이지 헤더 -->
+    <div class="page-header">
+        <div class="container">
+            <h1>협회 소개</h1>
+            <p>한국숲해설가협회를 소개합니다.</p>
+        </div>
+    </div>
+
+    <!-- 서브 탭 내비 -->
+    <div class="sub-nav">
+        <div class="sub-nav-inner">
+            <a href="about.html" class="sub-nav-item">인사말</a>
+            <a href="about-vision.html" class="sub-nav-item active">미션&비전</a>
+            <a href="about-project.html" class="sub-nav-item">주요사업</a>
+            <a href="about-history.html" class="sub-nav-item">연혁</a>
+            <a href="about-members.html" class="sub-nav-item">조직도&임원진</a>
+            <a href="about-regions.html" class="sub-nav-item">전국 지역협회</a>
+            <a href="about-constitution.html" class="sub-nav-item">정관</a>
+            <a href="about-contact.html" class="sub-nav-item">오시는길</a>
+        </div>
+    </div>
+    
+    <div class="content-wrap">
+
+        <!-- 1. 미션 -->
+        <div class="v-section">
+            <div class="v-head">
+                <span class="v-label">Mission</span>
+                <h2 class="v-title">미션</h2>
+                <p class="v-desc">한국숲해설가협회가 존재하는 이유이자, 모든 활동의 출발점입니다.</p>
+            </div>
+            <div class="mission-box">
+                <div class="mission-badge">Our Mission</div>
+                <div class="mission-text">
+                    자연생태와 문화에 대한 올바른 인식을 심어주고,<br>
+                    바람직한 숲체험이 이루어 질 수 있도록 안내한다.
+                </div>
+                <div class="mission-sub">
+                    숲과 사람이 함께 건강하게 공존하는 세상을 만들기 위해<br>
+                    전문 숲해설가를 양성하고, 자연의 가치를 사회에 전달합니다.
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 비전 -->
+        <div class="v-section">
+            <div class="v-head">
+                <span class="v-label">Vision</span>
+                <h2 class="v-title">비전</h2>
+                <p class="v-desc">우리가 지향하는 미래의 모습입니다.</p>
+            </div>
+            <div class="vision-box">
+                <div class="vision-text">
+                    숲과 사람을 잇는 가장 신뢰받는 전문 단체
+                </div>
+                <div class="vision-sub">
+                    전국 어디서나, 누구에게나 숲의 가치를 전하는<br>
+                    대한민국 대표 숲해설 전문 사단법인
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 핵심가치 -->
+        <div class="v-section">
+            <div class="v-head">
+                <span class="v-label">Core Values</span>
+                <h2 class="v-title">핵심가치</h2>
+                <p class="v-desc">협회의 모든 활동과 의사결정의 기준이 되는 네 가지 가치입니다.</p>
+            </div>
+            <div class="value-grid">
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="13" cy="13" r="10" stroke="#2d6a4f" stroke-width="2" />
+                            <path d="M9 13 L12 16 L17 10" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="value-keyword">전문성</div>
+                    <div class="value-desc">체계적 교육과 현장 경험을 바탕으로 높은 수준의 해설 역량을 갖춥니다.</div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 3 C8 3 4 7 4 12 C4 18 13 23 13 23 C13 23 22 18 22 12 C22 7 18 3 13 3Z"
+                                stroke="#2d6a4f" stroke-width="2" stroke-linejoin="round" />
+                            <path d="M13 8 L13 14 M10 11 L16 11" stroke="#2d6a4f" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="value-keyword">생태 존중</div>
+                    <div class="value-desc">자연 생태계의 가치를 소중히 여기고 지속 가능한 방식으로 활동합니다.</div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="9" cy="10" r="4" stroke="#2d6a4f" stroke-width="2" />
+                            <circle cx="17" cy="10" r="4" stroke="#2d6a4f" stroke-width="2" />
+                            <path d="M3 22 C3 18 6 16 9 16 C11 16 13 17 13 17 C13 17 15 16 17 16 C20 16 23 18 23 22"
+                                stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="value-keyword">공동체</div>
+                    <div class="value-desc">회원 간 협력과 나눔을 통해 함께 성장하는 건강한 공동체를 추구합니다.</div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 3 L15.5 9 L22 9.5 L17.5 14 L19 21 L13 17.5 L7 21 L8.5 14 L4 9.5 L10.5 9 Z"
+                                stroke="#2d6a4f" stroke-width="2" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="value-keyword">사회공헌</div>
+                    <div class="value-desc">취약계층과 지역사회를 위한 봉사활동으로 숲의 혜택을 나눕니다.</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 4. 전략목표 -->
+        <div class="v-section">
+            <div class="v-head">
+                <span class="v-label">Strategic Goals</span>
+                <h2 class="v-title">전략목표</h2>
+                <p class="v-desc">미션과 비전을 실현하기 위한 구체적인 방향입니다.</p>
+            </div>
+            <div class="strategy-list">
+
+                <div class="strategy-item">
+                    <div class="strategy-num">1</div>
+                    <div class="strategy-body">
+                        <div class="strategy-title">전문 숲해설가 양성 및 역량 강화</div>
+                        <div class="strategy-desc">
+                            산림청 인증 교육과정 운영과 지속적인 심화 교육을 통해
+                            높은 전문성을 갖춘 숲해설가를 배출하고 지원합니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-num">2</div>
+                    <div class="strategy-body">
+                        <div class="strategy-title">숲 체험 프로그램 확대 및 대중화</div>
+                        <div class="strategy-desc">
+                            어린이, 가족, 노인, 장애인 등 다양한 계층을 대상으로
+                            맞춤형 숲 체험 프로그램을 확대하여 숲해설의 저변을 넓힙니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-num">3</div>
+                    <div class="strategy-body">
+                        <div class="strategy-title">취약계층 대상 사회공헌 활동 강화</div>
+                        <div class="strategy-desc">
+                            복지기관, 학교, 지역사회와 연계하여 소외계층도 숲의 치유와
+                            안정의 혜택을 누릴 수 있도록 봉사활동을 지속적으로 펼칩니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-num">4</div>
+                    <div class="strategy-body">
+                        <div class="strategy-title">기후 위기 대응 환경 교육 선도</div>
+                        <div class="strategy-desc">
+                            탄소중립 국가 정책에 적극 동참하고, 숲의 탄소 흡수 기능과
+                            생태계 보전의 중요성을 알리는 환경 교육 활동을 강화합니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-num">5</div>
+                    <div class="strategy-body">
+                        <div class="strategy-title">유관기관 협력 네트워크 확대</div>
+                        <div class="strategy-desc">
+                            산림청, 국립수목원, 산림복지진흥원, 지역 자치단체 및
+                            환경 관련 단체와의 협력 관계를 강화하여 사업 기반을 확충합니다.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 5. 슬로건 -->
+        <div class="v-section">
+            <div class="slogan-banner">
+                <div class="slogan-label">Slogan</div>
+                <div class="slogan-text">
+                    숲이 사람에게, 사람이 숲에게
+                </div>
+                <div class="slogan-sub">
+                    숲과 인간의 동행, 그 가치를 한국숲해설가협회가 실현합니다.
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /content-wrap -->
+
+    <div id="ftr"></div>
+
+    <script src="common.js"></script>
+    <script>
+        document.getElementById('hdr').innerHTML = App.renderHeader('협회소개');
+        document.getElementById('ftr').innerHTML = App.renderFooter();
+    </script>
+</body>
+
+</html>

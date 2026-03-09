@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>멘토링 숲학교 | 한국숲해설가협회</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* ── 검색 영역 ── */
+        .search-wrap {
+            background: #fff;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .search-field label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-dark);
+        }
+
+        .search-field .form-control {
+            height: 40px;
+        }
+
+        .search-btn {
+            height: 40px;
+            padding: 0 24px;
+            white-space: nowrap;
+            align-self: flex-end;
+        }
+
+        /* ── 목록 상단 ── */
+        .list-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .list-count {
+            font-size: 14px;
+            color: var(--gray-dark);
+        }
+
+        .list-count strong {
+            font-weight: 700;
+        }
+
+        /* ── 게시판 테이블 ── */
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: #fff;
+            border-top: 2px solid var(--gray-dark);
+        }
+
+        .board-table thead tr {
+            background: var(--gray-bg);
+        }
+
+        .board-table thead th {
+            padding: 13px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-dark);
+            text-align: center;
+            border-bottom: 1px solid var(--gray-light);
+            white-space: nowrap;
+        }
+
+        .board-table tbody tr {
+            border-bottom: 1px solid var(--gray-light);
+            transition: background .15s;
+        }
+
+        .board-table tbody tr:hover {
+            background: var(--gray-bg);
+        }
+
+        .board-table tbody td {
+            padding: 13px 16px;
+            text-align: center;
+            color: var(--gray-dark);
+            vertical-align: middle;
+        }
+
+        .board-table tbody td.td-title {
+            text-align: left;
+        }
+
+        .board-table tbody td.td-title a {
+            color: var(--gray-dark);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .board-table tbody td.td-title a:hover {
+            color: var(--green-main);
+            text-decoration: underline;
+        }
+
+        /* 공지 배지 */
+        .badge-notice {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--green-dark);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 3px;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        /* ── 페이지네이션 ── */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            margin-top: 28px;
+        }
+
+        .page-btn {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--gray-light);
+            border-radius: 4px;
+            background: #fff;
+            font-size: 13px;
+            color: var(--gray-dark);
+            cursor: pointer;
+            transition: var(--trans);
+        }
+
+        .page-btn:hover {
+            border-color: var(--green-main);
+            color: var(--green-main);
+        }
+
+        .page-btn.active {
+            background: var(--green-dark);
+            color: #fff;
+            border-color: var(--green-dark);
+            font-weight: 700;
+        }
+
+        .page-btn.arrow {
+            font-size: 16px;
+            color: var(--gray-mid);
+        }
+
+        .page-btn:disabled,
+        .page-btn[disabled] {
+            opacity: .35;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .search-wrap {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-field .form-control {
+                width: 100%;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .board-table thead th:nth-child(1),
+            .board-table tbody td:nth-child(1) {
+                display: none;
+            }
+
+            .board-table thead th:nth-child(3),
+            .board-table tbody td:nth-child(3) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-wrap"></div>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>멘토링 숲학교</h1>
+            <p>정회원을 위한 멘토링 소식 게시판입니다.</p>
+        </div>
+    </div>
+
+    <div class="sub-nav">
+        <div class="sub-nav-inner">
+            <a href="course-competency.html" class="sub-nav-item">역량강화 교육강좌</a>
+            <a href="member-mentoring.html" class="sub-nav-item active">멘토링 숲학교</a>
+            <a href="member-recruit.html" class="sub-nav-item">수시숲해설 모집</a>
+            <a href="member-instructor.html" class="sub-nav-item">숲해설 강사 신청</a>
+            <a href="member-sagongdan.html" class="sub-nav-item">사공단 소식</a>
+            <a href="member-club.html" class="sub-nav-item">동아리 소식</a>
+        </div>
+    </div>
+
+    <main class="container section">
+        <!-- 목록 상단 -->
+        <div class="list-top">
+            <!-- 좌측: 건수 -->
+            <div class="list-count">목록 <strong id="totalCount">0</strong>건</div>
+
+            <!-- 우측: 검색 + 드롭다운 -->
+            <div style="display:flex; align-items:center; gap:8px;">
+                <input type="text" class="form-control" id="searchKeyword" placeholder="제목을 입력하세요"
+                    style="height:36px; width:200px; font-size:13px;" onkeydown="if(event.key==='Enter') doSearch()">
+                <button class="btn btn-primary" style="height:36px; padding:0 16px; font-size:13px; white-space:nowrap;"
+                    onclick="doSearch()">검색하기</button>
+                <select class="form-control" id="pageSizeSelect" onchange="changePageSize()"
+                    style="padding:0 28px 0 12px; height:36px; line-height:36px; font-size:12px; width:130px; flex-shrink:0; box-sizing:border-box;">
+                    <option value="10">10개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="50">50개씩 보기</option>
+                </select>
+            </div>
+        </div>
+
+
+        <!-- 테이블 -->
+        <table class="board-table">
+            <thead>
+                <tr>
+                    <th style="width:60px;">NO.</th>
+                    <th>제목</th>
+                    <th style="width:120px;">작성자</th>
+                    <th style="width:110px;">작성일</th>
+                    <th style="width:70px;">조회</th>
+                </tr>
+            </thead>
+            <tbody id="boardTableBody"></tbody>
+        </table>
+
+        <div class="pagination" id="pagination"></div>
+    </main>
+
+    <div id="footer-wrap"></div>
+    <script src="common.js"></script>
+    <script>
+        document.getElementById('header-wrap').innerHTML = App.renderHeader('회원활동');
+        document.getElementById('footer-wrap').innerHTML = App.renderFooter();
+
+        /* ── 샘플 데이터 ── */
+        const ALL_POSTS = [
+            // 공지 (isNotice: true) — 항상 상단 고정
+            { id: 9001, isNotice: true, title: '[공지] 2026년 멘토링 숲학교 운영 안내', author: '관리자', date: '2026-01-02', views: 320 },
+            { id: 9002, isNotice: true, title: '[공지] 멘토링 프로그램 참여 자격 안내', author: '관리자', date: '2026-01-01', views: 215 },
+            // 일반 게시글
+            ...Array.from({ length: 38 }, (_, i) => ({
+                id: 38 - i,
+                isNotice: false,
+                title: [
+                    '3월 멘토링 숲학교 후기를 공유합니다',
+                    '멘토링 일정 변경 안내 (4월)',
+                    '처음 멘토링에 참여했습니다 — 느낀 점',
+                    '숲 해설 멘토님께 감사 인사드립니다',
+                    '멘토링 숲학교 2기 모집 공고',
+                    '멘토링 활동 사진 공유합니다',
+                    '5월 야외 멘토링 장소 안내',
+                ][i % 7],
+                author: ['김회원', '이정회', '박숲길', '최나무', '정초록'][i % 5],
+                date: `2026-${String(Math.floor(i / 4) + 1).padStart(2, '0')}-${String((i % 28) + 1).padStart(2, '0')}`,
+                views: Math.floor(Math.random() * 200) + 10,
+            })),
+        ];
+
+        const NOTICES = ALL_POSTS.filter(p => p.isNotice);
+        const NORMALS = ALL_POSTS.filter(p => !p.isNotice);
+
+        let filtered = [...NORMALS];
+        let currentPage = 1;
+        let pageSize = 10;
+
+        /* ── 검색 ── */
+        function doSearch() {
+            const kw = document.getElementById('searchKeyword').value.trim().toLowerCase();
+            filtered = NORMALS.filter(p => !kw || p.title.toLowerCase().includes(kw));
+            currentPage = 1;
+            render();
+        }
+
+        function changePageSize() {
+            pageSize = Number(document.getElementById('pageSizeSelect').value);
+            currentPage = 1;
+            render();
+        }
+
+        /* ── 렌더링 ── */
+        function render() {
+            const total = filtered.length;
+            const totalPages = Math.ceil(total / pageSize) || 1;
+            const slice = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+            document.getElementById('totalCount').textContent = total.toLocaleString();
+
+            /* 공지 행 (항상 상단) + 일반 행 */
+            const noticeRows = NOTICES.map(p => `
+    <tr>
+      <td><span class="badge-notice">공지</span></td>
+      <td class="td-title">
+        <a href="member-mentoring-detail.html?id=${p.id}">
+          <span class="badge-notice">공지</span>${p.title}
+        </a>
+      </td>
+      <td>${p.author}</td>
+      <td>${p.date}</td>
+      <td>${p.views}</td>
+    </tr>`).join('');
+
+            const normalRows = slice.map(p => `
+    <tr>
+      <td>${p.id}</td>
+      <td class="td-title">
+        <a href="member-mentoring-detail.html?id=${p.id}">${p.title}</a>
+      </td>
+      <td>${p.author}</td>
+      <td>${p.date}</td>
+      <td>${p.views}</td>
+    </tr>`).join('');
+
+            document.getElementById('boardTableBody').innerHTML = noticeRows + normalRows;
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const G = 10;
+            const gs = Math.floor((currentPage - 1) / G) * G + 1;
+            const ge = Math.min(gs + G - 1, totalPages);
+            let h = `<button class="page-btn arrow" ${currentPage === 1 ? 'disabled' : ''}
+             onclick="goPage(${currentPage - 1})">&#8249;</button>`;
+            for (let i = gs; i <= ge; i++)
+                h += `<button class="page-btn ${i === currentPage ? 'active' : ''}"
+               onclick="goPage(${i})">${i}</button>`;
+            h += `<button class="page-btn arrow" ${currentPage === totalPages ? 'disabled' : ''}
+             onclick="goPage(${currentPage + 1})">&#8250;</button>`;
+            document.getElementById('pagination').innerHTML = h;
+        }
+
+        function goPage(p) {
+            currentPage = p;
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

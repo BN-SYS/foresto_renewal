@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오시는길 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="common.css">
+  <style>
+
+    .content-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 56px 24px 88px;
+    }
+
+    /* ── 2단 레이아웃 */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ── 지도 영역 */
+    .map-wrap {
+      background: var(--gray-light);
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      position: relative;
+    }
+    /* 카카오맵 iframe */
+    .map-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    /* iframe 로드 전 placeholder */
+    .map-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: #e8eeeb;
+      color: var(--gray-mid);
+      font-size: 14px;
+    }
+    .map-placeholder svg {
+      width: 48px; height: 48px; opacity: .4;
+    }
+
+    /* ── 정보 카드 */
+    .info-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .info-card-head {
+      background: var(--green-dark);
+      color: #fff;
+      padding: 20px 24px;
+    }
+    .info-card-head h3 {
+      font-size: 16px; font-weight: 700; margin-bottom: 3px;
+    }
+    .info-card-head p {
+      font-size: 13px; opacity: .8;
+    }
+    .info-card-body { padding: 4px 0; }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .info-row:last-child { border-bottom: none; }
+
+    .info-icon {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--green-pale);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .info-icon svg { width: 18px; height: 18px; }
+
+    .info-content { flex: 1; }
+    .info-label {
+      font-size: 11px; font-weight: 700;
+      color: var(--gray-mid); letter-spacing: .5px;
+      text-transform: uppercase; margin-bottom: 3px;
+    }
+    .info-value {
+      font-size: 14px; color: var(--gray-dark);
+      line-height: 1.65; font-weight: 500;
+      word-break: keep-all;
+    }
+    .info-value a {
+      color: var(--green-main);
+      text-decoration: none;
+    }
+    .info-value a:hover { text-decoration: underline; }
+
+    /* ── 교통편 섹션 */
+    .transport-section { margin-top: 40px; }
+    .transport-title {
+      font-size: 16px; font-weight: 700;
+      color: var(--green-dark); margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--green-pale);
+    }
+    .transport-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .transport-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .transport-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .transport-badge {
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 12px; font-weight: 700;
+      color: #fff;
+    }
+    .badge-subway { background: #2563eb; }
+    .badge-bus    { background: #16a34a; }
+    .badge-car    { background: #9333ea; }
+    .badge-park   { background: var(--gray-mid); }
+
+    .transport-name {
+      font-size: 14px; font-weight: 700; color: var(--gray-dark);
+    }
+    .transport-items {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .transport-item {
+      font-size: 13px; color: var(--gray-dark);
+      line-height: 1.6; word-break: keep-all;
+      display: flex; gap: 6px; align-items: flex-start;
+    }
+    .transport-item::before {
+      content: '·';
+      color: var(--gray-mid);
+      flex-shrink: 0;
+    }
+
+    /* ── 반응형 */
+    @media (max-width: 1024px) {
+      .contact-layout { grid-template-columns: 1fr; }
+      .map-wrap       { aspect-ratio: 16 / 9; }
+    }
+    @media (max-width: 600px) {
+      .transport-grid { grid-template-columns: 1fr; }
+      .content-wrap   { padding: 36px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="hdr"></div>
+
+<div class="page-header">
+  <div class="container">
+    <h1>협회 소개</h1>
+    <p>한국숲해설가협회를 소개합니다.</p>
+  </div>
+</div>
+
+<div class="sub-nav">
+  <div class="sub-nav-inner">
+    <a href="about.html"              class="sub-nav-item">인사말</a>
+    <a href="about-vision.html"       class="sub-nav-item">미션&amp;비전</a>
+    <a href="about-project.html"      class="sub-nav-item">주요사업</a>
+    <a href="about-history.html"      class="sub-nav-item">연혁</a>
+    <a href="about-members.html"      class="sub-nav-item">조직도&amp;임원진</a>
+    <a href="about-regions.html"      class="sub-nav-item">전국 지역협회</a>
+    <a href="about-constitution.html" class="sub-nav-item">정관</a>
+    <a href="about-contact.html"      class="sub-nav-item active">오시는길</a>
+  </div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="contact-layout">
+
+    <!-- 지도 -->
+    <div>
+      <div class="map-wrap" id="mapWrap">
+        <div class="map-placeholder" id="mapPlaceholder">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 4C16.268 4 10 10.268 10 18C10 28 24 44 24 44C24 44 38 28 38 18C38 10.268 31.732 4 24 4Z" stroke="#636e72" stroke-width="2.5"/>
+            <circle cx="24" cy="18" r="5" stroke="#636e72" stroke-width="2.5"/>
+          </svg>
+          <span>지도를 불러오는 중입니다.</span>
+          <a href="https://map.kakao.com" target="_blank" class="btn btn-primary btn-sm">카카오맵에서 보기</a>
+        </div>
+        <!-- 실제 적용 시 아래 iframe 활성화, 위 placeholder 제거 -->
+        <!--
+        <iframe
+          src="https://map.kakao.com/link/embed/협회주소"
+          allowfullscreen>
+        </iframe>
+        -->
+      </div>
+
+      <!-- 교통편 -->
+      <!-- <div class="transport-section">
+        <div class="transport-title">교통편 안내</div>
+        <div class="transport-grid">
+
+          <div class="transport-card">
+            <div class="transport-head">
+              <span class="transport-badge badge-subway">지하철</span>
+              <span class="transport-name">지하철 이용</span>
+            </div>
+            <div class="transport-items">
+              <div class="transport-item">○호선 ○○역 ○번 출구에서 도보 5분</div>
+              <div class="transport-item">○호선 ○○역 ○번 출구에서 도보 8분</div>
+            </div>
+          </div>
+
+          <div class="transport-card">
+            <div class="transport-head">
+              <span class="transport-badge badge-bus">버스</span>
+              <span class="transport-name">버스 이용</span>
+            </div>
+            <div class="transport-items">
+              <div class="transport-item">간선버스 ○○○번 — ○○○○ 정류장 하차</div>
+              <div class="transport-item">지선버스 ○○○○번 — ○○○○ 정류장 하차</div>
+            </div>
+          </div>
+
+          <div class="transport-card">
+            <div class="transport-head">
+              <span class="transport-badge badge-car">자가용</span>
+              <span class="transport-name">자가용 이용</span>
+            </div>
+            <div class="transport-items">
+              <div class="transport-item">내비게이션에 '한국숲해설가협회' 검색</div>
+              <div class="transport-item">건물 정문 앞 잠시 정차 가능</div>
+            </div>
+          </div>
+
+          <div class="transport-card">
+            <div class="transport-head">
+              <span class="transport-badge badge-park">주차</span>
+              <span class="transport-name">주차 안내</span>
+            </div>
+            <div class="transport-items">
+              <div class="transport-item">건물 내 주차장 이용 가능 (유료)</div>
+              <div class="transport-item">대중교통 이용을 권장드립니다.</div>
+            </div>
+          </div>
+
+        </div>
+      </div> -->
+    </div>
+
+    <!-- 연락처 정보 -->
+    <div class="info-card">
+      <div class="info-card-head">
+        <h3>사단법인 한국숲해설가협회</h3>
+        <p>Korea Forest Interpreter Association</p>
+      </div>
+      <div class="info-card-body">
+
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 2C6.238 2 4 4.238 4 7C4 11 9 16 9 16C9 16 14 11 14 7C14 4.238 11.762 2 9 2Z" stroke="#2d6a4f" stroke-width="1.6"/>
+              <circle cx="9" cy="7" r="2" stroke="#2d6a4f" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <div class="info-label">주소</div>
+            <div class="info-value">서울특별시 OO구 OO로 OOO<br>(우편번호: 00000)</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 4h12a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="#2d6a4f" stroke-width="1.6"/>
+              <path d="M2 5l7 5 7-5" stroke="#2d6a4f" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <div class="info-label">이메일</div>
+            <div class="info-value">
+              <a href="mailto:info@forest-guide.or.kr">info@forest-guide.or.kr</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.5 3h3l1.5 3.5-1.5 1a9 9 0 004 4l1-1.5L15 11.5v3c0 .5-.5 1-1 1A12 12 0 012.5 4c0-.5.5-1 1-1z" stroke="#2d6a4f" stroke-width="1.6" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <div class="info-label">대표전화</div>
+            <div class="info-value">
+              <a href="tel:020000000">02-000-0000</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="14" height="14" rx="2" stroke="#2d6a4f" stroke-width="1.6"/>
+              <path d="M2 7h14" stroke="#2d6a4f" stroke-width="1.6"/>
+              <path d="M6 2v5M12 2v5" stroke="#2d6a4f" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <div class="info-label">운영시간</div>
+            <div class="info-value">
+              평일 09:00 ~ 18:00<br>
+              점심시간 12:00 ~ 13:00<br>
+              토·일·공휴일 휴무
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="4" width="14" height="11" rx="1.5" stroke="#2d6a4f" stroke-width="1.6"/>
+              <path d="M5 4V3M13 4V3M2 8h14" stroke="#2d6a4f" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <div class="info-label">사업자등록번호</div>
+            <div class="info-value">000-00-00000</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /contact-layout -->
+
+</div><!-- /content-wrap -->
+
+<div id="ftr"></div>
+
+<script src="common.js"></script>
+<script>
+  document.getElementById('hdr').innerHTML = App.renderHeader('협회소개');
+  document.getElementById('ftr').innerHTML = App.renderFooter();
+</script>
+</body>
+</html>
