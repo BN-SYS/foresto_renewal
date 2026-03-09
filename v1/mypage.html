@@ -940,22 +940,262 @@
 
         /* ── 수료증 모달 ── */
         function openCertModal(id) {
-            const e = ALL_EDU.find(x => x.id === id);
-            if (!e) return;
-            document.getElementById('certPreviewArea').innerHTML = `
-    <div class="cert-preview">
-      <div style="font-size:13px;color:#636e72;margin-bottom:4px;">한국숲해설가협회</div>
-      <div class="cert-doc-title">수 료 증</div>
-      <div class="cert-body">
-        위 사람은 <strong>${e.title}</strong> 과정을<br>
-        성실히 이수하였기에 이 증서를 드립니다.<br>
-        이수시간: <strong>${e.hours}시간</strong>
+  const e = ALL_EDU.find(x => x.id === id);
+  if (!e) return;
+
+  const docNo = `제${e.id.toString().padStart(4,'0')}-${e.date.replace(/-/g,'').slice(0,6)}-${String(e.id * 17 % 99 + 1).padStart(2,'0')}호`;
+
+  /* 날짜 포매팅 */
+  const [y, m, d] = e.date.split('-');
+  const dateStr = `${y}년 ${parseInt(m)}월 ${parseInt(d)}일`;
+
+  document.getElementById('certPreviewArea').innerHTML = `
+  <div id="cert-root" style="
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    background: #fefcf3;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', serif;
+  ">
+
+    <!-- ══ 바깥 테두리 SVG 장식 ══ -->
+    <svg viewBox="0 0 500 680" xmlns="http://www.w3.org/2000/svg"
+         style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;">
+
+      <!-- 배경 크림색 -->
+      <rect width="500" height="680" fill="#fefcf3"/>
+
+      <!-- 바깥 금색 두꺼운 테두리 -->
+      <rect x="8" y="8" width="484" height="664" fill="none"
+            stroke="#b8962e" stroke-width="4" rx="4"/>
+      <!-- 안쪽 얇은 금색 테두리 -->
+      <rect x="16" y="16" width="468" height="648" fill="none"
+            stroke="#d4af37" stroke-width="1.2" rx="2"/>
+
+      <!-- 상단 중앙 장식 라인 -->
+      <line x1="60" y1="54" x2="440" y2="54" stroke="#d4af37" stroke-width="0.8"/>
+      <line x1="60" y1="58" x2="440" y2="58" stroke="#d4af37" stroke-width="0.4"/>
+
+      <!-- 하단 중앙 장식 라인 -->
+      <line x1="60" y1="620" x2="440" y2="620" stroke="#d4af37" stroke-width="0.8"/>
+      <line x1="60" y1="624" x2="440" y2="624" stroke="#d4af37" stroke-width="0.4"/>
+
+      <!-- 네 모서리 꽃문양 (로제트) -->
+      <!-- 좌상 -->
+      <g transform="translate(36,36)">
+        <circle cx="0" cy="0" r="10" fill="none" stroke="#b8962e" stroke-width="1.2"/>
+        <circle cx="0" cy="0" r="5"  fill="#d4af37" opacity="0.6"/>
+        <line x1="-13" y1="0"  x2="13"  y2="0"  stroke="#b8962e" stroke-width="0.8"/>
+        <line x1="0"  y1="-13" x2="0"   y2="13"  stroke="#b8962e" stroke-width="0.8"/>
+        <line x1="-9" y1="-9"  x2="9"   y2="9"   stroke="#b8962e" stroke-width="0.6"/>
+        <line x1="9"  y1="-9"  x2="-9"  y2="9"   stroke="#b8962e" stroke-width="0.6"/>
+      </g>
+      <!-- 우상 -->
+      <g transform="translate(464,36)">
+        <circle cx="0" cy="0" r="10" fill="none" stroke="#b8962e" stroke-width="1.2"/>
+        <circle cx="0" cy="0" r="5"  fill="#d4af37" opacity="0.6"/>
+        <line x1="-13" y1="0"  x2="13"  y2="0"  stroke="#b8962e" stroke-width="0.8"/>
+        <line x1="0"  y1="-13" x2="0"   y2="13"  stroke="#b8962e" stroke-width="0.8"/>
+        <line x1="-9" y1="-9"  x2="9"   y2="9"   stroke="#b8962e" stroke-width="0.6"/>
+        <line x1="9"  y1="-9"  x2="-9"  y2="9"   stroke="#b8962e" stroke-width="0.6"/>
+      </g>
+      <!-- 좌하 -->
+      <g transform="translate(36,644)">
+        <circle cx="0" cy="0" r="10" fill="none" stroke="#b8962e" stroke-width="1.2"/>
+        <circle cx="0" cy="0" r="5"  fill="#d4af37" opacity="0.6"/>
+        <line x1="-13" y1="0"  x2="13"  y2="0"  stroke="#b8962e" stroke-width="0.8"/>
+        <line x1="0"  y1="-13" x2="0"   y2="13"  stroke="#b8962e" stroke-width="0.8"/>
+        <line x1="-9" y1="-9"  x2="9"   y2="9"   stroke="#b8962e" stroke-width="0.6"/>
+        <line x1="9"  y1="-9"  x2="-9"  y2="9"   stroke="#b8962e" stroke-width="0.6"/>
+      </g>
+      <!-- 우하 -->
+      <g transform="translate(464,644)">
+        <circle cx="0" cy="0" r="10" fill="none" stroke="#b8962e" stroke-width="1.2"/>
+        <circle cx="0" cy="0" r="5"  fill="#d4af37" opacity="0.6"/>
+        <line x1="-13" y1="0"  x2="13"  y2="0"  stroke="#b8962e" stroke-width="0.8"/>
+        <line x1="0"  y1="-13" x2="0"   y2="13"  stroke="#b8962e" stroke-width="0.8"/>
+        <line x1="-9" y1="-9"  x2="9"   y2="9"   stroke="#b8962e" stroke-width="0.6"/>
+        <line x1="9"  y1="-9"  x2="-9"  y2="9"   stroke="#b8962e" stroke-width="0.6"/>
+      </g>
+
+      <!-- 상단 좌우 월계수 잎 장식 -->
+      <!-- 좌측 잎 -->
+      <g transform="translate(120,36)" opacity="0.75">
+        <ellipse cx="-30" cy="0" rx="18" ry="7" fill="#2d6a4f" transform="rotate(-20,-30,0)"/>
+        <ellipse cx="-16" cy="-4" rx="15" ry="6" fill="#40916c" transform="rotate(-10,-16,-4)"/>
+        <ellipse cx="-3"  cy="-6" rx="12" ry="5" fill="#2d6a4f" transform="rotate(0,-3,-6)"/>
+        <line x1="-44" y1="0" x2="0" y2="-8" stroke="#1b4332" stroke-width="1.2"/>
+      </g>
+      <!-- 우측 잎 -->
+      <g transform="translate(380,36) scale(-1,1)" opacity="0.75">
+        <ellipse cx="-30" cy="0" rx="18" ry="7" fill="#2d6a4f" transform="rotate(-20,-30,0)"/>
+        <ellipse cx="-16" cy="-4" rx="15" ry="6" fill="#40916c" transform="rotate(-10,-16,-4)"/>
+        <ellipse cx="-3"  cy="-6" rx="12" ry="5" fill="#2d6a4f" transform="rotate(0,-3,-6)"/>
+        <line x1="-44" y1="0" x2="0" y2="-8" stroke="#1b4332" stroke-width="1.2"/>
+      </g>
+
+      <!-- 하단 좌우 월계수 잎 -->
+      <g transform="translate(120,644) scale(1,-1)" opacity="0.75">
+        <ellipse cx="-30" cy="0" rx="18" ry="7" fill="#2d6a4f" transform="rotate(-20,-30,0)"/>
+        <ellipse cx="-16" cy="-4" rx="15" ry="6" fill="#40916c" transform="rotate(-10,-16,-4)"/>
+        <ellipse cx="-3"  cy="-6" rx="12" ry="5" fill="#2d6a4f" transform="rotate(0,-3,-6)"/>
+        <line x1="-44" y1="0" x2="0" y2="-8" stroke="#1b4332" stroke-width="1.2"/>
+      </g>
+      <g transform="translate(380,644) scale(-1,-1)" opacity="0.75">
+        <ellipse cx="-30" cy="0" rx="18" ry="7" fill="#2d6a4f" transform="rotate(-20,-30,0)"/>
+        <ellipse cx="-16" cy="-4" rx="15" ry="6" fill="#40916c" transform="rotate(-10,-16,-4)"/>
+        <ellipse cx="-3"  cy="-6" rx="12" ry="5" fill="#2d6a4f" transform="rotate(0,-3,-6)"/>
+        <line x1="-44" y1="0" x2="0" y2="-8" stroke="#1b4332" stroke-width="1.2"/>
+      </g>
+
+      <!-- 중앙 수직 좌우 측면 장식 점선 -->
+      <line x1="30" y1="80"  x2="30"  y2="600" stroke="#d4af37" stroke-width="0.6" stroke-dasharray="4,6"/>
+      <line x1="470" y1="80" x2="470" y2="600" stroke="#d4af37" stroke-width="0.6" stroke-dasharray="4,6"/>
+
+    </svg>
+    <!-- ══ /SVG ══ -->
+
+    <!-- ══ 콘텐츠 영역 ══ -->
+    <div style="
+      position: relative; z-index: 1;
+      padding: 52px 56px 44px;
+      min-height: 680px;
+      box-sizing: border-box;
+      display: flex; flex-direction: column; align-items: center;
+    ">
+      <!-- 문서번호 -->
+      <div style="align-self:flex-start; font-size:10px; color:#999; margin-bottom:10px; letter-spacing:0.8px;">
+        ${docNo}
       </div>
-      <div style="font-size:13px;color:#636e72;margin-bottom:8px;">수료일: ${e.date}</div>
-      <div style="font-size:14px;font-weight:700;color:#2d3436;">한국숲해설가협회장</div>
-    </div>`;
-            document.getElementById('certModal').classList.add('open');
-        }
+
+      <!-- 협회 상징 나무 SVG -->
+      <svg width="52" height="52" viewBox="0 0 52 52" style="margin-bottom:8px;">
+        <polygon points="26,4 40,24 12,24" fill="#2d6a4f"/>
+        <polygon points="26,14 42,36 10,36" fill="#40916c"/>
+        <rect x="22" y="36" width="8" height="9" fill="#6b4226"/>
+        <circle cx="26" cy="48" r="3" fill="#2d6a4f" opacity="0.4"/>
+      </svg>
+
+      <!-- 타이틀 -->
+      <div style="
+        font-size: 36px; font-weight: 900;
+        letter-spacing: 20px; text-indent: 20px;
+        color: #1a1a1a;
+        margin-bottom: 6px;
+      ">수 료 증</div>
+
+      <!-- 타이틀 하단 금 구분선 -->
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:28px; width:80%;">
+        <div style="flex:1; height:1px; background:linear-gradient(to right, transparent, #d4af37);"></div>
+        <div style="width:6px; height:6px; background:#d4af37; transform:rotate(45deg);"></div>
+        <div style="flex:1; height:1px; background:linear-gradient(to left, transparent, #d4af37);"></div>
+      </div>
+
+      <!-- 인적사항 -->
+      <table style="
+        width: 88%; font-size: 13px; border-collapse: collapse;
+        margin-bottom: 26px; color: #2d2d2d;
+      ">
+        <tbody>
+          <tr style="border-bottom: 1px solid #e8d48b;">
+            <td style="padding:9px 0 9px 8px; width:90px; color:#7a6a2a; font-weight:700; font-size:12px;">
+              성&emsp;&emsp;명
+            </td>
+            <td style="padding:9px 0; font-weight:700; font-size:15px; letter-spacing:2px;">
+              김숲해
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e8d48b;">
+            <td style="padding:9px 0 9px 8px; color:#7a6a2a; font-weight:700; font-size:12px;">
+              교육과정
+            </td>
+            <td style="padding:9px 0; font-weight:600; font-size:13px;">
+              ${e.title}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e8d48b;">
+            <td style="padding:9px 0 9px 8px; color:#7a6a2a; font-weight:700; font-size:12px;">
+              교육기간
+            </td>
+            <td style="padding:9px 0; font-size:13px;">
+              ${e.date} (총 ${e.hours}시간)
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:9px 0 9px 8px; color:#7a6a2a; font-weight:700; font-size:12px;">
+              구&emsp;&emsp;분
+            </td>
+            <td style="padding:9px 0; font-size:13px;">
+              ${e.type}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 구분선 다이아 -->
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:24px; width:80%;">
+        <div style="flex:1; height:1px; background:linear-gradient(to right, transparent, #d4af37);"></div>
+        <div style="width:6px; height:6px; background:#d4af37; transform:rotate(45deg);"></div>
+        <div style="flex:1; height:1px; background:linear-gradient(to left, transparent, #d4af37);"></div>
+      </div>
+
+      <!-- 본문 -->
+      <div style="
+        font-size: 14px; line-height: 2.1;
+        color: #1a1a1a; text-align: center;
+        margin-bottom: 28px; word-break: keep-all;
+        width: 88%;
+      ">
+        위 사람은 <strong>(사)한국숲해설가협회</strong>에서<br>
+        실시하는 <strong>${e.title}</strong> 과정을<br>
+        성실히 수료하였으므로 이 증서를 드립니다.
+      </div>
+
+      <!-- 날짜 -->
+      <div style="
+        font-size: 14px; color: #333;
+        letter-spacing: 2px; margin-bottom: 28px;
+      ">
+        ${dateStr}
+      </div>
+
+      <!-- 단체명 + 직인 -->
+      <div style="text-align:center;">
+        <div style="font-size:16px; font-weight:900; color:#1b4332; letter-spacing:1px; margin-bottom:2px;">
+          (사)한국숲해설가협회
+        </div>
+        <div style="font-size:10px; color:#74a18a; letter-spacing:1px; margin-bottom:12px;">
+          Forest Interpreter's Association
+        </div>
+
+        <!-- 붉은 원형 직인 SVG -->
+        <svg width="80" height="80" viewBox="0 0 80 80" style="opacity:0.82;">
+          <circle cx="40" cy="40" r="36" fill="none" stroke="#c0392b" stroke-width="2.8"/>
+          <circle cx="40" cy="40" r="30" fill="none" stroke="#c0392b" stroke-width="1"/>
+          <!-- 곡선 텍스트 대신 직선 텍스트 2줄 -->
+          <text x="40" y="28" text-anchor="middle" font-size="7.5" fill="#c0392b"
+                font-weight="700" letter-spacing="0.5">한국숲해설가협회</text>
+          <text x="40" y="42" text-anchor="middle" font-size="10" fill="#c0392b"
+                font-weight="900" letter-spacing="1">상임대표</text>
+          <text x="40" y="56" text-anchor="middle" font-size="7" fill="#c0392b"
+                letter-spacing="3">직&nbsp;&nbsp;인</text>
+        </svg>
+
+        <div style="font-size:13px; color:#2d3436; font-weight:700; margin-top:4px; letter-spacing:1px;">
+          상임대표 &nbsp;○○○
+        </div>
+      </div>
+
+    </div><!-- /콘텐츠 -->
+  </div><!-- /cert-root -->
+  `;
+
+  document.getElementById('certModal').classList.add('open');
+}
+
 
         /* ── 초기화 ── */
         showPanel('info');
