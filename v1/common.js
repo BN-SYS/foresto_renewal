@@ -80,9 +80,9 @@ const App = {
         ]
       },
       {
-        label: '회원활동', href: 'course-competency.html',
+        label: '회원활동', href: 'member-competency.html',
         children: [
-          { label: '역량강화 교육강좌', href: 'course-competency.html' },
+          { label: '역량강화 교육강좌', href: 'member-competency.html' },
           { label: '멘토링 숲학교', href: 'member-mentoring.html' },
           { label: '수시숲해설 모집', href: 'member-recruit.html' },
           { label: '숲해설 강사 신청', href: 'member-instructor.html' },

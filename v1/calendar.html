@@ -90,16 +90,29 @@
 <div id="header-wrap"></div>
 <div class="page-header">
   <div class="container">
-    <h1>📅 협회 일정</h1>
+    <h1>협회 일정</h1>
     <p>한국숲해설가협회의 모든 일정을 한눈에 확인하세요.</p>
+  </div>
+</div>
+
+<div class="sub-nav">
+  <div class="sub-nav-inner">
+    <a href="notice-list.html"           class="sub-nav-item">공지사항</a>
+    <a href="calendar.html"              class="sub-nav-item active">협회일정</a>
+    <a href="community-free.html"        class="sub-nav-item">자유게시판</a>
+    <a href="community-press.html"       class="sub-nav-item">언론보도</a>
+    <a href="community-job.html"         class="sub-nav-item">일자리 및 교육정보</a>
+    <a href="community-gallery.html"     class="sub-nav-item">갤러리</a>
+    <a href="community-newsletter.html"  class="sub-nav-item">협회소식지</a>
+    <a href="community-archive.html"     class="sub-nav-item">자료실</a>
   </div>
 </div>
 
 <main class="container section">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
     <div class="view-toggle">
-      <button class="view-btn active" id="btnMonth" onclick="setView('month')">📅 월별 보기</button>
-      <button class="view-btn" id="btnList" onclick="setView('list')">📋 목록 보기</button>
+      <button class="view-btn active" id="btnMonth" onclick="setView('month')">월별 보기</button>
+      <button class="view-btn" id="btnList" onclick="setView('list')">목록 보기</button>
     </div>
   </div>
 
@@ -130,7 +143,7 @@
     <div>
       <!-- 필터 -->
       <div class="side-card">
-        <div style="font-weight:700;font-size:15px;margin-bottom:12px;color:#2d6a4f">📌 카테고리 필터</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:12px;color:#2d6a4f">카테고리 필터</div>
         <div class="filter-item"><div class="filter-dot" style="background:#40916c"></div>교육/강좌</div>
         <div class="filter-item"><div class="filter-dot" style="background:#f4a261"></div>사회공헌 활동</div>
         <div class="filter-item"><div class="filter-dot" style="background:#1976d2"></div>협회 회의</div>
@@ -162,7 +175,7 @@
 
       <!-- 다가오는 일정 -->
       <div class="side-card">
-        <div style="font-weight:700;font-size:15px;margin-bottom:12px;color:#2d6a4f">🔔 다가오는 일정</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:12px;color:#2d6a4f">다가오는 일정</div>
         <div id="upcomingList"></div>
       </div>
     </div>

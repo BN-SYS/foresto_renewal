@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>멘토링 숲학교 | 한국숲해설가협회</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* ── 검색 영역 ── */
+        .search-wrap {
+            background: #fff;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .search-field label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-dark);
+        }
+
+        .search-field .form-control {
+            height: 40px;
+        }
+
+        .search-btn {
+            height: 40px;
+            padding: 0 24px;
+            white-space: nowrap;
+            align-self: flex-end;
+        }
+
+        /* ── 목록 상단 ── */
+        .list-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .list-count {
+            font-size: 14px;
+            color: var(--gray-dark);
+        }
+
+        .list-count strong {
+            font-weight: 700;
+        }
+
+        /* ── 게시판 테이블 ── */
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: #fff;
+            border-top: 2px solid var(--gray-dark);
+        }
+
+        .board-table thead tr {
+            background: var(--gray-bg);
+        }
+
+        .board-table thead th {
+            padding: 13px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-dark);
+            text-align: center;
+            border-bottom: 1px solid var(--gray-light);
+            white-space: nowrap;
+        }
+
+        .board-table tbody tr {
+            border-bottom: 1px solid var(--gray-light);
+            transition: background .15s;
+        }
+
+        .board-table tbody tr:hover {
+            background: var(--gray-bg);
+        }
+
+        .board-table tbody td {
+            padding: 13px 16px;
+            text-align: center;
+            color: var(--gray-dark);
+            vertical-align: middle;
+        }
+
+        .board-table tbody td.td-title {
+            text-align: left;
+        }
+
+        .board-table tbody td.td-title a {
+            color: var(--gray-dark);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .board-table tbody td.td-title a:hover {
+            color: var(--green-main);
+            text-decoration: underline;
+        }
+
+        /* 공지 배지 */
+        .badge-notice {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--green-dark);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 3px;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        /* ── 페이지네이션 ── */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            margin-top: 28px;
+        }
+
+        .page-btn {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--gray-light);
+            border-radius: 4px;
+            background: #fff;
+            font-size: 13px;
+            color: var(--gray-dark);
+            cursor: pointer;
+            transition: var(--trans);
+        }
+
+        .page-btn:hover {
+            border-color: var(--green-main);
+            color: var(--green-main);
+        }
+
+        .page-btn.active {
+            background: var(--green-dark);
+            color: #fff;
+            border-color: var(--green-dark);
+            font-weight: 700;
+        }
+
+        .page-btn.arrow {
+            font-size: 16px;
+            color: var(--gray-mid);
+        }
+
+        .page-btn:disabled,
+        .page-btn[disabled] {
+            opacity: .35;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .search-wrap {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-field .form-control {
+                width: 100%;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .board-table thead th:nth-child(1),
+            .board-table tbody td:nth-child(1) {
+                display: none;
+            }
+
+            .board-table thead th:nth-child(3),
+            .board-table tbody td:nth-child(3) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-wrap"></div>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>숲해설 강사 신청</h1>
+            <p>숲해설 강사 신청 폼입니다.</p>
+        </div>
+    </div>
+
+    <div class="sub-nav">
+        <div class="sub-nav-inner">
+            <a href="member-competency.html" class="sub-nav-item">역량강화 교육강좌</a>
+            <a href="member-mentoring.html" class="sub-nav-item">멘토링 숲학교</a>
+            <a href="member-recruit.html" class="sub-nav-item">수시숲해설 모집</a>
+            <a href="member-instructor.html" class="sub-nav-item active">숲해설 강사 신청</a>
+            <a href="member-sagongdan.html" class="sub-nav-item">사공단 소식</a>
+            <a href="member-club.html" class="sub-nav-item">동아리 소식</a>
+        </div>
+    </div>
+
+    <main class="container section">
+
+    </main>
+
+    <div id="footer-wrap"></div>
+    <script src="common.js"></script>
+    <script>
+        document.getElementById('header-wrap').innerHTML = App.renderHeader('회원활동');
+        document.getElementById('footer-wrap').innerHTML = App.renderFooter();
+    </script>
+
+</body>
+
+</html>
