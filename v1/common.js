@@ -57,7 +57,7 @@ const App = {
     const NAV = [
       { label:'홈',          href:'index.html'   },
       { label:'협회소개',    href:'#'            },
-      { label:'숲해설가교육', href:'course.html'  },
+      { label:'숲해설가교육', href:'course-list.html'  },
       { label:'회원활동',    href:'#'            },
       { label:'커뮤니티',    href:'calendar.html'},
       { label:'참여',        href:'#'            },
