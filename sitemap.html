@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한국숲해설가협회 사이트맵</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Noto Sans KR', sans-serif; background:#f0f4f0; }
+
+    .toolbar {
+      background:#2d6a4f; color:#fff; padding:10px 20px;
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:100;
+      box-shadow:0 2px 10px rgba(0,0,0,.2);
+      gap:12px; flex-wrap:wrap;
+    }
+    .toolbar h1 { font-size:14px; font-weight:700; }
+    .tbtns { display:flex; gap:7px; }
+    .tbtn {
+      padding:6px 13px; border-radius:5px; border:none;
+      font-size:12px; font-weight:600; cursor:pointer; transition:all .2s;
+    }
+    .tbtn-ghost  { background:rgba(255,255,255,.2); color:#fff; }
+    .tbtn-ghost:hover  { background:rgba(255,255,255,.35); }
+    .tbtn-accent { background:#f4a261; color:#fff; }
+    .tbtn-accent:hover { background:#e08a4a; }
+
+    .legend {
+      background:#fff; padding:7px 20px;
+      display:flex; gap:14px; flex-wrap:wrap; align-items:center;
+      border-bottom:1px solid #dfe6e9; font-size:11px;
+    }
+    .leg { display:flex; align-items:center; gap:5px; font-weight:500; }
+    .ld  { width:14px; height:10px; border-radius:2px; flex-shrink:0; }
+
+    .canvas-wrap { overflow:auto; padding:28px; background:#f0f4f0; }
+
+    #toast {
+      position:fixed; bottom:20px; right:20px;
+      background:#40916c; color:#fff; padding:10px 18px;
+      border-radius:7px; font-size:13px; font-weight:600;
+      box-shadow:0 4px 16px rgba(0,0,0,.2); z-index:9999;
+      opacity:0; transform:translateY(8px); transition:all .3s; pointer-events:none;
+    }
+    #toast.show { opacity:1; transform:translateY(0); }
+
+    @media print {
+      .toolbar,.legend { display:none; }
+      .canvas-wrap { padding:10px; background:#fff; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="toolbar">
+  <h1>한국숲해설가협회 — 사이트맵 V0.1</h1>
+  <div class="tbtns">
+    <button class="tbtn tbtn-ghost" onclick="zoom(0.15)">🔍 +</button>
+    <button class="tbtn tbtn-ghost" onclick="zoom(-0.15)">🔍 −</button>
+    <button class="tbtn tbtn-ghost" onclick="resetZoom()">↺ 초기화</button>
+    <button class="tbtn tbtn-ghost" onclick="window.print()">인쇄</button>
+    <!-- <button class="tbtn tbtn-accent" onclick="copyMd()">MD 복사</button> -->
+  </div>
+</div>
+
+<div class="legend">
+  <span style="color:#636e72;font-weight:700">유형:</span>
+  <div class="leg"><div class="ld" style="background:#d8f3dc;border:1.5px solid #40916c"></div>정보P</div>
+  <div class="leg"><div class="ld" style="background:#e3f2fd;border:1.5px solid #1976d2"></div>게시판P</div>
+  <div class="leg"><div class="ld" style="background:#fff3e0;border:1.5px solid #f4a261"></div>기능P ⭐</div>
+  <div class="leg"><div class="ld" style="background:#f5f5f5;border:1.5px solid #b2bec3"></div>보류/미확정</div>
+  <span style="color:#636e72;font-weight:700;margin-left:6px">권한:</span>
+  <div class="leg"><span style="background:#d8f3dc;color:#1b4332;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700">전체</span></div>
+  <div class="leg"><span style="background:#e3f2fd;color:#1565c0;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700">일반회원</span></div>
+  <div class="leg"><span style="background:#fff3e0;color:#e65100;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700">정회원</span></div>
+  <div class="leg"><span style="background:#1b4332;color:#d8f3dc;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700">관리자</span></div>
+</div>
+
+<div class="canvas-wrap">
+  <svg id="svg" xmlns="http://www.w3.org/2000/svg" style="display:block;transform-origin:top left"></svg>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════
+   치수 상수
+   ═══════════════════════════════════════════ */
+const C = {
+  // 루트
+  RW: 160, RH: 44,
+  // LV1 (대메뉴) — 고정 크기
+  L1W: 112, L1H: 40,
+  // LV2 (서브메뉴) — 고정 크기
+  L2W: 100, L2H: 32,
+  // LV3 (페이지)
+  L3W: 100, L3H: 30,
+
+  // 간격
+  COL_GAP:  48,   // LV1 컬럼 간 가로 여백
+  LV_HGAP: 20,   // 레벨 간 가로 간격
+  V_GAP:    8,    // 노드 간 세로 간격
+  L2_VGAP: 14,   // LV2 그룹 간 세로 여백
+  PAD_X:   32,
+  PAD_Y:   40,
+  ADMIN_TOP_MARGIN: 56, // 관리자 섹션 위 여백
+};
+
+/* ═══════════════════════════════════════════
+   색상
+   ═══════════════════════════════════════════ */
+const K = {
+  root:   { f:'#1b4332', t:'#ffffff', s:'#1b4332' },
+  lv1:    { f:'#2d6a4f', t:'#ffffff', s:'#2d6a4f' },
+  lv2:    { f:'#52b788', t:'#ffffff', s:'#52b788' },
+  info:   { f:'#d8f3dc', t:'#1b4332', s:'#40916c' },
+  board:  { f:'#e3f2fd', t:'#1565c0', s:'#1976d2' },
+  func:   { f:'#fff3e0', t:'#8b4513', s:'#f4a261' },
+  hold:   { f:'#f5f5f5', t:'#636e72', s:'#b2bec3' },
+  adm1:   { f:'#1b4332', t:'#d8f3dc', s:'#0d2b1e' },
+  adm2:   { f:'#2d6a4f', t:'#d8f3dc', s:'#1b4332' },
+  adm3:   { f:'#f0faf5', t:'#1b4332', s:'#2d6a4f' },
+};
+
+const AUTH_STYLE = {
+  '전체':    { bg:'#d8f3dc', tc:'#1b4332' },
+  '일반회원':{ bg:'#e3f2fd', tc:'#1565c0' },
+  '정회원':  { bg:'#fff3e0', tc:'#e65100' },
+  '관리자':  { bg:'#1b4332', tc:'#d8f3dc' },
+};
+
+/* ═══════════════════════════════════════════
+   데이터
+   ═══════════════════════════════════════════ */
+// 일반 메뉴 (상단 가로 배치)
+const MAIN_MENUS = [
+  {
+    id:'intro', label:'협회소개', color:K.lv1,
+    groups:[
+      { id:'g_intro1', label:'협회소개', color:K.lv2, pages:[
+        { label:'인사말',          auth:'전체', color:K.info },
+        { label:'미션 & 비전',     auth:'전체', color:K.info },
+        { label:'주요사업',        auth:'전체', color:K.info },
+        { label:'연혁 (타임라인)', auth:'전체', color:K.info },
+      ]},
+      { id:'g_org', label:'조직안내', color:K.lv2, pages:[
+        { label:'조직도·임원진',   auth:'전체', color:K.info },
+        { label:'전국 지역협회',   auth:'전체', color:K.info },
+        { label:'정관',            auth:'전체', color:K.info },
+        { label:'회원규정',        auth:'전체', color:K.info },
+        { label:'오시는 길',       auth:'전체', color:K.info },
+      ]},
+    ]
+  },
+  {
+    id:'edu', label:'숲해설가교육', color:K.lv1,
+    groups:[
+      { id:'g_eduintro', label:'숲해설가소개', color:K.lv2, pages:[
+        { label:'숲해설가란',       auth:'전체', color:K.info },
+        { label:'자주 묻는 질문',   auth:'전체', color:K.info },
+      ]},
+      { id:'g_expert', label:'전문과정', color:K.lv2, pages:[
+        { label:'교육과정 안내',    auth:'전체', color:K.info },
+        { label:'교육신청',      auth:'전체', color:K.func },
+      ]},
+      { id:'g_academy', label:'시민아카데미', color:K.lv2, pages:[
+        { label:'강좌 신청',     auth:'전체', color:K.func },
+      ]},
+      { id:'g_duty', label:'직무교육', color:K.lv2, pages:[
+        { label:'직무교육 안내',    auth:'전체', color:K.info },
+      ]},
+    ]
+  },
+  {
+    id:'activity', label:'회원활동', sub:'정회원 전용', color:K.lv1,
+    groups:[
+      { id:'g_cap',    label:'역량강화',     color:K.lv2, pages:[
+        { label:'교육강좌',         auth:'정회원', color:K.func },
+      ]},
+      { id:'g_ment',   label:'멘토링',       color:K.lv2, pages:[
+        { label:'멘토링 숲학교',    auth:'정회원', color:K.board },
+      ]},
+      { id:'g_forest', label:'수시숲해설',   color:K.lv2, pages:[
+        { label:'수시숲해설 모집',  auth:'정회원', color:K.board },
+        { label:'강사 신청',        auth:'정회원', color:K.func  },
+      ]},
+      { id:'g_social', label:'사회공헌사업단', color:K.lv2, pages:[
+        { label:'사공단 소식',      auth:'정회원', color:K.board },
+        { label:'사공단 일지',      auth:'정회원', color:K.board },
+      ]},
+      { id:'g_club',   label:'숲동아리단',   color:K.lv2, pages:[
+        { label:'동아리 소식',      auth:'정회원', color:K.board },
+        { label:'동아리 자료방',    auth:'정회원', color:K.board },
+        { label:'동아리 소개',      auth:'전체',   color:K.hold  },
+        { label:'이게뭐예요',       auth:'정회원', color:K.board },
+      ]},
+    ]
+  },
+  {
+    id:'comm', label:'커뮤니티', color:K.lv1,
+    groups:[
+      { id:'g_noticearea', label:'공지/일정', color:K.lv2, pages:[
+        { label:'공지사항',         auth:'전체', color:K.board },
+        { label:'협회 일정',     auth:'전체', color:K.func  },
+      ]},
+      { id:'g_boardarea', label:'게시판', color:K.lv2, pages:[
+        { label:'자유게시판',       auth:'일반회원', color:K.board },
+        { label:'언론보도',         auth:'전체',     color:K.board },
+        { label:'일자리/교육정보',  auth:'일반회원', color:K.board },
+      ]},
+      { id:'g_archive', label:'자료실', color:K.lv2, pages:[
+        { label:'갤러리',           auth:'전체',   color:K.board },
+        { label:'협회소식지',       auth:'전체',   color:K.board },
+        { label:'자료실',           auth:'정회원', color:K.board },
+      ]},
+    ]
+  },
+  {
+    id:'join', label:'참여', color:K.lv1,
+    groups:[
+      { id:'g_mem', label:'회원가입', color:K.lv2, pages:[
+        { label:'정회원 가입안내',  auth:'전체', color:K.info },
+      ]},
+      { id:'g_don', label:'후원', color:K.lv2, pages:[
+        { label:'후원 안내',        auth:'전체', color:K.info },
+        { label:'후원하기',      auth:'전체', color:K.func },
+      ]},
+    ]
+  },
+  {
+    id:'mypage', label:'👤 마이페이지', sub:'일반회원 이상', color:K.lv1,
+    groups:[
+      { id:'g_myinfo', label:'내정보', color:K.lv2, pages:[
+        { label:'회원정보 수정',    auth:'일반회원', color:K.func },
+        { label:'비밀번호 변경',    auth:'일반회원', color:K.func },
+        { label:'탈퇴하기',         auth:'일반회원', color:K.func },
+      ]},
+      { id:'g_myact', label:'나의활동', color:K.lv2, pages:[
+        { label:'교육이수내역',  auth:'일반회원', color:K.func },
+      ]},
+    ]
+  },
+];
+
+// 관리자 (하단 별도 배치)
+const ADMIN_MENU = {
+  id:'admin', label:'관리자', sub:'Admin Only', color:K.adm1,
+  groups:[
+    { id:'g_admmem',    label:'회원관리',   color:K.adm2, pages:[
+      { label:'회원 목록·등급', auth:'관리자', color:K.adm3 },
+      { label:'엑셀 다운로드',  auth:'관리자', color:K.adm3 },
+    ]},
+    { id:'g_admcourse', label:'강좌관리', color:K.adm2, pages:[
+      { label:'강좌 개설·수정', auth:'관리자', color:K.adm3 },
+      { label:'신청자 관리',    auth:'관리자', color:K.adm3 },
+      { label:'수료 처리·PDF',  auth:'관리자', color:K.adm3 },
+    ]},
+    { id:'g_admcal',    label:'일정관리', color:K.adm2, pages:[
+      { label:'일정 등록',      auth:'관리자', color:K.adm3 },
+      { label:'일정 수정·삭제', auth:'관리자', color:K.adm3 },
+    ]},
+    { id:'g_admcont',   label:'콘텐츠관리', color:K.adm2, pages:[
+      { label:'게시판 관리',    auth:'관리자', color:K.adm3 },
+      { label:'배너·팝업 관리', auth:'관리자', color:K.adm3 },
+    ]},
+  ]
+};
+
+/* ═══════════════════════════════════════════
+   레이아웃 계산 헬퍼
+   ═══════════════════════════════════════════ */
+
+// LV3 페이지 노드 1개 높이 (auth 뱃지 포함)
+function pageNodeH() {
+  return C.L3H + 14 + C.V_GAP; // 30 + 14(badge) + 8gap
+}
+
+// LV2 그룹 1개의 전체 높이
+function groupH(grp) {
+  const pagesH = grp.pages.length * pageNodeH() - C.V_GAP;
+  return C.L2H + C.LV_HGAP + pagesH;
+}
+
+// LV1 컬럼 전체 높이
+function colH(menu) {
+  const total = menu.groups.reduce((s, g) => s + groupH(g) + C.L2_VGAP, 0) - C.L2_VGAP;
+  return C.L1H + C.LV_HGAP + total;
+}
+
+/* ═══════════════════════════════════════════
+   SVG 요소 생성 헬퍼
+   ═══════════════════════════════════════════ */
+let SVG_HTML = '';
+
+function rect(x, y, w, h, r, col, shadow) {
+  const f = `filter="${shadow ? 'url(#sh)' : ''}"`;
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" ry="${r}"
+    fill="${col.f}" stroke="${col.s}" stroke-width="1.5" ${f}/>`;
+}
+
+function text(x, y, txt, size, weight, color, anchor='middle', dy=0) {
+  return `<text x="${x}" y="${y+dy}" text-anchor="${anchor}" dominant-baseline="middle"
+    font-size="${size}" font-weight="${weight}" fill="${color}"
+    style="pointer-events:none">${txt}</text>`;
+}
+
+function badge(cx, y, label, bg, tc) {
+  const bw = Math.min(label.length * 7.5 + 10, 54);
+  return `<rect x="${cx - bw/2}" y="${y}" width="${bw}" height="12" rx="6" fill="${bg}"/>
+    <text x="${cx}" y="${y+6}" text-anchor="middle" dominant-baseline="middle"
+      font-size="8" font-weight="700" fill="${tc}" style="pointer-events:none">${label}</text>`;
+}
+
+function line(x1, y1, x2, y2, color='#b7d8c4', dash='') {
+  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"
+    stroke="${color}" stroke-width="1.5" stroke-dasharray="${dash}"/>`;
+}
+
+function curve(x1, y1, x2, y2, color='#b7d8c4') {
+  const mx = (x1 + x2) / 2;
+  return `<path d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}"
+    fill="none" stroke="${color}" stroke-width="1.5"/>`;
+}
+
+/* ═══════════════════════════════════════════
+   노드 그리기
+   ═══════════════════════════════════════════ */
+function drawRoot(x, y) {
+  const cx = x + C.RW / 2;
+  SVG_HTML += rect(x, y, C.RW, C.RH, 8, K.root, true);
+  SVG_HTML += text(cx, y + C.RH/2, '🌲 한국숲해설가협회', 12, '700', '#fff');
+  return { cx, cy: y + C.RH/2, right: x + C.RW, bottom: y + C.RH };
+}
+
+function drawLv1(x, y, menu) {
+  const cx = x + C.L1W / 2;
+  SVG_HTML += rect(x, y, C.L1W, C.L1H, 7, menu.color, true);
+  const hasub = menu.sub ? 1 : 0;
+  const ty = y + C.L1H/2 - (hasub ? 6 : 0);
+  SVG_HTML += text(cx, ty, menu.label, 11, '700', '#fff');
+  if (menu.sub) SVG_HTML += text(cx, ty + 13, menu.sub, 9, '400', 'rgba(255,255,255,.75)');
+  return { cx, cy: y + C.L1H/2, right: x + C.L1W, bottom: y + C.L1H };
+}
+
+function drawLv2(x, y, grp) {
+  const cx = x + C.L2W / 2;
+  SVG_HTML += rect(x, y, C.L2W, C.L2H, 6, grp.color, false);
+  SVG_HTML += text(cx, y + C.L2H/2, grp.label, 10, '700', '#fff');
+  return { cx, cy: y + C.L2H/2, right: x + C.L2W, bottom: y + C.L2H };
+}
+
+function drawLv3(x, y, page) {
+  const cx = x + C.L3W / 2;
+  const bh = 14;
+  const total = C.L3H + bh;
+  SVG_HTML += rect(x, y, C.L3W, total, 5, page.color, false);
+  SVG_HTML += text(cx, y + C.L3H/2, page.label, 10, '500', page.color.t);
+  const ac = AUTH_STYLE[page.auth];
+  if (ac) SVG_HTML += badge(cx, y + C.L3H + 1, page.auth, ac.bg, ac.tc);
+  return { cx, cy: y + total/2, right: x + C.L3W, bottom: y + total };
+}
+
+/* ═══════════════════════════════════════════
+   컬럼 렌더 (LV1 1개 + 하위 전체)
+   반환: 컬럼 전체 높이
+   ═══════════════════════════════════════════ */
+function renderColumn(menu, colX, colY) {
+  // LV1
+  const lv1 = drawLv1(colX, colY, menu);
+
+  // LV1 → LV2 연결 수직선 시작
+  let gY = colY + C.L1H + C.LV_HGAP;
+  const lv2X = colX + C.L1W + C.LV_HGAP;
+
+  // LV2 그룹들의 총 높이 계산 → LV2 그룹들의 중간 Y 계산
+  const groups = menu.groups;
+  const totalGroupsH = groups.reduce((s, g) => s + groupH(g) + C.L2_VGAP, 0) - C.L2_VGAP;
+  const groupsStartY = colY + (C.L1H - totalGroupsH) / 2 + (totalGroupsH > C.L1H ? (C.L1H + C.LV_HGAP) : C.L1H / 2 - totalGroupsH / 2 + C.LV_HGAP);
+
+  // 실제 그룹 Y는 LV1 아래 or 중앙 정렬
+  let curGY = colY + C.L1H + C.LV_HGAP;
+  if (totalGroupsH < C.L1H) curGY = colY + (C.L1H - totalGroupsH) / 2;
+
+  // LV1 오른쪽 → LV2들 수직 분기선
+  const branchX = colX + C.L1W + C.LV_HGAP / 2;
+
+  // LV2 그룹 중심 Y 수집
+  const groupCYs = [];
+  const snapY = colY + C.L1H + C.LV_HGAP; // LV2 시작 Y는 항상 LV1 아래
+  let drawGY = snapY;
+
+  groups.forEach(grp => {
+    const gh = groupH(grp);
+    const grpCY = drawGY + C.L2H / 2;
+    groupCYs.push(grpCY);
+    drawGY += gh + C.L2_VGAP;
+  });
+
+  // LV1 → 분기선 수직선
+  const topCY   = groupCYs[0];
+  const botCY   = groupCYs[groupCYs.length - 1];
+  // 분기 수직선
+  if (groupCYs.length > 1) {
+    SVG_HTML += line(branchX, topCY, branchX, botCY, '#b7d8c4');
+  }
+  // LV1 → 분기점
+  SVG_HTML += line(lv1.right, lv1.cy, branchX, lv1.cy, '#b7d8c4');
+  if (Math.abs(lv1.cy - topCY) > 2 || groupCYs.length > 1) {
+    // lv1.cy 에서 branchX까지 이미 그림, 분기 수직선도 위에 그림
+  }
+
+  // 각 그룹 렌더
+  let drawGY2 = snapY;
+  groups.forEach((grp, gi) => {
+    const gh = groupH(grp);
+    const grpCY = groupCYs[gi];
+
+    // 분기점 → LV2
+    SVG_HTML += line(branchX, grpCY, lv2X, grpCY, '#b7d8c4');
+
+    // LV2 노드
+    const lv2Y = drawGY2;
+    const lv2 = drawLv2(lv2X, lv2Y, grp);
+
+    // LV2 → LV3 분기
+    const pagesX = lv2X + C.L2W + C.LV_HGAP;
+    const pBranchX = lv2X + C.L2W + C.LV_HGAP / 2;
+
+    let pY = lv2Y + C.L2H + C.LV_HGAP;
+    const pageCYs = grp.pages.map(p => {
+      const pnh = C.L3H + 14;
+      const cy = pY + pnh / 2;
+      pY += pnh + C.V_GAP;
+      return cy;
+    });
+
+    // LV2 → pBranchX
+    SVG_HTML += line(lv2.right, lv2.cy, pBranchX, lv2.cy, '#c8dfc8');
+    // 수직 분기
+    if (pageCYs.length > 1) {
+      SVG_HTML += line(pBranchX, pageCYs[0], pBranchX, pageCYs[pageCYs.length-1], '#c8dfc8');
+    }
+
+    // LV3 각 페이지
+    let pDrawY = lv2Y + C.L2H + C.LV_HGAP;
+    grp.pages.forEach((page, pi) => {
+      // pBranchX → page
+      SVG_HTML += line(pBranchX, pageCYs[pi], pagesX, pageCYs[pi], '#c8dfc8');
+      drawLv3(pagesX, pDrawY, page);
+      pDrawY += C.L3H + 14 + C.V_GAP;
+    });
+
+    drawGY2 += gh + C.L2_VGAP;
+  });
+
+  // 컬럼 실제 끝 X
+  const colEndX = lv2X + C.L2W + C.LV_HGAP + C.L3W;
+  const colEndY = snapY + totalGroupsH;
+  return { endX: colEndX, endY: colEndY };
+}
+
+/* ═══════════════════════════════════════════
+   전체 레이아웃 계산
+   ═══════════════════════════════════════════ */
+
+// 각 컬럼 너비 = L1W + gap + L2W + gap + L3W
+const COL_W = C.L1W + C.LV_HGAP + C.L2W + C.LV_HGAP + C.L3W;
+// 컬럼 간격
+const COL_STEP = COL_W + C.COL_GAP;
+
+// 최대 컬럼 높이
+const mainMaxH = Math.max(...MAIN_MENUS.map(m => colH(m)));
+
+// 루트 박스
+const rootX = C.PAD_X;
+const rootY = C.PAD_Y;
+
+// 루트 아래 → 메뉴 시작 Y
+const menuStartY = rootY + C.RH + 32;
+
+// 각 메뉴 컬럼 X
+const menuXs = MAIN_MENUS.map((_, i) => rootX + i * COL_STEP);
+
+// 전체 가로 폭
+const totalMainW = menuXs[menuXs.length - 1] + COL_W;
+
+// 루트 박스 중앙 조정
+const rootDrawX = (totalMainW - C.RW) / 2;
+
+// 관리자 섹션 시작 Y
+const adminY = menuStartY + mainMaxH + C.ADMIN_TOP_MARGIN;
+const adminColW = C.L1W + C.LV_HGAP + C.L2W + C.LV_HGAP + C.L3W;
+const adminGroupCount = ADMIN_MENU.groups.length;
+const adminTotalW = C.L1W + C.LV_HGAP + adminGroupCount * (C.L2W + C.LV_HGAP + C.L3W + C.COL_GAP);
+const adminX = (totalMainW - adminTotalW) / 2;
+
+/* ═══════════════════════════════════════════
+   드로잉 시작
+   ═══════════════════════════════════════════ */
+
+// 필터 정의
+SVG_HTML += `<defs>
+  <filter id="sh" x="-15%" y="-15%" width="130%" height="130%">
+    <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-opacity="0.13"/>
+  </filter>
+</defs>`;
+
+// 배경 구분선 (메인/관리자)
+const sepY = adminY - C.ADMIN_TOP_MARGIN / 2;
+
+// 루트
+drawRoot(rootDrawX, rootY);
+
+// 루트 → 각 LV1 연결선
+const rootBottomCX = rootDrawX + C.RW / 2;
+const rootBottom   = rootY + C.RH;
+
+// 메뉴 컬럼 렌더
+MAIN_MENUS.forEach((menu, i) => {
+  const cx = menuXs[i] + C.L1W / 2;
+  const cy = menuStartY + C.L1H / 2;
+  // 루트 → LV1 곡선
+  SVG_HTML += curve(rootBottomCX, rootBottom, menuXs[i], menuStartY + C.L1H/2, '#a8d5b5');
+  renderColumn(menu, menuXs[i], menuStartY);
+});
+
+/* ── 관리자 섹션 구분선 */
+SVG_HTML += `<line x1="${rootX}" y1="${sepY}" x2="${totalMainW + rootX}" y2="${sepY}"
+  stroke="#b7d8c4" stroke-width="1.5" stroke-dasharray="6,5"/>`;
+SVG_HTML += `<text x="${rootX}" y="${sepY - 8}"
+  font-size="10" fill="#636e72" font-weight="700"
+  style="pointer-events:none">▼ 관리자 영역</text>`;
+
+/* ── 관리자 LV1 박스 */
+const admLv1X = adminX < C.PAD_X ? C.PAD_X : adminX;
+const admLv1 = drawLv1(admLv1X, adminY, ADMIN_MENU);
+
+/* ── 관리자 그룹들 */
+const admBranchX = admLv1X + C.L1W + C.LV_HGAP / 2;
+const admLv2X    = admLv1X + C.L1W + C.LV_HGAP;
+
+// 각 그룹 위치 계산 (가로 방향으로 펼치기)
+const admGroupStep = C.L2W + C.LV_HGAP + C.L3W + C.COL_GAP;
+const admGroupCXs = ADMIN_MENU.groups.map((_, i) => admLv2X + i * admGroupStep + C.L2W / 2);
+
+// 분기 수직선
+const admTopCY  = adminY + C.L1H / 2;
+SVG_HTML += line(admLv1.right, admTopCY, admBranchX, admTopCY, '#5a9e7c');
+if (ADMIN_MENU.groups.length > 1) {
+  SVG_HTML += line(admBranchX, admTopCY, admBranchX + (ADMIN_MENU.groups.length - 1) * admGroupStep, admTopCY, '#5a9e7c');
+}
+
+ADMIN_MENU.groups.forEach((grp, gi) => {
+  const gX = admLv2X + gi * admGroupStep;
+  const gCX = gX + C.L2W / 2;
+
+  // 분기 → LV2
+  SVG_HTML += line(admBranchX + gi * admGroupStep, admTopCY, gX, admTopCY, '#5a9e7c');
+  SVG_HTML += line(gX, admTopCY, gX, adminY + C.LV_HGAP, '#5a9e7c');
+
+  // LV2
+  const lv2Y = adminY + C.LV_HGAP;
+  const lv2 = drawLv2(gX, lv2Y, grp);
+
+  // LV3
+  const pX = gX + C.L2W + C.LV_HGAP;
+  const pBrX = gX + C.L2W + C.LV_HGAP / 2;
+  let pDrawY = lv2Y + C.L2H + C.LV_HGAP;
+
+  const pageCYs = grp.pages.map((p, pi) => pDrawY + pi * (C.L3H + 14 + C.V_GAP) + (C.L3H + 14) / 2);
+
+  SVG_HTML += line(lv2.right, lv2.cy, pBrX, lv2.cy, '#7ab89a');
+  if (pageCYs.length > 1) SVG_HTML += line(pBrX, pageCYs[0], pBrX, pageCYs[pageCYs.length-1], '#7ab89a');
+
+  grp.pages.forEach((page, pi) => {
+    SVG_HTML += line(pBrX, pageCYs[pi], pX, pageCYs[pi], '#7ab89a');
+    drawLv3(pX, pDrawY, page);
+    pDrawY += C.L3H + 14 + C.V_GAP;
+  });
+});
+
+/* ═══════════════════════════════════════════
+   SVG 크기 확정 및 삽입
+   ═══════════════════════════════════════════ */
+const admMaxPageCount = Math.max(...ADMIN_MENU.groups.map(g => g.pages.length));
+const admEndY = adminY + C.LV_HGAP + C.L2H + C.LV_HGAP + admMaxPageCount * (C.L3H + 14 + C.V_GAP);
+const svgW = totalMainW + C.PAD_X * 2;
+const svgH = admEndY + C.PAD_Y;
+
+const svg = document.getElementById('svg');
+svg.setAttribute('width',   svgW);
+svg.setAttribute('height',  svgH);
+svg.setAttribute('viewBox', `0 0 ${svgW} ${svgH}`);
+svg.innerHTML = SVG_HTML;
+
+/* ═══════════════════════════════════════════
+   줌
+   ═══════════════════════════════════════════ */
+let scale = 1;
+function zoom(d) { scale = Math.min(Math.max(scale + d, 0.3), 2.5); svg.style.transform = `scale(${scale})`; }
+function resetZoom() { scale = 1; svg.style.transform = 'scale(1)'; }
+
+/* ═══════════════════════════════════════════
+   토스트 + MD 복사
+   ═══════════════════════════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function copyMd() {
+  const md = `# 한국숲해설가협회 사이트맵 V0.1\n\n\`\`\`\n한국숲해설가협회\n│\n├── 협회소개\n│   ├── 인사말 / 미션&비전 / 주요사업 / 연혁\n│   └── 조직도·임원진 / 전국지역협회 / 정관 / 회원규정 / 오시는길\n├── 숲해설가교육\n│   ├── 숲해설가란 / 자주묻는질문\n│   ├── 교육과정안내 / ⭐교육신청\n│   ├── ⭐시민아카데미 강좌신청\n│   └── 직무교육안내\n├── 회원활동 [정회원]\n│   ├── 교육강좌 / 멘토링숲학교\n│   ├── 수시숲해설모집 / 강사신청\n│   ├── 사공단소식 / 사공단일지\n│   └── 동아리소식 / 동아리자료방 / 동아리소개 / 이게뭐예요\n├── 커뮤니티\n│   ├── 공지사항 / ⭐협회일정\n│   ├── 자유게시판 / 언론보도 / 일자리정보\n│   └── 갤러리 / 협회소식지 / 자료실\n├── 참여\n│   ├── 정회원가입안내\n│   └── 후원안내 / ⭐후원하기\n├── 마이페이지 [일반회원]\n│   ├── 회원정보수정 / 비밀번호변경 / 탈퇴\n│   └── ⭐교육이수내역 (수료증PDF)\n└── 관리자 [Admin]\n    ├── 회원목록·등급 / 엑셀다운\n    ├── ⭐강좌개설·수정 / 신청자관리 / 수료처리·PDF\n    ├── ⭐일정등록·수정·삭제\n    └── 게시판관리 / 배너·팝업관리\n\`\`\``;
+  navigator.clipboard.writeText(md)
+    .then(()  => showToast('✅ MD 사이트맵 복사 완료!'))
+    .catch(() => showToast('⚠️ 복사 실패'));
+}
+</script>
+</body>
+</html>

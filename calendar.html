@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>협회 일정 - 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="common.css">
+  <style>
+    .cal-wrap { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+    .calendar-main { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .cal-nav {
+      background: #2d6a4f; color: #fff; padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cal-nav h2 { font-size: 22px; font-weight: 700; }
+    .cal-nav button {
+      background: rgba(255,255,255,0.2); border: none; color: #fff;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 18px;
+      cursor: pointer; transition: all 0.2s; display:flex;align-items:center;justify-content:center;
+    }
+    .cal-nav button:hover { background: rgba(255,255,255,0.35); }
+    .view-toggle { display:flex;gap:8px;margin-bottom:16px; }
+    .view-btn {
+      padding:8px 16px;border-radius:6px;border:1.5px solid #dfe6e9;
+      background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;
+    }
+    .view-btn.active { background:#40916c;color:#fff;border-color:#40916c; }
+
+    /* 캘린더 그리드 */
+    .full-cal-grid { display:grid;grid-template-columns:repeat(7,1fr);border-left:1px solid #dfe6e9;border-top:1px solid #dfe6e9; }
+    .full-day-header {
+      text-align:center;padding:10px;font-size:13px;font-weight:700;
+      background:#f4f6f4;border-right:1px solid #dfe6e9;border-bottom:1px solid #dfe6e9;
+    }
+    .full-day-header.sun{color:#e74c3c}.full-day-header.sat{color:#1565c0}
+    .full-cell {
+      min-height:100px;padding:6px;border-right:1px solid #dfe6e9;border-bottom:1px solid #dfe6e9;
+      vertical-align:top;background:#fff;transition:background 0.15s;
+    }
+    .full-cell:hover{background:#f9fbf9}
+    .full-cell.today{background:#f0faf5}
+    .full-cell.other-month{background:#f9f9f9}
+    .cell-date {
+      font-size:13px;font-weight:700;margin-bottom:4px;
+      width:26px;height:26px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .cell-date.today-num{background:#40916c;color:#fff}
+    .cell-date.sun{color:#e74c3c}
+    .cell-date.sat{color:#1565c0}
+    .event-tag {
+      font-size:11px;padding:2px 6px;border-radius:3px;margin-bottom:2px;
+      cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      display:block;transition:opacity 0.2s;
+    }
+    .event-tag:hover{opacity:0.8}
+    .evt-edu{background:#d8f3dc;color:#1b4332}
+    .evt-activity{background:#fff3e0;color:#e65100}
+    .evt-meeting{background:#e3f2fd;color:#1565c0}
+    .evt-club{background:#f3e5f5;color:#6a1b9a}
+
+    /* 목록형 뷰 */
+    .list-view-item {
+      display:flex;gap:16px;align-items:flex-start;padding:14px 0;
+      border-bottom:1px solid #dfe6e9;
+    }
+    .list-date-badge {
+      background:#2d6a4f;color:#fff;border-radius:8px;padding:8px 12px;
+      text-align:center;min-width:52px;flex-shrink:0;
+    }
+    .list-date-badge .month{font-size:11px;opacity:0.8}
+    .list-date-badge .day{font-size:22px;font-weight:700;line-height:1}
+    .list-event-info h4{font-size:14px;font-weight:700;margin-bottom:4px}
+    .list-event-info p{font-size:13px;color:#636e72}
+
+    /* 사이드 */
+    .side-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.08);margin-bottom:16px}
+    .filter-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:14px;cursor:pointer}
+    .filter-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+
+    @media(max-width:900px){.cal-wrap{grid-template-columns:1fr}}
+    @media(max-width:600px){
+      .full-cell{min-height:60px;padding:3px}
+      .event-tag{display:none}
+    }
+  </style>
+</head>
+<body>
+<div id="header-wrap"></div>
+<div class="page-header">
+  <div class="container">
+    <h1>📅 협회 일정</h1>
+    <p>한국숲해설가협회의 모든 일정을 한눈에 확인하세요.</p>
+  </div>
+</div>
+
+<main class="container section">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+    <div class="view-toggle">
+      <button class="view-btn active" id="btnMonth" onclick="setView('month')">📅 월별 보기</button>
+      <button class="view-btn" id="btnList" onclick="setView('list')">📋 목록 보기</button>
+    </div>
+  </div>
+
+  <div class="cal-wrap">
+    <!-- 좌: 캘린더 -->
+    <div>
+      <!-- 월별 뷰 -->
+      <div id="monthView" class="calendar-main">
+        <div class="cal-nav">
+          <button onclick="changeMonth(-1)">‹</button>
+          <h2 id="calMonthTitle">2026년 3월</h2>
+          <button onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="full-cal-grid" id="fullCalGrid"></div>
+      </div>
+
+      <!-- 목록 뷰 -->
+      <div id="listView" class="card" style="display:none">
+        <div class="card-header">
+          <span class="card-title">2026년 3월 일정 목록</span>
+          <span class="badge badge-green" id="eventCount">0건</span>
+        </div>
+        <div id="eventListWrap"></div>
+      </div>
+    </div>
+
+    <!-- 우: 사이드 -->
+    <div>
+      <!-- 필터 -->
+      <div class="side-card">
+        <div style="font-weight:700;font-size:15px;margin-bottom:12px;color:#2d6a4f">📌 카테고리 필터</div>
+        <div class="filter-item"><div class="filter-dot" style="background:#40916c"></div>교육/강좌</div>
+        <div class="filter-item"><div class="filter-dot" style="background:#f4a261"></div>사회공헌 활동</div>
+        <div class="filter-item"><div class="filter-dot" style="background:#1976d2"></div>협회 회의</div>
+        <div class="filter-item"><div class="filter-dot" style="background:#9c27b0"></div>동아리 모임</div>
+      </div>
+
+      <!-- 이번 달 요약 -->
+      <div class="side-card">
+        <div style="font-weight:700;font-size:15px;margin-bottom:12px;color:#2d6a4f">이번 달 요약</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:#d8f3dc;padding:12px;border-radius:8px;text-align:center">
+            <div style="font-size:22px;font-weight:700;color:#1b4332">3</div>
+            <div style="font-size:12px;color:#2d6a4f">교육/강좌</div>
+          </div>
+          <div style="background:#fff3e0;padding:12px;border-radius:8px;text-align:center">
+            <div style="font-size:22px;font-weight:700;color:#e65100">2</div>
+            <div style="font-size:12px;color:#e65100">봉사활동</div>
+          </div>
+          <div style="background:#e3f2fd;padding:12px;border-radius:8px;text-align:center">
+            <div style="font-size:22px;font-weight:700;color:#1565c0">1</div>
+            <div style="font-size:12px;color:#1565c0">협회회의</div>
+          </div>
+          <div style="background:#f3e5f5;padding:12px;border-radius:8px;text-align:center">
+            <div style="font-size:22px;font-weight:700;color:#6a1b9a">2</div>
+            <div style="font-size:12px;color:#6a1b9a">동아리</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 다가오는 일정 -->
+      <div class="side-card">
+        <div style="font-weight:700;font-size:15px;margin-bottom:12px;color:#2d6a4f">🔔 다가오는 일정</div>
+        <div id="upcomingList"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- 일정 상세 모달 -->
+<div class="modal-overlay" id="eventModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalEvtTitle">일정 상세</h3>
+      <button class="modal-close" onclick="App.closeModal('eventModal')">×</button>
+    </div>
+    <div class="modal-body" id="modalEvtBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" id="modalEvtLink" onclick="App.toast('해당 페이지로 이동합니다.')">관련 페이지 이동 →</button>
+      <button class="btn btn-gray" onclick="App.closeModal('eventModal')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div id="footer-wrap"></div>
+<script src="common.js"></script>
+<script>
+  document.getElementById('header-wrap').innerHTML = App.renderHeader('알림과소식');
+  document.getElementById('footer-wrap').innerHTML = App.renderFooter();
+
+  const EVENTS = [
+    { date:'2026-03-05', title:'이사회 회의', cat:'meeting', link:true, desc:'2026년 1분기 정기 이사회\n📍 장소: 협회 사무실\n⏰ 시간: 14:00~16:00' },
+    { date:'2026-03-10', title:'전문가과정 OT', cat:'edu', link:true, desc:'2026년 55기 전문가과정 오리엔테이션\n📍 장소: OO교육센터\n⏰ 시간: 10:00~12:00' },
+    { date:'2026-03-15', title:'전문가과정 접수마감', cat:'edu', link:true, desc:'55기 전문가과정 신청 마감일\n마감 전 신청 완료 바랍니다.' },
+    { date:'2026-03-18', title:'봉사활동 - 도봉구', cat:'activity', link:false, desc:'도봉구 초등학교 숲 체험 교육 봉사\n📍 장소: 도봉산 일원\n⏰ 시간: 09:00~13:00' },
+    { date:'2026-03-20', title:'숲사랑단 정기모임', cat:'club', link:true, desc:'3월 정기모임 및 봄철 탐방 계획 수립\n📍 장소: OO공원\n⏰ 시간: 10:00~12:00' },
+    { date:'2026-03-22', title:'시민아카데미 강좌', cat:'edu', link:true, desc:'봄 숲 이야기 시민 특강\n📍 장소: OO도서관\n⏰ 시간: 14:00~16:00' },
+    { date:'2026-03-25', title:'산들바람 모임', cat:'club', link:true, desc:'산들바람 동아리 3월 정기모임\n📍 장소: 북한산 둘레길\n⏰ 시간: 09:00~12:00' },
+    { date:'2026-03-28', title:'봉사활동 - 노원구', cat:'activity', link:false, desc:'노원구 복지관 자연치유 프로그램\n📍 장소: OO복지관\n⏰ 시간: 10:00~12:00' },
+  ];
+
+  let currentYear = 2026, currentMonth = 2;
+  let currentView = 'month';
+
+  const CAT_COLOR = { edu:'evt-edu', activity:'evt-activity', meeting:'evt-meeting', club:'evt-club' };
+  const CAT_LABEL = { edu:'교육/강좌', activity:'봉사활동', meeting:'협회회의', club:'동아리' };
+
+  function setView(v) {
+    currentView = v;
+    document.getElementById('monthView').style.display = v === 'month' ? 'block' : 'none';
+    document.getElementById('listView').style.display = v === 'list' ? 'block' : 'none';
+    document.getElementById('btnMonth').classList.toggle('active', v === 'month');
+    document.getElementById('btnList').classList.toggle('active', v === 'list');
+    renderCalendar();
+  }
+
+  function changeMonth(delta) {
+    currentMonth += delta;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    renderCalendar();
+  }
+
+  function getEventsForDate(y, m, d) {
+    const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    return EVENTS.filter(e => e.date === ds);
+  }
+
+  function openEventModal(evt) {
+    document.getElementById('modalEvtTitle').textContent = evt.title;
+    document.getElementById('modalEvtBody').innerHTML = `
+      <div style="margin-bottom:12px">
+        <span class="badge badge-green">${CAT_LABEL[evt.cat]}</span>
+        <span style="font-size:13px;color:#636e72;margin-left:8px">📅 ${evt.date}</span>
+      </div>
+      <div style="font-size:14px;line-height:1.8;white-space:pre-line;color:#2d3436">${evt.desc}</div>
+    `;
+    const linkBtn = document.getElementById('modalEvtLink');
+    linkBtn.style.display = evt.link ? 'inline-flex' : 'none';
+    App.openModal('eventModal');
+  }
+
+  function renderCalendar() {
+    const title = `${currentYear}년 ${currentMonth+1}월`;
+    document.getElementById('calMonthTitle').textContent = title;
+
+    const first = new Date(currentYear, currentMonth, 1).getDay();
+    const lastDay = new Date(currentYear, currentMonth+1, 0).getDate();
+    const today = new Date();
+
+    if (currentView === 'month') {
+      const days = ['일','월','화','수','목','금','토'];
+      let html = days.map((d,i) => `<div class="full-day-header ${i===0?'sun':i===6?'sat':''}">${d}</div>`).join('');
+      for (let i = 0; i < first; i++) {
+        html += `<div class="full-cell other-month"></div>`;
+      }
+      for (let d = 1; d <= lastDay; d++) {
+        const dow = (first + d - 1) % 7;
+        const isToday = currentYear === today.getFullYear() && currentMonth === today.getMonth() && d === today.getDate();
+        const evts = getEventsForDate(currentYear, currentMonth, d);
+        const dateClass = ['cell-date', isToday?'today-num':'', dow===0?'sun':dow===6?'sat':''].filter(Boolean).join(' ');
+        let evtHtml = evts.slice(0,3).map((e,idx) =>
+          `<span class="event-tag ${CAT_COLOR[e.cat]}" onclick="App.openEventModal_${idx}()">${e.title}</span>`
+        ).join('');
+        // 이벤트 핸들러를 data 속성으로 처리
+        const cellId = `cell_${d}`;
+        html += `<div class="full-cell${isToday?' today':''}" id="${cellId}">
+          <div class="${dateClass}">${d}</div>
+          <div class="evt-container">
+            ${evts.slice(0,2).map(e =>
+              `<span class="event-tag ${CAT_COLOR[e.cat]}" data-evt="${encodeURIComponent(JSON.stringify(e))}">${e.title}</span>`
+            ).join('')}
+            ${evts.length > 2 ? `<span style="font-size:11px;color:#636e72">+${evts.length-2}건 더</span>` : ''}
+          </div>
+        </div>`;
+      }
+      document.getElementById('fullCalGrid').innerHTML = html;
+
+      // 이벤트 태그 클릭
+      document.querySelectorAll('.event-tag[data-evt]').forEach(el => {
+        el.addEventListener('click', () => {
+          const evt = JSON.parse(decodeURIComponent(el.dataset.evt));
+          openEventModal(evt);
+        });
+      });
+    } else {
+      // 목록형
+      const monthEvts = EVENTS.filter(e => {
+        const ed = new Date(e.date);
+        return ed.getFullYear() === currentYear && ed.getMonth() === currentMonth;
+      }).sort((a,b) => a.date.localeCompare(b.date));
+
+      document.getElementById('eventCount').textContent = `${monthEvts.length}건`;
+      document.getElementById('eventListWrap').innerHTML = monthEvts.length
+        ? monthEvts.map(e => {
+            const d = new Date(e.date);
+            return `<div class="list-view-item">
+              <div class="list-date-badge">
+                <div class="month">${d.getMonth()+1}월</div>
+                <div class="day">${d.getDate()}</div>
+              </div>
+              <div class="list-event-info">
+                <h4>${e.title} <span class="badge badge-green" style="font-size:11px">${CAT_LABEL[e.cat]}</span></h4>
+                <p>${e.desc.split('\n')[0]}</p>
+                ${e.link ? `<button class="btn btn-outline btn-sm" style="margin-top:6px" onclick="App.toast('관련 페이지로 이동합니다.')">관련 페이지 →</button>` : ''}
+              </div>
+            </div>`;
+          }).join('')
+        : '<div style="text-align:center;padding:40px;color:#636e72">이번 달 등록된 일정이 없습니다.</div>';
+    }
+
+    // 다가오는 일정 (오늘 이후)
+    const upcoming = EVENTS
+      .filter(e => new Date(e.date) >= today)
+      .sort((a,b) => a.date.localeCompare(b.date))
+      .slice(0, 4);
+    document.getElementById('upcomingList').innerHTML = upcoming.map(e => {
+      const d = new Date(e.date);
+      return `<div style="padding:8px 0;border-bottom:1px solid #dfe6e9;cursor:pointer" onclick="openEventModal(${JSON.stringify(e).replace(/"/g,'&quot;')})">
+        <div style="font-size:12px;color:#636e72">${e.date} · ${CAT_LABEL[e.cat]}</div>
+        <div style="font-size:14px;font-weight:600;color:#2d3436;margin-top:2px">${e.title}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // upcoming 클릭 핸들러를 전역으로
+  window.openEventModal = openEventModal;
+
+  renderCalendar();
+</script>
+</body>
+</html>

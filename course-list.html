@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>강좌 신청 - 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="common.css">
+  <style>
+    /* 강좌 카드 */
+    .course-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px; }
+    .course-card {
+      background:#fff;border-radius:12px;overflow:hidden;
+      box-shadow:0 2px 12px rgba(0,0,0,0.08);transition:transform 0.25s,box-shadow 0.25s;
+    }
+    .course-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,0.12)}
+    .course-img {
+      height:120px;display:flex;align-items:center;justify-content:center;
+      font-size:52px;
+    }
+    .course-img.edu{background:linear-gradient(135deg,#d8f3dc,#b7e4c7)}
+    .course-img.academy{background:linear-gradient(135deg,#fff3e0,#ffe0b2)}
+    .course-img.special{background:linear-gradient(135deg,#e3f2fd,#bbdefb)}
+    .course-body{padding:18px}
+    .course-cat{font-size:12px;font-weight:700;margin-bottom:6px}
+    .course-title{font-size:16px;font-weight:700;margin-bottom:10px;color:#2d3436}
+    .course-meta{font-size:13px;color:#636e72;margin-bottom:12px;line-height:1.7}
+    .course-footer{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 18px;background:#f4f6f4;border-top:1px solid #dfe6e9;
+    }
+
+    /* 신청 진행 단계 */
+    .step-indicator {
+      display:flex;align-items:center;margin-bottom:32px;
+    }
+    .step {
+      display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
+    }
+    .step-num {
+      width:28px;height:28px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:12px;font-weight:700;flex-shrink:0;
+    }
+    .step.done .step-num{background:#40916c;color:#fff}
+    .step.active .step-num{background:#2d6a4f;color:#fff}
+    .step.pending .step-num{background:#dfe6e9;color:#636e72}
+    .step.done span,.step.active span{color:#2d6a4f}
+    .step.pending span{color:#b2bec3}
+    .step-divider{flex:1;height:2px;background:#dfe6e9;margin:0 8px;min-width:20px}
+    .step.done .step-divider-after{background:#40916c}
+
+    /* 정원 바 */
+    .quota-bar-wrap{margin-top:6px}
+    .quota-bar{height:6px;background:#dfe6e9;border-radius:3px;overflow:hidden;margin-top:4px}
+    .quota-fill{height:100%;border-radius:3px;background:#40916c;transition:width 0.4s}
+    .quota-fill.warning{background:#f4a261}
+    .quota-fill.full{background:#e74c3c}
+
+    @media(max-width:600px){
+      .course-grid{grid-template-columns:1fr}
+      .step span{display:none}
+    }
+  </style>
+</head>
+<body>
+<div id="header-wrap"></div>
+<div class="page-header">
+  <div class="container">
+    <h1>🎓 숲해설가 교육 & 강좌</h1>
+    <p>전문가 과정부터 시민 아카데미까지, 숲과 함께하는 교육 프로그램에 참여하세요.</p>
+  </div>
+</div>
+
+<main class="container section">
+  <!-- 탭 -->
+  <div class="tabs" id="courseTabs">
+    <button class="tab-btn active" onclick="filterCourse('all')">전체 강좌</button>
+    <button class="tab-btn" onclick="filterCourse('edu')">전문가과정</button>
+    <button class="tab-btn" onclick="filterCourse('academy')">시민아카데미</button>
+    <button class="tab-btn" onclick="filterCourse('special')">역량강화특강</button>
+  </div>
+
+  <div class="alert alert-info">
+    💡 <span>강좌 신청은 로그인 후 이용 가능합니다. 역량강화 강좌는 <strong>정회원 전용</strong>입니다.</span>
+  </div>
+
+  <!-- 강좌 목록 -->
+  <div class="course-grid" id="courseGrid"></div>
+</main>
+
+<!-- 강좌 신청 모달 -->
+<div class="modal-overlay" id="applyModal">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-header">
+      <h3 id="applyModalTitle">강좌 신청</h3>
+      <button class="modal-close" onclick="App.closeModal('applyModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <!-- 스텝 표시 -->
+      <div class="step-indicator">
+        <div class="step" id="step1" style="flex-shrink:0">
+          <div class="step-num">1</div><span>신청 안내</span>
+        </div>
+        <div class="step-divider" style="flex:1;height:2px;background:#dfe6e9;margin:0 8px"></div>
+        <div class="step" id="step2" style="flex-shrink:0">
+          <div class="step-num">2</div><span>신청 작성</span>
+        </div>
+        <div class="step-divider" style="flex:1;height:2px;background:#dfe6e9;margin:0 8px"></div>
+        <div class="step" id="step3" style="flex-shrink:0">
+          <div class="step-num">3</div><span>완료</span>
+        </div>
+      </div>
+      <div id="applyStep1">
+        <div class="alert alert-warning">
+          ⚠️ <span>본 신청은 취소 시 담당자에게 별도 연락이 필요합니다.</span>
+        </div>
+        <div style="background:#f4f6f4;padding:16px;border-radius:8px;font-size:14px;line-height:1.8;margin-bottom:16px">
+          <strong id="guideTitle" style="color:#2d6a4f;font-size:15px">신청 전 확인 사항</strong><br><br>
+          <div id="guideContent"></div>
+        </div>
+        <div style="background:#fff;border:1.5px solid #dfe6e9;border-radius:8px;padding:14px">
+          <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:14px">
+            <input type="checkbox" id="agreeCheck" style="margin-top:3px">
+            <span>안내 사항을 모두 확인하였으며, 신청에 동의합니다. <span style="color:#e74c3c">(필수)</span></span>
+          </label>
+        </div>
+      </div>
+      <div id="applyStep2" style="display:none">
+        <div class="form-group">
+          <label class="form-label">이름 <span class="required">*</span></label>
+          <input type="text" class="form-control" value="김숲해설" placeholder="이름을 입력하세요">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group">
+            <label class="form-label">연락처 <span class="required">*</span></label>
+            <input type="tel" class="form-control" value="010-1234-5678">
+          </div>
+          <div class="form-group">
+            <label class="form-label">이메일 <span class="required">*</span></label>
+            <input type="email" class="form-control" value="forest@example.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">거주 지역</label>
+          <select class="form-control">
+            <option>서울</option><option>경기</option><option>인천</option>
+            <option>부산</option><option>대구</option><option>기타</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">신청 서류 첨부 <span class="required">*</span></label>
+          <input type="file" class="form-control" accept=".pdf,.hwp,.docx,.jpg,.png">
+          <div class="form-hint">⚠️ 파일 크기: 최대 10MB / 허용 형식: PDF, HWP, DOCX, JPG, PNG</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">특이 사항</label>
+          <textarea class="form-control" rows="3" placeholder="문의사항이나 특이사항을 입력하세요."></textarea>
+        </div>
+      </div>
+      <div id="applyStep3" style="display:none;text-align:center;padding:24px 0">
+        <div style="font-size:56px;margin-bottom:16px">✅</div>
+        <h3 style="font-size:20px;font-weight:700;color:#2d6a4f;margin-bottom:10px">신청이 완료되었습니다!</h3>
+        <p style="font-size:14px;color:#636e72;line-height:1.7">
+          신청 내역은 마이페이지 → 교육이수내역에서 확인 가능합니다.<br>
+          문의사항은 협회 사무국(02-000-0000)으로 연락 주세요.
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-gray" id="applyPrevBtn" style="display:none" onclick="applyPrev()">이전</button>
+      <button class="btn btn-primary" id="applyNextBtn" onclick="applyNext()">동의하고 다음 →</button>
+      <button class="btn btn-primary" id="applyDoneBtn" style="display:none" onclick="App.closeModal('applyModal');App.toast('신청이 완료되었습니다! 마이페이지에서 확인하세요.')">완료</button>
+    </div>
+  </div>
+</div>
+
+<div id="footer-wrap"></div>
+<script src="common.js"></script>
+<script>
+  document.getElementById('header-wrap').innerHTML = App.renderHeader('숲해설가교육');
+  document.getElementById('footer-wrap').innerHTML = App.renderFooter();
+
+  const COURSES = [
+    {
+      id: 1, type: 'edu', emoji: '🌲', imgCls: 'edu',
+      cat: '전문가과정', title: '2026년 55기 숲해설가 전문가과정',
+      period: '2026.04.01 ~ 2026.06.30', location: 'OO교육센터 및 현장실습',
+      quota: 20, applied: 17, status: 'open',
+      guide: '• 자격 기준: 숲해설가 양성과정 이수자 또는 동등 경력자\n• 교육비: 별도 안내 예정\n• 신청 서류: 이력서, 경력증명서 업로드 필수\n• 수료 시 55기 수료증 발급\n• 문의: 협회 사무국 02-000-0000'
+    },
+    {
+      id: 2, type: 'academy', emoji: '🌿', imgCls: 'academy',
+      cat: '시민아카데미', title: '봄 숲 이야기 - 봄꽃과 함께하는 숲 산책',
+      period: '2026.03.22 (1일)', location: 'OO도서관 / 인근 공원',
+      quota: 30, applied: 22, status: 'open',
+      guide: '• 대상: 숲에 관심 있는 일반 시민 누구나\n• 교육비: 무료\n• 준비물: 편한 복장, 운동화\n• 수료증 발급 해당 없음\n• 취소 시 3일 전까지 연락 필수'
+    },
+    {
+      id: 3, type: 'special', emoji: '📚', imgCls: 'special',
+      cat: '역량강화특강', title: '숲 해설 기법 심화 워크숍',
+      period: '2026.04.10 ~ 2026.04.11', location: 'OO연수원',
+      quota: 15, applied: 15, status: 'closed',
+      guide: '• 대상: 정회원\n• 정원 마감으로 대기자 접수 중\n• 수료 시 이수증 발급'
+    },
+    {
+      id: 4, type: 'academy', emoji: '🍀', imgCls: 'academy',
+      cat: '시민아카데미', title: '어린이 숲 체험 교실 (가족 동반)',
+      period: '2026.04.05 (1일)', location: 'OO수목원',
+      quota: 25, applied: 8, status: 'open',
+      guide: '• 대상: 미취학~초등 어린이 및 보호자\n• 교육비: 무료\n• 신청 시 보호자 1인 필수 동반\n• 준비물: 편한 복장, 간식'
+    },
+    {
+      id: 5, type: 'special', emoji: '🏔️', imgCls: 'special',
+      cat: '역량강화특강', title: '겨울 숲 바라보기 통합 과정',
+      period: '2026.05.08 ~ 2026.05.09', location: '강원도 OO',
+      quota: 20, applied: 5, status: 'open',
+      guide: '• 대상: 정회원\n• 1박 2일 현장 심화 연수\n• 숙박비 별도 안내\n• 수료증 발급'
+    },
+    {
+      id: 6, type: 'edu', emoji: '🌳', imgCls: 'edu',
+      cat: '전문가과정', title: '2026년 직무교육 - 안전관리 과정',
+      period: '2026.05.15 (1일)', location: 'OO교육센터',
+      quota: 40, applied: 12, status: 'open',
+      guide: '• 대상: 현직 숲해설가\n• 교육비: 무료 (협회 지원)\n• 이수 필수 대상자: 공지 확인'
+    },
+  ];
+
+  let currentFilter = 'all';
+  let currentCourseId = null;
+  let applyStep = 1;
+
+  function filterCourse(type) {
+    currentFilter = type;
+    renderCourses();
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', ['all','edu','academy','special'][i] === type);
+    });
+  }
+
+  function getQuotaClass(applied, quota) {
+    const ratio = applied / quota;
+    if (ratio >= 1) return 'full';
+    if (ratio >= 0.85) return 'warning';
+    return '';
+  }
+
+  function renderCourses() {
+    const filtered = currentFilter === 'all' ? COURSES : COURSES.filter(c => c.type === currentFilter);
+    const CAT_COLOR = { edu:'badge-green', academy:'badge-orange', special:'badge-blue' };
+    document.getElementById('courseGrid').innerHTML = filtered.map(c => {
+      const ratio = Math.min(c.applied / c.quota, 1);
+      const qCls = getQuotaClass(c.applied, c.quota);
+      const isFull = c.status === 'closed' || c.applied >= c.quota;
+      return `<div class="course-card">
+        <div class="course-img ${c.imgCls}">${c.emoji}</div>
+        <div class="course-body">
+          <div class="course-cat"><span class="badge ${CAT_COLOR[c.type]}">${c.cat}</span></div>
+          <div class="course-title">${c.title}</div>
+          <div class="course-meta">
+            📅 ${c.period}<br>
+            📍 ${c.location}
+          </div>
+          <div class="quota-bar-wrap">
+            <div style="display:flex;justify-content:space-between;font-size:12px">
+              <span style="color:#636e72">신청 현황</span>
+              <span style="font-weight:700;color:${qCls==='full'?'#e74c3c':qCls==='warning'?'#e65100':'#2d6a4f'}">${c.applied}/${c.quota}명</span>
+            </div>
+            <div class="quota-bar"><div class="quota-fill ${qCls}" style="width:${ratio*100}%"></div></div>
+          </div>
+        </div>
+        <div class="course-footer">
+          <button class="btn btn-outline btn-sm" onclick="App.toast('강좌 상세 안내를 확인합니다.')">자세히 보기</button>
+          <button class="btn ${isFull?'btn-gray':'btn-primary'} btn-sm" ${isFull?'disabled':''} onclick="${isFull?'':''}" ${isFull?'':'onclick="openApply('+c.id+')"'}>
+            ${isFull ? (c.status==='closed'?'마감':'정원마감') : '신청하기'}
+          </button>
+        </div>
+      </div>`;
+    }).join('');
+
+    // 신청 버튼 이벤트 재연결
+    filtered.forEach(c => {
+      const cards = document.querySelectorAll('.course-card');
+      cards.forEach((card, idx) => {
+        const btn = card.querySelectorAll('.btn')[1];
+        if (btn && !btn.disabled) {
+          btn.addEventListener('click', () => openApply(filtered[idx].id));
+        }
+      });
+    });
+  }
+
+  function openApply(courseId) {
+    currentCourseId = courseId;
+    const course = COURSES.find(c => c.id === courseId);
+    document.getElementById('applyModalTitle').textContent = `강좌 신청 - ${course.cat}`;
+    document.getElementById('guideTitle').textContent = `📋 ${course.title}`;
+    document.getElementById('guideContent').innerHTML = course.guide.replace(/\n/g,'<br>');
+    applyStep = 1;
+    updateApplyStep();
+    App.openModal('applyModal');
+  }
+
+  function updateApplyStep() {
+    [1,2,3].forEach(s => {
+      document.getElementById(`applyStep${s}`).style.display = s === applyStep ? 'block' : 'none';
+      const stepEl = document.getElementById(`step${s}`);
+      stepEl.className = 'step ' + (s < applyStep ? 'done' : s === applyStep ? 'active' : 'pending');
+    });
+    document.getElementById('applyPrevBtn').style.display = applyStep > 1 && applyStep < 3 ? 'inline-flex' : 'none';
+    document.getElementById('applyNextBtn').style.display = applyStep < 3 ? 'inline-flex' : 'none';
+    document.getElementById('applyDoneBtn').style.display = applyStep === 3 ? 'inline-flex' : 'none';
+    document.getElementById('applyNextBtn').textContent = applyStep === 1 ? '동의하고 다음 →' : '신청 완료';
+  }
+
+  function applyNext() {
+    if (applyStep === 1 && !document.getElementById('agreeCheck').checked) {
+      App.toast('안내 사항 동의에 체크해주세요.', 'warning'); return;
+    }
+    applyStep++;
+    updateApplyStep();
+  }
+
+  function applyPrev() { applyStep--; updateApplyStep(); }
+
+  renderCourses();
+</script>
+</body>
+</html>

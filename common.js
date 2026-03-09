@@ -1,0 +1,118 @@
+/* =============================================
+   common.js | 공통 유틸·헤더·푸터 모듈
+   ============================================= */
+
+const App = {
+
+  /* ── 현재 로그인 상태 (프로토타입 고정값) */
+  user: {
+    isLoggedIn : true,
+    name       : '김숲해설',
+    role       : 'fullMember',   // guest | member | fullMember | admin
+    grade      : '정회원',
+  },
+
+  /* ── 날짜 포맷 */
+  fmtDate(str) {
+    const d = new Date(str);
+    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+  },
+
+  /* ── 토스트 */
+  toast(msg, type = 'success') {
+    const colors = { success:'#40916c', error:'#e74c3c', warning:'#f9a825', info:'#1976d2' };
+    const el = Object.assign(document.createElement('div'), { textContent: msg });
+    Object.assign(el.style, {
+      position:'fixed', bottom:'24px', right:'24px',
+      background: colors[type] || colors.success,
+      color:'#fff', padding:'12px 20px', borderRadius:'8px',
+      fontSize:'14px', fontWeight:'600',
+      boxShadow:'0 4px 20px rgba(0,0,0,.2)',
+      zIndex:'9999', opacity:'0', transform:'translateY(10px)',
+      transition:'all .3s ease', maxWidth:'320px', lineHeight:'1.5',
+    });
+    document.body.appendChild(el);
+    requestAnimationFrame(() => { el.style.opacity='1'; el.style.transform='translateY(0)'; });
+    setTimeout(() => { el.style.opacity='0'; setTimeout(() => el.remove(), 300); }, 3000);
+  },
+
+  /* ── 모달 열기/닫기 */
+  openModal(id)  { const m=document.getElementById(id); if(m){ m.classList.add('open');    document.body.style.overflow='hidden'; } },
+  closeModal(id) { const m=document.getElementById(id); if(m){ m.classList.remove('open'); document.body.style.overflow='';       } },
+
+  /* ── 탭 초기화 */
+  initTabs(wrap) {
+    const btns   = wrap.querySelectorAll('.tab-btn');
+    const panels = wrap.querySelectorAll('.tab-panel');
+    const activate = i => {
+      btns.forEach((b,j)   => b.classList.toggle('active', i===j));
+      panels.forEach((p,j) => p.style.display = i===j ? 'block' : 'none');
+    };
+    btns.forEach((b,i) => b.addEventListener('click', () => activate(i)));
+    activate(0);
+  },
+
+  /* ── 공통 헤더 렌더 */
+  renderHeader(activePage = '') {
+    const NAV = [
+      { label:'홈',          href:'index.html'   },
+      { label:'협회소개',    href:'#'            },
+      { label:'숲해설가교육', href:'course.html'  },
+      { label:'회원활동',    href:'#'            },
+      { label:'커뮤니티',    href:'calendar.html'},
+      { label:'참여',        href:'#'            },
+    ];
+    const navHtml = NAV.map(n =>
+      `<a href="${n.href}" class="${activePage===n.label?'active':''}">${n.label}</a>`
+    ).join('');
+
+    const actHtml = this.user.isLoggedIn
+      ? `<span style="font-size:13px;color:var(--gray-mid)">👤 ${this.user.name} (${this.user.grade})</span>
+         <a href="mypage.html"  class="btn btn-outline btn-sm">마이페이지</a>
+         <a href="admin.html"   class="btn btn-gray    btn-sm">관리자</a>
+         <button class="btn btn-gray btn-sm" onclick="App.toast('로그아웃 되었습니다.')">로그아웃</button>`
+      : `<button class="btn btn-outline btn-sm">로그인</button>
+         <button class="btn btn-primary btn-sm">회원가입</button>`;
+
+    return `
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">🌲</div>
+          <div class="logo-text">
+            <strong>한국숲해설가협회</strong>
+            <span>Korea Forest Interpreter Association</span>
+          </div>
+        </a>
+        <nav class="main-nav">${navHtml}</nav>
+        <div class="header-actions">${actHtml}</div>
+      </div>
+    </header>`;
+  },
+
+  /* ── 공통 푸터 렌더 */
+  renderFooter() {
+    return `
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-info">
+          <p><strong>사단법인 한국숲해설가협회</strong></p>
+          <p>주소: 서울특별시 OO구 OO로 OOO &nbsp;|&nbsp; 대표전화: 02-000-0000</p>
+          <p>이메일: info@forest-guide.or.kr &nbsp;|&nbsp; 사업자등록번호: 000-00-00000</p>
+        </div>
+        <div class="footer-links">
+          <a href="#">이용약관</a>
+          <a href="#"><strong>개인정보취급방침</strong></a>
+          <a href="#">이메일 무단수집 거부</a>
+          <a href="#" onclick="App.toast('구 홈페이지로 이동합니다.')">구 홈페이지</a>
+        </div>
+      </div>
+      <div class="footer-copy">Copyright © 2026 한국숲해설가협회. All rights reserved.</div>
+    </footer>`;
+  },
+};
+
+/* ── 모달 외부 클릭 닫기 */
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) App.closeModal(e.target.id);
+});

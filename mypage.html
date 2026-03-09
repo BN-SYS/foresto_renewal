@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - 한국숲해설가협회</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        .my-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 24px;
+            align-items: start
+        }
+
+        .my-sidebar {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 90px
+        }
+
+        .my-profile {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #dfe6e9;
+            margin-bottom: 16px
+        }
+
+        .my-avatar {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #40916c, #2d6a4f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 10px
+        }
+
+        .my-name {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 4px
+        }
+
+        .my-grade {
+            font-size: 13px;
+            padding: 3px 10px;
+            background: #d8f3dc;
+            color: #1b4332;
+            border-radius: 12px;
+            display: inline-block;
+            font-weight: 600
+        }
+
+        .side-nav a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #636e72;
+            transition: all 0.2s;
+            margin-bottom: 2px
+        }
+
+        .side-nav a:hover,
+        .side-nav a.active {
+            background: #d8f3dc;
+            color: #2d6a4f;
+            font-weight: 700
+        }
+
+        .side-nav .nav-group {
+            font-size: 11px;
+            font-weight: 700;
+            color: #b2bec3;
+            padding: 12px 12px 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px
+        }
+
+        /* 수료증 카드 */
+        .cert-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #dfe6e9;
+            margin-bottom: 10px;
+            transition: box-shadow 0.2s;
+        }
+
+        .cert-item:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08)
+        }
+
+        .cert-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0
+        }
+
+        .cert-info {
+            flex: 1
+        }
+
+        .cert-name {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px
+        }
+
+        .cert-meta {
+            font-size: 12px;
+            color: #636e72
+        }
+
+        .cert-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: flex-end
+        }
+
+        /* PDF 수료증 미리보기 스타일 */
+        .cert-preview {
+            border: 3px solid #2d6a4f;
+            border-radius: 8px;
+            padding: 32px 40px;
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, #f9fbf9, #fff);
+        }
+
+        .cert-preview .header-bar {
+            background: #2d6a4f;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 24px
+        }
+
+        .cert-preview .cert-org {
+            font-size: 13px;
+            color: #636e72;
+            margin-bottom: 8px
+        }
+
+        .cert-preview .cert-doc-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d6a4f;
+            margin-bottom: 24px;
+            letter-spacing: 2px
+        }
+
+        .cert-preview .cert-body {
+            font-size: 15px;
+            line-height: 2;
+            color: #2d3436;
+            margin-bottom: 24px;
+            border-top: 1px solid #dfe6e9;
+            border-bottom: 1px solid #dfe6e9;
+            padding: 16px 0
+        }
+
+        .cert-preview .cert-date {
+            font-size: 14px;
+            color: #636e72;
+            margin-bottom: 20px
+        }
+
+        .cert-preview .cert-sign {
+            font-size: 14px;
+            color: #2d3436;
+            font-weight: 700
+        }
+
+        @media(max-width:800px) {
+            .my-layout {
+                grid-template-columns: 1fr
+            }
+
+            .my-sidebar {
+                position: static
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-wrap"></div>
+    <div class="page-header">
+        <div class="container">
+            <h1>👤 마이페이지</h1>
+            <p>내 활동 내역 및 정보를 관리할 수 있습니다.</p>
+        </div>
+    </div>
+
+    <main class="container section">
+        <div class="my-layout">
+            <!-- 사이드바 -->
+            <div class="my-sidebar">
+                <div class="my-profile">
+                    <div class="my-avatar">🌿</div>
+                    <div class="my-name">김숲해설</div>
+                    <div class="my-grade">정회원</div>
+                    <div style="font-size:12px;color:#b2bec3;margin-top:6px">가입일 2023.05.12</div>
+                </div>
+                <nav class="side-nav">
+                    <div class="nav-group">내 정보</div>
+                    <a href="#" onclick="showPanel('info')" class="active" id="nav-info">👤 회원정보 수정</a>
+                    <a href="#" onclick="showPanel('pw')" id="nav-pw">🔒 비밀번호 변경</a>
+                    <a href="#" onclick="showPanel('withdraw')" id="nav-withdraw">🚪 탈퇴하기</a>
+                    <div class="nav-group">나의 활동</div>
+                    <a href="#" onclick="showPanel('cert')" id="nav-cert">🎓 교육이수내역</a>
+                    <div class="nav-group">커뮤니티</div>
+                    <a href="#" onclick="showPanel('myposts')" id="nav-myposts">📝 내가 쓴 글</a>
+                </nav>
+            </div>
+
+            <!-- 콘텐츠 -->
+            <div>
+                <!-- 회원정보 수정 -->
+                <div id="panel-info" class="card">
+                    <div class="card-header"><span class="card-title">👤 회원정보 수정</span></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                        <div class="form-group">
+                            <label class="form-label">이름 <span class="required">*</span></label>
+                            <input type="text" class="form-control" value="김숲해설">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">회원 ID</label>
+                            <input type="text" class="form-control" value="forest2023" disabled
+                                style="background:#f4f6f4">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">이메일</label>
+                            <input type="email" class="form-control" value="forest@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">연락처 <span class="required">*</span></label>
+                            <input type="tel" class="form-control" value="010-1234-5678">
+                        </div>
+                        <div class="form-group" style="grid-column:1/-1">
+                            <label class="form-label">주소</label>
+                            <input type="text" class="form-control" value="서울특별시 OO구 OO로 OO아파트 OOO호">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">소속 지역 협회</label>
+                            <select class="form-control">
+                                <option selected>서울숲해설가협회</option>
+                                <option>경기협회</option>
+                                <option>인천협회</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">기수</label>
+                            <input type="text" class="form-control" value="52기" disabled style="background:#f4f6f4">
+                            <div class="form-hint">기수는 관리자에 의해 설정됩니다.</div>
+                        </div>
+                    </div>
+                    <div style="text-align:right;margin-top:8px">
+                        <button class="btn btn-primary" onclick="App.toast('회원정보가 수정되었습니다.')">저장하기</button>
+                    </div>
+                </div>
+
+                <!-- 비밀번호 변경 -->
+                <div id="panel-pw" class="card" style="display:none">
+                    <div class="card-header"><span class="card-title">🔒 비밀번호 변경</span></div>
+                    <div style="max-width:400px">
+                        <div class="form-group">
+                            <label class="form-label">현재 비밀번호 <span class="required">*</span></label>
+                            <input type="password" class="form-control" placeholder="현재 비밀번호를 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">새 비밀번호 <span class="required">*</span></label>
+                            <input type="password" class="form-control" placeholder="새 비밀번호 (8자 이상)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">새 비밀번호 확인 <span class="required">*</span></label>
+                            <input type="password" class="form-control" placeholder="새 비밀번호를 한 번 더 입력하세요">
+                        </div>
+                        <button class="btn btn-primary" onclick="App.toast('비밀번호가 변경되었습니다.')">변경하기</button>
+                    </div>
+                </div>
+
+                <!-- 교육이수내역 -->
+                <div id="panel-cert" class="card" style="display:none">
+                    <div class="card-header">
+                        <span class="card-title">🎓 교육이수내역</span>
+                        <span class="badge badge-green">총 4건</span>
+                    </div>
+                    <div class="alert alert-info" style="margin-bottom:16px">
+                        💡 <span>수료 처리된 강좌에 한해 수료증을 다운로드 받을 수 있습니다.</span>
+                    </div>
+                    <div id="certList"></div>
+                </div>
+
+                <!-- 탈퇴 -->
+                <div id="panel-withdraw" class="card" style="display:none">
+                    <div class="card-header"><span class="card-title">🚪 탈퇴하기</span></div>
+                    <div class="alert alert-warning" style="margin-bottom:16px">
+                        ⚠️ <span>탈퇴 시 모든 활동 내역 및 수료증 정보가 삭제됩니다. 신중히 결정해주세요.</span>
+                    </div>
+                    <div style="max-width:400px">
+                        <div class="form-group">
+                            <label class="form-label">탈퇴 사유</label>
+                            <textarea class="form-control" rows="4" placeholder="탈퇴 사유를 입력해주세요 (선택)."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label style="display:flex;gap:8px;align-items:center;cursor:pointer;font-size:14px">
+                                <input type="checkbox"> 위 내용을 확인하였으며 탈퇴에 동의합니다.
+                            </label>
+                        </div>
+                        <button class="btn btn-danger" onclick="App.toast('탈퇴 처리가 완료되었습니다.', 'error')">탈퇴하기</button>
+                    </div>
+                </div>
+
+                <!-- 내가 쓴 글 -->
+                <div id="panel-myposts" class="card" style="display:none">
+                    <div class="card-header"><span class="card-title">📝 내가 쓴 글</span></div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>게시판</th>
+                                    <th>제목</th>
+                                    <th>작성일</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>5</td>
+                                    <td><span class="badge badge-green">동아리소식</span></td>
+                                    <td>3월 정기모임 후기 공유합니다</td>
+                                    <td>2026.03.07</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td><span class="badge badge-blue">자유게시판</span></td>
+                                    <td>봄 숲 탐방 추천 코스 공유</td>
+                                    <td>2026.02.28</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><span class="badge badge-orange">사공단소식</span></td>
+                                    <td>2월 봉사 후기</td>
+                                    <td>2026.02.20</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><span class="badge badge-green">동아리소식</span></td>
+                                    <td>신입 회원 환영합니다!</td>
+                                    <td>2026.02.10</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td><span class="badge badge-blue">자유게시판</span></td>
+                                    <td>처음 인사드립니다 :)</td>
+                                    <td>2023.05.15</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 수료증 미리보기 모달 -->
+    <div class="modal-overlay" id="certModal">
+        <div class="modal" style="max-width:560px">
+            <div class="modal-header">
+                <h3>📄 수료증 미리보기</h3>
+                <button class="modal-close" onclick="App.closeModal('certModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="cert-preview" id="certPreviewContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary"
+                    onclick="App.toast('수료증 PDF 다운로드를 시작합니다.', 'success');App.closeModal('certModal')">
+                    ⬇️ PDF 다운로드
+                </button>
+                <button class="btn btn-gray" onclick="App.closeModal('certModal')">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-wrap"></div>
+    <script src="common.js"></script>
+    <script>
+        document.getElementById('header-wrap').innerHTML = App.renderHeader();
+        document.getElementById('footer-wrap').innerHTML = App.renderFooter();
+
+        const CERTS = [
+            { id: 1, name: '숲해설가 전문가과정 52기', period: '2023.04.01 ~ 2023.06.30', status: '수료', date: '2023.07.05', cat: 'edu' },
+            { id: 2, name: '직무교육 - 안전관리과정', period: '2024.03.15 (1일)', status: '수료', date: '2024.03.15', cat: 'job' },
+            { id: 3, name: '역량강화특강 - 해설기법 심화', period: '2025.04.10 ~ 2025.04.11', status: '수료', date: '2025.04.12', cat: 'special' },
+            { id: 4, name: '시민아카데미 봄 숲 이야기', period: '2026.03.22 (예정)', status: '신청완료', date: '-', cat: 'academy' },
+        ];
+        const CAT_ICON = { edu: '🌲', job: '📋', special: '📚', academy: '🌿' };
+        const CAT_BG = { edu: '#d8f3dc', job: '#e3f2fd', special: '#f3e5f5', academy: '#fff3e0' };
+
+        document.getElementById('certList').innerHTML = CERTS.map(c => `
+    <div class="cert-item">
+      <div class="cert-icon" style="background:${CAT_BG[c.cat]}">${CAT_ICON[c.cat]}</div>
+      <div class="cert-info">
+        <div class="cert-name">${c.name}</div>
+        <div class="cert-meta">📅 교육 기간: ${c.period}</div>
+        ${c.status === '수료' ? `<div class="cert-meta" style="color:#40916c">✅ 수료일: ${c.date}</div>` : ''}
+      </div>
+      <div class="cert-actions">
+        <span class="badge ${c.status === '수료' ? 'badge-green' : 'badge-orange'}">${c.status}</span>
+        ${c.status === '수료' ?
+                `<button class="btn btn-primary btn-sm" onclick="openCertModal(${c.id})">📄 수료증 보기</button>` :
+                `<span style="font-size:12px;color:#b2bec3">수료 후 발급</span>`
+            }
+      </div>
+    </div>
+  `).join('');
+
+        function openCertModal(certId) {
+            const c = CERTS.find(x => x.id === certId);
+            document.getElementById('certPreviewContent').innerHTML = `
+      <div class="header-bar"></div>
+      <div class="cert-org">사단법인 한국숲해설가협회</div>
+      <div class="cert-doc-title">수 료 증</div>
+      <div class="cert-body">
+        성&nbsp;&nbsp;&nbsp;&nbsp;명: <strong>김 숲 해 설</strong><br>
+        과&nbsp;&nbsp;&nbsp;&nbsp;정: <strong>${c.name}</strong><br>
+        교육기간: <strong>${c.period}</strong><br><br>
+        위 사람은 상기 과정을 성실히 이수하였으므로<br>이 증서를 수여합니다.
+      </div>
+      <div class="cert-date">2026년 03월 09일</div>
+      <div class="cert-sign">
+        사단법인 한국숲해설가협회<br>상임대표이사 홍 길 동
+      </div>
+    `;
+            App.openModal('certModal');
+        }
+
+        function showPanel(name) {
+            ['info', 'pw', 'cert', 'withdraw', 'myposts'].forEach(p => {
+                document.getElementById(`panel-${p}`).style.display = p === name ? 'block' : 'none';
+                document.getElementById(`nav-${p}`).classList.toggle('active', p === name);
+            });
+        }
