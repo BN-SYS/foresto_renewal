@@ -763,12 +763,12 @@
 
 @media (max-width: 900px) {
   .photo-cards-row {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     height: auto;
   }
 
   .photo-card {
-    height: 140px;
+    height: 120px;
   }
 
   .home-board-grid {
@@ -793,12 +793,23 @@
 }
 
 @media (max-width: 600px) {
+
+  .hero-slide-btn {
+    margin-top: 18px;
+    padding: 9px 18px;
+    font-size: var(--text-sm);
+  }
+
+  .assoc-intro p {
+    font-size: var(--text-md);
+  }
+
   .photo-cards-row {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .photo-card {
-    height: 120px;
+    height: 100px;
   }
 
   .home-board-grid {
