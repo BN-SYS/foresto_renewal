@@ -201,30 +201,91 @@ const Footer = {
   render(root = '../') {
     return `
     <footer class="site-footer">
-      <div class="footer-inner">
+      <div class="footer-inner container">
+
+        <!-- 좌측: 기관정보 + 정책링크 -->
         <div class="footer-info">
-          <p><strong>사단법인 한국숲해설가협회</strong></p>
-          <p>주소: 06753 서울시 서초구 바우뫼로 158(양재동 유창빌딩 4층)</p>
-             <p>대표전화: 02-747-6518&nbsp;|&nbsp;
-             FAX: 02-747-6519</p>
-          <p>이메일: foresto123@hanmail.net</p>
+          <strong class="footer-logo-text">사단법인 한국숲해설가협회</strong>
+          <p>주소: 06753 서울시 서초구 바우뫼로 158(양재동 유향빌딩 4층)</p>
+          <p>대표전화: 02-747-6518 &nbsp;|&nbsp; FAX: 02-747-6519</p>
+          <p>이메일: <a href="mailto:foresto123@hanmail.net">foresto123@hanmail.net</a></p>
+          <div class="footer-links">
+            <a href="${root}policy/privacy.html">개인정보처리방침</a>
+            <a href="${root}policy/terms.html">이용약관</a>
+            <a href="${root}policy/email.html">이메일 무단수집 거부</a>
+          </div>
         </div>
-        <div class="footer-links">
-          <a href="${root}v2/privacy.html">개인정보처리방침</a>
-          <a href="${root}v2/terms.html">이용약관</a>
-          <a href="#"
-             onclick="App.toast('이메일 무단수집을 거부합니다.')">
-            이메일 무단수집 거부
-          </a>
-          <a href="http://www.foresto.org/" target="_blank" rel="noopener noreferrer">
-            구 홈페이지
-          </a>
+
+        <!-- 우측: SNS + 패밀리사이트 -->
+        <div class="footer-right">
+
+          <!-- SNS 아이콘 -->
+          <div class="footer-sns">
+            <a href="#" class="footer-sns-btn footer-sns-naver" title="네이버 블로그"
+              onclick="App.toast('블로그로 이동합니다.');return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path d="M16.273 12.845 7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-sns-btn footer-sns-yt" title="유튜브"
+              onclick="App.toast('유튜브로 이동합니다.');return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-sns-btn footer-sns-insta" title="인스타그램"
+              onclick="App.toast('인스타그램으로 이동합니다.');return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+              </svg>
+            </a>
+          </div>
+
+          <!-- 패밀리사이트 드롭다운 -->
+          <div class="footer-family" id="footerFamily">
+            <button class="footer-family-btn" onclick="Footer.toggleFamilySite()">
+              패밀리사이트 <span class="footer-family-arrow">▾</span>
+            </button>
+            <ul class="footer-family-list" id="familyList">
+              <li><a href="#" onclick="App.toast('산림청으로 이동합니다.');return false;">산림청</a></li>
+              <li><a href="#" onclick="App.toast('국립수목원으로 이동합니다.');return false;">국립수목원</a></li>
+              <li><a href="#" onclick="App.toast('산림복지진흥원으로 이동합니다.');return false;">산림복지진흥원</a></li>
+              <li><a href="#" onclick="App.toast('숲해설가 자격으로 이동합니다.');return false;">숲해설가 자격</a></li>
+              <li><a href="#" onclick="App.toast('녹색연합으로 이동합니다.');return false;">녹색연합</a></li>
+            </ul>
+          </div>
+
         </div>
       </div>
+
       <div class="footer-copy">
-        Copyright © 2026 한국숲해설가협회. All rights reserved.
+        <div class="container">
+          Copyright © 사단법인 한국숲해설가협회. All rights reserved.
+        </div>
       </div>
-    </footer>
-    <div id="toast"></div>`;
+    </footer>`;
+  },
+
+  /* 패밀리사이트 드롭다운 토글 */
+  toggleFamilySite() {
+    const list = document.getElementById('familyList');
+    const arrow = document.querySelector('.footer-family-arrow');
+    if (!list || !arrow) return;
+    const isOpen = list.classList.toggle('open');
+    arrow.textContent = isOpen ? '▴' : '▾';
+  },
+
+  /* 외부 클릭 시 드롭다운 닫기 — 푸터 렌더 후 한 번만 호출 */
+  initFamilyOutsideClick() {
+    document.addEventListener('click', function (e) {
+      const family = document.getElementById('footerFamily');
+      if (family && !family.contains(e.target)) {
+        const list = document.getElementById('familyList');
+        const arrow = document.querySelector('.footer-family-arrow');
+        if (list)  list.classList.remove('open');
+        if (arrow) arrow.textContent = '▾';
+      }
+    });
   },
 };
+
