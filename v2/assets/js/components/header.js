@@ -210,14 +210,13 @@ const Footer = {
           <p>이메일: foresto123@hanmail.net</p>
         </div>
         <div class="footer-links">
-          <a href="${root}privacy.html">개인정보처리방침</a>
-          <a href="${root}terms.html">이용약관</a>
+          <a href="${root}v2/privacy.html">개인정보처리방침</a>
+          <a href="${root}v2/terms.html">이용약관</a>
           <a href="#"
              onclick="App.toast('이메일 무단수집을 거부합니다.')">
             이메일 무단수집 거부
           </a>
-          <a href="#"
-             onclick="App.toast('구 홈페이지로 이동합니다.')">
+          <a href="http://www.foresto.org/" target="_blank" rel="noopener noreferrer">
             구 홈페이지
           </a>
         </div>
