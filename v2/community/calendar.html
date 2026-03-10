@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>협회 일정 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+</head>
+
+<body data-page="calendar">
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>협회 일정</h1>
+      <p>협회의 교육·행사·모임 일정을 한눈에 확인하세요</p>
+    </div>
+  </div>
+
+  <div class="page-tabs">
+    <a href="notice-list.html" class="sub-nav-item">공지사항</a>
+    <a href="calendar.html" class="sub-nav-item active">협회일정</a>
+    <a href="free.html" class="sub-nav-item">자유게시판</a>
+    <a href="press.html" class="sub-nav-item">언론보도</a>
+    <a href="job.html" class="sub-nav-item">일자리 및 교육정보</a>
+    <a href="gallery.html" class="sub-nav-item">갤러리</a>
+    <a href="newsletter.html" class="sub-nav-item">협회소식지</a>
+    <a href="archive.html" class="sub-nav-item">자료실</a>
+  </div>
+
+  <div class="content-wrap">
+
+    <!-- 뷰 전환 -->
+    <div
+      style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+      <div class="tabs" style="margin:0">
+        <button class="tab-btn active" id="btnMonth" onclick="CalView.setView('month')">월별 보기</button>
+        <button class="tab-btn" id="btnList" onclick="CalView.setView('list')">목록 보기</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-mid)">
+        <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#d8f3dc"></span>교육/강좌
+        <span
+          style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#fff3e0;margin-left:8px"></span>봉사활동
+        <span
+          style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#e3f2fd;margin-left:8px"></span>협회회의
+        <span
+          style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#f3e5f5;margin-left:8px"></span>동아리
+      </div>
+    </div>
+
+    <div class="cal-wrap">
+      <!-- 메인 캘린더 영역 -->
+      <div>
+        <!-- 월별 뷰 -->
+        <div id="monthView">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="cal-main-nav">
+              <button onclick="CalView.changeMonth(-1)">&#8249;</button>
+              <h2 id="calMonthTitle">2026년 3월</h2>
+              <button onclick="CalView.changeMonth(1)">&#8250;</button>
+            </div>
+            <div class="full-cal-grid" id="fullCalGrid"></div>
+          </div>
+        </div>
+
+        <!-- 목록 뷰 -->
+        <div id="listView" style="display:none">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title" id="listViewTitle">2026년 3월 일정 목록</span>
+              <span class="badge badge-green" id="eventCount">0건</span>
+            </div>
+            <div id="eventListWrap"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 사이드 패널 -->
+      <div>
+        <!-- 카테고리 필터 -->
+        <div class="side-card">
+          <div style="font-weight:700;color:var(--green-dark);margin-bottom:12px;font-size:14px">카테고리 필터</div>
+          <div class="filter-item">
+            <input type="checkbox" id="filterEdu" checked onchange="CalView.toggleFilter('edu',this.checked)">
+            <div class="filter-dot" style="background:#40916c"></div>
+            <label for="filterEdu" style="cursor:pointer;font-size:14px">교육/강좌</label>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" id="filterAct" checked onchange="CalView.toggleFilter('activity',this.checked)">
+            <div class="filter-dot" style="background:#f4a261"></div>
+            <label for="filterAct" style="cursor:pointer;font-size:14px">봉사활동</label>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" id="filterMtg" checked onchange="CalView.toggleFilter('meeting',this.checked)">
+            <div class="filter-dot" style="background:#1976d2"></div>
+            <label for="filterMtg" style="cursor:pointer;font-size:14px">협회회의</label>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" id="filterClub" checked onchange="CalView.toggleFilter('club',this.checked)">
+            <div class="filter-dot" style="background:#9c27b0"></div>
+            <label for="filterClub" style="cursor:pointer;font-size:14px">동아리</label>
+          </div>
+        </div>
+
+        <!-- 다가오는 일정 -->
+        <div class="side-card">
+          <div style="font-weight:700;color:var(--green-dark);margin-bottom:12px;font-size:14px">
+            📅 다가오는 일정
+          </div>
+          <div id="upcomingList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 일정 상세 모달 -->
+    <div class="modal-overlay" id="eventModal">
+      <div class="modal" style="max-width:480px">
+        <div class="modal-header">
+          <h3 id="modalEvtTitle"></h3>
+          <button class="modal-close" onclick="App.closeModal('eventModal')">×</button>
+        </div>
+        <div class="modal-body">
+          <div id="modalEvtBody"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-gray" onclick="App.closeModal('eventModal')">닫기</button>
+          <button class="btn btn-primary" id="modalEvtLink"
+            onclick="App.toast('관련 페이지로 이동합니다.');App.closeModal('eventModal')">
+            관련 페이지 →
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/community.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('커뮤니티', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    // 카테고리 필터 확장
+    CalView._filters = { edu: true, activity: true, meeting: true, club: true };
+    CalView.toggleFilter = function (cat, checked) {
+      this._filters[cat] = checked;
+      this.render();
+    };
+    const _origGetEventsForDate = CalView.getEventsForDate.bind(CalView);
+    CalView.getEventsForDate = function (y, m, d) {
+      return _origGetEventsForDate(y, m, d).filter(e => this._filters[e.cat] !== false);
+    };
+
+    CalView.init();
+  </script>
+</body>
+
+</html>

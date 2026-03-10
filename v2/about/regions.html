@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>전국 지역협회 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/about.css">
+</head>
+<body>
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>협회 소개</h1>
+      <p>한국숲해설가협회를 소개합니다.</p>
+    </div>
+  </div>
+
+<div class="page-tabs">
+      <a href="index.html"        class="sub-nav-item">인사말</a>
+      <a href="vision.html"       class="sub-nav-item">미션&amp;비전</a>
+      <a href="project.html"      class="sub-nav-item">주요사업</a>
+      <a href="history.html"      class="sub-nav-item">연혁</a>
+      <a href="members.html"      class="sub-nav-item">조직도&amp;임원진</a>
+      <a href="regions.html"      class="sub-nav-item active">전국 지역협회</a>
+      <a href="constitution.html" class="sub-nav-item">정관</a>
+      <a href="contact.html"      class="sub-nav-item">오시는길</a>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+    <h2 class="section-heading">전국 지역협회</h2>
+
+    <div class="alert alert-success" style="margin-bottom:32px">
+      현재 전국 <strong>12개 권역</strong>에 지역협회가 운영 중입니다. 지역협회를 클릭하면 상세 정보를 확인할 수 있습니다.
+    </div>
+
+    <div class="gallery-grid" id="regionGrid"></div>
+  </div>
+
+  <div id="ftr"></div>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('협회소개', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    const REGIONS = [
+      { name:'서울협회',     area:'서울특별시',       members:320, since:2001, contact:'02-000-1001', rep:'○○○' },
+      { name:'경기북부협회', area:'경기도 북부권',     members:185, since:2003, contact:'031-000-1002', rep:'○○○' },
+      { name:'경기남부협회', area:'경기도 남부권',     members:210, since:2004, contact:'031-000-1003', rep:'○○○' },
+      { name:'인천협회',     area:'인천광역시',        members:142, since:2005, contact:'032-000-1004', rep:'○○○' },
+      { name:'강원협회',     area:'강원도',            members:98,  since:2006, contact:'033-000-1005', rep:'○○○' },
+      { name:'충북협회',     area:'충청북도',          members:87,  since:2007, contact:'043-000-1006', rep:'○○○' },
+      { name:'충남협회',     area:'충청남도·대전',     members:103, since:2007, contact:'041-000-1007', rep:'○○○' },
+      { name:'전북협회',     area:'전라북도',          members:95,  since:2008, contact:'063-000-1008', rep:'○○○' },
+      { name:'전남협회',     area:'전라남도·광주',     members:112, since:2008, contact:'061-000-1009', rep:'○○○' },
+      { name:'경북협회',     area:'경상북도·대구',     members:88,  since:2009, contact:'053-000-1010', rep:'○○○' },
+      { name:'경남협회',     area:'경상남도·부산·울산', members:134, since:2009, contact:'055-000-1011', rep:'○○○' },
+      { name:'제주협회',     area:'제주특별자치도',    members:64,  since:2012, contact:'064-000-1012', rep:'○○○' },
+    ];
+
+    const EMOJIS = ['🌆','🌿','🌳','🌊','⛰️','🏞️','🌾','🌻','🍃','🏔️','🌴','🌺'];
+
+    document.getElementById('regionGrid').innerHTML = REGIONS.map((r, i) => `
+      <div class="gallery-card" onclick="App.toast('${r.name} 상세 페이지로 이동합니다.')">
+        <div class="gallery-thumb-placeholder" style="font-size:36px">${EMOJIS[i]}</div>
+        <div class="gallery-info">
+          <div class="gallery-title">${r.name}</div>
+          <div class="gallery-meta">
+            <span>${r.area} &nbsp;|</span>
+            <span>${r.members}명</span>
+          </div>
+          <div class="gallery-meta" style="margin-top:4px">
+            <span>${r.since}년 창설 &nbsp;|</span>
+            <span>${r.contact}</span>
+          </div>
+        </div>
+      </div>`).join('');
+  </script>
+</body>
+</html>

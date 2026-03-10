@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이게뭐예요 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body data-page="qna">
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>이게뭐예요?</h1>
+      <p>정회원 전용 | 식물·곤충·버섯 등 자연물 식별 질문 게시판</p>
+    </div>
+  </div>
+
+<div class="page-tabs">
+      <a href="competency.html"  class="sub-nav-item">역량강화 교육강좌</a>
+      <a href="mentoring.html"   class="sub-nav-item">멘토링 숲학교</a>
+      <a href="recruit.html"     class="sub-nav-item">수시숲해설 모집</a>
+      <a href="instructor.html"  class="sub-nav-item">숲해설 강사 신청</a>
+      <a href="sagongdan.html"   class="sub-nav-item">사공단 소식</a>
+      <a href="club.html"        class="sub-nav-item">동아리 소식</a>
+      <a href="qna.html"         class="sub-nav-item active">이게뭐예요</a>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <!-- 접근 안내 -->
+    <div class="alert alert-info" style="margin-bottom:20px">
+      이게뭐예요 게시판은 <strong>정회원 전용</strong> 메뉴입니다.
+      사진을 첨부해 식물·곤충·버섯 등 자연물 식별 질문을 남겨주세요.
+    </div>
+
+    <!-- 상단 액션 -->
+    <div class="list-top" style="margin-bottom:16px">
+      <div class="list-count">전체 <strong id="qnaCount">0</strong>건</div>
+      <button class="btn btn-primary"
+              onclick="QnaCtrl.openWriteModal()">✏️ 질문 작성</button>
+    </div>
+
+    <!-- 테이블 -->
+    <div class="table-wrap">
+      <table class="board-table">
+        <thead>
+          <tr>
+            <th style="width:60px">번호</th>
+            <th>질문 제목</th>
+            <th style="width:90px">작성자</th>
+            <th style="width:120px">상태</th>
+            <th style="width:180px">등록일</th>
+            <th style="width:70px">조회</th>
+          </tr>
+        </thead>
+        <tbody id="qnaTableBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="qnaPagination"></div>
+
+  </div>
+
+  <!-- 질문 작성 모달 -->
+  <div class="modal-overlay" id="qnaWriteModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>질문 작성</h3>
+        <button class="modal-close"
+                onclick="App.closeModal('qnaWriteModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">제목 <span class="req">*</span></label>
+          <input type="text" class="form-control" id="qnaTitle"
+                 placeholder="식물/곤충/버섯 이름이 뭔가요?">
+        </div>
+        <div class="form-group">
+          <label class="form-label">내용 <span class="req">*</span></label>
+          <textarea class="form-control" id="qnaContent" rows="5"
+                    placeholder="발견 장소, 특징 등을 자세히 적어주세요."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-gray"
+                onclick="App.closeModal('qnaWriteModal')">취소</button>
+        <button class="btn btn-primary"
+                onclick="QnaCtrl.saveQuestion()">등록</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ftr"></div>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/member.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+  </script>
+</body>
+</html>

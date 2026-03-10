@@ -1,0 +1,41 @@
+/* =============================================
+   responsive.css | 반응형 브레이크포인트
+   ============================================= */
+
+/* ── 태블릿 (≤ 1024px) */
+@media (max-width: 1024px) {
+  .container { padding: 0 20px; }
+  .main-nav  { display: none; }
+  .hamburger { display: flex; }
+  .header-actions .header-username { display: none; }
+}
+
+/* ── 태블릿 소형 (≤ 768px) */
+@media (max-width: 768px) {
+  :root { --header-h: 56px; }
+  .container { padding: 0 16px; }
+  .section   { padding: 32px 0; }
+  .content-wrap { padding: 36px 16px 60px; }
+  .page-header { padding: 24px 0; }
+  .page-header h1 { font-size: 20px; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .sub-nav-item { padding: 12px 16px; font-size: 13px; }
+  .data-table thead th:nth-child(n+4),
+  .data-table tbody td:nth-child(n+4) { display: none; }
+  .board-table thead th:nth-child(1),
+  .board-table tbody td:nth-child(1),
+  .board-table thead th:nth-child(3),
+  .board-table tbody td:nth-child(3) { display: none; }
+}
+
+/* ── 모바일 (≤ 480px) */
+@media (max-width: 480px) {
+  .tabs { gap: 6px; }
+  .tab-btn { font-size: 13px; padding: 7px 12px; }
+  .btn-lg  { padding: 11px 20px; font-size: 14px; }
+  .search-wrap { flex-direction: column; align-items: stretch; }
+  .search-field .form-control,
+  .search-field input[type="date"] { min-width: unset; width: 100%; }
+  .search-btn { width: 100%; }
+  .pagination .page-btn { width: 30px; height: 30px; font-size: 12px; }
+}

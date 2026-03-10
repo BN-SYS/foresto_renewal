@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자료실 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+
+</head>
+
+<body data-page="archive">
+
+  <div id="hdr"></div>
+
+  <!-- 페이지 헤더 -->
+  <div class="page-header">
+    <div class="container">
+      <h1>자료실</h1>
+      <p>회원 활동에 필요한 각종 자료를 공유합니다.</p>
+    </div>
+  </div>
+
+  <!-- 서브 내비 -->
+  <div class="page-tabs">
+    <a href="notice-list.html" class="sub-nav-item">공지사항</a>
+    <a href="calendar.html" class="sub-nav-item">협회일정</a>
+    <a href="free.html" class="sub-nav-item">자유게시판</a>
+    <a href="press.html" class="sub-nav-item">언론보도</a>
+    <a href="job.html" class="sub-nav-item">일자리 및 교육정보</a>
+    <a href="gallery.html" class="sub-nav-item">갤러리</a>
+    <a href="newsletter.html" class="sub-nav-item">협회소식지</a>
+    <a href="archive.html" class="sub-nav-item active">자료실</a>
+  </div>
+
+  <main>
+    <div class="content-wrap">
+
+      <!-- 접근 권한 배너 (JS가 회원등급별로 show/hide 처리) -->
+      <div class="access-banner" id="accessBanner" style="display:none;">
+        <div class="access-banner-icon">🔒</div>
+        <div class="access-banner-body">
+          <h4>정회원 전용 메뉴입니다.</h4>
+          <p>
+            자료실은 <strong>정회원</strong>만 파일을 다운로드할 수 있습니다.<br>
+            정회원 전환은
+            <a href="../about/members.html">정회원 가입안내</a>를
+            참고해 주세요. 일반회원은 목록 열람만 가능합니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 통계 (정회원/관리자에게만 노출) -->
+      <div class="archive-stats" id="archiveStats" style="display:none;">
+        <div class="archive-stat-card">
+          <div class="archive-stat-num" id="statTotalFiles">0</div>
+          <div class="archive-stat-label">전체 자료</div>
+        </div>
+        <div class="archive-stat-card">
+          <div class="archive-stat-num" id="statThisMonth">0</div>
+          <div class="archive-stat-label">이번 달 등록</div>
+        </div>
+        <div class="archive-stat-card">
+          <div class="archive-stat-num" id="statTotalDownload">0</div>
+          <div class="archive-stat-label">총 다운로드</div>
+        </div>
+        <div class="archive-stat-card">
+          <div class="archive-stat-num" id="statTotalViews">0</div>
+          <div class="archive-stat-label">총 조회수</div>
+        </div>
+      </div>
+
+      <!-- 검색 -->
+      <div class="search-wrap" style="margin-bottom:24px">
+        <div class="search-field">
+          <label>카테고리</label>
+          <select class="form-control" id="archiveCategoryFilter" onchange="ArchiveCtrl.filterByCategory(this.value)">
+            <option value="">전체</option>
+            <option value="교육자료">교육자료</option>
+            <option value="양식서류">양식서류</option>
+            <option value="보고서">보고서</option>
+            <option value="규정/정관">규정/정관</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>파일형식</label>
+          <select class="form-control" id="archiveFileType">
+            <option value="">전체</option>
+            <option value="pdf">PDF</option>
+            <option value="hwp">HWP</option>
+            <option value="docx">DOCX</option>
+            <option value="xlsx">XLSX</option>
+          </select>
+        </div>
+        <div class="search-field" style="flex:1;min-width:180px;">
+          <label>검색어</label>
+          <input type="text" class="form-control" id="archiveKeyword" placeholder="자료명 검색"
+            onkeydown="if(event.key==='Enter') ArchiveCtrl.search()">
+        </div>
+        <button class="btn btn-primary search-btn" onclick="ArchiveCtrl.search()">검색</button>
+        <button class="btn btn-gray search-btn" onclick="ArchiveCtrl.reset()">초기화</button>
+      </div>
+
+      <!-- 메인 레이아웃 -->
+      <div class="archive-layout">
+
+        <!-- 카테고리 사이드바 -->
+        <div class="archive-sidebar">
+          <div class="archive-sidebar-head">📂 카테고리</div>
+          <div class="archive-cat-item active" data-cat="" onclick="ArchiveCtrl.filterByCategory('', this)">
+            전체
+            <span class="cat-count" id="catCountAll">0</span>
+          </div>
+          <div class="archive-cat-item" data-cat="교육자료" onclick="ArchiveCtrl.filterByCategory('교육자료', this)">
+            📚 교육자료
+            <span class="cat-count" id="catCount_교육자료">0</span>
+          </div>
+          <div class="archive-cat-item" data-cat="양식서류" onclick="ArchiveCtrl.filterByCategory('양식서류', this)">
+            양식서류
+            <span class="cat-count" id="catCount_양식서류">0</span>
+          </div>
+          <div class="archive-cat-item" data-cat="보고서" onclick="ArchiveCtrl.filterByCategory('보고서', this)">
+            📊 보고서
+            <span class="cat-count" id="catCount_보고서">0</span>
+          </div>
+          <div class="archive-cat-item" data-cat="규정/정관" onclick="ArchiveCtrl.filterByCategory('규정/정관', this)">
+            📜 규정/정관
+            <span class="cat-count" id="catCount_규정/정관">0</span>
+          </div>
+          <div class="archive-cat-item" data-cat="기타" onclick="ArchiveCtrl.filterByCategory('기타', this)">
+            📁 기타
+            <span class="cat-count" id="catCount_기타">0</span>
+          </div>
+        </div>
+
+        <!-- 자료 목록 -->
+        <div>
+          <div class="list-top" style="margin-bottom:16px">
+            <span class="list-count">
+              총 <strong id="archiveCount">0</strong>건
+            </span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <select class="form-control" style="height:36px;font-size:13px;width:auto;"
+                onchange="ArchiveCtrl.changeSort(this.value)">
+                <option value="latest">최신순</option>
+                <option value="views">조회순</option>
+                <option value="download">다운로드순</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 자료 목록 영역 (정회원 아닐 시 blur 처리) -->
+          <div id="archiveListWrap" class="lock-overlay">
+            <!-- 비정회원 오버레이 (JS 처리) -->
+            <div id="lockMask" style="display:none;" class="lock-overlay-mask">
+              <span class="lock-icon">🔒</span>
+              <p>정회원 전용 자료실입니다.</p>
+              <small>파일 다운로드는 정회원만 이용 가능합니다.</small>
+              <a href="../about/members.html" class="btn btn-primary btn-sm" style="margin-top:8px">정회원 안내 →</a>
+            </div>
+
+            <!-- 자료 카드 목록 -->
+            <div id="archiveCardList">
+              <!-- JS 렌더 -->
+            </div>
+
+            <!-- 페이지네이션 -->
+            <div id="archivePagination" class="pagination"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/community.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('커뮤니티', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+  </script>
+</body>
+
+</html>

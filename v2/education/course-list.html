@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>전문과정 신청 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/education.css">
+</head>
+
+<body>
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>숲해설가 교육</h1>
+      <p>자연과 사람을 잇는 전문 숲해설가를 소개합니다.</p>
+    </div>
+  </div>
+
+  <div class="page-tabs">
+    <a href="forester.html" class="sub-nav-item">숲해설가란</a>
+    <a href="faq.html" class="sub-nav-item">자주 묻는 질문</a>
+    <a href="course-intro.html" class="sub-nav-item">전문과정 안내</a>
+    <a href="course-list.html" class="sub-nav-item active">전문과정 신청</a>
+    <a href="academy.html" class="sub-nav-item">시민아카데미</a>
+    <a href="job-training.html" class="sub-nav-item">직무교육</a>
+  </div>
+  
+  <div class="content-wrap">
+    <!-- <div class="alert alert-warning">
+      <strong>55기 전문가과정</strong> 모집 중입니다. 접수 마감: <strong>2026.03.20</strong> — 정원 마감 시 조기 종료될 수 있습니다.
+    </div> -->
+
+    <!-- 검색 필터 -->
+    <div class="search-wrap">
+      <div class="search-field">
+        <label>과정 구분</label>
+        <select class="form-control" id="searchType">
+          <option value="">전체</option>
+          <option value="전문과정">전문과정</option>
+          <option value="시민아카데미">시민아카데미</option>
+          <option value="직무교육">직무교육</option>
+          <option value="역량강화">역량강화</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>접수 상태</label>
+        <select class="form-control" id="searchStatus">
+          <option value="">전체</option>
+          <option value="open">접수중</option>
+          <option value="ready">접수예정</option>
+          <option value="closed">접수마감</option>
+          <option value="done">수강완료</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>교육 기간</label>
+        <div class="date-range">
+          <input type="date" class="form-control" id="searchFrom">
+          <span>~</span>
+          <input type="date" class="form-control" id="searchTo">
+        </div>
+      </div>
+      <button class="btn btn-primary search-btn" onclick="doSearch()">검색</button>
+      <button class="btn btn-gray search-btn" onclick="resetSearch()">초기화</button>
+    </div>
+
+    <div class="list-top">
+      <div class="list-count">총 <strong id="totalCount">0</strong>건</div>
+      <select class="form-control" style="width:auto;height:36px;font-size:13px"
+        onchange="window._ctrl && window._ctrl.changePageSize(+this.value)">
+        <option value="10">10개씩</option>
+        <option value="20">20개씩</option>
+        <option value="50">50개씩</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table class="board-table">
+        <thead>
+          <tr>
+            <th style="width:60px">번호</th>
+            <!-- <th style="width:90px">구분</th> -->
+            <th class="td-title">강좌명</th>
+            <th style="width:180px">교육일자</th>
+            <th style="width:230px">교육기간</th>
+            <th style="width:100px">상태</th>
+          </tr>
+        </thead>
+        <tbody id="courseBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="coursePagination"></div>
+  </div>
+
+  <div id="ftr"></div>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/education.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('숲해설가교육', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    window._ctrl = new CourseListController('전문과정', 'courseBody', 'coursePagination');
+    window._ctrl.render();
+
+    function doSearch() {
+      const type = document.getElementById('searchType').value;
+      const status = document.getElementById('searchStatus').value;
+      const from = document.getElementById('searchFrom').value;
+      const to = document.getElementById('searchTo').value;
+      window._ctrl.filter(status, from, to);
+    }
+
+    function resetSearch() {
+      ['searchType', 'searchStatus', 'searchFrom', 'searchTo'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      window._ctrl.filter('', '', '');
+    }
+  </script>
+</body>
+
+</html>

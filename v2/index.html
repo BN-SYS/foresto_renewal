@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/pages/main.css">
+</head>
+
+<body>
+
+  <div id="hdr"></div>
+
+  <!-- 팝업 공지 -->
+  <div class="popup-wrap" id="popup">
+    <div class="popup-head">
+      공지사항
+      <button onclick="document.getElementById('popup').style.display='none'" aria-label="닫기">×</button>
+    </div>
+    <div class="popup-body">
+      <strong>2026년 55기 전문가과정 모집</strong><br>
+      접수: 2026.03.01 ~ 03.20<br>
+      교육: 2026.04.01 ~ 06.30<br>
+      <a href="education/course-list.html" style="color:var(--green-main);font-weight:700">자세히 보기 →</a>
+    </div>
+    <div class="popup-foot">
+      <label class="popup-nosh-label">
+        <input type="checkbox" id="popupNoShow"> 오늘 하루 보지 않기
+      </label>
+      <button class="btn btn-primary btn-xs"
+        onclick="document.getElementById('popup').style.display='none'">닫기</button>
+    </div>
+  </div>
+
+  <!-- 히어로 -->
+  <div class="hero">
+    <div class="hero-inner">
+      <h2>숲이 주는 이야기를<br>함께 나누는 사람들</h2>
+      <p>한국숲해설가협회는 숲과 사람을 잇는 전문 해설가를 양성하고<br>자연과 함께하는 다양한 활동을 이어갑니다.</p>
+      <div class="hero-btns">
+        <a href="education/course-list.html" class="btn btn-accent btn-lg">전문가과정 신청</a>
+        <!-- <a href="about/index.html" class="btn btn-white-outline btn-lg">협회 소개</a> -->
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="container">
+
+      <!-- 빠른 링크 -->
+      <div class="quick-grid">
+        <div class="quick-item" onclick="location.href='education/course-list.html'">
+          <div class="quick-icon">📚</div><span>교육전문가과정</span>
+        </div>
+        <div class="quick-item" onclick="location.href='member/sagongdan.html'">
+          <div class="quick-icon">🌿</div><span>사회공헌단</span>
+        </div>
+        <div class="quick-item" onclick="location.href='member/competency.html'">
+          <div class="quick-icon">🎓</div><span>교육특강</span>
+        </div>
+        <div class="quick-item" onclick="location.href='member/club.html'">
+          <div class="quick-icon">🍃</div><span>숲동아리단</span>
+        </div>
+        <div class="quick-item" onclick="location.href='member/recruit.html'">
+          <div class="quick-icon">🗺️</div><span>숲해설 신청</span>
+        </div>
+      </div>
+
+      <!-- 메인 그리드 -->
+      <div class="main-grid section">
+        <div class="left-col">
+          <div class="board-cols">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">공지사항</span>
+                <a href="community/notice-list.html" class="btn btn-outline btn-xs">전체</a>
+              </div>
+              <div id="noticeList"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">동아리단 활동</span>
+                <a href="member/club.html" class="btn btn-outline btn-xs">전체</a>
+              </div>
+              <div id="clubList"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">사회공헌단 활동</span>
+              <a href="member/sagongdan.html" class="btn btn-outline btn-xs">전체</a>
+            </div>
+            <div id="socialList"></div>
+          </div>
+        </div>
+
+        <div class="right-col">
+          <!-- 캘린더 -->
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="card-header" style="padding:14px 18px;margin:0;border-radius:0">
+              <span class="card-title">협회 일정</span>
+              <a href="community/calendar.html" class="btn btn-outline btn-xs">전체</a>
+            </div>
+            <div class="cal-nav">
+              <button onclick="App.toast('이전 달')">‹</button>
+              <span>2026년 3월</span>
+              <button onclick="App.toast('다음 달')">›</button>
+            </div>
+            <div class="cal-grid" id="miniCal"></div>
+            <div class="cal-schedule">
+              <div class="cal-schedule-title">이번 달 주요 일정</div>
+              <div class="cal-schedule-item">
+                <span style="color:var(--accent)">●</span> 03.15 전문가과정 접수 마감
+              </div>
+              <div class="cal-schedule-item">
+                <span style="color:var(--green-main)">●</span> 03.20 동아리 정기모임
+              </div>
+              <div class="cal-schedule-item">
+                <span style="color:var(--info)">●</span> 03.28 사공단 봉사활동
+              </div>
+            </div>
+          </div>
+
+          <!-- SNS -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">SNS 채널</span></div>
+            <div class="sns-col">
+              <button class="sns-btn sns-naver" onclick="App.toast('블로그로 이동합니다.')">N 블로그</button>
+              <button class="sns-btn sns-yt" onclick="App.toast('유튜브로 이동합니다.')">유튜브</button>
+              <button class="sns-btn sns-insta" onclick="App.toast('인스타그램으로 이동합니다.')">인스타</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 유관기관 -->
+    <div class="related-wrap">
+      <div class="container">
+        <div class="related-label">유관기관 바로가기</div>
+        <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:4px">
+          <div class="quick-item related-item" style="min-width:120px;padding:12px"
+            onclick="App.toast('산림청으로 이동합니다.')"><span>산림청</span></div>
+          <div class="quick-item related-item" style="min-width:120px;padding:12px"
+            onclick="App.toast('국립수목원으로 이동합니다.')"><span>국립수목원</span></div>
+          <div class="quick-item related-item" style="min-width:120px;padding:12px"
+            onclick="App.toast('산림복지진흥원으로 이동합니다.')"><span>산림복지진흥원</span></div>
+          <div class="quick-item related-item" style="min-width:120px;padding:12px"
+            onclick="App.toast('숲해설가 자격으로 이동합니다.')"><span>숲해설가 자격</span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="ftr"></div>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/components/header.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('', '');
+    document.getElementById('ftr').innerHTML = Footer.render('');
+
+    /* 게시판 샘플 */
+    const NOTICES = [
+      { n: 5, t: '55기 전문가과정 모집 안내',    d: '2026.03.08' },
+      { n: 4, t: '[긴급] 3월 이사회 일정 변경',   d: '2026.03.05' },
+      { n: 3, t: '2026년 협회비 납부 안내',       d: '2026.03.01' },
+      { n: 2, t: '홈페이지 개편 작업 예고',        d: '2026.02.15' },
+      { n: 1, t: '2025년 우수회원 표창 결과',      d: '2026.02.10' },
+    ];
+    const CLUBS = [
+      { n: 5, t: '[숲사랑단] 3월 정기모임 후기',   d: '2026.03.07' },
+      { n: 4, t: '[초록나무] 봄맞이 탐방 활동',    d: '2026.03.05' },
+      { n: 3, t: '[산들바람] 2월 활동 정리',       d: '2026.03.01' },
+      { n: 2, t: '[숲사랑단] 겨울숲 사진전',       d: '2026.02.22' },
+      { n: 1, t: '[초록나무] 신입회원 환영모임',    d: '2026.02.18' },
+    ];
+    const SOCIAL = [
+      { n: 5, t: '도봉구 숲 정화 봉사 완료',       d: '2026.03.08' },
+      { n: 4, t: '3월 초등학교 숲 체험 교육',      d: '2026.03.03' },
+      { n: 3, t: '다문화가족 숲 힐링 프로그램',     d: '2026.02.25' },
+      { n: 2, t: '노인복지관 자연치유 특강',        d: '2026.02.17' },
+      { n: 1, t: '장애인시설 숲 나들이 봉사',       d: '2026.02.10' },
+    ];
+
+    function renderBoard(data, id) {
+      document.getElementById(id).innerHTML = data.map(r => `
+        <div class="board-row">
+          <span class="board-num">${r.n}</span>
+          <span class="board-title" onclick="App.toast('${r.t}')">${r.t}</span>
+          <span class="board-date">${r.d}</span>
+        </div>`).join('');
+    }
+    renderBoard(NOTICES,  'noticeList');
+    renderBoard(CLUBS,    'clubList');
+    renderBoard(SOCIAL,   'socialList');
+
+    /* 미니 캘린더 */
+    (function () {
+      const yr = 2026, mo = 2;
+      const first = new Date(yr, mo, 1).getDay();
+      const last  = new Date(yr, mo + 1, 0).getDate();
+      const eventDays = [5, 15, 20, 28];
+      const days = ['일','월','화','수','목','금','토'];
+      let html = days.map(d => `<div class="cal-dh">${d}</div>`).join('');
+      for (let i = 0; i < first; i++) html += `<div class="cal-cell"></div>`;
+      for (let d = 1; d <= last; d++) {
+        const dow = (first + d - 1) % 7;
+        const cls = ['cal-cell',
+          d === 10            ? 'today'     : '',
+          eventDays.includes(d) ? 'has-event' : '',
+          dow === 0           ? 'sun'       : '',
+          dow === 6           ? 'sat'       : '',
+        ].filter(Boolean).join(' ');
+        html += `<div class="${cls}"
+          onclick="App.toast('2026.03.${String(d).padStart(2,'0')} 일정')">${d}</div>`;
+      }
+      document.getElementById('miniCal').innerHTML = html;
+    })();
+
+    /* 팝업 오늘 하루 닫기 */
+    document.getElementById('popupNoShow').addEventListener('change', function () {
+      if (this.checked) {
+        localStorage.setItem('popup_hide_until', new Date().toDateString());
+        document.getElementById('popup').style.display = 'none';
+      }
+    });
+    if (localStorage.getItem('popup_hide_until') === new Date().toDateString()) {
+      document.getElementById('popup').style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>

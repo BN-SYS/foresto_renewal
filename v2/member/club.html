@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동아리 소식 | 한국숲해설가협회</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/reset.css">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/pages/about.css">
+</head>
+
+<body>
+
+    <div id="hdr"></div>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>숲동아리단</h1>
+            <p>정회원 전용 | 동아리 소식 · 자료 · 소개 · Q&A</p>
+        </div>
+    </div>
+
+    <div class="page-tabs">
+        <a href="competency.html" class="sub-nav-item">역량강화 교육강좌</a>
+        <a href="mentoring.html" class="sub-nav-item">멘토링 숲학교</a>
+        <a href="recruit.html" class="sub-nav-item">수시숲해설 모집</a>
+        <a href="instructor.html" class="sub-nav-item">숲해설 강사 신청</a>
+        <a href="sagongdan.html" class="sub-nav-item">사공단 소식</a>
+        <a href="club.html" class="sub-nav-item active">동아리 소식</a>
+        <a href="qna.html" class="sub-nav-item">이게뭐예요</a>
+    </div>
+
+    <div class="content-wrap">
+
+        <div class="alert alert-info" style="margin-bottom:24px">
+            동아리 게시판은 <strong>정회원 전용</strong> 메뉴입니다.
+        </div>
+
+        <!-- 내부 탭 -->
+        <div class="tabs" style="margin-bottom:24px">
+            <button class="tab-btn active" onclick="ClubCtrl.switchTab('news', this)">동아리 소식</button>
+            <button class="tab-btn" onclick="ClubCtrl.switchTab('archive', this)">자료방</button>
+            <button class="tab-btn" onclick="ClubCtrl.switchTab('intro', this)">동아리 소개</button>
+        </div>
+
+        <!-- 소식 탭 -->
+        <div id="tab-news">
+            <div class="search-wrap">
+                <div class="search-field">
+                    <label>동아리</label>
+                    <select class="form-control" id="clubFilter" onchange="ClubCtrl.searchNews()">
+                        <option value="">전체</option>
+                        <option>숲사랑단</option>
+                        <option>초록나무</option>
+                        <option>산들바람</option>
+                    </select>
+                </div>
+                <div class="search-field">
+                    <label>검색</label>
+                    <input type="text" class="form-control" id="clubNewsKeyword" placeholder="제목 검색"
+                        style="min-width:180px" onkeydown="if(event.key==='Enter') ClubCtrl.searchNews()">
+                </div>
+                <button class="btn btn-primary search-btn" onclick="ClubCtrl.searchNews()">검색</button>
+                <button class="btn btn-gray search-btn" onclick="ClubCtrl.resetNews()">초기화</button>
+            </div>
+            <div class="list-top">
+                <span class="list-count">전체 <strong id="clubNewsCount">0</strong>건</span>
+            </div>
+            <div class="table-wrap">
+                <table class="board-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60px">번호</th>
+                            <th style="width:150px">동아리</th>
+                            <th>제목</th>
+                            <th style="width:120px">작성자</th>
+                            <th style="width:180px">작성일</th>
+                            <th style="width:70px">조회</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clubNewsTableBody"></tbody>
+                </table>
+            </div>
+            <div class="pagination" id="clubNewsPagination"></div>
+        </div>
+
+        <!-- 자료방 탭 -->
+        <div id="tab-archive" style="display:none">
+            <div class="search-wrap">
+                <div class="search-field">
+                    <label>검색</label>
+                    <input type="text" class="form-control" id="clubArchiveKeyword" placeholder="제목 검색"
+                        style="min-width:220px" onkeydown="if(event.key==='Enter') ClubCtrl.searchArchive()">
+                </div>
+                <button class="btn btn-primary search-btn" onclick="ClubCtrl.searchArchive()">검색</button>
+                <button class="btn btn-gray search-btn" onclick="ClubCtrl.resetArchive()">초기화</button>
+            </div>
+            <div class="list-top">
+                <span class="list-count">전체 <strong id="clubArchiveCount">0</strong>건</span>
+            </div>
+            <div class="table-wrap">
+                <table class="board-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60px">번호</th>
+                            <th>제목</th>
+                            <th style="width:90px">작성자</th>
+                            <th style="width:60px">첨부</th>
+                            <th style="width:110px">작성일</th>
+                            <th style="width:70px">조회</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clubArchiveTableBody"></tbody>
+                </table>
+            </div>
+            <div class="pagination" id="clubArchivePagination"></div>
+        </div>
+
+        <!-- 동아리 소개 탭 -->
+        <div id="tab-intro" style="display:none">
+            <div class="gallery-grid">
+                <div class="gallery-card">
+                    <div class="gallery-thumb-placeholder">🌲</div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">숲사랑단</div>
+                        <div class="gallery-meta">
+                            <span>회원 12명</span>
+                            <span>2019년 창단</span>
+                        </div>
+                        <p style="font-size:13px;color:var(--gray-mid);margin-top:8px;line-height:1.7">
+                            도심 속 숲을 찾아 자연의 소중함을 나누는 동아리입니다.
+                            매월 정기 탐방과 해설 활동을 진행합니다.
+                        </p>
+                    </div>
+                </div>
+                <div class="gallery-card">
+                    <div class="gallery-thumb-placeholder">🍃</div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">초록나무</div>
+                        <div class="gallery-meta">
+                            <span>회원 9명</span>
+                            <span>2021년 창단</span>
+                        </div>
+                        <p style="font-size:13px;color:var(--gray-mid);margin-top:8px;line-height:1.7">
+                            식물 생태 탐구와 해설에 특화된 동아리로, 계절별 식물 관찰 활동을 진행합니다.
+                        </p>
+                    </div>
+                </div>
+                <div class="gallery-card">
+                    <div class="gallery-thumb-placeholder">🌬️</div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">산들바람</div>
+                        <div class="gallery-meta">
+                            <span>회원 8명</span>
+                            <span>2022년 창단</span>
+                        </div>
+                        <p style="font-size:13px;color:var(--gray-mid);margin-top:8px;line-height:1.7">
+                            산림치유와 숲 힐링 프로그램 개발에 집중하는 동아리입니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="ftr"></div>
+
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/components/header.js"></script>
+    <script src="../assets/js/pages/member.js"></script>
+    <script>
+        document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+        document.getElementById('ftr').innerHTML = Footer.render('../');
+        ClubCtrl.init();
+    </script>
+</body>
+
+</html>

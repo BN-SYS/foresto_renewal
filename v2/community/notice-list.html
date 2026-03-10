@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공지사항 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+</head>
+
+<body data-page="notice">
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>공지사항</h1>
+      <p>협회 주요 공지 및 안내사항</p>
+    </div>
+  </div>
+  
+  <div class="page-tabs">
+    <a href="notice-list.html" class="sub-nav-item active">공지사항</a>
+    <a href="calendar.html" class="sub-nav-item">협회일정</a>
+    <a href="free.html" class="sub-nav-item">자유게시판</a>
+    <a href="press.html" class="sub-nav-item">언론보도</a>
+    <a href="job.html" class="sub-nav-item">일자리 및 교육정보</a>
+    <a href="gallery.html" class="sub-nav-item">갤러리</a>
+    <a href="newsletter.html" class="sub-nav-item">협회소식지</a>
+    <a href="archive.html" class="sub-nav-item">자료실</a>
+  </div>
+
+  <div class="content-wrap">
+
+    <div class="search-wrap">
+      <div class="search-field">
+        <label>검색</label>
+        <input type="text" class="form-control" id="noticeKeyword" placeholder="제목 검색" style="min-width:240px"
+          onkeydown="if(event.key==='Enter') NoticeBoard.search(this.value)">
+      </div>
+      <button class="btn btn-primary search-btn"
+        onclick="NoticeBoard.search(document.getElementById('noticeKeyword').value)">검색</button>
+      <button class="btn btn-gray search-btn"
+        onclick="document.getElementById('noticeKeyword').value='';NoticeBoard.search('')">초기화</button>
+    </div>
+
+    <div class="list-top">
+      <span class="list-count">전체 <strong id="noticeCount">0</strong>건</span>
+      <select class="form-control" style="width:auto;height:36px;font-size:13px"
+        onchange="NoticeBoard.changePageSize(+this.value)">
+        <option value="10">10개씩</option>
+        <option value="20">20개씩</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table class="board-table">
+        <thead>
+          <tr>
+            <th style="width: 120px">번호</th>
+            <th class="col-title">제목</th>
+            <th style="width:90px">작성자</th>
+            <th style="width:110px">작성일</th>
+            <th style="width:70px">조회</th>
+          </tr>
+        </thead>
+        <tbody id="noticeTableBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="noticePagination"></div>
+
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/community.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('커뮤니티', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    NoticeBoard.init();
+  </script>
+</body>
+
+</html>

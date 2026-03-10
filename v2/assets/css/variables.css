@@ -1,0 +1,61 @@
+/* =============================================
+   variables.css | CSS 커스텀 프로퍼티
+   ============================================= */
+
+/* ── 기본 font-size 설정 (글자 크기 조절 기준) */
+html {
+  font-size: 16px;
+  /* JS에서 이 값을 변경해 전체 크기 조절 */
+}
+
+:root {
+  /* 색상 */
+  --green-dark: #2d6a4f;
+  --green-main: #40916c;
+  --green-light: #74c69d;
+  --green-pale: #d8f3dc;
+  --gray-dark: #2d3436;
+  --gray-mid: #636e72;
+  --gray-light: #dfe6e9;
+  --gray-bg: #f4f6f4;
+  --white: #ffffff;
+  --accent: #f4a261;
+  --danger: #e74c3c;
+  --info: #1976d2;
+  --info-pale: #e3f2fd;
+
+  /* 타이포 — rem 기준 (html font-size 16px 기준) */
+  --font-base: 'Noto Sans KR', sans-serif;
+  --text-xs: 1.0625rem;
+  /* 17px */
+  --text-sm: 1.1875rem;
+  /* 19px */
+  --text-md: 1.25rem;
+  /* 20px */
+  --text-base: 1.375rem;
+  /* 22px */
+  --text-lg: 1.5rem;
+  /* 24px */
+  --text-xl: 1.75rem;
+  /* 28px */
+  --text-2xl: 2rem;
+  /* 32px */
+    --text-3xl: 2.5rem;
+  /* 40px */
+     --text-4xl: 3rem;
+  /* 48px */
+
+
+  /* 레이아웃 */
+  --container-max: 1200px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow: 0 2px 12px rgba(0, 0, 0, .08);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, .12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .16);
+  --trans: all .22s ease;
+
+  /* 헤더 높이 */
+  --header-h: 96px;
+}

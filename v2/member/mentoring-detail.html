@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>멘토링 숲학교 상세 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+</head>
+
+<body>
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>멘토링 숲학교</h1>
+      <p>회원 전용 게시판</p>
+    </div>
+  </div>
+
+  <div class="page-tabs">
+    <a href="competency.html" class="sub-nav-item">역량강화 교육강좌</a>
+    <a href="mentoring.html" class="sub-nav-item active">멘토링 숲학교</a>
+    <a href="recruit.html" class="sub-nav-item">수시숲해설 모집</a>
+    <a href="instructor.html" class="sub-nav-item">숲해설 강사 신청</a>
+    <a href="sagongdan.html" class="sub-nav-item">사공단 소식</a>
+    <a href="club.html" class="sub-nav-item">동아리 소식</a>
+    <a href="qna.html" class="sub-nav-item">이게뭐예요</a>
+  </div>
+
+  <div class="content-wrap">
+    <div class="post-wrap" id="postDetail">
+      <div style="text-align:center;padding:48px;color:var(--gray-mid)">불러오는 중...</div>
+    </div>
+    <div class="post-actions">
+      <button class="btn btn-gray" onclick="history.back()">목록</button>
+      <button class="btn btn-outline" onclick="App.toast('수정 기능은 관리자 권한이 필요합니다.', 'warning')">수정</button>
+      <button class="btn btn-danger" onclick="App.toast('삭제 기능은 관리자 권한이 필요합니다.', 'warning')">삭제</button>
+    </div>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/member.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    BoardDetail.render('postDetail', MentoringBoard.DATA, App.getParam('id'));
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>갤러리 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/about.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+</head>
+
+<body>
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>갤러리</h1>
+      <p>협회 활동 사진 모음</p>
+    </div>
+  </div>
+
+  <div class="page-tabs">
+    <a href="notice-list.html" class="sub-nav-item">공지사항</a>
+    <a href="calendar.html" class="sub-nav-item">협회일정</a>
+    <a href="free.html" class="sub-nav-item">자유게시판</a>
+    <a href="press.html" class="sub-nav-item">언론보도</a>
+    <a href="job.html" class="sub-nav-item">일자리 및 교육정보</a>
+    <a href="gallery.html" class="sub-nav-item active">갤러리</a>
+    <a href="newsletter.html" class="sub-nav-item">협회소식지</a>
+    <a href="archive.html" class="sub-nav-item">자료실</a>
+  </div>
+
+  <div class="content-wrap">
+
+    <div class="list-top" style="margin-bottom:16px">
+      <span class="list-count">전체 <strong id="galleryCount">0</strong>건</span>
+    </div>
+
+    <!-- 썸네일 그리드 -->
+    <div class="gallery-grid" id="galleryGrid"></div>
+    <div class="pagination" id="galleryPagination"></div>
+
+    <!-- 사진 상세 모달 -->
+    <div class="modal-overlay" id="galleryModal">
+      <div class="modal" style="max-width:700px">
+        <div class="modal-header">
+          <h3 id="galleryModalTitle"></h3>
+          <button class="modal-close" onclick="App.closeModal('galleryModal')">×</button>
+        </div>
+        <div class="modal-body" style="padding:0">
+          <div id="galleryModalImg"
+            style="background:var(--gray-light);min-height:320px;display:flex;align-items:center;justify-content:center;font-size:80px">
+          </div>
+          <div id="galleryModalInfo" style="padding:20px 24px;font-size:14px;color:var(--gray-dark);line-height:1.8">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-gray" onclick="App.closeModal('galleryModal')">닫기</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/community.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('커뮤니티', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    GalleryCtrl.init();
+  </script>
+</body>
+
+</html>

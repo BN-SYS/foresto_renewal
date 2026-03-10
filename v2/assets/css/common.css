@@ -1,0 +1,209 @@
+/* =============================================
+   common.css | 공통 레이아웃 / 유틸리티
+   ============================================= */
+@import url('./variables.css');
+@import url('./reset.css');
+
+/* ── 레이아웃 */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.section { padding: 48px 0; }
+
+/* ── 헤더 */
+.site-header {
+  background: var(--white);
+  border-bottom: 3px solid var(--green-main);
+  position: sticky;
+  top: 0; z-index: 100;
+  box-shadow: var(--shadow);
+  height: var(--header-h);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  gap: 16px;
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; flex-shrink: 0;
+}
+.logo-img {
+  height: 48px;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-img img {
+  height: 48px; width: auto; object-fit: contain; display: block;
+}
+.logo-text { display: none; }
+
+/* ── 네비게이션 */
+.main-nav { display: flex; align-items: center; gap: 2px; }
+.nav-item { position: relative; }
+.nav-item > a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--gray-dark);
+  white-space: nowrap;
+  transition: var(--trans);
+}
+
+.nav-item > a:hover,
+.nav-item.active > a {
+  background: var(--green-pale); color: var(--green-dark); font-weight: 700;
+}
+.arrow {
+  display: inline-block; width: 0; height: 0;
+  border-left: 4px solid transparent; border-right: 4px solid transparent;
+  border-top: 5px solid var(--gray-mid); transition: transform .2s;
+  flex-shrink: 0; margin-top: 1px;
+}
+.nav-item.has-dropdown:hover .arrow { transform: rotate(180deg); }
+.dropdown {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0;
+  min-width: 160px; background: var(--white);
+  border: 1px solid var(--gray-light); border-radius: var(--radius);
+  box-shadow: var(--shadow-md); padding: 6px; flex-direction: column; z-index: 300;
+}
+.nav-item.has-dropdown:hover .dropdown { display: flex; }
+.sub-item {
+  display: block; padding: 8px 14px;
+  font-size: var(--text-lg); 
+  font-weight: 500;
+  color: var(--gray-dark); border-radius: var(--radius); white-space: nowrap;
+  transition: var(--trans);
+}
+.sub-item:hover { background: var(--green-pale); color: var(--green-dark); }
+
+/* ── 헤더 액션 */
+.header-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.header-username {
+  font-size: var(--text-lg);           /* 13px → var */
+  color: var(--gray-mid); white-space: nowrap;
+}
+
+/* ── 모바일 햄버거 */
+.hamburger {
+  display: none;
+  flex-direction: column; gap: 5px;
+  width: 32px; height: 32px;
+  align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--gray-dark); border-radius: 2px; transition: var(--trans);
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── 모바일 메뉴 드로어 */
+.mobile-nav {
+  display: none; position: fixed; inset: 0; top: var(--header-h);
+  background: var(--white); z-index: 99; overflow-y: auto;
+  padding: 16px 0 32px;
+}
+.mobile-nav.open { display: block; }
+.mobile-nav-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px;
+  font-size: var(--text-base);         /* 15px → var */
+  font-weight: 600;
+  color: var(--gray-dark); border-bottom: 1px solid var(--gray-light);
+  cursor: pointer;
+}
+.mobile-nav-item.active { color: var(--green-dark); background: var(--green-pale); }
+.mobile-sub-wrap { display: none; background: var(--gray-bg); }
+.mobile-sub-wrap.open { display: block; }
+.mobile-sub-item {
+  display: block; padding: 10px 24px 10px 36px;
+  font-size: var(--text-base);         /* 14px → var */
+  color: var(--gray-mid);
+  border-bottom: 1px solid var(--gray-light);
+}
+.mobile-sub-item:hover { color: var(--green-dark); }
+
+/* ── 페이지 헤더 (히어로) */
+.page-header {
+  background: linear-gradient(135deg, var(--green-dark), var(--green-main));
+  color: var(--white); padding: 36px 0;
+  text-align: left;
+}
+.page-header h1 {
+  font-size: var(--text-xl);           /* 24px → var */
+  font-weight: 700; margin-bottom: 6px; text-align: left;
+}
+.page-header p {
+  font-size: var(--text-base);         /* 14px → var */
+  opacity: .85; text-align: left;
+}
+
+/* ── 서브 탭 내비 */
+.sub-nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-light);
+}
+.sub-nav-inner {
+  max-width: var(--container-max); margin: 0 auto;
+  padding: 0 24px; display: flex; overflow-x: auto;
+}
+.sub-nav-inner::-webkit-scrollbar { height: 0; }
+.sub-nav-item {
+  padding: 16px 24px;
+  font-size: var(--text-base);         /* 14px → var */
+  font-weight: 500;
+  color: var(--gray-mid); cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: var(--trans); white-space: nowrap;
+  text-decoration: none; display: block; flex-shrink: 0;
+}
+.sub-nav-item:hover  { color: var(--green-dark); }
+.sub-nav-item.active {
+  color: var(--green-dark); font-weight: 700;
+  border-bottom-color: var(--green-dark);
+}
+
+/* ── 콘텐츠 래퍼 */
+.content-wrap {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 52px 24px 80px;
+}
+
+/* ── 푸터 */
+.site-footer {
+  background: var(--green-dark); color: rgba(255,255,255,.8); padding: 32px 0;
+}
+.footer-inner {
+  max-width: var(--container-max); margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start;
+}
+.footer-info p {
+  font-size: var(--text-lg);           /* 13px → var */
+  margin-bottom: 4px;
+}
+.footer-links     { display: flex; gap: 14px; flex-wrap: wrap; }
+.footer-links a {
+  font-size: var(--text-lg);           /* 13px → var */
+  color: rgba(255,255,255,.7);
+}
+.footer-links a:hover { color: var(--white); text-decoration: underline; }
+.footer-copy {
+  text-align: center; margin-top: 20px;
+  font-size: var(--text-sm);           /* 12px → var */
+  color: rgba(255,255,255,.45); border-top: 1px solid rgba(255,255,255,.1);
+  padding-top: 16px;
+}

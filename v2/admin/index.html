@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 대시보드 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/admin.css">
+</head>
+<body class="admin-body">
+
+  <div id="hdr"></div>
+
+  <!-- 관리자 레이아웃 -->
+  <div class="admin-layout">
+
+    <!-- 사이드바 -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-head">
+        <span>🛠 관리자</span>
+        <button class="sidebar-toggle" onclick="AdminLayout.toggleSidebar()" aria-label="사이드바 토글">☰</button>
+      </div>
+      <nav class="admin-nav">
+        <a href="index.html"    class="admin-nav-item active"><span class="nav-ico">📊</span><span class="nav-txt">대시보드</span></a>
+        <a href="members.html"  class="admin-nav-item"><span class="nav-ico">👥</span><span class="nav-txt">회원관리</span></a>
+        <a href="courses.html"  class="admin-nav-item"><span class="nav-ico">📚</span><span class="nav-txt">강좌관리</span></a>
+        <a href="calendar.html" class="admin-nav-item"><span class="nav-ico">📅</span><span class="nav-txt">일정관리</span></a>
+        <a href="content.html"  class="admin-nav-item"><span class="nav-ico">📝</span><span class="nav-txt">콘텐츠관리</span></a>
+      </nav>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">대시보드</h1>
+        <div style="font-size:13px;color:var(--gray-mid)">2026년 3월 10일 (화)</div>
+      </div>
+
+      <!-- 통계 카드 -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#d8f3dc">👥</div>
+          <div class="stat-body">
+            <div class="stat-num">1,248</div>
+            <div class="stat-label">전체 회원</div>
+            <div class="stat-diff up">↑ 12명 (이번 달)</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#e3f2fd">📚</div>
+          <div class="stat-body">
+            <div class="stat-num">8</div>
+            <div class="stat-label">진행 중 강좌</div>
+            <div class="stat-diff">신청자 124명</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fff3e0">📋</div>
+          <div class="stat-body">
+            <div class="stat-num">23</div>
+            <div class="stat-label">이번 달 신청</div>
+            <div class="stat-diff up">↑ 5건 증가</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#f3e5f5">🏆</div>
+          <div class="stat-body">
+            <div class="stat-num">89</div>
+            <div class="stat-label">이번 달 수료</div>
+            <div class="stat-diff">수료증 발급 완료</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2단 그리드 -->
+      <div class="admin-grid-2">
+
+        <!-- 최근 신청자 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">최근 강좌 신청</span>
+            <a href="courses.html" class="btn btn-outline btn-xs">전체보기</a>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>이름</th>
+                <th>강좌명</th>
+                <th class="center">신청일</th>
+                <th class="center">상태</th>
+              </tr>
+            </thead>
+            <tbody id="recentApply"></tbody>
+          </table>
+        </div>
+
+        <!-- 최근 가입 회원 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">최근 가입 회원</span>
+            <a href="members.html" class="btn btn-outline btn-xs">전체보기</a>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>이름</th>
+                <th>등급</th>
+                <th class="center">가입일</th>
+                <th class="center">관리</th>
+              </tr>
+            </thead>
+            <tbody id="recentMembers"></tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- 미처리 업무 -->
+      <div class="card" style="margin-top:20px">
+        <div class="card-header">
+          <span class="card-title">⚠️ 미처리 업무</span>
+          <span class="badge badge-red" id="todoCount">0건</span>
+        </div>
+        <div id="todoList"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/admin.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('관리자', '../');
+
+    /* ── 샘플 데이터 */
+    const RECENT_APPLY = [
+      { name:'김민수', course:'55기 전문가과정', date:'2026.03.09', status:'applied' },
+      { name:'이지영', course:'시민아카데미 봄꽃', date:'2026.03.08', status:'open' },
+      { name:'박성호', course:'직무교육 기본과정', date:'2026.03.08', status:'applied' },
+      { name:'최수진', course:'역량강화 리더십', date:'2026.03.07', status:'done' },
+      { name:'정태원', course:'55기 전문가과정', date:'2026.03.07', status:'applied' },
+    ];
+    const RECENT_MEMBERS = [
+      { name:'홍길동', grade:'일반회원', joinDate:'2026.03.09' },
+      { name:'이순신', grade:'일반회원', joinDate:'2026.03.08' },
+      { name:'강감찬', grade:'준회원',   joinDate:'2026.03.07' },
+      { name:'세종대왕', grade:'일반회원', joinDate:'2026.03.06' },
+      { name:'유관순', grade:'정회원',   joinDate:'2026.03.05' },
+    ];
+    const TODOS = [
+      { type:'warn', text:'정회원 전환 대기 7명 승인 필요' },
+      { type:'info', text:'55기 전문가과정 신청서 검토 23건' },
+      { type:'warn', text:'수료 처리 미완료 강좌 2건' },
+      { type:'info', text:'공지사항 등록 예정 (3월 이사회 결과)' },
+    ];
+
+    const STATUS_META = { applied:{l:'신청완료',c:'badge-blue'}, open:{l:'접수중',c:'badge-green'}, done:{l:'수료완료',c:'badge-gray'} };
+    const GRADE_META  = { '정회원':{c:'badge-green'}, '일반회원':{c:'badge-blue'}, '준회원':{c:'badge-orange'} };
+
+    document.getElementById('recentApply').innerHTML = RECENT_APPLY.map(r => {
+      const s = STATUS_META[r.status] || {l:r.status,c:'badge-gray'};
+      return `<tr>
+        <td>${r.name}</td>
+        <td>${r.course}</td>
+        <td class="center" style="font-size:12px;color:var(--gray-mid)">${r.date}</td>
+        <td class="center"><span class="badge ${s.c}">${s.l}</span></td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('recentMembers').innerHTML = RECENT_MEMBERS.map(r => {
+      const g = GRADE_META[r.grade] || {c:'badge-gray'};
+      return `<tr>
+        <td>${r.name}</td>
+        <td><span class="badge ${g.c}">${r.grade}</span></td>
+        <td class="center" style="font-size:12px;color:var(--gray-mid)">${r.joinDate}</td>
+        <td class="center"><button class="btn btn-outline btn-xs" onclick="App.toast('${r.name} 회원 상세')">관리</button></td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('todoCount').textContent = TODOS.length + '건';
+    document.getElementById('todoList').innerHTML = TODOS.map(t => `
+      <div class="alert alert-${t.type==='warn'?'warning':'info'}" style="margin-bottom:8px">
+        ${t.type==='warn'?'⚠️':'ℹ️'} ${t.text}
+      </div>`).join('');
+  </script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원관리 | 관리자 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/admin.css">
+</head>
+<body class="admin-body">
+  <div id="hdr"></div>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-head">
+        <span>🛠 관리자</span>
+        <button class="sidebar-toggle" onclick="AdminLayout.toggleSidebar()">☰</button>
+      </div>
+      <nav class="admin-nav">
+        <a href="index.html"    class="admin-nav-item"><span class="nav-ico">📊</span><span class="nav-txt">대시보드</span></a>
+        <a href="members.html"  class="admin-nav-item active"><span class="nav-ico">👥</span><span class="nav-txt">회원관리</span></a>
+        <a href="courses.html"  class="admin-nav-item"><span class="nav-ico">📚</span><span class="nav-txt">강좌관리</span></a>
+        <a href="calendar.html" class="admin-nav-item"><span class="nav-ico">📅</span><span class="nav-txt">일정관리</span></a>
+        <a href="content.html"  class="admin-nav-item"><span class="nav-ico">📝</span><span class="nav-txt">콘텐츠관리</span></a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">회원관리</h1>
+        <button class="btn btn-primary btn-sm" onclick="App.toast('엑셀 다운로드 기능 준비 중입니다.')">📥 엑셀 다운로드</button>
+      </div>
+
+      <div class="admin-filter-bar">
+        <div class="search-field">
+          <label>회원등급</label>
+          <select class="form-control" id="filterGrade">
+            <option value="">전체</option>
+            <option value="admin">관리자</option>
+            <option value="fullMember">정회원</option>
+            <option value="member">일반회원</option>
+            <option value="associate">준회원</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>이름/아이디</label>
+          <input type="text" class="form-control" id="filterKeyword" placeholder="검색어 입력" style="min-width:180px">
+        </div>
+        <button class="btn btn-primary search-btn" onclick="MemberAdmin.search()">검색</button>
+      </div>
+
+      <div class="list-top">
+        <div class="list-count">목록 <strong id="memberCount">0</strong>명</div>
+        <select class="form-control" id="pageSizeSelect" onchange="MemberAdmin.changePageSize(this.value)" style="width:130px;height:36px;font-size:13px;">
+          <option value="10">10개씩 보기</option>
+          <option value="20">20개씩 보기</option>
+          <option value="50">50개씩 보기</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width:40px;">NO.</th>
+              <th>이름</th>
+              <th>아이디</th>
+              <th>이메일</th>
+              <th>등급</th>
+              <th>가입일</th>
+              <th>상태</th>
+              <th style="width:100px;">관리</th>
+            </tr>
+          </thead>
+          <tbody id="memberTableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="memberPagination"></div>
+    </main>
+  </div>
+
+  <!-- 회원 상세/수정 모달 -->
+  <div class="modal-overlay" id="memberModal">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">
+        <h3 id="memberModalTitle">회원 정보 수정</h3>
+        <button class="modal-close" onclick="App.closeModal('memberModal')">×</button>
+      </div>
+      <div class="modal-body" id="memberModalBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-gray" onclick="App.closeModal('memberModal')">닫기</button>
+        <button class="btn btn-primary" onclick="MemberAdmin.saveMember()">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/admin.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('관리자', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    const ALL_MEMBERS = Array.from({ length: 50 }, (_, i) => ({
+      id: 50 - i,
+      name: ['김숲해','이정회','박초록','최나무','정바람','한생태','윤들판','임해설','조산림','강자연'][i % 10],
+      userId: `user${String(50-i).padStart(3,'0')}`,
+      email: `user${50-i}@example.com`,
+      grade: ['fullMember','member','associate','fullMember','member'][i % 5],
+      gradeLabel: ['정회원','일반회원','준회원','정회원','일반회원'][i % 5],
+      joinDate: `2026-0${(i % 9)+1}-${String((i % 20)+1).padStart(2,'0')}`,
+      status: i % 7 === 0 ? 'inactive' : 'active',
+    }));
+
+    const GRADE_BADGE = { fullMember:'badge-green', member:'badge-blue', associate:'badge-orange', admin:'badge-red' };
+
+    const MemberAdmin = {
+      filtered:    [...ALL_MEMBERS],
+      currentPage: 1,
+      pageSize:    10,
+      selectedId:  null,
+
+      search() {
+        const grade = document.getElementById('filterGrade').value;
+        const kw    = document.getElementById('filterKeyword').value.trim().toLowerCase();
+        this.filtered = ALL_MEMBERS.filter(m => {
+          if (grade && m.grade !== grade) return false;
+          if (kw && !m.name.toLowerCase().includes(kw) && !m.userId.toLowerCase().includes(kw)) return false;
+          return true;
+        });
+        this.currentPage = 1;
+        this.render();
+      },
+
+      changePageSize(size) { this.pageSize = Number(size); this.currentPage = 1; this.render(); },
+
+      render() {
+        const total = this.filtered.length;
+        const slice = this.filtered.slice((this.currentPage-1)*this.pageSize, this.currentPage*this.pageSize);
+        document.getElementById('memberCount').textContent = total.toLocaleString();
+        const tbody = document.getElementById('memberTableBody');
+        tbody.innerHTML = slice.map((m, i) => `
+          <tr>
+            <td class="center">${(this.currentPage-1)*this.pageSize + i + 1}</td>
+            <td>${m.name}</td>
+            <td style="font-size:13px;color:var(--gray-mid)">${m.userId}</td>
+            <td style="font-size:13px;color:var(--gray-mid)">${m.email}</td>
+            <td class="center"><span class="badge ${GRADE_BADGE[m.grade]||'badge-gray'}">${m.gradeLabel}</span></td>
+            <td class="center" style="font-size:13px;color:var(--gray-mid)">${m.joinDate}</td>
+            <td class="center"><span class="badge ${m.status==='active'?'badge-green':'badge-gray'}">${m.status==='active'?'정상':'비활성'}</span></td>
+            <td class="center">
+              <button class="btn btn-outline btn-xs" onclick="MemberAdmin.openModal(${m.id})">수정</button>
+            </td>
+          </tr>`).join('');
+        App.renderPagination('memberPagination', this.currentPage, Math.ceil(total/this.pageSize)||1, p => { this.currentPage = p; this.render(); });
+      },
+
+      openModal(id) {
+        const m = ALL_MEMBERS.find(x => x.id === id);
+        if (!m) return;
+        this.selectedId = id;
+        document.getElementById('memberModalTitle').textContent = `회원 정보 수정 - ${m.name}`;
+        document.getElementById('memberModalBody').innerHTML = `
+          <div class="form-group"><label class="form-label">이름</label><input class="form-control" id="editName" value="${m.name}"></div>
+          <div class="form-group"><label class="form-label">이메일</label><input type="email" class="form-control" id="editEmail" value="${m.email}"></div>
+          <div class="form-group">
+            <label class="form-label">회원등급</label>
+            <select class="form-control" id="editGrade">
+              <option value="associate"   ${m.grade==='associate' ?'selected':''}>준회원</option>
+              <option value="member"      ${m.grade==='member'    ?'selected':''}>일반회원</option>
+              <option value="fullMember"  ${m.grade==='fullMember'?'selected':''}>정회원</option>
+              <option value="admin"       ${m.grade==='admin'     ?'selected':''}>관리자</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">상태</label>
+            <select class="form-control" id="editStatus">
+              <option value="active"   ${m.status==='active'  ?'selected':''}>정상</option>
+              <option value="inactive" ${m.status==='inactive'?'selected':''}>비활성</option>
+            </select>
+          </div>`;
+        App.openModal('memberModal');
+      },
+
+      saveMember() {
+        App.toast('회원 정보가 저장되었습니다.');
+        App.closeModal('memberModal');
+      },
+    };
+
+    MemberAdmin.render();
+  </script>
+</body>
+</html>

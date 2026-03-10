@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 | 한국숲해설가협회</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/reset.css">
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+    <style>
+        /* ── 인증 페이지 공통 레이아웃 */
+        .auth-bg {
+            min-height: 100vh;
+            background: linear-gradient(160deg, #f4f6f4 0%, var(--green-pale) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+
+        /* ── 로고 영역 */
+        .auth-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 32px;
+            text-decoration: none;
+        }
+
+        .auth-logo-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--green-dark), var(--green-main));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .auth-logo-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--green-dark);
+            letter-spacing: -0.3px;
+        }
+
+        .auth-logo-sub {
+            font-size: 12px;
+            color: var(--gray-mid);
+            margin-top: -6px;
+        }
+
+        /* ── 카드 */
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            padding: 40px 40px 32px;
+        }
+
+        .auth-card-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gray-dark);
+            margin-bottom: 6px;
+        }
+
+        .auth-card-desc {
+            font-size: 14px;
+            color: var(--gray-mid);
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        /* ── 입력 그룹 */
+        .auth-form-group {
+            margin-bottom: 16px;
+        }
+
+        .auth-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-dark);
+            margin-bottom: 6px;
+        }
+
+        .auth-input-wrap {
+            position: relative;
+        }
+
+        .auth-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 44px 0 16px;
+            border: 1.5px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 15px;
+            font-family: inherit;
+            background: var(--white);
+            color: var(--gray-dark);
+            transition: var(--trans);
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--green-main);
+            box-shadow: 0 0 0 3px rgba(64, 145, 108, .1);
+        }
+
+        .auth-input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, .1);
+        }
+
+        .auth-input-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: var(--gray-mid);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .auth-error-msg {
+            font-size: 12px;
+            color: var(--danger);
+            margin-top: 5px;
+            display: none;
+        }
+
+        .auth-error-msg.show {
+            display: block;
+        }
+
+        /* ── 옵션 행 */
+        .auth-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .auth-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            color: var(--gray-dark);
+            cursor: pointer;
+        }
+
+        .auth-checkbox-label input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--green-main);
+        }
+
+        .auth-link {
+            font-size: 13px;
+            color: var(--green-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ── 버튼 */
+        .auth-btn {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: var(--trans);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .auth-btn-primary {
+            background: linear-gradient(135deg, var(--green-dark), var(--green-main));
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(45, 106, 79, .3);
+        }
+
+        .auth-btn-primary:hover {
+            opacity: .92;
+            transform: translateY(-1px);
+        }
+
+        .auth-btn-outline {
+            background: transparent;
+            color: var(--green-dark);
+            border: 1.5px solid var(--green-main);
+        }
+
+        .auth-btn-outline:hover {
+            background: var(--green-pale);
+        }
+
+        /* ── 구분선 */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+            color: var(--gray-mid);
+            font-size: 12px;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-light);
+        }
+
+        /* ── 하단 링크 */
+        .auth-footer-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--gray-mid);
+            flex-wrap: wrap;
+        }
+
+        .auth-footer-links a {
+            color: var(--green-dark);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .auth-footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-footer-links .sep {
+            color: var(--gray-light);
+        }
+
+        /* ── 공지 배너 */
+        .auth-notice {
+            width: 100%;
+            max-width: 440px;
+            background: var(--green-pale);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            font-size: 12px;
+            color: var(--green-dark);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-top: 16px;
+            line-height: 1.65;
+        }
+
+        /* ── 알림 박스 */
+        .auth-alert {
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.6;
+        }
+
+        .auth-alert.show {
+            display: flex;
+        }
+
+        .auth-alert-error {
+            background: #fce4ec;
+            color: #c62828;
+        }
+
+        .auth-alert-success {
+            background: var(--green-pale);
+            color: var(--green-dark);
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 28px 20px 24px;
+            }
+
+            .auth-card-title {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 헤더 없는 전용 레이아웃 -->
+    <div class="auth-bg">
+
+        <!-- ── 로고 (이미지 버전) -->
+        <a href="../index.html" class="auth-logo">
+            <div class="logo-img">
+                <img src="../image/logo.png" alt="한국숲해설가협회">
+            </div>
+        </a>
+
+        <!-- 로그인 카드 -->
+        <div class="auth-card">
+            <div class="auth-card-title">로그인</div>
+            <div class="auth-card-desc">
+                협회 홈페이지 회원 서비스를 이용하시려면 로그인해 주세요.
+            </div>
+
+            <!-- 오류 알림 -->
+            <div class="auth-alert auth-alert-error" id="loginAlert">
+                <span>⚠️</span>
+                <span id="loginAlertMsg"></span>
+            </div>
+
+            <form id="loginForm" onsubmit="LoginCtrl.submit(event)">
+
+                <!-- 아이디 -->
+                <div class="auth-form-group">
+                    <label class="auth-label" for="loginId">아이디 (이메일)</label>
+                    <div class="auth-input-wrap">
+                        <input type="email" class="auth-input" id="loginId" placeholder="example@email.com"
+                            autocomplete="username" required>
+                        <span class="auth-input-icon">✉️</span>
+                    </div>
+                    <div class="auth-error-msg" id="loginIdErr">
+                        올바른 이메일 형식으로 입력해 주세요.
+                    </div>
+                </div>
+
+                <!-- 비밀번호 -->
+                <div class="auth-form-group">
+                    <label class="auth-label" for="loginPw">비밀번호</label>
+                    <div class="auth-input-wrap">
+                        <input type="password" class="auth-input" id="loginPw" placeholder="비밀번호 입력"
+                            autocomplete="current-password" required>
+                        <span class="auth-input-icon" id="loginPwToggle"
+                            onclick="LoginCtrl.togglePw('loginPw','loginPwToggle')" title="비밀번호 표시/숨기기">👁</span>
+                    </div>
+                    <div class="auth-error-msg" id="loginPwErr">
+                        비밀번호를 입력해 주세요.
+                    </div>
+                </div>
+
+                <!-- 옵션 -->
+                <div class="auth-options">
+                    <label class="auth-checkbox-label">
+                        <input type="checkbox" id="rememberMe">
+                        아이디 저장
+                    </label>
+                    <a href="find.html" class="auth-link">아이디 · 비밀번호 찾기</a>
+                </div>
+
+                <button type="submit" class="auth-btn auth-btn-primary">
+                    🌲 로그인
+                </button>
+            </form>
+
+            <div class="auth-divider">또는</div>
+
+            <a href="register.html" class="auth-btn auth-btn-outline" style="text-decoration:none">
+                ✏️ 회원가입
+            </a>
+
+            <div class="auth-footer-links">
+                <span>처음 방문하셨나요?</span>
+                <a href="register.html">회원가입 →</a>
+                <span class="sep">|</span>
+                <a href="../index.html">메인으로</a>
+            </div>
+        </div>
+
+        <!-- 안내 배너 -->
+        <div class="auth-notice">
+            <span>🔒</span>
+            <div>
+                회원가입 시 <strong>휴대폰 본인인증</strong>이 필요합니다.
+                기존 회원이신 분은 이메일 주소로 로그인해 주세요.
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../assets/js/app.js"></script>
+    <script>
+        const LoginCtrl = {
+
+            togglePw(inputId, iconId) {
+                const input = document.getElementById(inputId);
+                const icon = document.getElementById(iconId);
+                if (!input) return;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    if (icon) icon.textContent = '🙈';
+                } else {
+                    input.type = 'password';
+                    if (icon) icon.textContent = '👁';
+                }
+            },
+
+            showAlert(msg, type = 'error') {
+                const el = document.getElementById('loginAlert');
+                const msgEl = document.getElementById('loginAlertMsg');
+                if (!el) return;
+                el.className = `auth-alert auth-alert-${type} show`;
+                if (msgEl) msgEl.textContent = msg;
+            },
+
+            hideAlert() {
+                const el = document.getElementById('loginAlert');
+                if (el) el.classList.remove('show');
+            },
+
+            setError(inputId, errId, show) {
+                const input = document.getElementById(inputId);
+                const err = document.getElementById(errId);
+                if (input) input.classList.toggle('error', show);
+                if (err) err.classList.toggle('show', show);
+            },
+
+            setLoading(isLoading) {
+                const btn = document.getElementById('loginSubmitBtn');
+                if (!btn) return;
+                btn.disabled = isLoading;
+                btn.textContent = isLoading ? '로그인 중...' : '🌲 로그인';
+            },
+
+            submit(e) {
+                e.preventDefault();
+                this.hideAlert();
+
+                const id = document.getElementById('loginId')?.value.trim() || '';
+                const pw = document.getElementById('loginPw')?.value || '';
+
+                let hasError = false;
+
+                const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(id);
+                this.setError('loginId', 'loginIdErr', !emailValid);
+                if (!emailValid) hasError = true;
+
+                this.setError('loginPw', 'loginPwErr', !pw);
+                if (!pw) hasError = true;
+
+                if (hasError) return;
+
+                if (document.getElementById('rememberMe')?.checked) {
+                    localStorage.setItem('savedLoginId', id);
+                } else {
+                    localStorage.removeItem('savedLoginId');
+                }
+
+                this.setLoading(true);
+
+                setTimeout(() => {
+                    if (id === 'test@forest.or.kr' && pw === '1234') {
+                        /* ✅ App.login() 으로 localStorage 에 저장 */
+                        App.login({
+                            name: '김숲해설',
+                            role: 'fullMember',
+                            grade: '정회원',
+                        });
+                        location.href = '../index.html';
+
+                    } else if (id === 'admin@forest.or.kr' && pw === '1234') {
+                        App.login({
+                            name: '관리자',
+                            role: 'admin',
+                            grade: '관리자',
+                        });
+                        location.href = '../admin/index.html';
+
+                    } else {
+                        this.showAlert(
+                            '아이디 또는 비밀번호가 일치하지 않습니다.\n' +
+                            '(테스트: test@forest.or.kr / 1234)'
+                        );
+                        this.setLoading(false);
+                    }
+                }, 800);
+            },
+
+            restoreSavedId() {
+                const saved = localStorage.getItem('savedLoginId');
+                if (!saved) return;
+                const input = document.getElementById('loginId');
+                const check = document.getElementById('rememberMe');
+                if (input) input.value = saved;
+                if (check) check.checked = true;
+            },
+        };
+
+        LoginCtrl.restoreSavedId();
+
+        document.getElementById('loginPw')?.addEventListener('keydown', e => {
+            if (e.key === 'Enter') LoginCtrl.submit(e);
+        });
+    </script>
+
+</body>
+
+</html>
