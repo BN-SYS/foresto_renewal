@@ -152,7 +152,7 @@
 }
 
 /* ── 서브 탭 내비 */
-.sub-nav {
+/* .sub-nav {
   background: var(--white);
   border-bottom: 1px solid var(--gray-light);
 }
@@ -161,20 +161,20 @@
   padding: 0 24px; display: flex; overflow-x: auto;
 }
 .sub-nav-inner::-webkit-scrollbar { height: 0; }
-.sub-nav-item {
+.page-tab  {
   padding: 16px 24px;
-  font-size: var(--text-base);         /* 14px → var */
+  font-size: var(--text-base);         
   font-weight: 500;
   color: var(--gray-mid); cursor: pointer;
   border-bottom: 3px solid transparent;
   transition: var(--trans); white-space: nowrap;
   text-decoration: none; display: block; flex-shrink: 0;
 }
-.sub-nav-item:hover  { color: var(--green-dark); }
-.sub-nav-item.active {
+.page-tab :hover  { color: var(--green-dark); }
+.page-tab .active {
   color: var(--green-dark); font-weight: 700;
   border-bottom-color: var(--green-dark);
-}
+} */
 
 /* ── 콘텐츠 래퍼 */
 .content-wrap {

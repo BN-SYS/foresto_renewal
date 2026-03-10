@@ -99,9 +99,9 @@ const Header = {
             class="btn btn-outline btn-sm">마이페이지</a>
          ${App.user.role === 'admin'
         ? `<a href="${root}admin/index.html"
-                 class="btn btn-gray btn-sm">관리자</a>`
+                 class="btn btn-gray btn-outline btn-sm">관리자</a>`
         : ''}
-         <button class="btn btn-gray btn-sm"
+         <button class="btn btn-gray btn-outline btn-sm"
                  onclick="App.logout()">로그아웃</button>`
       : `<a href="${root}auth/login.html"
             class="btn btn-outline btn-sm">로그인</a>
@@ -155,7 +155,7 @@ const Header = {
         <!-- ── 로고 (이미지 버전) -->
         <a href="${root}index.html" class="logo">
   <div class="logo-img">
-    <img src="${root}image/logo.png"
+    <img src="${root}assets/image//logo.png"
          alt="한국숲해설가협회">
   </div>
 </a>

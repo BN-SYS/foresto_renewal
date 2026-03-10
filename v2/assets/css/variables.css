@@ -4,15 +4,15 @@
 
 /* ── 기본 font-size 설정 (글자 크기 조절 기준) */
 html {
-  font-size: 16px;
+  font-size: 20px;
   /* JS에서 이 값을 변경해 전체 크기 조절 */
 }
 
 :root {
   /* 색상 */
-  --green-dark: #2d6a4f;
-  --green-main: #40916c;
-  --green-light: #74c69d;
+  --green-dark: #1d4b36;
+  --green-main: #05803e;
+  --green-light: #5c977a;
   --green-pale: #d8f3dc;
   --gray-dark: #2d3436;
   --gray-mid: #636e72;
@@ -47,7 +47,7 @@ html {
 
 
   /* 레이아웃 */
-  --container-max: 1200px;
+  --container-max: 1800px;
   --radius: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;

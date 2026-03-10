@@ -569,7 +569,6 @@ const NoticeCtrl = {
     </td>
     <td class="td-title">
       <a href="notice-detail.html?id=${row.id}">
-        ${isPinned ? '<span class="badge-notice">공지</span>' : ''}
         ${row.title}
       </a>
     </td>
