@@ -64,7 +64,6 @@
   line-height: 1.25;
   margin-bottom: 16px;
   text-shadow: 0 2px 12px rgba(0, 0, 0, .45);
-  word-break: keep-all;
 }
 
 .hero-slide-desc {
@@ -72,8 +71,7 @@
   color: rgba(255, 255, 255, .88);
   margin-bottom: 28px;
   line-height: 1.75;
-  word-break: keep-all;
-  max-width: 480px;
+  max-width: 650px;
 }
 
 .hero-slide-btn {
