@@ -138,16 +138,37 @@
 
 /* ── 페이지 헤더 (히어로) */
 .page-header {
-  background: linear-gradient(135deg, var(--green-dark), var(--green-main));
-  color: var(--white); padding: 36px 0;
+  position: relative;
+  background-image: url('../image/banner/banner1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--white);
+  padding: 58px 0;
   text-align: left;
 }
+
+/* 이미지 위에 그라디언트 오버레이 */
+.page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(190, 190, 190, 0.2));
+}
+
+/* 텍스트가 오버레이 위로 올라오게 */
+.page-header .container {
+  position: relative;
+  z-index: 1;
+}
 .page-header h1 {
-  font-size: var(--text-xl);           /* 24px → var */
+  font-size: var(--text-3xl);           /* 24px → var */
   font-weight: 700; margin-bottom: 6px; text-align: left;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .45);
+  
 }
 .page-header p {
-  font-size: var(--text-base);         /* 14px → var */
+  font-size: var(--text-xl);         /* 14px → var */
   opacity: .85; text-align: left;
 }
 

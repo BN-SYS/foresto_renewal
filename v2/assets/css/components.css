@@ -266,7 +266,7 @@ select.form-control {
 
 .page-tab {
   padding: 14px 40px;
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   font-weight: 500;
   color: var(--gray-mid);
   text-decoration: none;
