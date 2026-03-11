@@ -2,6 +2,10 @@
    member.css | 회원활동 페이지 전용 스타일
    ============================================= */
 
+/* ── board-table 핀(고정) 행 */
+.board-table tr.pinned td       { background: #f0faf4; }
+.board-table tr.pinned:hover td { background: #e4f5eb; }
+
 /* ── 안내 배너 */
 .member-intro-banner {
   display: flex;

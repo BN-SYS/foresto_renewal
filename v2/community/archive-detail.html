@@ -4,16 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>자료실 | 한국숲해설가협회</title>
+  <title>자료실 상세 | 한국숲해설가협회</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/reset.css">
   <link rel="stylesheet" href="../assets/css/common.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
   <link rel="stylesheet" href="../assets/css/pages/community.css">
+  <!-- attach-section, file-type-badge 스타일은 community.css 에 정의 -->
 </head>
 
-<body data-page="archive">
+<body data-page="archive-detail">
 
   <div id="hdr"></div>
 
@@ -39,47 +40,8 @@
 
   <main>
     <div class="content-wrap">
-
-      <!-- 검색 영역 -->
-      <div class="search-wrap">
-        <div class="search-field" style="flex:1;min-width:160px;">
-          <label>검색어</label>
-          <input type="text" class="form-control" id="archiveKeyword"
-                 placeholder="제목 검색"
-                 onkeydown="if(event.key==='Enter') ArchiveCtrl.search()">
-        </div>
-        <button class="btn btn-primary search-btn" onclick="ArchiveCtrl.search()">검색</button>
-        <button class="btn btn-gray search-btn"    onclick="ArchiveCtrl.reset()">초기화</button>
-      </div>
-
-      <!-- 목록 상단 바 -->
-      <div class="list-top">
-        <span class="list-count">전체 <strong id="archiveCount">0</strong>건</span>
-        <select class="form-control" id="archiveSortSelect"
-                style="width:auto;height:36px;font-size:13px"
-                onchange="ArchiveCtrl.changeSort(this.value)">
-          <option value="latest">최신순</option>
-          <option value="views">조회순</option>
-        </select>
-      </div>
-
-      <!-- 자료 목록 테이블 -->
-      <div class="table-wrap">
-        <table class="board-table">
-          <thead>
-            <tr>
-              <th style="width:120px">번호</th>
-              <th class="col-title">제목</th>
-              <th style="width:80px">작성자</th>
-              <th style="width:110px">등록일</th>
-              <th style="width:60px">조회</th>
-            </tr>
-          </thead>
-          <tbody id="archiveTableBody"></tbody>
-        </table>
-      </div>
-      <div class="pagination" id="archivePagination"></div>
-
+      <!-- JS가 이 영역을 채움 -->
+      <div id="archiveDetail"></div>
     </div>
   </main>
 

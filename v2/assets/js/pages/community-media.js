@@ -6,272 +6,186 @@
 
 /* ══════════════════════════════════════════════
    8. 협회소식지 컨트롤러
-   - 카드형 / 목록형 뷰 전환
-   - 연도별 탭 필터
-   - 최신호 하이라이트 배너
-   - PDF 다운로드
 ══════════════════════════════════════════════ */
 const NewsletterCtrl = {
 
     DATA: [
         {
-            id: 10, year: 2026, half: '상반기',
+            id: 10, year: 2026, half: '상반기', isPin: true,
             title: '한국숲해설가협회 소식지 2026년 상반기호',
-            desc: '55기 전문가과정 수료, 사공단 봉사활동 성과, 동아리 정기총회 결과 등 2026년 상반기 주요 활동을 담았습니다.',
-            date: '2026-06-30', file: '소식지_2026_상반기.pdf',
-            views: 312, downloads: 185,
-            tags: ['전문가과정', '사공단', '동아리', '봉사활동'],
-            isLatest: true,
+            author: '사무국', date: '2026-06-30', views: 312,
+            content: `<p>55기 전문가과정 수료, 사공단 봉사활동 성과, 동아리 정기총회 결과 등 2026년 상반기 주요 활동을 담았습니다.</p>
+                      <p>이번 호에는 신규 정회원 소개와 협회 창립 25주년 기념 특집 기사를 수록했습니다.</p>`,
+            attachments: [
+                { name: '소식지_2026_상반기.pdf', ext: 'pdf', size: '8.2MB' },
+            ],
         },
         {
             id: 9, year: 2025, half: '하반기',
             title: '한국숲해설가협회 소식지 2025년 하반기호',
-            desc: '2025년 하반기 협회 주요 활동 및 회원 소식을 담았습니다.',
-            date: '2025-12-31', file: '소식지_2025_하반기.pdf',
-            views: 487, downloads: 302,
-            tags: ['수료식', '정기총회', '봉사활동'],
-            isLatest: false,
+            author: '사무국', date: '2025-12-31', views: 487,
+            content: `<p>2025년 하반기 협회 주요 활동 및 회원 소식을 담았습니다.</p>
+                      <p>수료식, 정기총회, 봉사활동 성과를 정리했습니다.</p>`,
+            attachments: [
+                { name: '소식지_2025_하반기.pdf', ext: 'pdf', size: '7.8MB' },
+            ],
         },
         {
             id: 8, year: 2025, half: '상반기',
             title: '한국숲해설가협회 소식지 2025년 상반기호',
-            desc: '2025년 상반기 협회 주요 활동 및 회원 소식을 담았습니다.',
-            date: '2025-06-30', file: '소식지_2025_상반기.pdf',
-            views: 524, downloads: 341,
-            tags: ['전문가과정', '역량강화', '신입회원'],
-            isLatest: false,
+            author: '사무국', date: '2025-06-30', views: 524,
+            content: `<p>2025년 상반기 협회 주요 활동 및 회원 소식을 담았습니다.</p>
+                      <p>전문가과정 운영 현황, 역량강화 교육, 신입회원 활동 소식을 담았습니다.</p>`,
+            attachments: [
+                { name: '소식지_2025_상반기.pdf', ext: 'pdf', size: '7.5MB' },
+            ],
         },
         {
             id: 7, year: 2024, half: '하반기',
             title: '한국숲해설가협회 소식지 2024년 하반기호',
-            desc: '2024년 하반기 협회 주요 활동을 담았습니다.',
-            date: '2024-12-31', file: '소식지_2024_하반기.pdf',
-            views: 612, downloads: 398,
-            tags: ['사공단', '동아리', '교육'],
-            isLatest: false,
+            author: '사무국', date: '2024-12-31', views: 612,
+            content: `<p>2024년 하반기 협회 주요 활동을 담았습니다.</p>
+                      <p>사공단 봉사활동, 동아리 활동, 교육 성과를 정리했습니다.</p>`,
+            attachments: [
+                { name: '소식지_2024_하반기.pdf', ext: 'pdf', size: '6.9MB' },
+            ],
         },
         {
             id: 6, year: 2024, half: '상반기',
             title: '한국숲해설가협회 소식지 2024년 상반기호',
-            desc: '2024년 상반기 협회 주요 활동을 담았습니다.',
-            date: '2024-06-30', file: '소식지_2024_상반기.pdf',
-            views: 578, downloads: 365,
-            tags: ['전문가과정', '멘토링'],
-            isLatest: false,
+            author: '사무국', date: '2024-06-30', views: 578,
+            content: `<p>2024년 상반기 협회 주요 활동을 담았습니다.</p>
+                      <p>전문가과정 운영과 멘토링 프로그램 소식을 중심으로 구성했습니다.</p>`,
+            attachments: [
+                { name: '소식지_2024_상반기.pdf', ext: 'pdf', size: '7.1MB' },
+            ],
         },
         {
             id: 5, year: 2023, half: '하반기',
             title: '한국숲해설가협회 소식지 2023년 하반기호',
-            desc: '2023년 하반기 협회 주요 활동을 담았습니다.',
-            date: '2023-12-31', file: '소식지_2023_하반기.pdf',
-            views: 445, downloads: 280,
-            tags: ['봉사활동', '수료식'],
-            isLatest: false,
+            author: '사무국', date: '2023-12-31', views: 445,
+            content: `<p>2023년 하반기 협회 주요 활동을 담았습니다.</p>
+                      <p>봉사활동 현황과 수료식 소식을 정리했습니다.</p>`,
+            attachments: [
+                { name: '소식지_2023_하반기.pdf', ext: 'pdf', size: '6.5MB' },
+            ],
         },
         {
             id: 4, year: 2023, half: '상반기',
             title: '한국숲해설가협회 소식지 2023년 상반기호',
-            desc: '2023년 상반기 협회 주요 활동을 담았습니다.',
-            date: '2023-06-30', file: '소식지_2023_상반기.pdf',
-            views: 390, downloads: 241,
-            tags: ['전문가과정', '교육'],
-            isLatest: false,
+            author: '사무국', date: '2023-06-30', views: 390,
+            content: `<p>2023년 상반기 협회 주요 활동을 담았습니다.</p>
+                      <p>전문가과정 교육 현황과 회원 활동 소식을 담았습니다.</p>`,
+            attachments: [
+                { name: '소식지_2023_상반기.pdf', ext: 'pdf', size: '6.2MB' },
+            ],
         },
         {
             id: 3, year: 2022, half: '하반기',
             title: '한국숲해설가협회 소식지 2022년 하반기호',
-            desc: '2022년 하반기 협회 주요 활동을 담았습니다.',
-            date: '2022-12-31', file: '소식지_2022_하반기.pdf',
-            views: 321, downloads: 198,
-            tags: ['사공단', '동아리'],
-            isLatest: false,
+            author: '사무국', date: '2022-12-31', views: 321,
+            content: `<p>2022년 하반기 협회 주요 활동을 담았습니다.</p>
+                      <p>사공단, 동아리 활동 소식을 중심으로 구성했습니다.</p>`,
+            attachments: [
+                { name: '소식지_2022_하반기.pdf', ext: 'pdf', size: '5.8MB' },
+            ],
         },
         {
             id: 2, year: 2022, half: '상반기',
             title: '한국숲해설가협회 소식지 2022년 상반기호',
-            desc: '2022년 상반기 협회 주요 활동을 담았습니다.',
-            date: '2022-06-30', file: '소식지_2022_상반기.pdf',
-            views: 298, downloads: 172,
-            tags: ['전문가과정'],
-            isLatest: false,
+            author: '사무국', date: '2022-06-30', views: 298,
+            content: `<p>2022년 상반기 협회 주요 활동을 담았습니다.</p>
+                      <p>전문가과정 50기 수료 소식을 담은 특집호입니다.</p>`,
+            attachments: [
+                { name: '소식지_2022_상반기.pdf', ext: 'pdf', size: '5.5MB' },
+            ],
         },
         {
             id: 1, year: 2021, half: '하반기',
             title: '한국숲해설가협회 소식지 2021년 하반기호',
-            desc: '2021년 하반기 협회 창립 이후 주요 활동을 담은 첫 소식지입니다.',
-            date: '2021-12-31', file: '소식지_2021_하반기.pdf',
-            views: 256, downloads: 143,
-            tags: ['창립', '전문가과정'],
-            isLatest: false,
+            author: '사무국', date: '2021-12-31', views: 256,
+            content: `<p>협회 창립 이후 처음 발행된 소식지입니다.</p>
+                      <p>협회 출범 배경, 초대 임원진 소개, 첫 번째 전문가과정 수료 소식을 담았습니다.</p>`,
+            attachments: [
+                { name: '소식지_2021_하반기.pdf', ext: 'pdf', size: '4.8MB' },
+            ],
         },
     ],
 
     _filtered: [],
     _page: 1,
-    _pageSize: 6,
-    _view: 'card',
-    _yearFilter: 'all',
+    _pageSize: 12,
 
-    /* ── 진입점 */
     init() {
         this._filtered = [...this.DATA];
-        this._renderLatestBanner();
-        this._renderYearTabs();
         this.render();
     },
 
-    /* ── 최신호 배너 */
-    _renderLatestBanner() {
-        const latest = this.DATA.find(d => d.isLatest) || this.DATA[0];
-        const el = document.getElementById('nlLatestBanner');
-        if (!el || !latest) return;
-
-        el.innerHTML = `
-      <div class="nl-latest-cover">
-        <span>📰</span>
-        <span>${latest.year}</span>
-      </div>
-      <div class="nl-latest-info">
-        <div style="font-size:12px;opacity:.7;margin-bottom:6px;
-                    letter-spacing:1px;font-weight:700">✨ 최신호</div>
-        <h3>${latest.title}</h3>
-        <p>${latest.desc}</p>
-        <div class="nl-tags">
-          ${latest.tags.map(t => `<span class="nl-tag">#${t}</span>`).join('')}
-        </div>
-      </div>
-      <div class="nl-latest-actions">
-        <button class="btn btn-white btn-sm"
-                onclick="NewsletterCtrl.download('${latest.file}', '${latest.title}')">
-          📥 PDF 다운로드
-        </button>
-        <button class="btn btn-white-outline btn-sm"
-                onclick="App.toast('소식지 미리보기를 엽니다.')">
-          👁 미리보기
-        </button>
-        <div style="font-size:12px;opacity:.7;text-align:center;margin-top:4px">
-          조회 ${latest.views} · 다운 ${latest.downloads}
-        </div>
-      </div>`;
-    },
-
-    /* ── 연도 탭 렌더 */
-    _renderYearTabs() {
-        const el = document.getElementById('yearTabs');
-        if (!el) return;
-        const years = [...new Set(this.DATA.map(d => d.year))].sort((a, b) => b - a);
-        el.innerHTML = `
-      <button class="year-tab active" data-year="all"
-              onclick="NewsletterCtrl.filterYear('all', this)">전체</button>
-      ${years.map(y => `
-        <button class="year-tab" data-year="${y}"
-                onclick="NewsletterCtrl.filterYear(${y}, this)">
-          ${y}년
-        </button>`).join('')}`;
-    },
-
-    /* ── 연도 필터 */
-    filterYear(year, btn) {
-        this._yearFilter = year;
-        this._page = 1;
-        document.querySelectorAll('.year-tab').forEach(b => b.classList.remove('active'));
-        if (btn) btn.classList.add('active');
-        this._applyFilter();
-    },
-
-    /* ── 검색 */
     search() {
+        const kw = (document.getElementById('nlSearchInput')?.value || '').trim().toLowerCase();
+        this._filtered = kw
+            ? this.DATA.filter(d => d.title.toLowerCase().includes(kw) ||
+                                    d.content.toLowerCase().includes(kw))
+            : [...this.DATA];
         this._page = 1;
-        this._applyFilter();
+        this.render();
     },
 
     reset() {
         const el = document.getElementById('nlSearchInput');
         if (el) el.value = '';
-        this._yearFilter = 'all';
+        this._filtered = [...this.DATA];
         this._page = 1;
-        document.querySelectorAll('.year-tab').forEach(b => b.classList.remove('active'));
-        const allTab = document.querySelector('.year-tab[data-year="all"]');
-        if (allTab) allTab.classList.add('active');
-        this._applyFilter();
-    },
-
-    /* ── 필터 적용 */
-    _applyFilter() {
-        const kw = (document.getElementById('nlSearchInput')?.value || '').trim().toLowerCase();
-        this._filtered = this.DATA.filter(d => {
-            if (this._yearFilter !== 'all' && d.year !== this._yearFilter) return false;
-            if (kw && !d.title.toLowerCase().includes(kw)) return false;
-            return true;
-        });
         this.render();
     },
 
-    /* ── 뷰 전환 */
-    setView(v, btn) {
-        this._view = v;
-        this._page = 1;
-        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-        if (btn) btn.classList.add('active');
-        const cardWrap = document.getElementById('viewCardWrap');
-        const listWrap = document.getElementById('viewListWrap');
-        if (cardWrap) cardWrap.style.display = v === 'card' ? 'block' : 'none';
-        if (listWrap) listWrap.style.display = v === 'list' ? 'block' : 'none';
-        this.render();
-    },
-
-    /* ── 메인 렌더 */
     render() {
         const total = this._filtered.length;
         const slice = this._filtered.slice(
             (this._page - 1) * this._pageSize,
             this._page * this._pageSize
         );
+
         const countEl = document.getElementById('nlCount');
         if (countEl) countEl.textContent = total.toLocaleString();
-        if (this._view === 'card') {
-            this._renderCards(slice, total);
-        } else {
-            this._renderTable(slice, total);
-        }
-    },
 
-    /* ── 카드형 렌더 */
-    _renderCards(slice, total) {
         const grid = document.getElementById('nlGrid');
         if (!grid) return;
+        if (!grid.classList.contains('newsletter-grid')) {
+            grid.classList.add('newsletter-grid');
+        }
+
         if (!slice.length) {
             grid.innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;
-                    padding:60px;color:var(--gray-mid)">
-          <div style="font-size:40px;margin-bottom:12px">📭</div>
-          <p>검색 결과가 없습니다.</p>
-        </div>`;
-            App.renderPagination('nlPagination', 1, 1, () => { });
+                <div style="grid-column:1/-1;text-align:center;
+                            padding:60px;color:var(--gray-mid)">
+                  검색 결과가 없습니다.
+                </div>`;
+            App.renderPagination('nlPagination', 1, 1, () => {});
             return;
         }
-        grid.innerHTML = slice.map(item => `
-      <div class="nl-card">
-        <div class="nl-cover">
-          ${item.isLatest ? '<span class="nl-cover-badge">최신호</span>' : ''}
-          <div class="nl-cover-icon">📰</div>
-          <div class="nl-cover-year">${item.year}년</div>
-          <div class="nl-cover-title">${item.half}호</div>
-        </div>
-        <div class="nl-info">
-          <div class="nl-info-title">${item.title}</div>
-          <div class="nl-info-desc">${item.desc}</div>
-          <div class="nl-info-meta">
-            <span style="font-size:12px;color:var(--gray-mid)">
-              ${item.date} · 조회 ${item.views}
-            </span>
-            <button class="nl-download-btn"
-                    onclick="NewsletterCtrl.download('${item.file}', '${item.title}')">
-              📥 PDF
-            </button>
-          </div>
-        </div>
-      </div>`).join('');
+
+        grid.innerHTML = slice.map(item => {
+            const pinBadge = item.isPin
+                ? `<span class="nl-cover-badge">최신</span>`
+                : '';
+            return `
+            <div class="nl-card"
+                 onclick="location.href='newsletter-detail.html?id=${item.id}'">
+              <div class="nl-cover">
+                ${pinBadge}
+                <div class="nl-cover-title">소식지 썸네일</div>
+              </div>
+              <div class="nl-info">
+                <div class="nl-info-title">${item.title}</div>
+                <div class="nl-info-meta">
+                  <span>${item.date}</span>
+                  <span>조회 ${item.views}</span>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+
         App.renderPagination(
             'nlPagination',
             this._page,
@@ -280,380 +194,371 @@ const NewsletterCtrl = {
         );
     },
 
-    /* ── 목록형 렌더 */
-    _renderTable(slice, total) {
-        const tbody = document.getElementById('nlTableBody');
-        if (!tbody) return;
-        if (!slice.length) {
-            tbody.innerHTML = `
-        <tr>
-          <td colspan="5" style="text-align:center;padding:40px;color:var(--gray-mid)">
-            검색 결과가 없습니다.
-          </td>
-        </tr>`;
-            App.renderPagination('nlListPagination', 1, 1, () => { });
+    renderDetail() {
+        const id   = App.getParam('id');
+        const item = this.DATA.find(d => String(d.id) === String(id));
+        const el   = document.getElementById('newsletterDetail');
+        if (!el) return;
+
+        if (!item) {
+            el.innerHTML = `
+                <div style="text-align:center;padding:48px;color:var(--gray-mid)">
+                  게시물을 찾을 수 없습니다.
+                </div>`;
             return;
         }
-        tbody.innerHTML = slice.map((item, i) => {
-            const seq = total - (this._page - 1) * this._pageSize - i;
-            return `
-        <tr>
-          <td class="center" style="font-size:13px">${seq}</td>
-          <td>
-            <div style="font-weight:600;margin-bottom:2px">${item.title}</div>
-            <div style="font-size:12px;color:var(--gray-mid)">${item.desc}</div>
-          </td>
-          <td class="center" style="font-size:13px">${item.date}</td>
-          <td class="center" style="font-size:13px">${item.views}</td>
-          <td class="center">
-            <button class="btn btn-outline btn-xs"
-                    onclick="NewsletterCtrl.download('${item.file}', '${item.title}')">
-              📥 PDF
-            </button>
-          </td>
-        </tr>`;
-        }).join('');
-        App.renderPagination(
-            'nlListPagination',
-            this._page,
-            Math.ceil(total / this._pageSize) || 1,
-            (p) => { this._page = p; this.render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-        );
+
+        const idx  = this.DATA.findIndex(d => d.id === item.id);
+        const prev = this.DATA[idx + 1];
+        const next = this.DATA[idx - 1];
+
+        const attachHtml = (item.attachments || []).length
+            ? `<div class="attach-section">
+                 <h4 class="attach-title">첨부파일 (${item.attachments.length}개)</h4>
+                 <ul class="attach-list">
+                   ${item.attachments.map(a => {
+                       const extCls = a.ext === 'pdf' ? 'file-type-pdf'
+                                    : a.ext === 'hwp' ? 'file-type-hwp'
+                                    : 'file-type-etc';
+                       return `
+                   <li class="attach-item">
+                     <span class="file-type-badge ${extCls}" style="font-size:10px;padding:2px 7px">${a.ext.toUpperCase()}</span>
+                     <span class="attach-name">${a.name}</span>
+                     <span class="attach-size">${a.size}</span>
+                     <button class="btn btn-outline btn-xs"
+                             onclick="NewsletterCtrl.download('${a.name}', '${a.name}')">
+                       다운로드
+                     </button>
+                   </li>`;
+                   }).join('')}
+                 </ul>
+               </div>`
+            : '';
+
+        el.innerHTML = `
+            <div class="post-wrap">
+              <div class="post-head">
+                <div style="margin-bottom:8px">
+                  <span class="badge badge-green">${item.year}년 ${item.half}호</span>
+                </div>
+                <h2>${item.title}</h2>
+                <div class="post-meta">
+                  <span>발행처 <strong>${item.author}</strong></span>
+                  <span>발행일 <strong>${item.date}</strong></span>
+                  <span>조회 <strong>${item.views}</strong></span>
+                </div>
+              </div>
+              <div class="post-body">${item.content || ''}</div>
+              ${attachHtml}
+              <div class="post-nav">
+                ${next ? `<div class="post-nav-item">
+                  <span class="post-nav-label">다음글</span>
+                  <span class="post-nav-title"
+                        onclick="location.href='newsletter-detail.html?id=${next.id}'">${next.title}</span>
+                  <span class="post-nav-date">${next.date}</span>
+                </div>` : ''}
+                ${prev ? `<div class="post-nav-item">
+                  <span class="post-nav-label">이전글</span>
+                  <span class="post-nav-title"
+                        onclick="location.href='newsletter-detail.html?id=${prev.id}'">${prev.title}</span>
+                  <span class="post-nav-date">${prev.date}</span>
+                </div>` : ''}
+              </div>
+              <div class="post-actions">
+                <button class="btn btn-gray" onclick="location.href='newsletter.html'">목록으로</button>
+              </div>
+            </div>`;
     },
 
-    /* ── 다운로드 */
-    download(file, title) {
-        App.toast(`📥 "${title}" 다운로드를 시작합니다.`);
-        /* 실제 구현 시: window.open(`/uploads/${file}`) */
+    download(file, name) {
+        App.toast(`"${name}" 다운로드를 시작합니다.`);
     },
 };
 
 
 /* ══════════════════════════════════════════════
-   9. 자료실 컨트롤러 (정회원 전용)
-   - 카테고리 사이드바 필터
-   - 파일형식 / 키워드 복합 검색
-   - 정렬 (최신순 / 조회순 / 다운로드순)
-   - 권한별 다운로드 잠금 + 오버레이
+   9. 자료실 컨트롤러
 ══════════════════════════════════════════════ */
 const ArchiveCtrl = {
 
     DATA: [
-        /* 교육자료 */
         {
-            id: 20, category: '교육자료',
+            id: 20, isPin: true,
             title: '숲해설가 교육 매뉴얼 2026',
-            desc: '2026년 개정 숲해설가 교육 과정 전체 매뉴얼입니다.',
-            author: '사무국', date: '2026-03-01',
-            file: '교육매뉴얼_2026.pdf', ext: 'pdf', size: '4.2MB',
-            views: 312, downloads: 187,
+            content: `<p>본 매뉴얼은 2026년 개정된 숲해설가 교육 과정 전체를 담고 있습니다.</p>
+                      <p>1장 숲해설가의 역할과 자세, 2장 생태 해설 기법, 3장 현장 실습 가이드, 4장 안전 관리 수칙 등으로 구성되어 있습니다.</p>
+                      <p>교육 매뉴얼은 정회원 대상으로 배포되며, 외부 공유를 금합니다.</p>`,
+            author: '사무국', date: '2026-03-01', views: 312,
+            attachments: [
+                { name: '교육매뉴얼_2026.pdf', ext: 'pdf', size: '4.2MB' },
+            ],
         },
         {
-            id: 19, category: '교육자료',
+            id: 19, isPin: true,
             title: '봄철 식물 해설 참고자료',
-            desc: '봄철 주요 식물 해설에 활용할 수 있는 사진·설명 자료집입니다.',
-            author: '사무국', date: '2026-02-20',
-            file: '봄철식물자료.pdf', ext: 'pdf', size: '8.1MB',
-            views: 245, downloads: 142,
+            content: `<p>봄철 주요 식물 해설에 활용할 수 있는 사진·설명 자료집입니다.</p>
+                      <p>진달래, 개나리, 목련 등 봄철 개화 식물 40여 종의 생태 특성과 해설 포인트를 정리했습니다.</p>`,
+            author: '사무국', date: '2026-02-20', views: 245,
+            attachments: [
+                { name: '봄철식물자료.pdf', ext: 'pdf', size: '8.1MB' },
+            ],
         },
         {
-            id: 18, category: '교육자료',
+            id: 18,
             title: '숲 생태 해설 자료집 v3',
-            desc: '숲 생태 관련 해설 자료 최신 버전입니다.',
-            author: '교육팀', date: '2025-11-15',
-            file: '생태해설자료_v3.pdf', ext: 'pdf', size: '6.7MB',
-            views: 423, downloads: 258,
+            content: `<p>숲 생태 관련 해설 자료 최신 버전(v3)입니다.</p>
+                      <p>v2 대비 수목 도감 이미지 전면 교체, 해설 스크립트 보완, 계절별 포인트 정리가 추가되었습니다.</p>`,
+            author: '교육팀', date: '2025-11-15', views: 423,
+            attachments: [
+                { name: '생태해설자료_v3.pdf', ext: 'pdf', size: '6.7MB' },
+                { name: '생태해설자료_v3_요약본.pdf', ext: 'pdf', size: '1.2MB' },
+            ],
         },
         {
-            id: 17, category: '교육자료',
+            id: 17,
             title: '조류 생태 관찰 가이드',
-            desc: '숲 해설 시 자주 만나는 조류 30종 사진 및 설명 가이드입니다.',
-            author: '생태팀', date: '2025-09-10',
-            file: '조류가이드.pdf', ext: 'pdf', size: '5.3MB',
-            views: 367, downloads: 213,
+            content: `<p>숲 해설 시 자주 만나는 조류 30종의 사진 및 설명 가이드입니다.</p>
+                      <p>각 조류의 특징, 서식지, 계절별 관찰 포인트, 울음소리 특성을 담았습니다.</p>`,
+            author: '생태팀', date: '2025-09-10', views: 367,
+            attachments: [
+                { name: '조류가이드.pdf', ext: 'pdf', size: '5.3MB' },
+            ],
         },
-        /* 양식서류 */
         {
-            id: 16, category: '양식서류',
+            id: 16,
             title: '협회 회원 가입 신청서',
-            desc: '협회 신규 회원 가입 시 제출하는 신청서 양식입니다.',
-            author: '사무국', date: '2026-01-05',
-            file: '회원가입신청서.hwp', ext: 'hwp', size: '0.3MB',
-            views: 521, downloads: 395,
+            content: `<p>협회 신규 회원 가입 시 제출하는 신청서 양식입니다.</p>
+                      <p>작성 완료 후 사무국 이메일(foresto@example.com)로 제출하거나 직접 방문 제출해 주세요.</p>`,
+            author: '사무국', date: '2026-01-05', views: 521,
+            attachments: [
+                { name: '회원가입신청서.hwp', ext: 'hwp', size: '0.3MB' },
+                { name: '회원가입신청서.docx', ext: 'docx', size: '0.3MB' },
+            ],
         },
         {
-            id: 15, category: '양식서류',
+            id: 15,
             title: '강사 활동 일지 양식',
-            desc: '숲 해설 강사 활동 일지 작성 양식입니다. 월별 작성 후 제출해 주세요.',
-            author: '사무국', date: '2026-01-05',
-            file: '강사활동일지.hwp', ext: 'hwp', size: '0.2MB',
-            views: 389, downloads: 312,
+            content: `<p>숲 해설 강사 활동 일지 작성 양식입니다.</p>
+                      <p>매월 말일 사무국에 제출해 주시기 바랍니다. HWP 또는 DOCX 중 편한 형식으로 작성하세요.</p>`,
+            author: '사무국', date: '2026-01-05', views: 389,
+            attachments: [
+                { name: '강사활동일지.hwp', ext: 'hwp', size: '0.2MB' },
+                { name: '강사활동일지.docx', ext: 'docx', size: '0.2MB' },
+            ],
         },
         {
-            id: 14, category: '양식서류',
+            id: 14,
             title: '사공단 활동 보고 양식',
-            desc: '사회공헌사업단 활동 보고서 작성 양식입니다.',
-            author: '사무국', date: '2026-01-05',
-            file: '사공단활동보고.hwp', ext: 'hwp', size: '0.2MB',
-            views: 278, downloads: 201,
+            content: `<p>사회공헌사업단 활동 보고서 작성 양식입니다.</p>
+                      <p>봉사 활동 완료 후 7일 이내 사무국에 제출해 주세요.</p>`,
+            author: '사무국', date: '2026-01-05', views: 278,
+            attachments: [
+                { name: '사공단활동보고.hwp', ext: 'hwp', size: '0.2MB' },
+            ],
         },
         {
-            id: 13, category: '양식서류',
+            id: 13,
             title: '동아리 활동 계획서 양식',
-            desc: '동아리 연간 활동 계획서 작성 양식입니다.',
-            author: '사무국', date: '2025-12-20',
-            file: '동아리활동계획서.docx', ext: 'docx', size: '0.2MB',
-            views: 234, downloads: 178,
+            content: `<p>동아리 연간 활동 계획서 작성 양식입니다.</p>
+                      <p>매년 1월 31일까지 작성하여 사무국에 제출해 주시기 바랍니다.</p>`,
+            author: '사무국', date: '2025-12-20', views: 234,
+            attachments: [
+                { name: '동아리활동계획서.docx', ext: 'docx', size: '0.2MB' },
+            ],
         },
-        /* 보고서 */
         {
-            id: 12, category: '보고서',
+            id: 12,
             title: '2025년 사업 결과 보고서',
-            desc: '2025년 협회 전체 사업 추진 결과 종합 보고서입니다.',
-            author: '사무국', date: '2026-02-10',
-            file: '2025사업결과보고서.pdf', ext: 'pdf', size: '3.5MB',
-            views: 445, downloads: 267,
+            content: `<p>2025년 협회 전체 사업 추진 결과 종합 보고서입니다.</p>
+                      <p>전문가과정 운영, 사공단 봉사활동, 시민아카데미 강좌, 동아리 활동 현황 등을 포함합니다.</p>`,
+            author: '사무국', date: '2026-02-10', views: 445,
+            attachments: [
+                { name: '2025사업결과보고서.pdf', ext: 'pdf', size: '3.5MB' },
+            ],
         },
         {
-            id: 11, category: '보고서',
+            id: 11,
             title: '2025년 사공단 연간 활동 보고서',
-            desc: '2025년 사회공헌사업단 연간 봉사 활동 실적 보고서입니다.',
-            author: '사공단', date: '2026-02-05',
-            file: '사공단_2025연간보고.pdf', ext: 'pdf', size: '2.1MB',
-            views: 312, downloads: 189,
+            content: `<p>2025년 사회공헌사업단 연간 봉사 활동 실적 보고서입니다.</p>
+                      <p>총 봉사 횟수, 참여 인원, 활동 지역 등 통계와 주요 활동 사진이 포함되어 있습니다.</p>`,
+            author: '사공단', date: '2026-02-05', views: 312,
+            attachments: [
+                { name: '사공단_2025연간보고.pdf', ext: 'pdf', size: '2.1MB' },
+            ],
         },
         {
-            id: 10, category: '보고서',
+            id: 10,
             title: '회원 현황 통계 보고서 2025',
-            desc: '2025년 회원 현황 및 활동 통계 보고서입니다.',
-            author: '사무국', date: '2026-01-20',
-            file: '회원통계_2025.xlsx', ext: 'xlsx', size: '1.2MB',
-            views: 198, downloads: 124,
+            content: `<p>2025년 회원 현황 및 활동 통계 보고서입니다.</p>
+                      <p>회원 등급별 현황, 지역별 분포, 신규 가입/탈퇴 추이 등을 엑셀 형식으로 정리했습니다.</p>`,
+            author: '사무국', date: '2026-01-20', views: 198,
+            attachments: [
+                { name: '회원통계_2025.xlsx', ext: 'xlsx', size: '1.2MB' },
+            ],
         },
-        /* 규정/정관 */
         {
-            id: 9, category: '규정/정관',
+            id: 9,
             title: '협회 정관 (2026년 개정)',
-            desc: '2026년 정기총회에서 개정된 최신 협회 정관입니다.',
-            author: '사무국', date: '2026-03-01',
-            file: '협회정관_2026.pdf', ext: 'pdf', size: '0.8MB',
-            views: 567, downloads: 348,
+            content: `<p>2026년 정기총회에서 개정된 최신 협회 정관입니다.</p>
+                      <p>이번 개정에서는 정회원 자격 기준 명확화, 총회 의결 정족수 조정, 임원 임기 규정 보완 등이 반영되었습니다.</p>`,
+            author: '사무국', date: '2026-03-01', views: 567,
+            attachments: [
+                { name: '협회정관_2026.pdf', ext: 'pdf', size: '0.8MB' },
+            ],
         },
         {
-            id: 8, category: '규정/정관',
+            id: 8,
             title: '회원 규정집 (2025년 개정)',
-            desc: '회원 등급, 권리/의무, 징계 등 회원 규정 전체를 담은 문서입니다.',
-            author: '사무국', date: '2025-08-15',
-            file: '회원규정_2025.pdf', ext: 'pdf', size: '0.6MB',
-            views: 412, downloads: 256,
+            content: `<p>회원 등급, 권리/의무, 징계 등 회원 규정 전체를 담은 문서입니다.</p>
+                      <p>회원 활동 시 반드시 숙지하시기 바랍니다.</p>`,
+            author: '사무국', date: '2025-08-15', views: 412,
+            attachments: [
+                { name: '회원규정_2025.pdf', ext: 'pdf', size: '0.6MB' },
+            ],
         },
         {
-            id: 7, category: '규정/정관',
+            id: 7,
             title: '윤리강령 및 행동지침',
-            desc: '협회 임원 및 회원의 윤리강령과 행동지침을 담은 문서입니다.',
-            author: '사무국', date: '2025-03-10',
-            file: '윤리강령.pdf', ext: 'pdf', size: '0.4MB',
-            views: 289, downloads: 167,
+            content: `<p>협회 임원 및 회원의 윤리강령과 행동지침을 담은 문서입니다.</p>
+                      <p>모든 회원은 협회 활동 시 본 윤리강령을 준수하여야 합니다.</p>`,
+            author: '사무국', date: '2025-03-10', views: 289,
+            attachments: [
+                { name: '윤리강령.pdf', ext: 'pdf', size: '0.4MB' },
+            ],
         },
-        /* 기타 */
         {
-            id: 6, category: '기타',
+            id: 6,
             title: '회원 혜택 안내문 2026',
-            desc: '2026년 협회 회원 혜택 및 지원 사항 안내 문서입니다.',
-            author: '사무국', date: '2026-01-10',
-            file: '회원혜택안내_2026.pdf', ext: 'pdf', size: '0.5MB',
-            views: 478, downloads: 312,
+            content: `<p>2026년 협회 회원 혜택 및 지원 사항 안내 문서입니다.</p>
+                      <p>교육 수강 할인, 자격증 취득 지원, 도서 구입 지원 등 다양한 혜택이 포함되어 있습니다.</p>`,
+            author: '사무국', date: '2026-01-10', views: 478,
+            attachments: [
+                { name: '회원혜택안내_2026.pdf', ext: 'pdf', size: '0.5MB' },
+            ],
         },
         {
-            id: 5, category: '기타',
+            id: 5,
             title: '숲해설가 자격 취득 안내',
-            desc: '국가 공인 숲해설가 자격 취득 절차 및 준비 사항 안내입니다.',
-            author: '사무국', date: '2025-10-05',
-            file: '자격취득안내.pdf', ext: 'pdf', size: '0.7MB',
-            views: 634, downloads: 421,
+            content: `<p>국가 공인 숲해설가 자격 취득 절차 및 준비 사항 안내입니다.</p>
+                      <p>응시 자격, 시험 일정, 준비 서류, 교육 이수 요건 등을 상세히 안내합니다.</p>`,
+            author: '사무국', date: '2025-10-05', views: 634,
+            attachments: [
+                { name: '자격취득안내.pdf', ext: 'pdf', size: '0.7MB' },
+            ],
         },
         {
-            id: 4, category: '기타',
+            id: 4,
             title: '협회 홍보 브로슈어 2025',
-            desc: '협회 소개 및 주요 사업을 담은 홍보용 브로슈어 파일입니다.',
-            author: '홍보팀', date: '2025-06-01',
-            file: '홍보브로슈어_2025.pdf', ext: 'pdf', size: '12.3MB',
-            views: 345, downloads: 198,
+            content: `<p>협회 소개 및 주요 사업을 담은 홍보용 브로슈어 파일입니다.</p>
+                      <p>협회 소개, 교육 사업, 사회공헌 활동 등을 한눈에 볼 수 있습니다.</p>`,
+            author: '홍보팀', date: '2025-06-01', views: 345,
+            attachments: [
+                { name: '홍보브로슈어_2025.pdf', ext: 'pdf', size: '12.3MB' },
+            ],
         },
         {
-            id: 3, category: '기타',
+            id: 3,
             title: '2025 정기총회 자료집',
-            desc: '2025년 정기총회 발표 자료 및 결의 사항을 담은 문서입니다.',
-            author: '사무국', date: '2025-02-20',
-            file: '정기총회_2025.pdf', ext: 'pdf', size: '2.8MB',
-            views: 512, downloads: 334,
+            content: `<p>2025년 정기총회 발표 자료 및 결의 사항을 담은 문서입니다.</p>
+                      <p>사업 결과 보고, 결산 보고, 2026년 사업 계획, 임원 선출 결과가 포함되어 있습니다.</p>`,
+            author: '사무국', date: '2025-02-20', views: 512,
+            attachments: [
+                { name: '정기총회_2025.pdf', ext: 'pdf', size: '2.8MB' },
+            ],
         },
         {
-            id: 2, category: '기타',
+            id: 2,
             title: '숲해설 프로그램 운영 가이드',
-            desc: '숲해설 프로그램 기획부터 운영까지 전반적인 가이드입니다.',
-            author: '교육팀', date: '2024-11-30',
-            file: '프로그램운영가이드.pdf', ext: 'pdf', size: '3.1MB',
-            views: 423, downloads: 278,
+            content: `<p>숲해설 프로그램 기획부터 운영까지 전반적인 가이드입니다.</p>
+                      <p>대상별 프로그램 설계, 현장 안전 관리, 사후 평가 방법 등을 단계별로 안내합니다.</p>`,
+            author: '교육팀', date: '2024-11-30', views: 423,
+            attachments: [
+                { name: '프로그램운영가이드.pdf', ext: 'pdf', size: '3.1MB' },
+            ],
         },
         {
-            id: 1, category: '기타',
+            id: 1,
             title: '협회 연혁 자료 모음',
-            desc: '협회 설립부터 현재까지 주요 연혁을 정리한 자료입니다.',
-            author: '사무국', date: '2024-06-15',
-            file: '연혁자료.pdf', ext: 'pdf', size: '1.4MB',
-            views: 234, downloads: 156,
+            content: `<p>협회 설립부터 현재까지 주요 연혁을 정리한 자료입니다.</p>
+                      <p>창립 총회 자료, 주요 사업 이력, 역대 임원 명단 등이 포함되어 있습니다.</p>`,
+            author: '사무국', date: '2024-06-15', views: 234,
+            attachments: [
+                { name: '연혁자료.pdf', ext: 'pdf', size: '1.4MB' },
+            ],
         },
     ],
 
     _filtered: [],
     _page: 1,
     _pageSize: 10,
-    _currentCategory: '',
     _currentSort: 'latest',
-    _isFullMember: false,
 
-    /* ── 진입점 */
-    init() {
-        this._isFullMember = (
+    _isFullMember() {
+        return (
             typeof App !== 'undefined' &&
             (App.user.role === 'fullMember' || App.user.role === 'admin')
         );
-        this._applyAccessControl();
-        this._updateCategoryCounts();
+    },
+
+    init() {
         this._filtered = [...this.DATA];
         this.render();
     },
 
-    /* ── 권한 처리 */
-    _applyAccessControl() {
-        /* 접근 배너: 비정회원에게 노출 */
-        const banner = document.getElementById('accessBanner');
-        if (banner) banner.style.display = !this._isFullMember ? 'flex' : 'none';
-
-        /* 통계: 정회원만 노출 */
-        const stats = document.getElementById('archiveStats');
-        if (stats && this._isFullMember) {
-            stats.style.display = 'grid';
-            this._renderStats();
-        }
-
-        /* 다운로드 잠금 오버레이 */
-        const lockMask = document.getElementById('lockMask');
-        if (lockMask) lockMask.style.display = !this._isFullMember ? 'flex' : 'none';
-    },
-
-    /* ── 통계 렌더 */
-    _renderStats() {
-        const set = (id, v) => {
-            const el = document.getElementById(id);
-            if (el) el.textContent = v.toLocaleString();
-        };
-        const now = new Date();
-        const thisM = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-        set('statTotalFiles', this.DATA.length);
-        set('statThisMonth', this.DATA.filter(d => d.date.startsWith(thisM)).length);
-        set('statTotalDownload', this.DATA.reduce((s, d) => s + d.downloads, 0));
-        set('statTotalViews', this.DATA.reduce((s, d) => s + d.views, 0));
-    },
-
-    /* ── 카테고리 카운트 */
-    _updateCategoryCounts() {
-        const cats = ['교육자료', '양식서류', '보고서', '규정/정관', '기타'];
-        const allEl = document.getElementById('catCountAll');
-        if (allEl) allEl.textContent = this.DATA.length;
-        cats.forEach(cat => {
-            const el = document.getElementById(`catCount_${cat}`);
-            if (el) el.textContent = this.DATA.filter(d => d.category === cat).length;
-        });
-    },
-
-    /* ── 카테고리 필터 */
-    filterByCategory(cat, btn) {
-        this._currentCategory = cat;
-        this._page = 1;
-
-        /* 사이드바 활성화 */
-        document.querySelectorAll('.archive-cat-item')
-            .forEach(el => el.classList.remove('active'));
-        if (btn) {
-            btn.classList.add('active');
-        } else {
-            document.querySelectorAll(`.archive-cat-item[data-cat="${cat}"]`)
-                .forEach(el => el.classList.add('active'));
-        }
-
-        /* select 동기화 */
-        const sel = document.getElementById('archiveCategoryFilter');
-        if (sel) sel.value = cat;
-
-        this._applyFilter();
-    },
-
-    /* ── 정렬 */
     changeSort(sort) {
         this._currentSort = sort;
         this._page = 1;
         this._applyFilter();
     },
 
-    /* ── 검색 */
     search() {
         this._page = 1;
         this._applyFilter();
     },
 
     reset() {
-        this._currentCategory = '';
         this._currentSort = 'latest';
         this._page = 1;
-        ['archiveCategoryFilter', 'archiveFileType', 'archiveKeyword'].forEach(id => {
+        ['archiveKeyword'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.value = '';
         });
-        document.querySelectorAll('.archive-cat-item')
-            .forEach(el => el.classList.remove('active'));
-        const allCat = document.querySelector('.archive-cat-item[data-cat=""]');
-        if (allCat) allCat.classList.add('active');
+        const sortEl = document.getElementById('archiveSortSelect');
+        if (sortEl) sortEl.value = 'latest';
         this._applyFilter();
     },
 
-    /* ── 필터 + 정렬 */
     _applyFilter() {
         const keyword = (document.getElementById('archiveKeyword')?.value || '').trim().toLowerCase();
-        const fileType = document.getElementById('archiveFileType')?.value || '';
 
         this._filtered = this.DATA.filter(d => {
-            if (this._currentCategory && d.category !== this._currentCategory) return false;
-            if (fileType && d.ext !== fileType) return false;
             if (keyword && !d.title.toLowerCase().includes(keyword) &&
-                !d.desc.toLowerCase().includes(keyword)) return false;
+                !d.content.toLowerCase().includes(keyword)) return false;
             return true;
         });
 
         const sortMap = {
             latest: (a, b) => b.date.localeCompare(a.date),
-            views: (a, b) => b.views - a.views,
-            download: (a, b) => b.downloads - a.downloads,
+            views:  (a, b) => b.views - a.views,
         };
         this._filtered.sort(sortMap[this._currentSort] || sortMap.latest);
         this.render();
     },
 
-    /* ── 파일 확장자 → 뱃지 클래스 */
     _extClass(ext) {
         const map = {
             pdf: 'file-type-pdf', hwp: 'file-type-hwp',
-            docx: 'file-type-docx', xlsx: 'file-type-xlsx',
-            zip: 'file-type-zip',
+            docx: 'file-type-docx', doc: 'file-type-docx',
+            xlsx: 'file-type-xlsx', jpg: 'file-type-img', png: 'file-type-img',
         };
         return map[(ext || '').toLowerCase()] || 'file-type-etc';
     },
 
-    /* ── 메인 렌더 */
     render() {
-        const total = this._filtered.length;
-        const slice = this._filtered.slice(
+        const pinned   = this.DATA.filter(d => d.isPin);
+        const unpinned = this._filtered.filter(d => !d.isPin);
+        const total    = unpinned.length;
+        const slice    = unpinned.slice(
             (this._page - 1) * this._pageSize,
             this._page * this._pageSize
         );
@@ -661,55 +566,49 @@ const ArchiveCtrl = {
         const countEl = document.getElementById('archiveCount');
         if (countEl) countEl.textContent = total.toLocaleString();
 
-        const listEl = document.getElementById('archiveCardList');
-        if (!listEl) return;
+        const tbody = document.getElementById('archiveTableBody');
+        if (!tbody) return;
 
         if (!slice.length) {
-            listEl.innerHTML = `
-        <div style="text-align:center;padding:60px 24px;color:var(--gray-mid)">
-          <div style="font-size:40px;margin-bottom:12px">📂</div>
-          <p style="font-size:15px">검색 결과가 없습니다.</p>
-        </div>`;
-            App.renderPagination('archivePagination', 1, 1, () => { });
+            tbody.innerHTML = `
+                <tr>
+                  <td colspan="5" style="text-align:center;padding:40px;color:var(--gray-mid)">
+                    등록된 자료가 없습니다.
+                  </td>
+                </tr>`;
+            App.renderPagination('archivePagination', 1, 1, () => {});
             return;
         }
 
-        listEl.innerHTML = slice.map(item => {
-            const extCls = this._extClass(item.ext);
-            const extUpper = (item.ext || 'FILE').toUpperCase();
-            /* 비정회원: 다운로드 버튼 잠금 */
-            const dlBtn = this._isFullMember
-                ? `<button class="btn btn-primary btn-sm"
-                   onclick="ArchiveCtrl.download('${item.file}', '${item.title}')">
-             다운로드
-           </button>`
-                : `<button class="btn btn-gray btn-sm" disabled title="정회원만 다운로드 가능합니다.">
-             다운로드
-           </button>`;
-
+        const renderRow = (item, seqLabel) => {
+            const firstAtt = (item.attachments || [])[0];
+            const extLabel = firstAtt ? (firstAtt.ext || '').toUpperCase() : '';
+            const extCls   = firstAtt ? this._extClass(firstAtt.ext) : '';
+            const extBadge = extLabel
+                ? `<span class="file-type-badge ${extCls}" style="font-size:10px;padding:2px 6px;margin-left:6px;vertical-align:middle">${extLabel}</span>`
+                : '';
+            const extra = (item.attachments || []).length > 1
+                ? `<span class="badge badge-gray" style="font-size:10px;margin-left:4px;vertical-align:middle">+${item.attachments.length - 1}</span>`
+                : '';
             return `
-        <div class="archive-item-row">
-          <div class="file-type-badge ${extCls}">${extUpper}</div>
-          <div class="archive-item-body">
-            <div class="archive-item-title">${item.title}</div>
-            <div class="archive-item-meta">
-              <span>${item.category}</span>
-              <span>${item.author}</span>
-              <span>${item.date}</span>
-              <span>${item.size}</span>
-              <span>조회 ${item.views}</span>
-              <span>다운 ${item.downloads}</span>
-            </div>
-            <div style="font-size:12px;color:var(--gray-mid);margin-top:4px;
-                        white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-              ${item.desc}
-            </div>
-          </div>
-          <div class="archive-item-actions">
-            ${dlBtn}
-          </div>
-        </div>`;
-        }).join('');
+                <tr class="${item.isPin ? 'pinned' : ''}">
+                  <td class="col-num" style="text-align:center">
+                    ${item.isPin ? '<span class="badge-notice">공지</span>' : seqLabel}
+                  </td>
+                  <td class="td-title">
+                    <a href="archive-detail.html?id=${item.id}">
+                      ${item.title}${extBadge}${extra}
+                    </a>
+                  </td>
+                  <td class="col-author">${item.author}</td>
+                  <td class="col-date">${item.date}</td>
+                  <td class="col-views">${item.views}</td>
+                </tr>`;
+        };
+
+        const pinnedRows = pinned.map(item => renderRow(item, ''));
+        const normalRows = slice.map((item, i) => renderRow(item, total - (this._page - 1) * this._pageSize - i));
+        tbody.innerHTML = [...pinnedRows, ...normalRows].join('');
 
         App.renderPagination(
             'archivePagination',
@@ -723,25 +622,111 @@ const ArchiveCtrl = {
         );
     },
 
-    /* ── 다운로드 핸들러 */
-    download(file, title) {
-        if (!this._isFullMember) {
+    renderDetail() {
+        const id   = App.getParam('id');
+        const item = this.DATA.find(d => String(d.id) === String(id));
+        const el   = document.getElementById('archiveDetail');
+        if (!el) return;
+
+        if (!item) {
+            el.innerHTML = `
+                <div style="text-align:center;padding:48px;color:var(--gray-mid)">
+                  게시물을 찾을 수 없습니다.
+                </div>`;
+            return;
+        }
+
+        const isFullMember = this._isFullMember();
+
+        const idx  = this.DATA.findIndex(d => d.id === item.id);
+        const prev = this.DATA[idx + 1];
+        const next = this.DATA[idx - 1];
+
+        const attachHtml = (item.attachments || []).length
+            ? `<div class="attach-section">
+                 <h4 class="attach-title">첨부파일 (${item.attachments.length}개)</h4>
+                 <ul class="attach-list">
+                   ${item.attachments.map(a => {
+                       const cls   = this._extClass(a.ext);
+                       const dlBtn = isFullMember
+                           ? `<button class="btn btn-outline btn-xs"
+                                      onclick="ArchiveCtrl.download('${a.name}', '${a.name}')">
+                                다운로드
+                              </button>`
+                           : `<button class="btn btn-gray btn-xs" disabled
+                                      title="정회원만 다운로드 가능합니다.">
+                                다운로드
+                              </button>`;
+                       return `
+                   <li class="attach-item">
+                     <span class="file-type-badge ${cls}" style="font-size:10px;padding:2px 7px">${a.ext.toUpperCase()}</span>
+                     <span class="attach-name">${a.name}</span>
+                     <span class="attach-size">${a.size}</span>
+                     ${dlBtn}
+                   </li>`;
+                   }).join('')}
+                 </ul>
+                 ${!isFullMember
+                     ? `<p class="attach-notice">정회원만 파일을 다운로드할 수 있습니다.
+                          <a href="../about/members.html">정회원 안내 →</a></p>`
+                     : ''}
+               </div>`
+            : '';
+
+        el.innerHTML = `
+            <div class="post-wrap">
+              <div class="post-head">
+                <h2>${item.title}</h2>
+                <div class="post-meta">
+                  <span>작성자 <strong>${item.author}</strong></span>
+                  <span>작성일 <strong>${item.date}</strong></span>
+                  <span>조회 <strong>${item.views}</strong></span>
+                </div>
+              </div>
+              <div class="post-body">${item.content || ''}</div>
+              ${attachHtml}
+              <div class="post-nav">
+                ${next
+                    ? `<div class="post-nav-item">
+                         <span class="post-nav-label">다음글</span>
+                         <span class="post-nav-title"
+                               onclick="location.href='archive-detail.html?id=${next.id}'">${next.title}</span>
+                         <span class="post-nav-date">${next.date}</span>
+                       </div>`
+                    : ''}
+                ${prev
+                    ? `<div class="post-nav-item">
+                         <span class="post-nav-label">이전글</span>
+                         <span class="post-nav-title"
+                               onclick="location.href='archive-detail.html?id=${prev.id}'">${prev.title}</span>
+                         <span class="post-nav-date">${prev.date}</span>
+                       </div>`
+                    : ''}
+              </div>
+              <div class="post-actions">
+                <button class="btn btn-gray" onclick="location.href='archive.html'">목록으로</button>
+              </div>
+            </div>`;
+    },
+
+    download(file, name) {
+        if (!this._isFullMember()) {
             App.toast('정회원만 다운로드할 수 있습니다.', 'warning');
             return;
         }
-        App.toast(`📥 "${title}" 다운로드를 시작합니다.`);
-        /* 실제 구현 시: window.open(`/uploads/${file}`) */
+        App.toast(`"${name}" 다운로드를 시작합니다.`);
     },
 };
-
 
 
 /* ── 소식지·자료실 페이지 자동 초기화 */
 document.addEventListener('DOMContentLoaded', () => {
     const page = document.body.dataset.page;
     const initMap = {
-        'newsletter': () => NewsletterCtrl.init(),
-        'archive':    () => ArchiveCtrl.init(),
+        'newsletter':        () => NewsletterCtrl.init(),
+        'newsletter-detail': () => NewsletterCtrl.renderDetail(),
+        'archive':           () => ArchiveCtrl.init(),
+        'archive-detail':    () => ArchiveCtrl.renderDetail(),
     };
     if (page && initMap[page]) initMap[page]();
 });

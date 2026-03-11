@@ -16,7 +16,7 @@
 <body class="auth-page">
     <div id="hdr"></div>
 
-    <div class="auth-bg auth-bg--top">
+    <div class="auth-bg">
 
         <!-- 로그인 카드 -->
         <div class="auth-card">
@@ -27,6 +27,7 @@
 
             <!-- 오류 알림 -->
             <div class="auth-alert auth-alert-error" id="loginAlert">
+                <span>⚠️</span>
                 <span id="loginAlertMsg"></span>
             </div>
 
@@ -38,6 +39,7 @@
                     <div class="auth-input-wrap">
                         <input type="email" class="auth-input" id="loginId" placeholder="example@email.com"
                             autocomplete="username" required>
+                        <span class="auth-input-icon">✉️</span>
                     </div>
                     <div class="auth-error-msg" id="loginIdErr">
                         올바른 이메일 형식으로 입력해 주세요.
@@ -68,14 +70,14 @@
                 </div>
 
                 <button type="submit" class="auth-btn auth-btn-primary">
-                    로그인
+                    🌲 로그인
                 </button>
             </form>
 
             <div class="auth-divider">또는</div>
 
             <a href="register.html" class="auth-btn auth-btn-outline" style="text-decoration:none">
-                회원가입
+                ✏️ 회원가입
             </a>
 
             <div class="auth-footer-links">
@@ -88,13 +90,13 @@
 
         <!-- 안내 배너 -->
         <div class="auth-notice">
+            <span>🔒</span>
             <div>
                 회원가입 시 <strong>휴대폰 본인인증</strong>이 필요합니다.
-                기존 회원이신 분은 이메일 주소로 로그인해 주세요.
+                <span style="font-size:12px;display:block;margin-top:3px">기존 홈페이지 회원은 최초 로그인 시 본인인증 후 비밀번호를 재설정합니다.</span>
             </div>
         </div>
 
-    </div>
     </div>
 
     <div id="ftr"></div>
@@ -173,28 +175,36 @@
 
                 this.setLoading(true);
 
+                // ── 실제 구현 시 서버 API 호출로 교체
+                // POST /api/auth/login → { status: 'ok'|'legacy_pending'|'error', ... }
                 setTimeout(() => {
+
+                    // 정상 회원
                     if (id === 'test@forest.or.kr' && pw === '1234') {
-                        /* ✅ App.login() 으로 localStorage 에 저장 */
-                        App.login({
-                            name: '김숲해설',
-                            role: 'fullMember',
-                            grade: '정회원',
-                        });
+                        App.login({ name: '김숲해설', role: 'fullMember', grade: '정회원' });
                         location.href = '../index.html';
 
+                    // 관리자
                     } else if (id === 'admin@forest.or.kr' && pw === '1234') {
-                        App.login({
-                            name: '관리자',
-                            role: 'admin',
-                            grade: '관리자',
-                        });
+                        App.login({ name: '관리자', role: 'admin', grade: '관리자' });
                         location.href = '../admin/index.html';
+
+                    // ★ 기존 회원 — "본인인증 대기" 상태 (비밀번호 없음)
+                    // 실제 구현: 서버가 status:'legacy_pending' 반환 시 이 분기 처리
+                    } else if (id === 'legacy@forest.or.kr') {
+                        this.showAlert(
+                            '기존 홈페이지 회원입니다. 최초 1회 본인인증이 필요합니다.',
+                            'info'
+                        );
+                        setTimeout(() => {
+                            // 이메일을 파라미터로 넘겨 verify-legacy에서 활용
+                            location.href = `verify-legacy.html?email=${encodeURIComponent(id)}`;
+                        }, 1400);
 
                     } else {
                         this.showAlert(
                             '아이디 또는 비밀번호가 일치하지 않습니다.\n' +
-                            '(테스트: test@forest.or.kr / 1234)'
+                            '(테스트 — 신규: test@forest.or.kr / 1234  |  기존회원: legacy@forest.or.kr)'
                         );
                         this.setLoading(false);
                     }

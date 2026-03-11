@@ -39,25 +39,12 @@
   <main>
     <div class="content-wrap">
 
-      <!-- 카테고리 탭 -->
-      <div class="tabs" id="jobCatTabs" style="margin-bottom:20px">
-        <button class="tab-btn active" data-cat="" onclick="JobCtrl.filterByTab('', this)">전체</button>
-        <button class="tab-btn" data-cat="채용공고" onclick="JobCtrl.filterByTab('채용공고', this)"> 채용공고</button>
-        <button class="tab-btn" data-cat="교육정보" onclick="JobCtrl.filterByTab('교육정보', this)">교육정보</button>
-        <button class="tab-btn" data-cat="자격증정보" onclick="JobCtrl.filterByTab('자격증정보', this)">자격증정보</button>
-        <button class="tab-btn" data-cat="공모사업" onclick="JobCtrl.filterByTab('공모사업', this)">공모사업</button>
-      </div>
-
       <!-- 검색 -->
       <div class="search-wrap">
-        <div class="search-field" style="flex:1;min-width:180px">
+        <div class="search-field" style="flex:1;min-width:200px">
           <label>검색어</label>
           <input type="text" class="form-control" id="jobKeyword" placeholder="제목 검색"
             onkeydown="if(event.key==='Enter') JobCtrl.search()">
-        </div>
-        <div class="search-field">
-          <label>마감일</label>
-          <input type="date" class="form-control" id="jobDeadlineFilter">
         </div>
         <button class="btn btn-primary search-btn" onclick="JobCtrl.search()">검색</button>
         <button class="btn btn-gray search-btn" onclick="JobCtrl.reset()">초기화</button>
@@ -66,14 +53,6 @@
       <!-- 목록 상단 -->
       <div class="list-top">
         <span class="list-count">전체 <strong id="jobCount">0</strong>건</span>
-        <div style="font-size:12px;color:var(--gray-mid)">
-          <span style="margin-right:12px">
-            <span class="dday-badge dday-hot">D-3 이내</span> 마감임박
-          </span>
-          <span>
-            <span class="dday-badge dday-end">마감</span> 접수종료
-          </span>
-        </div>
       </div>
 
       <!-- 게시판 테이블 -->
@@ -81,12 +60,10 @@
         <table class="board-table">
           <thead>
             <tr>
-              <th style="width:60px">번호</th>
-              <th style="width:120px">구분</th>
-              <th>제목</th>
-              <th style="width:90px">작성자</th>
+              <th style="width:120px">번호</th>
+              <th class="col-title">제목</th>
+              <th style="width:80px">작성자</th>
               <th style="width:110px">등록일</th>
-              <th style="width:110px">마감일</th>
               <th style="width:60px">조회</th>
             </tr>
           </thead>

@@ -220,14 +220,17 @@ const RECRUIT_LOCATIONS = [
 ];
 
 const RECRUIT_DATA = Array.from({ length: 15 }, (_, i) => ({
-  id:      15 - i,
-  title:   `[모집] ${RECRUIT_LOCATIONS[i]}`,
-  period:  `2026-0${(i % 9) + 1}`,
-  count:   `${(i % 5) + 2}명`,
-  status:  i % 3 === 0 ? 'closed' : 'open',
-  date:    makeDate(i),
-  content: `<p>수시숲해설 모집 ${15 - i}번 게시물입니다.</p>
-            <p>참여를 원하시는 분은 기간 내 신청해 주세요.</p>`,
+  id:        15 - i,
+  title:     `[모집] ${RECRUIT_LOCATIONS[i]}`,
+  period:    `2026-0${(i % 9) + 1}`,
+  count:     `${(i % 5) + 2}명`,
+  status:    i % 3 === 0 ? 'closed' : 'open',
+  date:      makeDate(i),
+  content:   `<p>수시숲해설 모집 ${15 - i}번 게시물입니다.</p>
+              <p>현장 활동에 관심 있는 회원분들의 많은 참여 바랍니다.</p>
+              <p>활동 내용, 일정, 대상 기관 등 세부 안내는 아래 신청 링크에서 확인하세요.</p>`,
+  /* 외부 신청 링크 (실제 운영 시 네이버폼 등으로 교체, null이면 링크 없음) */
+  applyLink: i % 3 === 0 ? null : 'https://naver.me/xxxxx',
 }));
 
 /* ── 1-3. 사공단 소식 데이터 (20건) */
@@ -241,6 +244,7 @@ const NEWS_SUBTITLES = [
 
 const SAGONGDAN_NEWS_DATA = Array.from({ length: 20 }, (_, i) => ({
   id:      20 - i,
+  isPin:   i < 1,   /* 최신 1건 고정 */
   title:   `[사공단] ${NEWS_SUBTITLES[i % NEWS_SUBTITLES.length]} ${Math.floor(i / NEWS_SUBTITLES.length) + 1}호`,
   author:  pickAuthor('staff', i),
   date:    makeDate(i),
@@ -279,6 +283,7 @@ const CLUB_NEWS_SUBTITLES = [
 
 const CLUB_NEWS_DATA = Array.from({ length: 24 }, (_, i) => ({
   id:      24 - i,
+  isPin:   i < 1,   /* 최신 1건 고정 */
   title:   `[${CLUB_NAMES[i % 3]}] ${CLUB_NEWS_SUBTITLES[i % CLUB_NEWS_SUBTITLES.length]}`,
   club:    CLUB_NAMES[i % 3],
   author:  pickAuthor('member', i),
@@ -508,7 +513,7 @@ const RecruitCtrl = {
         <tr>
           <td class="center">${seq}</td>
           <td class="td-title">
-            <a href="?id=${row.id}">${row.title}</a>
+            <a href="recruit-detail.html?id=${row.id}">${row.title}</a>
           </td>
           <td class="center">${row.period}</td>
           <td class="center">${row.count}</td>
@@ -540,6 +545,72 @@ const RecruitCtrl = {
       if (el) el.value = '';
     });
     this._board?.filterFn(null);
+  },
+
+  /* ── 상세 페이지 렌더 */
+  renderDetail() {
+    const id   = App.getParam('id');
+    const item = RECRUIT_DATA.find(d => String(d.id) === String(id));
+    const el   = document.getElementById('recruitDetail');
+    if (!el) return;
+
+    if (!item) {
+      el.innerHTML = `
+        <div style="text-align:center;padding:48px;color:var(--gray-mid)">
+          모집 공고를 찾을 수 없습니다.
+        </div>`;
+      return;
+    }
+
+    const idx  = RECRUIT_DATA.findIndex(d => d.id === item.id);
+    const prev = RECRUIT_DATA[idx + 1];
+    const next = RECRUIT_DATA[idx - 1];
+
+    /* 외부 신청 링크 버튼 */
+    const applyBtnHtml = item.status === 'open'
+      ? (item.applyLink
+          ? `<a href="${item.applyLink}" target="_blank" rel="noopener noreferrer"
+                class="btn btn-primary">신청하기 (외부 링크)</a>`
+          : `<button class="btn btn-gray" disabled>신청 링크 준비 중</button>`)
+      : `<button class="btn btn-gray" disabled>모집 마감</button>`;
+
+    el.innerHTML = `
+      <div class="post-wrap">
+        <div class="post-head">
+          <div style="margin-bottom:8px">
+            <span class="badge ${item.status === 'open' ? 'badge-green' : 'badge-gray'}">
+              ${item.status === 'open' ? '모집중' : '마감'}
+            </span>
+          </div>
+          <h2>${item.title}</h2>
+          <div class="post-meta">
+            <span>활동 기간 <strong>${item.period}</strong></span>
+            <span>모집 인원 <strong>${item.count}</strong></span>
+            <span>등록일 <strong>${item.date}</strong></span>
+          </div>
+        </div>
+        <div class="post-body">${item.content || ''}</div>
+        <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+          ${applyBtnHtml}
+        </div>
+        <div class="post-nav">
+          ${next ? `<div class="post-nav-item">
+            <span class="post-nav-label">다음글</span>
+            <span class="post-nav-title"
+                  onclick="location.href='recruit-detail.html?id=${next.id}'">${next.title}</span>
+            <span class="post-nav-date">${next.date}</span>
+          </div>` : ''}
+          ${prev ? `<div class="post-nav-item">
+            <span class="post-nav-label">이전글</span>
+            <span class="post-nav-title"
+                  onclick="location.href='recruit-detail.html?id=${prev.id}'">${prev.title}</span>
+            <span class="post-nav-date">${prev.date}</span>
+          </div>` : ''}
+        </div>
+        <div class="post-actions">
+          <button class="btn btn-gray" onclick="location.href='recruit.html'">목록으로</button>
+        </div>
+      </div>`;
   },
 };
 
@@ -604,8 +675,8 @@ const SagongdanCtrl = {
       paginationId: 'newsPagination',
       countId:      'newsCount',
       rowRenderer:  (row, seq) => `
-        <tr>
-          <td class="center">${seq}</td>
+        <tr class="${row.isPin ? 'pinned' : ''}">
+          <td class="center">${row.isPin ? '<span class="badge-notice">공지</span>' : seq}</td>
           <td class="td-title">
             <a href="?type=news&id=${row.id}">${row.title}</a>
           </td>
@@ -706,8 +777,8 @@ const ClubCtrl = {
       paginationId: 'clubNewsPagination',
       countId:      'clubNewsCount',
       rowRenderer:  (row, seq) => `
-        <tr>
-          <td class="center">${seq}</td>
+        <tr class="${row.isPin ? 'pinned' : ''}">
+          <td class="center">${row.isPin ? '<span class="badge-notice">공지</span>' : seq}</td>
           <td class="center">
             <span class="badge badge-green"
                   style="font-size:11px">${row.club}</span>
@@ -966,6 +1037,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'mentoring':         () => MentoringCtrl.init(),
     'mentoring-detail':  () => MentoringCtrl.renderDetail(),
     'recruit':           () => RecruitCtrl.init(),
+    'recruit-detail':    () => RecruitCtrl.renderDetail(),
     'instructor':        () => InstructorCtrl.init(),
     'sagongdan':         () => SagongdanCtrl.init(),
     'club':              () => ClubCtrl.init(),

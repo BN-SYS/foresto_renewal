@@ -321,4 +321,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── 4. 현재 단계에 맞게 버튼 상태 초기화 */
   App.fontSize._apply();
+
+  /* ── 5. 모바일 가로 스크롤 탭: active 탭이 뷰포트 안에 들어오도록 스크롤 조정 */
+  const pageTabs = document.querySelector('.page-tabs');
+  if (pageTabs) {
+    const activeTab = pageTabs.querySelector('.page-tab.active');
+    if (activeTab) {
+      /* active 탭을 컨테이너 중앙에 배치 (페이지 전체 스크롤 방지) */
+      const tabLeft    = activeTab.offsetLeft;
+      const tabWidth   = activeTab.offsetWidth;
+      const containerW = pageTabs.offsetWidth;
+      pageTabs.scrollLeft = tabLeft - (containerW / 2) + (tabWidth / 2);
+    }
+  }
 });

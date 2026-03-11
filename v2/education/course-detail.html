@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>강좌 상세 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/education.css">
+</head>
+
+<body>
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>숲해설가 교육</h1>
+      <p>자연과 사람을 잇는 전문 숲해설가 교육 안내입니다.</p>
+    </div>
+  </div>
+
+  <div class="page-tabs">
+    <a href="forester.html"    class="page-tab">숲해설가란</a>
+    <a href="faq.html"         class="page-tab">자주 묻는 질문</a>
+    <a href="course-intro.html" class="page-tab">전문과정 안내</a>
+    <a href="course-list.html" class="page-tab">전문과정 신청</a>
+    <a href="academy.html"     class="page-tab">시민아카데미</a>
+    <a href="job-training.html" class="page-tab">직무교육</a>
+  </div>
+
+  <div class="content-wrap">
+    <!-- JS가 이 영역을 채움 -->
+    <div id="courseDetail"></div>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/education.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('숲해설가교육', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    window._ctrl = new CourseDetailController();
+    window._ctrl.init();
+  </script>
+</body>
+
+</html>

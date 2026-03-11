@@ -91,14 +91,15 @@ class CourseListController {
     if (!tbody) return;
     tbody.innerHTML = slice.map(c => {
       const sm    = STATUS_META[c.status];
+      /* 목록에서 타이틀 및 상태 배지 모두 상세 페이지로 이동 */
       const badge = sm.canApply
-        ? `<button class="status-badge ${sm.cls}" onclick="window._ctrl.openApply(${c.id})">${sm.label}</button>`
+        ? `<a href="course-detail.html?id=${c.id}" class="status-badge ${sm.cls}">${sm.label}</a>`
         : `<span class="status-badge ${sm.cls}">${sm.label}</span>`;
       return `<tr>
         <td class="center">${c.id}</td>
-        <td class="td-title">${sm.canApply
-          ? `<a href="#" onclick="window._ctrl.openApply(${c.id});return false">${c.title}</a>`
-          : `<span>${c.title}</span>`}</td>
+        <td class="td-title">
+          <a href="course-detail.html?id=${c.id}">${c.title}</a>
+        </td>
         <td class="center">${c.date}</td>
         <td class="center" style="font-size:13px;color:var(--gray-mid)">${c.from} ~ ${c.to}</td>
         <td class="center">${badge}</td>
@@ -262,4 +263,82 @@ class CourseListController {
         </div>
       </div>`);
   }
+}
+
+
+/* ══════════════════════════════════════════════
+   강좌 상세 컨트롤러
+   - 4개 강좌 유형 공통 사용 (전문과정 / 시민아카데미 / 역량강화 / 강사신청)
+   - URL 파라미터 id로 ALL_COURSES_RAW에서 강좌 조회
+   - 신청하기 버튼 → CourseListController 와 동일한 3단계 모달 사용
+   - window._ctrl 설정으로 모달 버튼 참조 유지
+══════════════════════════════════════════════ */
+class CourseDetailController extends CourseListController {
+    constructor() {
+        /* 부모 생성자: pageType 없이 초기화 (render 미사용, 모달 inject만 활용) */
+        super('__detail__', '', '');
+        /* 전체 강좌 데이터 접근 */
+        this.courses = ALL_COURSES_RAW;
+    }
+
+    /* ── 상세 페이지 렌더 */
+    init() {
+        const id     = Number(App.getParam('id'));
+        const course = this.courses.find(c => c.id === id);
+        const el     = document.getElementById('courseDetail');
+        if (!el) return;
+
+        if (!course) {
+            el.innerHTML = `
+                <div style="text-align:center;padding:64px 24px;color:var(--gray-mid)">
+                  강좌 정보를 찾을 수 없습니다.
+                  <br><br>
+                  <button class="btn btn-gray" onclick="history.back()">이전 페이지로</button>
+                </div>`;
+            return;
+        }
+
+        const sm = STATUS_META[course.status];
+        const applyBtn = sm.canApply
+            ? `<button class="btn btn-primary" style="min-width:120px"
+                       onclick="window._ctrl.openApply(${course.id})">신청하기</button>`
+            : `<button class="btn btn-gray" style="min-width:120px" disabled>${sm.label}</button>`;
+
+        /* 목록으로 돌아갈 경로 판별 (referer 또는 type 기반) */
+        const backMap = {
+            '전문과정':   'course-list.html',
+            '시민아카데미': 'academy.html',
+            '직무교육':   'job-training.html',
+            '역량강화':   'job-training.html',
+        };
+        const backHref = backMap[course.type] || 'course-list.html';
+
+        el.innerHTML = `
+            <div class="post-wrap">
+              <div class="post-head">
+                <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
+                  <span class="badge badge-green">${course.type}</span>
+                  <span class="status-badge ${sm.cls}">${sm.label}</span>
+                </div>
+                <h2>${course.title}</h2>
+                <div class="post-meta">
+                  <span>접수일 <strong>${course.date}</strong></span>
+                  <span>교육 기간 <strong>${course.from} ~ ${course.to}</strong></span>
+                </div>
+              </div>
+
+              <div class="post-body">
+                <div style="background:var(--gray-bg);padding:20px 24px;
+                            border-radius:var(--radius);border-left:4px solid var(--green-main);
+                            font-size:var(--text-md);line-height:1.8;white-space:pre-line">
+                  ${course.guide}
+                </div>
+              </div>
+
+              <div style="margin-top:32px;display:flex;gap:12px">
+                ${applyBtn}
+                <button class="btn btn-gray" onclick="location.href='${backHref}'">목록으로</button>
+              </div>
+            </div>`;
+    }
 }

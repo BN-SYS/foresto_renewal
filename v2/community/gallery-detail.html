@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>갤러리 | 한국숲해설가협회</title>
+  <title>갤러리 상세 | 한국숲해설가협회</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/reset.css">
   <link rel="stylesheet" href="../assets/css/common.css">
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../assets/css/pages/community.css">
 </head>
 
-<body data-page="gallery">
+<body data-page="gallery-detail">
 
   <div id="hdr"></div>
 
@@ -35,17 +35,12 @@
     <a href="archive.html"     class="page-tab">자료실</a>
   </div>
 
-  <div class="content-wrap">
-
-    <div class="list-top" style="margin-bottom:16px">
-      <span class="list-count">전체 <strong id="galleryCount">0</strong>건</span>
+  <main>
+    <div class="content-wrap">
+      <!-- JS가 이 영역을 채움 -->
+      <div id="galleryDetail"></div>
     </div>
-
-    <!-- 썸네일 카드 그리드 -->
-    <div class="gallery-grid" id="galleryGrid"></div>
-    <div class="pagination" id="galleryPagination"></div>
-
-  </div>
+  </main>
 
   <div id="ftr"></div>
 

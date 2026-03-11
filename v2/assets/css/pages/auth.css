@@ -26,7 +26,7 @@ body.auth-page {
 /* register는 상단 정렬 */
 .auth-bg.auth-bg--top {
   justify-content: flex-start;
-  padding: 100px;
+  padding-top: 32px;
 }
 
 /* ── 인증 영역 전체 폰트 리셋 */
@@ -260,6 +260,7 @@ body.auth-page {
 .auth-alert.show    { display: flex; }
 .auth-alert-error   { background: #fce4ec; color: #c62828; }
 .auth-alert-success { background: var(--green-pale); color: var(--green-dark); }
+.auth-alert-info    { background: #e3f2fd; color: #1565c0; }
 
 /* ══════════════════════════════════
    register.html 전용
@@ -417,7 +418,6 @@ body.auth-page {
   gap: 10px;
   margin-top: 20px;
   align-items: center;
-  justify-content: space-between;
 }
 
 /* ══════════════════════════════════

@@ -1,5 +1,6 @@
 /* =============================================
    about.css | 협회소개 페이지 전용 스타일
+   - donate 후원 페이지 스타일 포함
    ============================================= */
 
 /* ── 섹션 타이틀 */
@@ -710,4 +711,118 @@
   .map-wrap      { aspect-ratio: 4/3; }
   .project-stats { grid-template-columns: repeat(2, 1fr); padding: 24px 16px; }
   .partner-grid  { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+/* ══════════════════════════════════════════════
+   후원하기 페이지
+══════════════════════════════════════════════ */
+
+/* ── 후원 탭 */
+.donate-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--green-main);
+  margin-bottom: 32px;
+}
+.donate-tab {
+  padding: 12px 32px;
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--gray-mid);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+.donate-tab:hover  { color: var(--green-main); }
+.donate-tab.active { color: var(--green-main); border-bottom-color: var(--green-main); font-weight: 700; }
+
+/* ── 후원 폼 레이아웃 */
+.donate-form { max-width: 560px; }
+.donate-form .form-group { margin-bottom: 20px; }
+.donate-form label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--gray-dark);
+  margin-bottom: 6px;
+}
+.donate-form label .req { color: var(--error); margin-left: 2px; }
+
+/* ── 금액 프리셋 */
+.amount-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.amount-btn {
+  padding: 8px 18px;
+  font-size: var(--text-sm);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--gray-dark);
+  cursor: pointer;
+  transition: all .15s;
+}
+.amount-btn:hover  { border-color: var(--green-main); color: var(--green-main); }
+.amount-btn.active { border-color: var(--green-main); background: var(--green-main); color: var(--white); }
+
+/* ── 후원 안내 박스 */
+.donate-notice {
+  padding: 16px 20px;
+  background: var(--green-pale);
+  border-left: 4px solid var(--green-main);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: 28px;
+  font-size: var(--text-sm);
+  color: var(--gray-dark);
+  line-height: 1.7;
+}
+
+/* ── 완료 화면 */
+.donate-complete {
+  text-align: center;
+  padding: 48px 24px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.donate-complete-icon {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: var(--green-main);
+  color: var(--white);
+  font-size: 28px;
+  line-height: 64px;
+  margin: 0 auto 20px;
+}
+.donate-complete h3 { font-size: var(--text-lg); font-weight: 700; margin-bottom: 12px; }
+.donate-complete p  { color: var(--gray-mid); font-size: var(--text-md); line-height: 1.7; }
+
+/* ── 계좌 안내 박스 */
+.donate-account {
+  margin: 24px auto;
+  padding: 24px 28px;
+  background: var(--gray-bg);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  text-align: left;
+  max-width: 360px;
+}
+.donate-account dl { display: grid; grid-template-columns: 80px 1fr; gap: 10px 12px; }
+.donate-account dt { font-size: var(--text-sm); color: var(--gray-mid); font-weight: 500; }
+.donate-account dd { font-size: var(--text-md); color: var(--gray-dark); font-weight: 600; }
+
+.donate-complete-note {
+  margin-top: 16px;
+  font-size: var(--text-sm) !important;
+  color: var(--gray-mid) !important;
+  line-height: 1.7;
+}
+.donate-complete-note a { color: var(--green-main); }
+
+/* ── 반응형 */
+@media (max-width: 768px) {
+  .donate-tab  { padding: 10px 20px; font-size: var(--text-sm); }
+  .donate-form { max-width: 100%; }
+  .amount-btn  { padding: 8px 14px; }
 }

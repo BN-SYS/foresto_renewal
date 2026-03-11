@@ -155,7 +155,13 @@ const FREE_DATA = {
 
 /* ── 1-3. 언론보도 */
 const PRESS_DATA = {
-    pinned: [],
+    pinned: [
+        {
+            id: 9801, title: '[고정] 한국숲해설가협회 미디어 보도 자료 모음 (2026년)',
+            author: '사무국', date: '2026-01-10', views: 445, link: '#',
+            content: `<p>2026년 협회 관련 주요 언론 보도 자료를 모아 제공합니다.</p>`,
+        },
+    ],
     normals: Array.from({ length: 18 }, (_, i) => ({
         id: 18 - i,
         title: [
@@ -166,7 +172,7 @@ const PRESS_DATA = {
             '전문 숲해설가 양성 프로그램 인기몰이',
             '자연과 함께하는 치유 숲 프로그램 주목',
         ][i % 6],
-        media: ['조선일보', 'KBS뉴스', '한겨레', '연합뉴스', 'MBC뉴스', '경향신문'][i % 6],
+        author: ['사무국', '김회원', '이회원', '박회원', '최회원', '정회원'][i % 6],
         date: commMakeDate(i),
         views: Math.floor(Math.random() * 200 + 50),
         link: '#',
@@ -174,44 +180,74 @@ const PRESS_DATA = {
     })),
 };
 
-/* ── 1-4. 일자리 및 교육정보 */
-const JOB_CATEGORIES = ['채용공고', '교육정보', '자격증정보', '공모사업'];
-
+/* ── 1-4. 일자리 및 교육정보 (TASK 8: deadline·category 필드 제거, 핀 기능 추가) */
 const JOB_DATA = {
-    pinned: [],
+    pinned: [
+        {
+            id: 9901, title: '[필독] 일자리·교육정보 게시판 이용 안내',
+            author: '관리자', date: '2026-01-05', views: 720,
+            content: `<p>일자리·교육정보 게시판 이용 방법을 안내합니다.</p>
+                      <p>채용, 교육, 자격, 공모 관련 정보를 공유하는 공간입니다.</p>`,
+        },
+        {
+            id: 9900, title: '[고정] 2026년 산림 관련 자격시험 일정 총정리',
+            author: '사무국', date: '2026-01-15', views: 1150,
+            content: `<p>2026년 산림 관련 국가자격시험 일정을 정리하였습니다.</p>
+                      <p>산림교육전문가, 숲해설가 등 주요 자격 시험 일정을 확인하세요.</p>`,
+        },
+    ],
     normals: Array.from({ length: 22 }, (_, i) => ({
         id: 22 - i,
         title: [
-            '[채용] 국립수목원 숲해설가 채용 공고',
-            '[교육] 생태관광 전문가 양성 과정 모집',
-            '[자격] 산림교육전문가 자격시험 안내',
-            '[공모] 2026 녹색생활 실천 공모전',
-            '[채용] 지자체 산림복지 해설사 모집',
-            '[교육] 숲치유지도사 심화 과정 안내',
+            '국립수목원 숲해설가 채용 공고',
+            '생태관광 전문가 양성 과정 모집',
+            '산림교육전문가 자격시험 안내',
+            '2026 녹색생활 실천 공모전',
+            '지자체 산림복지 해설사 모집',
+            '숲치유지도사 심화 과정 안내',
         ][i % 6],
-        category: JOB_CATEGORIES[i % JOB_CATEGORIES.length],
         author: '사무국',
         date: commMakeDate(i),
-        deadline: commMakeDate(i + 5),
         views: Math.floor(Math.random() * 180 + 20),
-        content: `<p>일자리/교육정보 ${22 - i}번 게시물입니다.</p>`,
+        content: `<p>일자리/교육정보 ${22 - i}번 게시물입니다.</p>
+                  <p>세부 내용은 원문 공고를 확인하시기 바랍니다.</p>`,
     })),
 };
 
 /* ── 1-5. 갤러리 */
+const GALLERY_TITLES = [
+    '2026 봄 숲 탐방 행사', '55기 전문가과정 수료식',
+    '사공단 봉사활동 현장', '동아리 정기모임 사진',
+    '이사회 회의 모습', '시민아카데미 현장',
+    '숲 치유 프로그램', '어린이 생태교육',
+];
+const GALLERY_CONTENTS = [
+    `<p>2026년 봄을 맞아 협회 회원들과 함께한 숲 탐방 행사 현장입니다.</p>
+     <p>북한산 둘레길을 따라 봄꽃과 나무를 관찰하며 소중한 시간을 보냈습니다.</p>`,
+    `<p>2026년 55기 전문가과정 수료식 현장입니다.</p>
+     <p>총 42명의 수료생이 교육을 마치고 새로운 숲해설가로 탄생했습니다.</p>`,
+    `<p>사회공헌사업단의 지역 초등학교 숲 체험 교육 봉사활동 현장입니다.</p>
+     <p>학생들과 함께 숲 속 생물 관찰 및 자연 놀이 활동을 진행했습니다.</p>`,
+    `<p>동아리 3월 정기모임 사진입니다.</p>
+     <p>봄철 탐방 일정을 논의하고 새로운 회원을 환영하는 시간을 가졌습니다.</p>`,
+    `<p>2026년 1분기 정기 이사회 모습입니다.</p>
+     <p>2026년 주요 사업 방향과 예산 운영 계획을 심의했습니다.</p>`,
+    `<p>시민아카데미 봄 특강 현장 사진입니다.</p>
+     <p>지역 도서관에서 시민 50여 명을 대상으로 봄 숲 이야기 강연을 진행했습니다.</p>`,
+    `<p>숲 치유 프로그램 운영 사진입니다.</p>
+     <p>스트레스 해소와 심신 회복을 위한 치유 숲 체험 프로그램을 진행했습니다.</p>`,
+    `<p>어린이 생태교육 현장 사진입니다.</p>
+     <p>유치원 어린이들과 함께 숲 속 곤충과 식물을 관찰하는 체험 교육을 진행했습니다.</p>`,
+];
 const GALLERY_DATA = Array.from({ length: 24 }, (_, i) => ({
     id: 24 - i,
-    title: [
-        '2026 봄 숲 탐방 행사', '55기 전문가과정 수료식',
-        '사공단 봉사활동 현장', '동아리 정기모임 사진',
-        '이사회 회의 모습', '시민아카데미 현장',
-        '숲 치유 프로그램', '어린이 생태교육',
-    ][i % 8],
+    title: GALLERY_TITLES[i % 8],
     author: ['사무국', '김회원', '이회원', '박회원'][i % 4],
     date: commMakeDate(i),
     views: Math.floor(Math.random() * 200 + 20),
     imgUrl: null,
-    content: `<p>갤러리 ${24 - i}번 게시물입니다.</p>`,
+    content: GALLERY_CONTENTS[i % 8],
+    link: i % 3 === 0 ? '#' : null,   /* 일부 게시물에 외부 링크 샘플 */
 }));
 
 /* ── 1-6. 협회 일정 이벤트 */
@@ -735,16 +771,18 @@ const PressCtrl = {
             paginationId: 'pressPagination',
             countId: 'pressCount',
             notices: PRESS_DATA.pinned,
-            rowRenderer: (row, seq) => `
-  <tr>
-    <td class="col-num">${seq}</td>
+            rowRenderer: (row, seq, isPinned) => `
+  <tr class="${isPinned ? 'pinned' : ''}">
+    <td class="col-num">
+      ${isPinned ? '<span class="badge-notice">공지</span>' : seq}
+    </td>
     <td class="td-title">
       <a href="${row.link || '#'}"
          target="_blank" rel="noopener noreferrer">
         ${row.title}
       </a>
     </td>
-    <td class="col-author">${row.media}</td>
+    <td class="col-author">${row.author}</td>
     <td class="col-date">${row.date}</td>
     <td class="col-views">${row.views}</td>
   </tr>`,
@@ -777,18 +815,14 @@ const JobCtrl = {
             paginationId: 'jobPagination',
             countId: 'jobCount',
             notices: JOB_DATA.pinned,
-            rowRenderer: (row, seq) => `
-  <tr>
-    <td class="col-num">${seq}</td>
-    <td class="center">
-      <span class="badge badge-blue" style="font-size:11px">${row.category}</span>
-    </td>
+            rowRenderer: (row, seq, isPinned) => `
+  <tr class="${isPinned ? 'pinned' : ''}">
+    <td class="col-num center">${isPinned ? '<span class="badge-notice">공지</span>' : seq}</td>
     <td class="td-title">
       <a href="job-detail.html?id=${row.id}">${row.title}</a>
     </td>
     <td class="col-author">${row.author}</td>
     <td class="col-date">${row.date}</td>
-    <td class="center" style="font-size:13px;color:var(--danger)">${row.deadline}</td>
     <td class="col-views">${row.views}</td>
   </tr>`,
         });
@@ -810,14 +844,10 @@ const JobCtrl = {
         el.innerHTML = `
       <div class="post-wrap">
         <div class="post-head">
-          <div style="margin-bottom:8px">
-            <span class="badge badge-blue">${item.category}</span>
-          </div>
           <h2>${item.title}</h2>
           <div class="post-meta">
             <span>작성자 <strong>${item.author}</strong></span>
             <span>작성일 <strong>${item.date}</strong></span>
-            ${item.deadline ? `<span>마감일 <strong style="color:var(--danger)">${item.deadline}</strong></span>` : ''}
             <span>조회 <strong>${item.views}</strong></span>
           </div>
         </div>
@@ -833,20 +863,16 @@ const JobCtrl = {
     },
 
     search() {
-        const category = document.getElementById('jobCategory')?.value || '';
         const keyword = document.getElementById('jobKeyword')?.value || '';
         this._board?.filterFn(r => {
-            if (category && r.category !== category) return false;
             if (keyword && !r.title.toLowerCase().includes(keyword.toLowerCase())) return false;
             return true;
         });
     },
 
     reset() {
-        ['jobCategory', 'jobKeyword'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.value = '';
-        });
+        const el = document.getElementById('jobKeyword');
+        if (el) el.value = '';
         this._board?.filterFn(null);
     },
 };
@@ -854,6 +880,9 @@ const JobCtrl = {
 
 /* ══════════════════════════════════════════════
    7. 갤러리 컨트롤러
+   - 썸네일 카드형 목록
+   - 카드 클릭 → gallery-detail.html 이동
+   - renderDetail(): 본문 + 외부 링크
 ══════════════════════════════════════════════ */
 const GalleryCtrl = {
     _data: GALLERY_DATA,
@@ -862,6 +891,13 @@ const GalleryCtrl = {
     _pageSize: 12,
 
     init() { this.render(); },
+
+    /* ── 본문 첫 번째 <img src> 추출 유틸 (실제 에디터 이미지 대응) */
+    _extractThumb(htmlStr) {
+        if (!htmlStr) return null;
+        const m = htmlStr.match(/<img[^>]+src=["']([^"']+)["']/i);
+        return m ? m[1] : null;
+    },
 
     render() {
         const total = this._filtered.length;
@@ -874,18 +910,26 @@ const GalleryCtrl = {
         const grid = document.getElementById('galleryGrid');
         if (!grid) return;
         grid.innerHTML = slice.length
-            ? slice.map(item => `
-          <div class="gallery-card" onclick="App.toast('${item.title}')">
-            <div class="gallery-thumb-placeholder">🌿</div>
-            <div class="gallery-info">
-              <div class="gallery-title">${item.title}</div>
-              <div class="gallery-meta">
-                <span>${item.author}</span>
-                <span>${item.date}</span>
-                <span>👁 ${item.views}</span>
-              </div>
-            </div>
-          </div>`).join('')
+            ? slice.map(item => {
+                const thumbSrc = item.imgUrl || this._extractThumb(item.content);
+                const thumb = thumbSrc
+                    ? `<div class="gallery-thumb" style="background-image:url('${thumbSrc}')"></div>`
+                    : `<div class="gallery-thumb-placeholder"></div>`;
+                return `
+                <div class="gallery-card"
+                     onclick="location.href='gallery-detail.html?id=${item.id}'"
+                     style="cursor:pointer">
+                  ${thumb}
+                  <div class="gallery-info">
+                    <div class="gallery-title">${item.title}</div>
+                    <div class="gallery-meta">
+                      <span>${item.author}</span>
+                      <span>${item.date}</span>
+                      <span>조회 ${item.views}</span>
+                    </div>
+                  </div>
+                </div>`;
+              }).join('')
             : `<div style="grid-column:1/-1;text-align:center;
                      padding:40px;color:var(--gray-mid)">
            등록된 사진이 없습니다.
@@ -896,6 +940,58 @@ const GalleryCtrl = {
             Math.ceil(total / this._pageSize) || 1,
             (p) => { this._page = p; this.render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
         );
+    },
+
+    /* ── 상세 페이지 렌더 */
+    renderDetail() {
+        const id   = App.getParam('id');
+        const item = this._data.find(d => String(d.id) === String(id));
+        const el   = document.getElementById('galleryDetail');
+        if (!el) return;
+        if (!item) {
+            el.innerHTML = `
+                <div style="text-align:center;padding:48px;color:var(--gray-mid)">
+                  게시물을 찾을 수 없습니다.
+                </div>`;
+            return;
+        }
+        const idx  = this._data.findIndex(d => d.id === item.id);
+        const prev = this._data[idx + 1];
+        const next = this._data[idx - 1];
+        const linkBtn = item.link
+            ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer"
+                  class="btn btn-outline">관련 페이지 바로가기</a>`
+            : '';
+        el.innerHTML = `
+            <div class="post-wrap">
+              <div class="post-head">
+                <h2>${item.title}</h2>
+                <div class="post-meta">
+                  <span>작성자 <strong>${item.author}</strong></span>
+                  <span>작성일 <strong>${item.date}</strong></span>
+                  <span>조회 <strong>${item.views}</strong></span>
+                </div>
+              </div>
+              <div class="post-body">${item.content || ''}</div>
+              ${linkBtn ? `<div style="margin-top:16px">${linkBtn}</div>` : ''}
+              <div class="post-nav">
+                ${next ? `<div class="post-nav-item">
+                  <span class="post-nav-label">다음글</span>
+                  <span class="post-nav-title"
+                        onclick="location.href='gallery-detail.html?id=${next.id}'">${next.title}</span>
+                  <span class="post-nav-date">${next.date}</span>
+                </div>` : ''}
+                ${prev ? `<div class="post-nav-item">
+                  <span class="post-nav-label">이전글</span>
+                  <span class="post-nav-title"
+                        onclick="location.href='gallery-detail.html?id=${prev.id}'">${prev.title}</span>
+                  <span class="post-nav-date">${prev.date}</span>
+                </div>` : ''}
+              </div>
+              <div class="post-actions">
+                <button class="btn btn-gray" onclick="location.href='gallery.html'">목록으로</button>
+              </div>
+            </div>`;
     },
 
     search() {
@@ -925,15 +1021,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const page = document.body.dataset.page;
 
     const initMap = {
-        'calendar':      () => CalendarCtrl.init(),
-        'notice':        () => NoticeCtrl.init(),
-        'notice-detail': () => NoticeCtrl.renderDetail(),
-        'free':          () => FreeCtrl.init(),
-        'free-detail':   () => FreeCtrl.renderDetail(),
-        'press':         () => PressCtrl.init(),
-        'job':           () => JobCtrl.init(),
-        'job-detail':    () => JobCtrl.renderDetail(),
-        'gallery':       () => GalleryCtrl.init(),
+        'calendar':        () => CalendarCtrl.init(),
+        'notice':          () => NoticeCtrl.init(),
+        'notice-detail':   () => NoticeCtrl.renderDetail(),
+        'free':            () => FreeCtrl.init(),
+        'free-detail':     () => FreeCtrl.renderDetail(),
+        'press':           () => PressCtrl.init(),
+        'job':             () => JobCtrl.init(),
+        'job-detail':      () => JobCtrl.renderDetail(),
+        'gallery':         () => GalleryCtrl.init(),
+        'gallery-detail':  () => GalleryCtrl.renderDetail(),
         /* 'newsletter' / 'archive' → community-media.js 에서 처리 */
     };
 

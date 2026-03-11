@@ -11,21 +11,81 @@
     <link rel="stylesheet" href="../assets/css/components.css">
     <link rel="stylesheet" href="../assets/css/responsive.css">
     <link rel="stylesheet" href="../assets/css/pages/auth.css">
+    <style>
+        /* ── 인증 방식 선택 */
+        .method-select {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .method-btn {
+            padding: 11px 8px;
+            border: 1.5px solid var(--gray-light);
+            border-radius: var(--radius);
+            background: var(--white);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-mid);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--trans);
+            font-family: inherit;
+            line-height: 1.5;
+        }
+        .method-btn:hover { border-color: var(--green-main); color: var(--green-main); }
+        .method-btn.active {
+            border-color: var(--green-dark);
+            background: var(--green-pale);
+            color: var(--green-dark);
+        }
+        .method-form { display: none; }
+        .method-form.active { display: block; }
+
+        /* ── 본인인증 박스 */
+        .nice-box {
+            background: var(--green-pale);
+            border: 1.5px solid var(--green-light);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            margin-bottom: 12px;
+        }
+        .nice-box p {
+            font-size: 13px;
+            color: var(--green-dark);
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+        .nice-done {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--green-dark);
+            border: 1.5px solid var(--green-main);
+            margin-top: 10px;
+        }
+        .nice-done.show { display: flex; }
+    </style>
 </head>
 
 <body class="auth-page">
     <div id="hdr"></div>
 
-    <div class="auth-bg auth-bg--top">
-        <div class="auth-card" style="max-width:460px;padding:0;overflow:hidden">
+    <div class="auth-bg">
+        <div class="auth-card" style="max-width:480px;padding:0;overflow:hidden">
 
             <!-- 탭 -->
             <div class="find-tabs">
-                <button class="find-tab-btn active" id="tabId" onclick="FindCtrl.switchTab('id', this)">
-                    아이디 찾기
+                <button class="find-tab-btn active" id="tabId" onclick="FindCtrl.switchTab('id')">
+                    🔍 아이디 찾기
                 </button>
-                <button class="find-tab-btn" id="tabPw" onclick="FindCtrl.switchTab('pw', this)">
-                    비밀번호 찾기
+                <button class="find-tab-btn" id="tabPw" onclick="FindCtrl.switchTab('pw')">
+                    🔑 비밀번호 찾기
                 </button>
             </div>
 
@@ -34,10 +94,19 @@
                 <!-- ══ 아이디 찾기 ══ -->
                 <div class="find-panel active" id="panelId">
 
-                    <p style="font-size:14px;color:var(--gray-mid);margin-bottom:24px;line-height:1.7">
-                        가입 시 등록한 <strong>이름과 휴대폰 번호</strong>로
-                        아이디(이메일)를 찾을 수 있습니다.
+                    <p style="font-size:14px;color:var(--gray-mid);margin-bottom:16px;line-height:1.7">
+                        가입 시 등록한 정보로 아이디(이메일)를 찾을 수 있습니다.
                     </p>
+
+                    <!-- 인증 방식 -->
+                    <div class="method-select">
+                        <button class="method-btn active" id="idBtnNice" onclick="FindCtrl.switchMethod('id','nice')">
+                            📱 휴대폰 본인인증
+                        </button>
+                        <button class="method-btn" id="idBtnEmail" onclick="FindCtrl.switchMethod('id','email')">
+                            ✉️ 이메일 인증
+                        </button>
+                    </div>
 
                     <!-- 결과 -->
                     <div class="find-result" id="idResult">
@@ -46,37 +115,78 @@
                         <div class="find-result-sub" id="idResultSub"></div>
                     </div>
 
-                    <div id="idForm">
-                        <div style="margin-bottom:16px">
-                            <label class="auth-label">이름</label>
-                            <input type="text" class="auth-input" style="padding:0 14px" id="findIdName" placeholder="홍길동">
-                        </div>
-                        <div style="margin-bottom:16px">
-                            <label class="auth-label">휴대폰 번호</label>
-                            <div class="form-row-btn">
-                                <input type="tel" class="auth-input" style="padding:0 14px" id="findIdPhone" placeholder="010-0000-0000">
-                                <button class="btn btn-outline btn-sm" style="height:46px;white-space:nowrap"
-                                    onclick="FindCtrl.sendVerifyCode('id')">인증번호 발송</button>
+                    <!-- 폼 영역 -->
+                    <div id="idForms">
+
+                        <!-- ① 본인인증 -->
+                        <div class="method-form active" id="idFormNice">
+                            <div style="margin-bottom:14px">
+                                <label class="auth-label">이름</label>
+                                <input type="text" class="auth-input" id="idNiceName" placeholder="홍길동">
                             </div>
-                        </div>
-                        <div style="margin-bottom:24px" id="idCodeWrap">
-                            <label class="auth-label">인증번호</label>
-                            <div class="form-row-btn">
-                                <input type="text" class="auth-input" style="padding:0 14px" id="findIdCode"
-                                    placeholder="인증번호 6자리 입력" maxlength="6">
-                                <span id="idTimer" style="font-size:13px;font-weight:700;color:var(--danger);min-width:44px;text-align:center;line-height:46px">3:00</span>
+                            <div class="nice-box">
+                                <p>
+                                    <strong>휴대폰 본인인증</strong>을 통해 가입된 이메일을 확인합니다.<br>
+                                    <span style="font-size:12px;opacity:.75">인증 서비스: NICE 평가정보 / KCB 이니시스 연동 예정</span>
+                                </p>
+                                <button class="auth-btn auth-btn-primary" id="idNiceBtn"
+                                    onclick="FindCtrl.doNice('id')">
+                                    📱 본인인증 진행
+                                </button>
                             </div>
+                            <div class="nice-done" id="idNiceDone">
+                                <span style="font-size:20px">✅</span>
+                                <div>
+                                    <div style="font-weight:700">본인인증 완료</div>
+                                    <div id="idNiceInfo" style="font-size:12px;color:var(--gray-mid)"></div>
+                                </div>
+                            </div>
+                            <button class="auth-btn auth-btn-primary" style="margin-top:14px"
+                                onclick="FindCtrl.findId('nice')">
+                                🔍 아이디 찾기
+                            </button>
                         </div>
 
-                        <button class="auth-btn auth-btn-primary" onclick="FindCtrl.findId()">
-                            🔍 아이디 찾기
-                        </button>
+                        <!-- ② 이메일 인증 -->
+                        <div class="method-form" id="idFormEmail">
+                            <div style="margin-bottom:14px">
+                                <label class="auth-label">이름</label>
+                                <input type="text" class="auth-input" id="idEmailName" placeholder="홍길동">
+                            </div>
+                            <div style="margin-bottom:14px">
+                                <label class="auth-label">가입 시 등록한 이메일</label>
+                                <div class="form-row-btn">
+                                    <input type="email" class="auth-input" id="idEmailAddr"
+                                        placeholder="example@email.com">
+                                    <button class="btn btn-outline btn-sm" style="height:44px;white-space:nowrap"
+                                        onclick="FindCtrl.sendCode('idEmail')">
+                                        인증번호 발송
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="margin-bottom:20px" id="idEmailCodeWrap" style="display:none">
+                                <label class="auth-label">인증번호</label>
+                                <div class="form-row-btn">
+                                    <input type="text" class="auth-input" id="idEmailCode"
+                                        placeholder="인증번호 6자리" maxlength="6">
+                                    <span id="idEmailTimer"
+                                        style="font-size:13px;font-weight:700;color:var(--danger);min-width:44px;text-align:center;line-height:44px"></span>
+                                </div>
+                            </div>
+                            <button class="auth-btn auth-btn-primary" onclick="FindCtrl.findId('email')">
+                                🔍 아이디 찾기
+                            </button>
+                        </div>
                     </div>
 
-                    <div id="idDoneActions" style="display:none;margin-top:16px;flex-direction:column;gap:8px">
-                        <a href="login.html" class="auth-btn auth-btn-primary" style="text-decoration:none">🌲 로그인 하기</a>
+                    <!-- 완료 후 버튼 -->
+                    <div id="idDoneActions"
+                        style="display:none;margin-top:16px;flex-direction:column;gap:8px">
+                        <a href="login.html" class="auth-btn auth-btn-primary" style="text-decoration:none">
+                            🌲 로그인 하기
+                        </a>
                         <button class="btn btn-outline"
-                            onclick="FindCtrl.switchTab('pw', document.getElementById('tabPw'))">
+                            onclick="FindCtrl.switchTab('pw')">
                             비밀번호도 찾기 →
                         </button>
                     </div>
@@ -85,80 +195,135 @@
                 <!-- ══ 비밀번호 찾기 ══ -->
                 <div class="find-panel" id="panelPw">
 
-                    <p style="font-size:14px;color:var(--gray-mid);margin-bottom:24px;line-height:1.7">
-                        가입 시 등록한 <strong>이메일과 휴대폰 번호</strong>로
-                        본인을 확인한 후 비밀번호를 재설정합니다.
+                    <p style="font-size:14px;color:var(--gray-mid);margin-bottom:16px;line-height:1.7">
+                        본인 확인 후 비밀번호를 재설정할 수 있습니다.
                     </p>
 
-                    <div id="pwVerifyForm">
-                        <div style="margin-bottom:16px">
-                            <label class="auth-label">이메일 (아이디)</label>
-                            <input type="email" class="auth-input" style="padding:0 14px" id="findPwEmail" placeholder="example@email.com">
-                        </div>
-                        <div style="margin-bottom:16px">
-                            <label class="auth-label">휴대폰 번호</label>
-                            <div class="form-row-btn">
-                                <input type="tel" class="auth-input" style="padding:0 14px" id="findPwPhone" placeholder="010-0000-0000">
-                                <button class="btn btn-outline btn-sm" style="height:46px;white-space:nowrap"
-                                    onclick="FindCtrl.sendVerifyCode('pw')">인증번호 발송</button>
+                    <!-- 인증 방식 -->
+                    <div class="method-select">
+                        <button class="method-btn active" id="pwBtnNice" onclick="FindCtrl.switchMethod('pw','nice')">
+                            📱 휴대폰 본인인증
+                        </button>
+                        <button class="method-btn" id="pwBtnEmail" onclick="FindCtrl.switchMethod('pw','email')">
+                            ✉️ 이메일 인증
+                        </button>
+                    </div>
+
+                    <!-- 폼 영역 -->
+                    <div id="pwForms">
+
+                        <!-- ① 본인인증 -->
+                        <div class="method-form active" id="pwFormNice">
+                            <div style="margin-bottom:14px">
+                                <label class="auth-label">이메일 (아이디)</label>
+                                <input type="email" class="auth-input" id="pwNiceEmail"
+                                    placeholder="example@email.com">
                             </div>
-                        </div>
-                        <div style="margin-bottom:24px" id="pwCodeWrap">
-                            <label class="auth-label">인증번호</label>
-                            <div class="form-row-btn">
-                                <input type="text" class="auth-input" style="padding:0 14px" id="findPwCode"
-                                    placeholder="인증번호 6자리 입력" maxlength="6">
-                                <span id="pwTimer" style="font-size:13px;font-weight:700;color:var(--danger);min-width:44px;text-align:center;line-height:46px"></span>
+                            <div class="nice-box">
+                                <p>
+                                    <strong>휴대폰 본인인증</strong>으로 본인을 확인합니다.<br>
+                                    <span style="font-size:12px;opacity:.75">인증 서비스: NICE 평가정보 / KCB 이니시스 연동 예정</span>
+                                </p>
+                                <button class="auth-btn auth-btn-primary" id="pwNiceBtn"
+                                    onclick="FindCtrl.doNice('pw')">
+                                    📱 본인인증 진행
+                                </button>
                             </div>
+                            <div class="nice-done" id="pwNiceDone">
+                                <span style="font-size:20px">✅</span>
+                                <div>
+                                    <div style="font-weight:700">본인인증 완료</div>
+                                    <div id="pwNiceInfo" style="font-size:12px;color:var(--gray-mid)"></div>
+                                </div>
+                            </div>
+                            <button class="auth-btn auth-btn-primary" style="margin-top:14px"
+                                onclick="FindCtrl.verifyPw('nice')">
+                                본인 확인 완료
+                            </button>
                         </div>
-                        <button class="auth-btn auth-btn-primary" onclick="FindCtrl.verifyForPw()">본인 확인</button>
+
+                        <!-- ② 이메일 인증 -->
+                        <div class="method-form" id="pwFormEmail">
+                            <div style="margin-bottom:14px">
+                                <label class="auth-label">이메일 (아이디)</label>
+                                <div class="form-row-btn">
+                                    <input type="email" class="auth-input" id="pwEmailAddr"
+                                        placeholder="example@email.com">
+                                    <button class="btn btn-outline btn-sm" style="height:44px;white-space:nowrap"
+                                        onclick="FindCtrl.sendCode('pwEmail')">
+                                        인증번호 발송
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="margin-bottom:20px" id="pwEmailCodeWrap">
+                                <label class="auth-label">인증번호</label>
+                                <div class="form-row-btn">
+                                    <input type="text" class="auth-input" id="pwEmailCode"
+                                        placeholder="인증번호 6자리" maxlength="6">
+                                    <span id="pwEmailTimer"
+                                        style="font-size:13px;font-weight:700;color:var(--danger);min-width:44px;text-align:center;line-height:44px"></span>
+                                </div>
+                            </div>
+                            <button class="auth-btn auth-btn-primary" onclick="FindCtrl.verifyPw('email')">
+                                본인 확인
+                            </button>
+                        </div>
                     </div>
 
                     <!-- 비밀번호 재설정 폼 -->
                     <div class="reset-form" id="pwResetForm">
-                        <div class="alert alert-success" style="margin-bottom:20px">
-                            <div style="font-size:13px">본인 확인이 완료되었습니다. 새 비밀번호를 설정해 주세요.</div>
+                        <div class="alert alert-success" style="margin-bottom:18px">
+                            <span>✅</span>
+                            <div style="font-size:13px">본인 확인 완료. 새 비밀번호를 설정해 주세요.</div>
                         </div>
-
-                        <div style="margin-bottom:16px">
+                        <div style="margin-bottom:14px">
                             <label class="auth-label">새 비밀번호</label>
                             <div style="position:relative">
                                 <input type="password" class="auth-input" id="newPw"
-                                    placeholder="8자 이상, 영문·숫자·특수문자 조합" style="padding:0 44px 0 14px">
+                                    placeholder="8자 이상, 영문·숫자·특수문자 조합" style="padding-right:44px">
                                 <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--gray-mid);cursor:pointer"
                                     onclick="FindCtrl.togglePw('newPw',this)">👁</span>
                             </div>
-                            <div style="margin-top:6px;font-size:12px;color:var(--gray-mid)">
+                            <div style="margin-top:5px;font-size:12px;color:var(--gray-mid)">
                                 8자 이상, 영문·숫자·특수문자를 포함해 주세요.
                             </div>
                         </div>
-
-                        <div style="margin-bottom:24px">
+                        <div style="margin-bottom:22px">
                             <label class="auth-label">새 비밀번호 확인</label>
-                            <input type="password" class="auth-input" style="padding:0 14px" id="newPwConfirm"
+                            <input type="password" class="auth-input" id="newPwConfirm"
                                 placeholder="비밀번호를 다시 입력하세요">
                         </div>
-
                         <button class="auth-btn auth-btn-primary" onclick="FindCtrl.resetPassword()">
-                            비밀번호 재설정
+                            🔑 비밀번호 재설정
                         </button>
                     </div>
 
                     <!-- 재설정 완료 -->
                     <div id="pwDone" style="display:none;text-align:center;padding:16px 0">
                         <div style="font-size:40px;margin-bottom:12px">🎉</div>
-                        <div style="font-size:18px;font-weight:800;color:var(--green-dark);margin-bottom:8px">비밀번호 재설정 완료</div>
-                        <div style="font-size:14px;color:var(--gray-mid);margin-bottom:20px;line-height:1.7">새 비밀번호로 로그인해 주세요.</div>
-                        <a href="login.html" class="auth-btn auth-btn-primary" style="text-decoration:none">로그인 하기</a>
+                        <div style="font-size:18px;font-weight:800;color:var(--green-dark);margin-bottom:8px">
+                            비밀번호 재설정 완료
+                        </div>
+                        <div style="font-size:14px;color:var(--gray-mid);margin-bottom:20px;line-height:1.7">
+                            새 비밀번호로 로그인해 주세요.
+                        </div>
+                        <a href="login.html" class="auth-btn auth-btn-primary" style="text-decoration:none">
+                            🌲 로그인 하기
+                        </a>
                     </div>
+
                 </div>
             </div>
         </div>
 
         <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--gray-mid)">
-            <a href="login.html" style="color:var(--green-dark);font-weight:700;text-decoration:none">← 로그인으로 돌아가기</a>
+            <a href="login.html" style="color:var(--green-dark);font-weight:700;text-decoration:none">
+                ← 로그인으로 돌아가기
+            </a>
             <span style="margin:0 8px;color:var(--gray-light)">|</span>
-            <a href="register.html" style="color:var(--green-dark);font-weight:700;text-decoration:none">회원가입</a>
+            <a href="register.html" style="color:var(--green-dark);font-weight:700;text-decoration:none">
+                회원가입
+            </a>
         </div>
     </div>
 
@@ -171,105 +336,139 @@
         document.getElementById('ftr').innerHTML = Footer.render('../');
 
         const FindCtrl = {
-            _idTimer: null, _pwTimer: null,
-            _idSent: false, _pwSent: false, _pwVerified: false,
+            _timers: {},
+            _sent: {},        // sendCode 발송 여부
+            _niceOk: {},      // 본인인증 완료 여부
+            _pwVerified: false,
 
-            switchTab(tab, btn) {
+            /* ── 탭 전환 */
+            switchTab(tab) {
                 ['Id', 'Pw'].forEach(t => {
-                    const panel  = document.getElementById(`panel${t}`);
-                    const tabBtn = document.getElementById(`tab${t}`);
-                    if (panel)  panel.classList.toggle('active', t.toLowerCase() === tab);
-                    if (tabBtn) tabBtn.classList.toggle('active', t.toLowerCase() === tab);
+                    document.getElementById(`panel${t}`)?.classList.toggle('active', t.toLowerCase() === tab);
+                    document.getElementById(`tab${t}`)?.classList.toggle('active', t.toLowerCase() === tab);
                 });
             },
 
-            sendVerifyCode(type) {
-                const phoneId = type === 'id' ? 'findIdPhone' : 'findPwPhone';
-                const phone   = document.getElementById(phoneId)?.value.trim() || '';
-                if (!phone || phone.length < 9) { App.toast('휴대폰 번호를 올바르게 입력해 주세요.', 'warning'); return; }
-                const codeWrap = document.getElementById(type === 'id' ? 'idCodeWrap' : 'pwCodeWrap');
-                if (codeWrap) codeWrap.style.display = 'block';
-                App.toast(`인증번호를 ${phone}으로 발송했습니다. (테스트: 123456)`);
-                this._startTimer(type);
-                if (type === 'id') this._idSent = true;
-                else               this._pwSent = true;
+            /* ── 인증 방식 전환 */
+            switchMethod(panel, method) {
+                const isNice = method === 'nice';
+                document.getElementById(`${panel}BtnNice`)?.classList.toggle('active', isNice);
+                document.getElementById(`${panel}BtnEmail`)?.classList.toggle('active', !isNice);
+                document.getElementById(`${panel}FormNice`)?.classList.toggle('active', isNice);
+                document.getElementById(`${panel}FormEmail`)?.classList.toggle('active', !isNice);
             },
 
-            _startTimer(type) {
-                const timerId = type === 'id' ? '_idTimer' : '_pwTimer';
-                const spanId  = type === 'id' ? 'idTimer'  : 'pwTimer';
-                if (this[timerId]) clearInterval(this[timerId]);
+            /* ── 본인인증 시뮬레이션 (NICE/KCB 연동 예정) */
+            doNice(panel) {
+                const btn = document.getElementById(`${panel}NiceBtn`);
+                if (btn) { btn.textContent = '인증 처리 중...'; btn.disabled = true; }
+
+                // 실제 구현: window.open('/nice/cert', 'niceCert', 'width=500,height=600')
+                setTimeout(() => {
+                    this._niceOk[panel] = true;
+                    document.getElementById(`${panel}NiceDone`)?.classList.add('show');
+                    document.getElementById(`${panel}NiceInfo`).textContent = '김숲해설 · 010-1234-5678';
+                    if (btn) { btn.textContent = '✅ 인증 완료'; btn.disabled = true; }
+                    App.toast('본인인증이 완료되었습니다.');
+                }, 1200);
+            },
+
+            /* ── 이메일 인증번호 발송 */
+            sendCode(key) {
+                const emailId = key === 'idEmail' ? 'idEmailAddr' : 'pwEmailAddr';
+                const email = document.getElementById(emailId)?.value.trim() || '';
+                const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                if (!valid) { App.toast('이메일을 올바르게 입력해 주세요.', 'warning'); return; }
+
+                const wrapId = key === 'idEmail' ? 'idEmailCodeWrap' : 'pwEmailCodeWrap';
+                const wrap = document.getElementById(wrapId);
+                if (wrap) wrap.style.display = 'block';
+
+                this._sent[key] = true;
+                App.toast(`${email}으로 인증번호를 발송했습니다. (테스트: 123456)`);
+                this._startTimer(key);
+            },
+
+            /* ── 타이머 */
+            _startTimer(key) {
+                const timerId = `${key}Timer`;
+                if (this._timers[key]) clearInterval(this._timers[key]);
                 let remain = 180;
-                const update = () => {
-                    const m  = String(Math.floor(remain / 60)).padStart(1, '0');
-                    const s  = String(remain % 60).padStart(2, '0');
-                    const el = document.getElementById(spanId);
-                    if (el) el.textContent = `${m}:${s}`;
-                    if (remain <= 0) { clearInterval(this[timerId]); if (el) el.textContent = '만료'; }
+                const tick = () => {
+                    const m = String(Math.floor(remain / 60));
+                    const s = String(remain % 60).padStart(2, '0');
+                    const el = document.getElementById(timerId);
+                    if (el) el.textContent = remain > 0 ? `${m}:${s}` : '만료';
+                    if (remain <= 0) clearInterval(this._timers[key]);
                     remain--;
                 };
-                update();
-                this[timerId] = setInterval(update, 1000);
+                tick();
+                this._timers[key] = setInterval(tick, 1000);
             },
 
-            findId() {
-                const name  = document.getElementById('findIdName')?.value.trim() || '';
-                const phone = document.getElementById('findIdPhone')?.value.trim() || '';
-                const code  = document.getElementById('findIdCode')?.value.trim() || '';
-                if (!name)             { App.toast('이름을 입력해 주세요.', 'warning'); return; }
-                if (!phone)            { App.toast('휴대폰 번호를 입력해 주세요.', 'warning'); return; }
-                if (!this._idSent)     { App.toast('인증번호를 먼저 발송해 주세요.', 'warning'); return; }
-                if (code !== '123456') { App.toast('인증번호가 일치하지 않습니다.', 'warning'); return; }
+            /* ── 아이디 찾기 */
+            findId(method) {
+                if (method === 'nice') {
+                    const name = document.getElementById('idNiceName')?.value.trim();
+                    if (!name) { App.toast('이름을 입력해 주세요.', 'warning'); return; }
+                    if (!this._niceOk['id']) { App.toast('본인인증을 먼저 진행해 주세요.', 'warning'); return; }
+                } else {
+                    const name = document.getElementById('idEmailName')?.value.trim();
+                    const code = document.getElementById('idEmailCode')?.value.trim();
+                    if (!name) { App.toast('이름을 입력해 주세요.', 'warning'); return; }
+                    if (!this._sent['idEmail']) { App.toast('인증번호를 먼저 발송해 주세요.', 'warning'); return; }
+                    if (code !== '123456') { App.toast('인증번호가 일치하지 않습니다.', 'warning'); return; }
+                }
 
-                const resultEl  = document.getElementById('idResult');
-                const valueEl   = document.getElementById('idResultValue');
-                const subEl     = document.getElementById('idResultSub');
-                const formEl    = document.getElementById('idForm');
-                const actionsEl = document.getElementById('idDoneActions');
-                if (resultEl)  resultEl.classList.add('show');
-                if (valueEl)   valueEl.textContent = 'test@forest.or.kr';
-                if (subEl)     subEl.textContent   = '가입일: 2025-03-15 · 정회원';
-                if (formEl)    formEl.style.display = 'none';
-                if (actionsEl) actionsEl.style.display = 'flex';
-                if (this._idTimer) clearInterval(this._idTimer);
+                // 결과 표시 (프로토타입)
+                document.getElementById('idResult')?.classList.add('show');
+                document.getElementById('idResultValue').textContent = 'test@forest.or.kr';
+                document.getElementById('idResultSub').textContent = '가입일: 2025-03-15 · 정회원';
+                document.getElementById('idForms').style.display = 'none';
+                const done = document.getElementById('idDoneActions');
+                if (done) done.style.display = 'flex';
+                if (this._timers['idEmail']) clearInterval(this._timers['idEmail']);
             },
 
-            verifyForPw() {
-                const email = document.getElementById('findPwEmail')?.value.trim() || '';
-                const phone = document.getElementById('findPwPhone')?.value.trim() || '';
-                const code  = document.getElementById('findPwCode')?.value.trim() || '';
-                const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-                if (!emailValid)       { App.toast('이메일을 올바르게 입력해 주세요.', 'warning'); return; }
-                if (!phone)            { App.toast('휴대폰 번호를 입력해 주세요.', 'warning'); return; }
-                if (!this._pwSent)     { App.toast('인증번호를 먼저 발송해 주세요.', 'warning'); return; }
-                if (code !== '123456') { App.toast('인증번호가 일치하지 않습니다.', 'warning'); return; }
+            /* ── 비밀번호 찾기: 본인 확인 */
+            verifyPw(method) {
+                if (method === 'nice') {
+                    const email = document.getElementById('pwNiceEmail')?.value.trim();
+                    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '');
+                    if (!emailValid) { App.toast('이메일을 올바르게 입력해 주세요.', 'warning'); return; }
+                    if (!this._niceOk['pw']) { App.toast('본인인증을 먼저 진행해 주세요.', 'warning'); return; }
+                } else {
+                    const code = document.getElementById('pwEmailCode')?.value.trim();
+                    if (!this._sent['pwEmail']) { App.toast('인증번호를 먼저 발송해 주세요.', 'warning'); return; }
+                    if (code !== '123456') { App.toast('인증번호가 일치하지 않습니다.', 'warning'); return; }
+                }
+
                 this._pwVerified = true;
-                if (this._pwTimer) clearInterval(this._pwTimer);
-                const verifyEl = document.getElementById('pwVerifyForm');
-                const resetEl  = document.getElementById('pwResetForm');
-                if (verifyEl) verifyEl.style.display = 'none';
-                if (resetEl)  resetEl.classList.add('show');
+                if (this._timers['pwEmail']) clearInterval(this._timers['pwEmail']);
+                document.getElementById('pwForms').style.display = 'none';
+                document.getElementById('pwResetForm')?.classList.add('show');
             },
 
+            /* ── 비밀번호 재설정 */
             resetPassword() {
                 if (!this._pwVerified) { App.toast('본인 확인을 먼저 진행해 주세요.', 'warning'); return; }
-                const pw     = document.getElementById('newPw')?.value || '';
+                const pw = document.getElementById('newPw')?.value || '';
                 const pwConf = document.getElementById('newPwConfirm')?.value || '';
                 const pwValid = pw.length >= 8 && /[0-9]/.test(pw) && /[^A-Za-z0-9]/.test(pw);
-                if (!pwValid)      { App.toast('비밀번호는 8자 이상 영문·숫자·특수문자 조합이어야 합니다.', 'warning'); return; }
+                if (!pwValid) { App.toast('비밀번호는 8자 이상 영문·숫자·특수문자 조합이어야 합니다.', 'warning'); return; }
                 if (pw !== pwConf) { App.toast('비밀번호가 일치하지 않습니다.', 'warning'); return; }
-                const resetEl = document.getElementById('pwResetForm');
-                const doneEl  = document.getElementById('pwDone');
-                if (resetEl) resetEl.classList.remove('show');
-                if (doneEl)  doneEl.style.display = 'block';
+
+                document.getElementById('pwResetForm')?.classList.remove('show');
+                document.getElementById('pwDone').style.display = 'block';
                 App.toast('비밀번호가 재설정되었습니다!');
             },
 
-            togglePw(inputId, iconEl) {
-                const input = document.getElementById(inputId);
-                if (!input) return;
-                if (input.type === 'password') { input.type = 'text';     iconEl.textContent = '🙈'; }
-                else                           { input.type = 'password'; iconEl.textContent = '👁'; }
+            /* ── 비밀번호 표시 토글 */
+            togglePw(id, icon) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.type = el.type === 'password' ? 'text' : 'password';
+                icon.textContent = el.type === 'password' ? '👁' : '🙈';
             },
         };
     </script>
