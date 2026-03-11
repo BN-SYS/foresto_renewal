@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../assets/css/pages/community.css">
 </head>
 
-<body>
+<body data-page="mentoring-detail">
 
   <div id="hdr"></div>
 
@@ -25,23 +25,18 @@
   </div>
 
   <div class="page-tabs">
-    <a href="competency.html" class="page-tab ">역량강화 교육강좌</a>
-    <a href="mentoring.html" class="page-tab  active">멘토링 숲학교</a>
-    <a href="recruit.html" class="page-tab ">수시숲해설 모집</a>
-    <a href="instructor.html" class="page-tab ">숲해설 강사 신청</a>
-    <a href="sagongdan.html" class="page-tab ">사공단 소식</a>
-    <a href="club.html" class="page-tab ">동아리 소식</a>
-    <a href="qna.html" class="page-tab ">이게뭐예요</a>
+    <a href="competency.html" class="page-tab">역량강화 교육강좌</a>
+    <a href="mentoring.html" class="page-tab active">멘토링 숲학교</a>
+    <a href="recruit.html" class="page-tab">수시숲해설 모집</a>
+    <a href="instructor.html" class="page-tab">숲해설 강사 신청</a>
+    <a href="sagongdan.html" class="page-tab">사공단 소식</a>
+    <a href="club.html" class="page-tab">동아리 소식</a>
+    <a href="qna.html" class="page-tab">이게뭐예요</a>
   </div>
 
   <div class="content-wrap">
-    <div class="post-wrap" id="postDetail">
+    <div id="mentoringDetail">
       <div style="text-align:center;padding:48px;color:var(--gray-mid)">불러오는 중...</div>
-    </div>
-    <div class="post-actions">
-      <button class="btn btn-gray" onclick="history.back()">목록</button>
-      <button class="btn btn-outline" onclick="App.toast('수정 기능은 관리자 권한이 필요합니다.', 'warning')">수정</button>
-      <button class="btn btn-danger" onclick="App.toast('삭제 기능은 관리자 권한이 필요합니다.', 'warning')">삭제</button>
     </div>
   </div>
 
@@ -53,7 +48,6 @@
   <script>
     document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
     document.getElementById('ftr').innerHTML = Footer.render('../');
-    BoardDetail.render('postDetail', MentoringBoard.DATA, App.getParam('id'));
   </script>
 </body>
 

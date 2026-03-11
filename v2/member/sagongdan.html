@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../assets/css/common.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
 </head>
 
 <body>
@@ -39,76 +40,84 @@
       사회공헌사업단 게시판은 <strong>정회원 전용</strong> 메뉴입니다.
     </div>
 
-    <!-- 탭: 소식 / 일지 -->
-    <div class="tabs" style="margin-bottom:24px">
-      <button class="tab-btn active" onclick="SagongdanCtrl.switchTab('news', this)">사공단 소식</button>
-      <button class="tab-btn" onclick="SagongdanCtrl.switchTab('log', this)">사공단 일지</button>
+    <!-- 목록 영역 -->
+    <div id="sagongdanListWrap">
+      <!-- 탭: 소식 / 일지 -->
+      <div class="tabs" style="margin-bottom:24px">
+        <button class="tab-btn active" onclick="SagongdanCtrl.switchTab('news', this)">사공단 소식</button>
+        <button class="tab-btn" onclick="SagongdanCtrl.switchTab('log', this)">사공단 일지</button>
+      </div>
+
+      <!-- 소식 탭 -->
+      <div id="tab-news">
+        <div class="search-wrap">
+          <div class="search-field">
+            <label>검색</label>
+            <input type="text" class="form-control" id="newsKeyword" placeholder="제목 검색" style="min-width:220px"
+              onkeydown="if(event.key==='Enter') SagongdanCtrl.searchNews()">
+          </div>
+          <button class="btn btn-primary search-btn" onclick="SagongdanCtrl.searchNews()">검색</button>
+          <button class="btn btn-gray search-btn" onclick="SagongdanCtrl.resetNews()">초기화</button>
+        </div>
+        <div class="list-top">
+          <span class="list-count">전체 <strong id="newsCount">0</strong>건</span>
+        </div>
+        <div class="table-wrap">
+          <table class="board-table">
+            <thead>
+              <tr>
+                <th style="width:60px">번호</th>
+                <th>제목</th>
+                <th style="width:90px">작성자</th>
+                <th style="width:180px">작성일</th>
+                <th style="width:70px">조회</th>
+              </tr>
+            </thead>
+            <tbody id="newsTableBody"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="newsPagination"></div>
+      </div>
+
+      <!-- 일지 탭 -->
+      <div id="tab-log" style="display:none">
+        <div class="alert alert-warning" style="margin-bottom:16px">
+          파일 업로드 용량 제한: 파일당 최대 <strong>10MB</strong> / 허용 형식: JPG, PNG, PDF, HWP, DOCX
+        </div>
+        <div class="search-wrap">
+          <div class="search-field">
+            <label>검색</label>
+            <input type="text" class="form-control" id="logKeyword" placeholder="제목 검색" style="min-width:220px"
+              onkeydown="if(event.key==='Enter') SagongdanCtrl.searchLog()">
+          </div>
+          <button class="btn btn-primary search-btn" onclick="SagongdanCtrl.searchLog()">검색</button>
+          <button class="btn btn-gray search-btn" onclick="SagongdanCtrl.resetLog()">초기화</button>
+        </div>
+        <div class="list-top">
+          <span class="list-count">전체 <strong id="logCount">0</strong>건</span>
+        </div>
+        <div class="table-wrap">
+          <table class="board-table">
+            <thead>
+              <tr>
+                <th style="width:60px">번호</th>
+                <th>제목</th>
+                <th style="width:90px">작성자</th>
+                <th style="width:90px">활동일</th>
+                <th style="width:60px">첨부</th>
+                <th style="width:110px">작성일</th>
+              </tr>
+            </thead>
+            <tbody id="logTableBody"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="logPagination"></div>
+      </div>
     </div>
 
-    <!-- 소식 탭 -->
-    <div id="tab-news">
-      <div class="search-wrap">
-        <div class="search-field">
-          <label>검색</label>
-          <input type="text" class="form-control" id="newsKeyword" placeholder="제목 검색" style="min-width:220px"
-            onkeydown="if(event.key==='Enter') SagongdanCtrl.searchNews()">
-        </div>
-        <button class="btn btn-primary search-btn" onclick="SagongdanCtrl.searchNews()">검색</button>
-        <button class="btn btn-gray search-btn" onclick="SagongdanCtrl.resetNews()">초기화</button>
-      </div>
-      <div class="list-top">
-        <span class="list-count">전체 <strong id="newsCount">0</strong>건</span>
-      </div>
-      <div class="table-wrap">
-        <table class="board-table">
-          <thead>
-            <tr>
-              <th style="width:60px">번호</th>
-              <th>제목</th>
-              <th style="width:90px">작성자</th>
-              <th style="width:180px">작성일</th>
-              <th style="width:70px">조회</th>
-            </tr>
-          </thead>
-          <tbody id="newsTableBody"></tbody>
-        </table>
-      </div>
-      <div class="pagination" id="newsPagination"></div>
-    </div>
-
-    <!-- 일지 탭 -->
-    <div id="tab-log" style="display:none">
-      <div class="alert alert-warning" style="margin-bottom:16px">
-        📎 파일 업로드 용량 제한: 파일당 최대 <strong>10MB</strong> / 허용 형식: JPG, PNG, PDF, HWP, DOCX
-      </div>
-      <div class="search-wrap">
-        <div class="search-field">
-          <label>검색</label>
-          <input type="text" class="form-control" id="logKeyword" placeholder="제목 검색" style="min-width:220px"
-            onkeydown="if(event.key==='Enter') SagongdanCtrl.searchLog()">
-        </div>
-        <button class="btn btn-primary search-btn" onclick="SagongdanCtrl.searchLog()">검색</button>
-        <button class="btn btn-gray search-btn" onclick="SagongdanCtrl.resetLog()">초기화</button>
-      </div>
-      <div class="list-top">
-        <span class="list-count">전체 <strong id="logCount">0</strong>건</span>
-      </div>
-      <div class="table-wrap">
-        <table class="board-table">
-          <thead>
-            <tr>
-              <th style="width:60px">번호</th>
-              <th>제목</th>
-              <th style="width:90px">작성자</th>
-              <th style="width:90px">활동일</th>
-              <th style="width:60px">첨부</th>
-              <th style="width:110px">작성일</th>
-            </tr>
-          </thead>
-          <tbody id="logTableBody"></tbody>
-        </table>
-      </div>
-      <div class="pagination" id="logPagination"></div>
+    <!-- 상세 영역 (id 파라미터 있을 때 노출) -->
+    <div id="sagongdanDetailWrap" style="display:none">
+      <div id="sagongdanDetail"></div>
     </div>
 
   </div>

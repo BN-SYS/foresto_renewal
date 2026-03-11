@@ -404,6 +404,45 @@ const CompetencyCtrl = {
     });
     this._ctrl?.filter('', '', '');
   },
+
+  renderDetail() {
+    const id   = App.getParam('id');
+    const item = COMPETENCY_DATA.find(d => String(d.id) === String(id));
+    const el   = document.getElementById('competencyDetail');
+    if (!el) return;
+    if (!item) {
+      el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</div>`;
+      return;
+    }
+    const STATUS_LABELS = { open: '신청가능', ready: '준비중', closed: '마감', done: '수료완료' };
+    const STATUS_BADGES = { open: 'badge-green', ready: 'badge-blue', closed: 'badge-gray', done: 'badge-gray' };
+    const prev = COMPETENCY_DATA.find(d => d.id === item.id + 1);
+    const next = COMPETENCY_DATA.find(d => d.id === item.id - 1);
+    el.innerHTML = `
+      <div class="post-wrap">
+        <div class="post-head">
+          <div style="margin-bottom:8px">
+            <span class="badge ${STATUS_BADGES[item.status] || 'badge-gray'}">${STATUS_LABELS[item.status] || item.status}</span>
+          </div>
+          <h2>${item.title}</h2>
+          <div class="post-meta">
+            <span>교육 기간 <strong>${item.from} ~ ${item.to}</strong></span>
+            <span>정원 <strong>${item.capacity}명</strong></span>
+          </div>
+        </div>
+        <div class="post-body">
+          ${item.content || '<p>내용이 없습니다.</p>'}
+          ${item.guide ? `<pre style="background:var(--gray-bg);padding:16px 20px;border-radius:var(--radius);font-size:var(--text-sm);line-height:1.8;white-space:pre-wrap;color:var(--gray-dark);margin-top:20px">${item.guide}</pre>` : ''}
+        </div>
+        <div class="post-nav">
+          ${next ? `<div class="post-nav-item"><span class="post-nav-label">다음글</span><span class="post-nav-title" onclick="location.href='competency-detail.html?id=${next.id}'">${next.title}</span><span class="post-nav-date">${next.date}</span></div>` : ''}
+          ${prev ? `<div class="post-nav-item"><span class="post-nav-label">이전글</span><span class="post-nav-title" onclick="location.href='competency-detail.html?id=${prev.id}'">${prev.title}</span><span class="post-nav-date">${prev.date}</span></div>` : ''}
+        </div>
+        <div class="post-actions">
+          <button class="btn btn-gray" onclick="location.href='competency.html'">목록으로</button>
+        </div>
+      </div>`;
+  },
 };
 
 
@@ -546,6 +585,18 @@ const SagongdanCtrl = {
   _logBoard:  null,
 
   init() {
+    /* 상세 보기 분기: URL에 id 파라미터가 있으면 상세로 전환 */
+    const id   = App.getParam('id');
+    const type = App.getParam('type') || 'news';
+    if (id) {
+      const listWrap   = document.getElementById('sagongdanListWrap');
+      const detailWrap = document.getElementById('sagongdanDetailWrap');
+      if (listWrap)   listWrap.style.display   = 'none';
+      if (detailWrap) detailWrap.style.display = 'block';
+      SagongdanCtrl.renderDetail(type, id);
+      return;
+    }
+
     /* 소식 게시판 */
     this._newsBoard = createBoard({
       data:         SAGONGDAN_NEWS_DATA,
@@ -636,6 +687,18 @@ const ClubCtrl = {
   _archiveBoard: null,
 
   init() {
+    /* 상세 보기 분기: URL에 id 파라미터가 있으면 상세로 전환 */
+    const id  = App.getParam('id');
+    const tab = App.getParam('tab') || 'news';
+    if (id) {
+      const listWrap   = document.getElementById('clubListWrap');
+      const detailWrap = document.getElementById('clubDetailWrap');
+      if (listWrap)   listWrap.style.display   = 'none';
+      if (detailWrap) detailWrap.style.display = 'block';
+      ClubCtrl.renderDetail(tab, id);
+      return;
+    }
+
     /* 소식 게시판 */
     this._newsBoard = createBoard({
       data:         CLUB_NEWS_DATA,
@@ -775,7 +838,7 @@ const QnaCtrl = {
           <tr>
             <td class="center">${seq}</td>
             <td class="td-title">
-              <a href="?id=${row.id}">${row.title}</a>
+              <a href="qna-detail.html?id=${row.id}">${row.title}</a>
             </td>
             <td class="center">${row.author}</td>
             <td class="center">
@@ -898,15 +961,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const page = document.body.dataset.page;
 
   const initMap = {
-    'competency':  () => CompetencyCtrl.init(),
-    'mentoring':   () => MentoringCtrl.init(),
-    'mentoring-detail': () => MentoringCtrl.renderDetail(),
-    'recruit':     () => RecruitCtrl.init(),
-    'instructor':  () => InstructorCtrl.init(),
-    'sagongdan':   () => SagongdanCtrl.init(),
-    'club':        () => ClubCtrl.init(),
-    'qna':         () => QnaCtrl.init(),
-    'qna-detail':  () => QnaCtrl.renderDetail(),
+    'competency':        () => CompetencyCtrl.init(),
+    'competency-detail': () => CompetencyCtrl.renderDetail(),
+    'mentoring':         () => MentoringCtrl.init(),
+    'mentoring-detail':  () => MentoringCtrl.renderDetail(),
+    'recruit':           () => RecruitCtrl.init(),
+    'instructor':        () => InstructorCtrl.init(),
+    'sagongdan':         () => SagongdanCtrl.init(),
+    'club':              () => ClubCtrl.init(),
+    'qna':               () => QnaCtrl.init(),
+    'qna-detail':        () => QnaCtrl.renderDetail(),
   };
 
   if (page && initMap[page]) {

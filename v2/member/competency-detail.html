@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>공지사항 상세 | 한국숲해설가협회</title>
+  <title>역량강화 교육강좌 | 한국숲해설가협회</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/reset.css">
   <link rel="stylesheet" href="../assets/css/common.css">
@@ -13,30 +13,29 @@
   <link rel="stylesheet" href="../assets/css/pages/community.css">
 </head>
 
-<body data-page="notice-detail">
+<body data-page="competency-detail">
 
   <div id="hdr"></div>
 
   <div class="page-header">
     <div class="container">
-      <h1>공지사항</h1>
-      <p>협회 주요 공지 및 안내사항</p>
+      <h1>역량강화 교육강좌</h1>
+      <p>정회원 전용 | 회원 역량강화 교육 프로그램</p>
     </div>
   </div>
 
   <div class="page-tabs">
-    <a href="notice-list.html" class="page-tab  active">공지사항</a>
-    <a href="calendar.html" class="page-tab ">협회일정</a>
-    <a href="free.html" class="page-tab ">자유게시판</a>
-    <a href="press.html" class="page-tab ">언론보도</a>
-    <a href="job.html" class="page-tab ">일자리 및 교육정보</a>
-    <a href="gallery.html" class="page-tab ">갤러리</a>
-    <a href="newsletter.html" class="page-tab ">협회소식지</a>
-    <a href="archive.html" class="page-tab ">자료실</a>
+    <a href="competency.html" class="page-tab active">역량강화 교육강좌</a>
+    <a href="mentoring.html" class="page-tab">멘토링 숲학교</a>
+    <a href="recruit.html" class="page-tab">수시숲해설 모집</a>
+    <a href="instructor.html" class="page-tab">숲해설 강사 신청</a>
+    <a href="sagongdan.html" class="page-tab">사공단 소식</a>
+    <a href="club.html" class="page-tab">동아리 소식</a>
+    <a href="qna.html" class="page-tab">이게뭐예요</a>
   </div>
 
   <div class="content-wrap">
-    <div id="noticeDetail">
+    <div id="competencyDetail">
       <div style="text-align:center;padding:48px;color:var(--gray-mid)">불러오는 중...</div>
     </div>
   </div>
@@ -45,9 +44,9 @@
 
   <script src="../assets/js/app.js"></script>
   <script src="../assets/js/components/header.js"></script>
-  <script src="../assets/js/pages/community.js"></script>
+  <script src="../assets/js/pages/member.js"></script>
   <script>
-    document.getElementById('hdr').innerHTML = Header.render('커뮤니티', '../');
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
     document.getElementById('ftr').innerHTML = Footer.render('../');
   </script>
 </body>

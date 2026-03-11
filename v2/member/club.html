@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../assets/css/components.css">
     <link rel="stylesheet" href="../assets/css/responsive.css">
     <link rel="stylesheet" href="../assets/css/pages/about.css">
+    <link rel="stylesheet" href="../assets/css/pages/community.css">
 </head>
 
 <body>
@@ -40,12 +41,14 @@
             동아리 게시판은 <strong>정회원 전용</strong> 메뉴입니다.
         </div>
 
-        <!-- 내부 탭 -->
-        <div class="tabs" style="margin-bottom:24px">
-            <button class="tab-btn active" onclick="ClubCtrl.switchTab('news', this)">동아리 소식</button>
-            <button class="tab-btn" onclick="ClubCtrl.switchTab('archive', this)">자료방</button>
-            <button class="tab-btn" onclick="ClubCtrl.switchTab('intro', this)">동아리 소개</button>
-        </div>
+        <!-- 목록 영역 -->
+        <div id="clubListWrap">
+          <!-- 내부 탭 -->
+          <div class="tabs" style="margin-bottom:24px">
+              <button class="tab-btn active" onclick="ClubCtrl.switchTab('news', this)">동아리 소식</button>
+              <button class="tab-btn" onclick="ClubCtrl.switchTab('archive', this)">자료방</button>
+              <button class="tab-btn" onclick="ClubCtrl.switchTab('intro', this)">동아리 소개</button>
+          </div>
 
         <!-- 소식 탭 -->
         <div id="tab-news">
@@ -164,6 +167,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+        </div><!-- /#clubListWrap -->
+
+        <!-- 상세 영역 (id 파라미터 있을 때 노출) -->
+        <div id="clubDetailWrap" style="display:none">
+          <div id="clubDetail"></div>
         </div>
 
     </div>

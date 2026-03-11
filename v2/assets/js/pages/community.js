@@ -641,7 +641,7 @@ const FreeCtrl = {
   <tr>
     <td class="col-num">${seq}</td>
     <td class="td-title">
-      <a href="?id=${row.id}">${row.title}</a>
+      <a href="free-detail.html?id=${row.id}">${row.title}</a>
     </td>
     <td class="col-author">${row.author}</td>
     <td class="col-date">${row.date}</td>
@@ -649,6 +649,39 @@ const FreeCtrl = {
   </tr>`,
         });
         this._board.init();
+    },
+
+    renderDetail() {
+        const id  = App.getParam('id');
+        const all = [...(FREE_DATA.pinned || []), ...FREE_DATA.normals];
+        const item = all.find(d => String(d.id) === String(id));
+        const el   = document.getElementById('freeDetail');
+        if (!el) return;
+        if (!item) {
+            el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</div>`;
+            return;
+        }
+        const prev = all.find(d => d.id === item.id + 1);
+        const next = all.find(d => d.id === item.id - 1);
+        el.innerHTML = `
+      <div class="post-wrap">
+        <div class="post-head">
+          <h2>${item.title}</h2>
+          <div class="post-meta">
+            <span>작성자 <strong>${item.author}</strong></span>
+            <span>작성일 <strong>${item.date}</strong></span>
+            <span>조회 <strong>${item.views}</strong></span>
+          </div>
+        </div>
+        <div class="post-body">${item.content || '<p>내용이 없습니다.</p>'}</div>
+        <div class="post-nav">
+          ${next ? `<div class="post-nav-item"><span class="post-nav-label">다음글</span><span class="post-nav-title" onclick="location.href='free-detail.html?id=${next.id}'">${next.title}</span><span class="post-nav-date">${next.date}</span></div>` : ''}
+          ${prev ? `<div class="post-nav-item"><span class="post-nav-label">이전글</span><span class="post-nav-title" onclick="location.href='free-detail.html?id=${prev.id}'">${prev.title}</span><span class="post-nav-date">${prev.date}</span></div>` : ''}
+        </div>
+        <div class="post-actions">
+          <button class="btn btn-gray" onclick="location.href='free.html'">목록으로</button>
+        </div>
+      </div>`;
     },
 
     search() {
@@ -751,7 +784,7 @@ const JobCtrl = {
       <span class="badge badge-blue" style="font-size:11px">${row.category}</span>
     </td>
     <td class="td-title">
-      <a href="?id=${row.id}">${row.title}</a>
+      <a href="job-detail.html?id=${row.id}">${row.title}</a>
     </td>
     <td class="col-author">${row.author}</td>
     <td class="col-date">${row.date}</td>
@@ -760,6 +793,43 @@ const JobCtrl = {
   </tr>`,
         });
         this._board.init();
+    },
+
+    renderDetail() {
+        const id  = App.getParam('id');
+        const all = [...(JOB_DATA.pinned || []), ...JOB_DATA.normals];
+        const item = all.find(d => String(d.id) === String(id));
+        const el   = document.getElementById('jobDetail');
+        if (!el) return;
+        if (!item) {
+            el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</div>`;
+            return;
+        }
+        const prev = all.find(d => d.id === item.id + 1);
+        const next = all.find(d => d.id === item.id - 1);
+        el.innerHTML = `
+      <div class="post-wrap">
+        <div class="post-head">
+          <div style="margin-bottom:8px">
+            <span class="badge badge-blue">${item.category}</span>
+          </div>
+          <h2>${item.title}</h2>
+          <div class="post-meta">
+            <span>작성자 <strong>${item.author}</strong></span>
+            <span>작성일 <strong>${item.date}</strong></span>
+            ${item.deadline ? `<span>마감일 <strong style="color:var(--danger)">${item.deadline}</strong></span>` : ''}
+            <span>조회 <strong>${item.views}</strong></span>
+          </div>
+        </div>
+        <div class="post-body">${item.content || '<p>내용이 없습니다.</p>'}</div>
+        <div class="post-nav">
+          ${next ? `<div class="post-nav-item"><span class="post-nav-label">다음글</span><span class="post-nav-title" onclick="location.href='job-detail.html?id=${next.id}'">${next.title}</span><span class="post-nav-date">${next.date}</span></div>` : ''}
+          ${prev ? `<div class="post-nav-item"><span class="post-nav-label">이전글</span><span class="post-nav-title" onclick="location.href='job-detail.html?id=${prev.id}'">${prev.title}</span><span class="post-nav-date">${prev.date}</span></div>` : ''}
+        </div>
+        <div class="post-actions">
+          <button class="btn btn-gray" onclick="location.href='job.html'">목록으로</button>
+        </div>
+      </div>`;
     },
 
     search() {
@@ -859,8 +929,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'notice':        () => NoticeCtrl.init(),
         'notice-detail': () => NoticeCtrl.renderDetail(),
         'free':          () => FreeCtrl.init(),
+        'free-detail':   () => FreeCtrl.renderDetail(),
         'press':         () => PressCtrl.init(),
         'job':           () => JobCtrl.init(),
+        'job-detail':    () => JobCtrl.renderDetail(),
         'gallery':       () => GalleryCtrl.init(),
         /* 'newsletter' / 'archive' → community-media.js 에서 처리 */
     };
