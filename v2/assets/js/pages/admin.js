@@ -1,7 +1,35 @@
 /* =============================================
-   admin.js | 관리자 공통 로직 (레이아웃 + 권한)
+   admin.js | 관리자 공통 로직 (레이아웃 + 권한 + 사이드바)
    ============================================= */
 'use strict';
+
+/* ── 관리자 사이드바 네비게이션 데이터 */
+const ADMIN_NAV = [
+  { key: 'dashboard', href: 'index.html',    ico: '📊', label: '대시보드' },
+  { key: 'members',   href: 'members.html',  ico: '👥', label: '회원관리' },
+  { key: 'courses',   href: 'courses.html',  ico: '📚', label: '강좌관리' },
+  { key: 'calendar',  href: 'calendar.html', ico: '📅', label: '일정관리' },
+  { key: 'content',   href: 'content.html',  ico: '📝', label: '콘텐츠관리' },
+];
+
+/* ── AdminSidebar: 마운트 포인트(#adminNavMount)에 nav 항목을 주입 */
+const AdminSidebar = {
+  /**
+   * @param {string} activeKey - ADMIN_NAV의 key 값 (예: 'dashboard')
+   */
+  mount(activeKey) {
+    const mountEl = document.getElementById('adminNavMount');
+    if (!mountEl) return;
+    mountEl.innerHTML = ADMIN_NAV.map(item => `
+      <a href="${item.href}"
+         class="admin-nav-item${item.key === activeKey ? ' active' : ''}"
+         aria-current="${item.key === activeKey ? 'page' : 'false'}">
+        <span class="nav-ico" aria-hidden="true">${item.ico}</span>
+        <span class="nav-txt">${item.label}</span>
+      </a>
+    `).join('');
+  },
+};
 
 const AdminLayout = {
   toggleSidebar() {

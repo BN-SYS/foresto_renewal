@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>조직도·임원진 | 한국숲해설가협회</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/variables.css">
   <link rel="stylesheet" href="../assets/css/reset.css">
   <link rel="stylesheet" href="../assets/css/common.css">
   <link rel="stylesheet" href="../assets/css/components.css">
@@ -51,47 +50,42 @@
       <div class="org-vline"></div>
 
       <!-- 2단 분기: 사무처장 + 감사 -->
-      <div style="display:flex;align-items:flex-start;gap:0;position:relative;width:100%;max-width:640px;justify-content:center">
-        <div style="position:absolute;top:0;left:calc(50% - 130px);right:calc(50% - 130px);height:2px;background:var(--gray-light)"></div>
-
-        <div style="display:flex;flex-direction:column;align-items:center;padding:0 48px">
+      <div class="org-fork org-fork--2col">
+        <div class="org-fork-item org-fork-item--wide">
           <div class="org-vline"></div>
           <div class="org-box type-sub">사무처장</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;padding:0 48px">
+        <div class="org-fork-item org-fork-item--wide">
           <div class="org-vline"></div>
           <div class="org-box type-gray">감 사</div>
         </div>
       </div>
 
-      <div style="display:flex;flex-direction:column;align-items:center">
-        <div class="org-vline"></div>
-      </div>
+      <div class="org-vline"></div>
 
       <!-- 4개 부서 -->
-      <div style="display:flex;align-items:flex-start;gap:0;position:relative;width:100%;max-width:800px;justify-content:center">
-        <div style="position:absolute;top:0;left:calc(50% - 280px);right:calc(50% - 280px);height:2px;background:var(--gray-light)"></div>
-        <div style="display:flex;flex-direction:column;align-items:center;padding:0 20px">
+      <div class="org-fork org-fork--4col">
+        <div class="org-fork-item org-fork-item--std">
           <div class="org-vline"></div>
-          <div class="org-box type-sub" style="min-width:90px">교육부</div>
+          <div class="org-box type-sub org-box--dept">교육부</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;padding:0 20px">
+        <div class="org-fork-item org-fork-item--std">
           <div class="org-vline"></div>
-          <div class="org-box type-sub" style="min-width:90px">사회공헌부</div>
+          <div class="org-box type-sub org-box--dept">사회공헌부</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;padding:0 20px">
+        <div class="org-fork-item org-fork-item--std">
           <div class="org-vline"></div>
-          <div class="org-box type-sub" style="min-width:90px">회원관리부</div>
+          <div class="org-box type-sub org-box--dept">회원관리부</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;padding:0 20px">
+        <div class="org-fork-item org-fork-item--std">
           <div class="org-vline"></div>
-          <div class="org-box type-sub" style="min-width:90px">홍보출판부</div>
+          <div class="org-box type-sub org-box--dept">홍보출판부</div>
         </div>
       </div>
     </div>
 
     <!-- 임원진 -->
-    <h2 class="section-heading" style="margin-top:56px">임원진</h2>
+    <h2 class="section-heading section-heading--mt">임원진</h2>
     <table class="member-table">
       <tbody>
         <tr>
@@ -102,29 +96,29 @@
         </tr>
         <tr>
           <td class="role-cell">부대표</td>
-          <td>
+          <td class="name-row--lg">
             <span class="name-item">○○○</span>
-            <span class="name-item" style="margin-left:16px">○○○</span>
+            <span class="name-item">○○○</span>
           </td>
         </tr>
         <tr>
           <td class="role-cell">이사</td>
           <td>
             <span class="name-item">○○○ <span class="name-sub">(교육부)</span></span>
-            <span class="name-item" style="margin-left:12px">○○○ <span class="name-sub">(사회공헌부)</span></span>
-            <span class="name-item" style="margin-left:12px">○○○ <span class="name-sub">(회원관리부)</span></span>
-            <span class="name-item" style="margin-left:12px">○○○ <span class="name-sub">(홍보출판부)</span></span>
-            <span class="name-item" style="margin-left:12px">○○○</span>
-            <span class="name-item" style="margin-left:12px">○○○</span>
-            <span class="name-item" style="margin-left:12px">○○○</span>
-            <span class="name-item" style="margin-left:12px">○○○</span>
+            <span class="name-item">○○○ <span class="name-sub">(사회공헌부)</span></span>
+            <span class="name-item">○○○ <span class="name-sub">(회원관리부)</span></span>
+            <span class="name-item">○○○ <span class="name-sub">(홍보출판부)</span></span>
+            <span class="name-item">○○○</span>
+            <span class="name-item">○○○</span>
+            <span class="name-item">○○○</span>
+            <span class="name-item">○○○</span>
           </td>
         </tr>
         <tr>
           <td class="role-cell">감사</td>
-          <td>
+          <td class="name-row--lg">
             <span class="name-item">○○○</span>
-            <span class="name-item" style="margin-left:16px">○○○</span>
+            <span class="name-item">○○○</span>
           </td>
         </tr>
         <tr>
@@ -135,15 +129,15 @@
         </tr>
         <tr>
           <td class="role-cell">간사</td>
-          <td>
+          <td class="name-row--lg">
             <span class="name-item">○○○</span>
-            <span class="name-item" style="margin-left:16px">○○○</span>
+            <span class="name-item">○○○</span>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <div class="alert alert-info" style="margin-top:28px">
+    <div class="alert alert-info alert--top-gap">
       ℹ임원진 정보는 정기총회 결과에 따라 변경될 수 있습니다. 최신 정보는 협회 사무국으로 문의하시기 바랍니다.
     </div>
 

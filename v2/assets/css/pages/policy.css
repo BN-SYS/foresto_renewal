@@ -69,3 +69,42 @@
   font-size: var(--text-md);
   color: var(--gray-mid);
 }
+
+/* ── 정책 섹션 (이메일 무단수집 거부 등) */
+.policy-section        { margin: 24px 0; }
+.policy-section-title  {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--gray-dark);
+  margin-bottom: 8px;
+}
+
+/* ── 반응형 */
+@media (max-width: 768px) {
+  .policy-wrap {
+    padding: 0 4px;
+  }
+  .policy-title {
+    font-size: var(--text-lg);
+  }
+  .policy-body {
+    font-size: var(--text-base);
+    line-height: 1.8;
+  }
+  .policy-body h3 {
+    font-size: var(--text-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .policy-title {
+    font-size: var(--text-md);
+  }
+  .page-tabs {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .page-tab {
+    padding: 10px 12px;
+  }
+}

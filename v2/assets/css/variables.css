@@ -21,6 +21,8 @@ html {
   --white: #ffffff;
   --accent: #f4a261;
   --danger: #e74c3c;
+  --warning: #f9a825;
+  --warning-pale: #fff8e1;
   --info: #1976d2;
   --info-pale: #e3f2fd;
 

@@ -44,12 +44,12 @@
   }
 
   .page-header h1 {
-    font-size: 20px;
+    font-size: var(--text-xl);
   }
 
   .page-tab {
     padding: 12px 16px;
-    font-size: 13px;
+    font-size: var(--text-sm);
   }
 
   .data-table thead th:nth-child(n+4),
@@ -112,13 +112,13 @@
   }
 
   .tab-btn {
-    font-size: 13px;
+    font-size: var(--text-sm);
     padding: 7px 12px;
   }
 
   .btn-lg {
     padding: 11px 20px;
-    font-size: 14px;
+    font-size: var(--text-md);
   }
 
   .search-wrap {
@@ -139,7 +139,7 @@
   .pagination .page-btn {
     width: 30px;
     height: 30px;
-    font-size: 12px;
+    font-size: var(--text-xs);
   }
 
   /* ── 푸터 모바일 */
@@ -163,6 +163,38 @@
   }
 
   .footer-copy {
-    font-size: 11px;
+    font-size: var(--text-xs);
+  }
+}
+
+/* ── 소형 모바일 (≤ 360px) — CLAUDE.md 기준 최솟값 */
+@media (max-width: 360px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .page-tab {
+    padding: 10px 10px;
+    font-size: var(--text-xs);
+  }
+
+  .btn {
+    padding: 7px 14px;
+  }
+
+  .btn-lg {
+    padding: 10px 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .modal {
+    width: 96%;
+  }
+
+  .tabs {
+    gap: 4px;
   }
 }

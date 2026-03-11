@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>한국숲해설가협회</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/reset.css">
   <link rel="stylesheet" href="assets/css/common.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -144,7 +143,7 @@
           </div>
           <div class="cal-nav">
             <button onclick="App.toast('이전 달')">‹</button>
-            <span>2026년 3월</span>
+            <span id="miniCalTitle"></span>
             <button onclick="App.toast('다음 달')">›</button>
           </div>
           <div class="cal-grid" id="miniCal"></div>
@@ -240,13 +239,20 @@
     renderBoard(CLUBS, 'clubList');
     renderBoard(SOCIAL, 'socialList');
 
-    /* ── 미니캘린더 2026-03 */
+    /* ── 미니캘린더 (동적 날짜 기반) */
     (function () {
-      const yr = 2026, mo = 2; // JS month: 0=1월, 2=3월
-      const first = new Date(yr, mo, 1).getDay();       // 3월 1일 = 일요일(0)
-      const lastDay = new Date(yr, mo + 1, 0).getDate();  // 31일
-      const today = 10; // 현재 날짜 (2026-03-10)
-      const eventDays = [15, 20, 25, 28];
+      const now = new Date();
+      const yr = now.getFullYear();
+      const mo = now.getMonth(); // 0=1월
+      const today = now.getDate();
+      const eventDays = [15, 20, 25, 28]; // TODO: 실제 일정 데이터로 교체
+
+      /* 월 표시 업데이트 */
+      const titleEl = document.getElementById('miniCalTitle');
+      if (titleEl) titleEl.textContent = `${yr}년 ${mo + 1}월`;
+
+      const first = new Date(yr, mo, 1).getDay();
+      const lastDay = new Date(yr, mo + 1, 0).getDate();
 
       const days = ['일', '월', '화', '수', '목', '금', '토'];
       let html = days.map(d => `<div class="cal-dh">${d}</div>`).join('');
@@ -257,6 +263,7 @@
       // 날짜 채우기
       for (let d = 1; d <= lastDay; d++) {
         const dow = (first + d - 1) % 7;
+        const dateStr = `${yr}.${String(mo + 1).padStart(2, '0')}.${String(d).padStart(2, '0')}`;
         const cls = [
           'cal-cell',
           d === today ? 'today' : '',
@@ -265,7 +272,7 @@
           dow === 6 ? 'sat' : ''
         ].filter(Boolean).join(' ');
 
-        html += `<div class="${cls}" onclick="App.toast('2026.03.${String(d).padStart(2, '0')} 일정')">${d}</div>`;
+        html += `<div class="${cls}" onclick="App.toast('${dateStr} 일정')">${d}</div>`;
       }
 
       document.getElementById('miniCal').innerHTML = html;

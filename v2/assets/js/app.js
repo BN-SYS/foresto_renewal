@@ -36,9 +36,12 @@ const App = {
     };
     this.toast('로그아웃 되었습니다.');
     setTimeout(() => {
-      /* 현재 depth에 맞게 index.html 로 이동 */
-      const depth = location.pathname.split('/').length - 2;
-      location.href = depth > 0 ? '../'.repeat(depth) + 'v2/index.html' : 'v2/index.html';
+      /* 현재 경로에서 v2/ 루트의 index.html 로 이동
+         pathname 예: /v2/admin/index.html → depth 2 → ../../index.html */
+      const parts = location.pathname.split('/').filter(Boolean);
+      const v2Idx = parts.lastIndexOf('v2');
+      const depth = v2Idx >= 0 ? parts.length - v2Idx - 1 : 0;
+      location.href = (depth > 0 ? '../'.repeat(depth) : './') + 'index.html';
     }, 800);
   },
 
@@ -65,14 +68,9 @@ const App = {
     return '../'.repeat(depth);
   },
 
-  /* ── 토스트 알림 */
+  /* ── 토스트 알림
+       배경색은 CSS 변수 기반 클래스로 제어 (components.css의 .toast-* 참조) */
   toast(msg, type = 'success') {
-    const colors = {
-      success: '#40916c',
-      error: '#e74c3c',
-      warning: '#f9a825',
-      info: '#1976d2',
-    };
     let el = document.getElementById('toast');
     if (!el) {
       el = document.createElement('div');
@@ -80,24 +78,31 @@ const App = {
       document.body.appendChild(el);
     }
     el.textContent = msg;
-    el.style.background = colors[type] || colors.success;
+    /* type 클래스로 색상 제어: toast-success / toast-error / toast-warning / toast-info */
+    el.className = `toast-${type}`;
     el.classList.add('show');
     clearTimeout(el._t);
     el._t = setTimeout(() => el.classList.remove('show'), 3000);
   },
 
-  /* ── 모달 열기/닫기 */
+  /* ── 모달 열기/닫기
+       모달 요소에 role="dialog" aria-modal="true" aria-labelledby="..." 권장 */
   openModal(id) {
     const m = document.getElementById(id);
     if (m) {
       m.classList.add('open');
+      m.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      /* 포커스 트랩: 모달 내 첫 번째 포커서블 요소로 이동 */
+      const focusable = m.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusable) focusable.focus();
     }
   },
   closeModal(id) {
     const m = document.getElementById(id);
     if (m) {
       m.classList.remove('open');
+      m.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     }
   },
@@ -263,7 +268,7 @@ document.addEventListener('keydown', e => {
 ══════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ── 1. 퀵메뉴 HTML 삽입 */
+  /* ── 1. 퀵메뉴 HTML 삽입 (스타일은 components.css에서 관리) */
   if (!document.getElementById('fontQuickWrap')) {
     document.body.insertAdjacentHTML('beforeend', `
       <div class="font-quick-wrap" id="fontQuickWrap">
@@ -271,99 +276,25 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="fq-panel" id="fqPanel">
           <div class="fq-label">글자 크기</div>
           <button class="fq-btn" id="fqBtnUp"
-                  onclick="App.fontSize.up()" title="글자 크게">
-            <span style="font-size:17px;font-weight:800">가</span>
-            <span style="font-size:11px;color:var(--green-main)">+</span>
+                  onclick="App.fontSize.up()" title="글자 크게" aria-label="글자 크게">
+            <span class="fq-ico-lg">가</span>
+            <span class="fq-ico-acc">+</span>
           </button>
           <button class="fq-btn fq-btn-reset" id="fqBtnReset"
-                  onclick="App.fontSize.reset()" title="기본 크기로">
+                  onclick="App.fontSize.reset()" title="기본 크기로" aria-label="글자 크기 기본으로">
             기본
           </button>
           <button class="fq-btn" id="fqBtnDown"
-                  onclick="App.fontSize.down()" title="글자 작게">
-            <span style="font-size:13px;font-weight:800">가</span>
-            <span style="font-size:11px;color:var(--green-main)">−</span>
+                  onclick="App.fontSize.down()" title="글자 작게" aria-label="글자 작게">
+            <span class="fq-ico-sm">가</span>
+            <span class="fq-ico-acc">−</span>
           </button>
         </div>
 
         <button class="fq-toggle" id="fqToggle"
-                title="글자 크기 조절">가</button>
+                title="글자 크기 조절" aria-label="글자 크기 조절 패널 열기">가</button>
 
       </div>
-
-      <style>
-        .font-quick-wrap {
-          position: fixed;
-          right: 20px;
-          bottom: 80px;
-          z-index: 500;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 6px;
-        }
-        .fq-toggle {
-          width: 44px; height: 44px;
-          border-radius: 50%;
-          background: var(--green-dark);
-          color: #fff;
-          border: 1px solid #fff;
-          font-size: 17px; font-weight: 800;
-          font-family: inherit;
-          cursor: pointer;
-          box-shadow: 0 14px 24px rgba(0,0,0,.22);
-          transition: background .2s, transform .2s;
-          display: flex; align-items: center; justify-content: center;
-        }
-        .fq-toggle:hover        { background: var(--green-main); transform: scale(1.08); }
-        .fq-toggle.open         { background: var(--green-main); }
-        .fq-panel {
-          display: none;
-          flex-direction: column;
-          align-items: center;
-          gap: 4px;
-          background: var(--white);
-          border: 1px solid var(--gray-light);
-          border-radius: 12px;
-          padding: 10px 8px;
-          box-shadow: 0 6px 20px rgba(0,0,0,.13);
-          min-width: 56px;
-        }
-        .fq-panel.open          { display: flex; }
-        .fq-label {
-          font-size: 11px; color: var(--gray-mid);
-          font-weight: 700; margin-bottom: 4px;
-          white-space: nowrap;
-        }
-        .fq-btn {
-          width: 40px; height: 40px;
-          border-radius: 8px;
-          border: 1.5px solid var(--gray-light);
-          background: var(--white);
-          color: var(--gray-dark);
-          font-family: inherit; font-weight: 700;
-          cursor: pointer; transition: all .15s;
-          display: flex; align-items: center;
-          justify-content: center; gap: 1px;
-          flex-direction: column; line-height: 1;
-        }
-        .fq-btn:hover {
-          border-color: var(--green-main);
-          background: var(--green-pale);
-          color: var(--green-dark);
-        }
-        .fq-btn:disabled {
-          opacity: .35; cursor: not-allowed; pointer-events: none;
-        }
-        .fq-btn-reset {
-          font-size: 11px;
-          color: var(--gray-mid);
-        }
-        @media (max-width: 600px) {
-          .font-quick-wrap { right: 12px; bottom: 64px; }
-          .fq-toggle       { width: 40px; height: 40px; font-size: 15px; }
-        }
-      </style>
     `);
   }
 

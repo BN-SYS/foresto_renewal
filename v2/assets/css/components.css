@@ -114,6 +114,7 @@ select.form-control {
 .board-table tbody td.td-title a:hover { color: var(--green-main); text-decoration: underline; }
 
 /* ── 알림박스 */
+.alert--top-gap { margin-top: 28px; }
 .alert {
   padding: 13px 18px; border-radius: var(--radius);
   font-size: var(--text-md);
@@ -121,13 +122,14 @@ select.form-control {
   display: flex; gap: 10px; align-items: flex-start;
 }
 .alert-info    { background: var(--info-pale); border-left: 4px solid var(--info); color: var(--info); }
-.alert-warning { background: #fff8e1; border-left: 4px solid #f9a825; color: #e65100; }
+.alert-warning { background: var(--warning-pale); border-left: 4px solid var(--warning); color: #e65100; }
 .alert-success { background: var(--green-pale); border-left: 4px solid var(--green-main); color: var(--green-dark); }
 .alert-danger  { background: #fce4ec; border-left: 4px solid var(--danger); color: #c62828; }
 
-/* ── 모달 */
+/* ── 모달
+   사용 예: <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle"> */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  position: fixed; inset: 0; background: rgba(0, 0, 0, .5);
   z-index: 1000; display: none; align-items: center; justify-content: center;
 }
 .modal-overlay.open { display: flex; }
@@ -246,14 +248,18 @@ select.form-control {
 /* ── 토스트 */
 #toast {
   position: fixed; bottom: 24px; right: 24px; z-index: 9999;
-  background: var(--green-main); color: var(--white);
+  color: var(--white);
   padding: 12px 20px; border-radius: var(--radius);
   font-size: var(--text-base);
   font-weight: 600; box-shadow: var(--shadow-md);
   opacity: 0; transform: translateY(10px); transition: all .3s ease;
   pointer-events: none; max-width: 320px; line-height: 1.5;
 }
-#toast.show { opacity: 1; transform: translateY(0); }
+#toast.show              { opacity: 1; transform: translateY(0); }
+#toast.toast-success     { background: var(--green-main); }
+#toast.toast-error       { background: var(--danger); }
+#toast.toast-warning     { background: var(--warning, #f9a825); color: var(--gray-dark); }
+#toast.toast-info        { background: var(--info); }
 
 /* ── 페이지 탭 (공통 상단 탭 – a 링크 / button 모두 지원) */
 .page-tabs {
@@ -287,4 +293,76 @@ select.form-control {
   color: var(--green-dark);
   font-weight: 700;
   border-bottom-color: var(--green-main);
+}
+
+/* ── 글자 크기 퀵메뉴 (app.js에서 HTML만 삽입, 스타일은 여기서 관리) */
+.font-quick-wrap {
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.fq-toggle {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--green-dark);
+  color: var(--white);
+  border: 1px solid var(--white);
+  font-size: 1.0625rem; font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 14px 24px rgba(0, 0, 0, .22);
+  transition: background .2s, transform .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.fq-toggle:hover      { background: var(--green-main); transform: scale(1.08); }
+.fq-toggle.open       { background: var(--green-main); }
+.fq-panel {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius-lg);
+  padding: 10px 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .13);
+  min-width: 56px;
+}
+.fq-panel.open        { display: flex; }
+.fq-label {
+  font-size: var(--text-xs); color: var(--gray-mid);
+  font-weight: 700; margin-bottom: 4px;
+  white-space: nowrap;
+}
+.fq-btn {
+  width: 40px; height: 40px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--gray-light);
+  background: var(--white);
+  color: var(--gray-dark);
+  font-family: inherit; font-weight: 700;
+  cursor: pointer; transition: var(--trans);
+  display: flex; align-items: center;
+  justify-content: center; gap: 1px;
+  flex-direction: column; line-height: 1;
+}
+.fq-btn:hover {
+  border-color: var(--green-main);
+  background: var(--green-pale);
+  color: var(--green-dark);
+}
+.fq-btn:disabled      { opacity: .35; cursor: not-allowed; pointer-events: none; }
+.fq-btn-reset         { font-size: var(--text-xs); color: var(--gray-mid); }
+/* fq-btn 내 가/나 표기용 span 클래스 */
+.fq-ico-lg  { font-size: 1.0625rem; font-weight: 800; }
+.fq-ico-sm  { font-size: 0.6875rem; font-weight: 800; }
+.fq-ico-acc { font-size: 0.6875rem; color: var(--green-main); }
+@media (max-width: 600px) {
+  .font-quick-wrap { right: 12px; bottom: 64px; }
+  .fq-toggle       { width: 40px; height: 40px; font-size: var(--text-xs); }
 }

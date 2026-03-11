@@ -314,7 +314,7 @@
 .org-box.type-gray { background: var(--gray-bg);    color: var(--gray-dark); border: 1px solid var(--gray-light); }
 .org-vline        { width: 2px; height: 24px; background: var(--gray-light); }
 .org-aside-hline  { width: 36px; height: 2px; background: var(--gray-light); }
-.org-fork         { display: flex; align-items: flex-start; position: relative; }
+.org-fork         { display: flex; align-items: flex-start; position: relative; justify-content: center; width: 100%; }
 .org-fork::before {
   content: ''; position: absolute;
   top: 0; left: 50px; right: 50px;
@@ -322,6 +322,23 @@
 }
 .org-fork-item    { display: flex; flex-direction: column; align-items: center; padding: 0 12px; }
 .org-fork-item .org-vline { height: 20px; }
+
+/* 조직도 fork 변형 — members.html 전용 */
+.org-fork--2col   { max-width: 640px; }
+.org-fork--2col::before { left: calc(50% - 130px); right: calc(50% - 130px); }
+.org-fork--4col   { max-width: 800px; }
+.org-fork--4col::before { left: calc(50% - 280px); right: calc(50% - 280px); }
+.org-fork-item--wide  { padding: 0 48px; }
+.org-fork-item--std   { padding: 0 20px; }
+.org-box--dept    { min-width: 90px; }
+.org-fork-vwrap   { display: flex; flex-direction: column; align-items: center; }
+
+/* 임원 이름 간격: inline style 대신 gap 활용 */
+.name-item + .name-item { margin-left: 12px; }
+.name-row--lg .name-item + .name-item { margin-left: 16px; }
+
+/* 임원진 섹션 여백 */
+.section-heading--mt { margin-top: 56px; }
 
 /* ── 임원 테이블 */
 .member-table {

@@ -23,20 +23,14 @@
         <span>🛠 관리자</span>
         <button class="sidebar-toggle" onclick="AdminLayout.toggleSidebar()" aria-label="사이드바 토글">☰</button>
       </div>
-      <nav class="admin-nav">
-        <a href="index.html"    class="admin-nav-item active"><span class="nav-ico">📊</span><span class="nav-txt">대시보드</span></a>
-        <a href="members.html"  class="admin-nav-item"><span class="nav-ico">👥</span><span class="nav-txt">회원관리</span></a>
-        <a href="courses.html"  class="admin-nav-item"><span class="nav-ico">📚</span><span class="nav-txt">강좌관리</span></a>
-        <a href="calendar.html" class="admin-nav-item"><span class="nav-ico">📅</span><span class="nav-txt">일정관리</span></a>
-        <a href="content.html"  class="admin-nav-item"><span class="nav-ico">📝</span><span class="nav-txt">콘텐츠관리</span></a>
-      </nav>
+      <nav class="admin-nav" id="adminNavMount" aria-label="관리자 메뉴"></nav>
     </aside>
 
     <!-- 메인 콘텐츠 -->
     <main class="admin-main">
       <div class="admin-topbar">
         <h1 class="admin-page-title">대시보드</h1>
-        <div style="font-size:13px;color:var(--gray-mid)">2026년 3월 10일 (화)</div>
+        <div style="font-size:13px;color:var(--gray-mid)" id="adminTodayDate"></div>
       </div>
 
       <!-- 통계 카드 -->
@@ -135,6 +129,15 @@
   <script src="../assets/js/pages/admin.js"></script>
   <script>
     document.getElementById('hdr').innerHTML = Header.render('관리자', '../');
+    AdminSidebar.mount('dashboard');
+    /* 오늘 날짜 동적 표시 */
+    (function () {
+      const now = new Date();
+      const days = ['일', '월', '화', '수', '목', '금', '토'];
+      const el = document.getElementById('adminTodayDate');
+      if (el) el.textContent =
+        `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 (${days[now.getDay()]})`;
+    })();
 
     /* ── 샘플 데이터 */
     const RECENT_APPLY = [
