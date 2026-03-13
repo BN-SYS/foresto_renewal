@@ -397,26 +397,13 @@
   background: var(--gray-light);
   display: block;
 }
-.gallery-thumb-placeholder {
-  width: 100%; aspect-ratio: 16/9;
-  background: var(--green-pale);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--green-main);
-  font-size: var(--text-lg);
-  font-weight: 700;
-}
 .gallery-info  { padding: 14px 16px; }
 .gallery-title {
-  font-size: var(--text-md);
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: var(--gray-dark);
   margin-bottom: 6px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.gallery-meta {
-  font-size: var(--text-sm);
-  color: var(--gray-mid);
-  display: flex; gap: 10px;
 }
 
 /* ── 오시는길 */

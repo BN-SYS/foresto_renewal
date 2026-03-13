@@ -184,6 +184,7 @@ body.auth-page {
   box-sizing: border-box;
   text-decoration: none;
 }
+
 .auth-btn-primary {
   background: linear-gradient(135deg, var(--green-dark), var(--green-main));
   color: #fff;

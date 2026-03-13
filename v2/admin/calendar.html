@@ -66,7 +66,7 @@
                 <th style="width:100px" class="center">날짜</th>
                 <th>제목</th>
                 <th style="width:90px" class="center">카테고리</th>
-                <th style="width:90px" class="center">링크</th>
+                <th style="width:70px" class="center">링크</th>
                 <th style="width:110px" class="center">관리</th>
               </tr>
             </thead>
@@ -77,46 +77,66 @@
     </main>
   </div>
 
-  <!-- 일정 등록/수정 모달 -->
+  <!-- 일정 등록 모달 — 카테고리(필수) + 제목(필수) + 날짜(필수) + 링크(선택) -->
   <div class="modal-overlay" id="calEventModal">
-    <div class="modal" style="max-width:520px">
+    <div class="modal" style="max-width:460px">
       <div class="modal-header">
         <h3 id="calEventModalTitle">일정 등록</h3>
         <button class="modal-close" onclick="App.closeModal('calEventModal')">×</button>
       </div>
       <div class="modal-body">
+
         <div class="form-group">
           <label class="form-label">날짜 <span class="req">*</span></label>
           <input type="date" class="form-control" id="evtDate">
         </div>
-        <div class="form-group">
-          <label class="form-label">제목 <span class="req">*</span></label>
-          <input type="text" class="form-control" id="evtTitle" placeholder="일정 제목">
-        </div>
+
         <div class="form-group">
           <label class="form-label">카테고리 <span class="req">*</span></label>
           <select class="form-control" id="evtCat">
+            <option value="">선택해주세요</option>
             <option value="edu">교육/강좌</option>
-            <option value="activity">봉사활동</option>
-            <option value="meeting">협회회의</option>
-            <option value="club">동아리</option>
+            <option value="activity">사회공헌 활동</option>
+            <option value="meeting">협회 회의</option>
+            <option value="club">동아리 모임</option>
+            <option value="event">행사</option>
           </select>
         </div>
+
         <div class="form-group">
-          <label class="form-label">상세 내용</label>
-          <textarea class="form-control" id="evtDesc" rows="4" placeholder="장소, 시간 등 상세 정보를 입력하세요."></textarea>
+          <label class="form-label">제목 <span class="req">*</span></label>
+          <input type="text" class="form-control" id="evtTitle" placeholder="일정 제목을 입력하세요">
         </div>
-        <div class="form-group">
-          <label class="form-label">관련 페이지 링크</label>
-          <div style="display:flex;gap:8px;align-items:center">
-            <input type="checkbox" id="evtLink">
-            <label for="evtLink" style="font-size:14px;cursor:pointer">관련 페이지 링크 표시</label>
+
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">관련 링크 <span style="color:var(--gray-mid);font-size:12px">(선택)</span></label>
+          <input type="url" class="form-control" id="evtLink" placeholder="https://...">
+          <div style="font-size:12px;color:var(--gray-mid);margin-top:4px">
+            관련 게시물 또는 외부 페이지 URL을 입력하면 캘린더 클릭 시 이동합니다.
           </div>
         </div>
+
       </div>
       <div class="modal-footer">
         <button class="btn btn-gray" onclick="App.closeModal('calEventModal')">취소</button>
         <button class="btn btn-primary" onclick="CalAdmin.saveEvent()">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 일정 상세 모달 -->
+  <div class="modal-overlay" id="calDetailModal">
+    <div class="modal" style="max-width:440px">
+      <div class="modal-header">
+        <h3 id="calDetailTitle">일정 상세</h3>
+        <button class="modal-close" onclick="App.closeModal('calDetailModal')">×</button>
+      </div>
+      <div class="modal-body" id="calDetailBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-danger btn-sm" onclick="CalAdmin.deleteFromDetail()">삭제</button>
+        <div style="flex:1"></div>
+        <button class="btn btn-gray" onclick="App.closeModal('calDetailModal')">닫기</button>
+        <button class="btn btn-primary" id="calDetailEditBtn">수정</button>
       </div>
     </div>
   </div>

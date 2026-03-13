@@ -67,6 +67,58 @@ const ContentAdmin = {
     });
   },
 
+  /* ── 첨부파일 UI 초기화 (모달 열 때마다 호출) */
+  _resetFileList() {
+    const list = document.getElementById('noticeFileList');
+    if (!list) return;
+    list.innerHTML = '';
+    this.addFileInput(); /* 기본 1개 표시 */
+    this._syncAddFileBtn();
+  },
+
+  addFileInput() {
+    const MAX = 5;
+    const list = document.getElementById('noticeFileList');
+    if (!list) return;
+    if (list.children.length >= MAX) return;
+
+    const idx = list.children.length + 1;
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px';
+    wrapper.innerHTML = `
+      <input type="file" class="form-control notice-file-input"
+        accept=".pdf,.hwp,.docx" style="flex:1">
+      <button type="button" class="btn btn-gray btn-xs" style="flex-shrink:0;padding:6px 10px"
+        onclick="ContentAdmin.removeFileInput(this)">✕</button>`;
+    list.appendChild(wrapper);
+    this._syncAddFileBtn();
+  },
+
+  removeFileInput(btn) {
+    const wrapper = btn.closest('div');
+    const list    = document.getElementById('noticeFileList');
+    /* 마지막 1개는 삭제 안 함 */
+    if (list && list.children.length <= 1) {
+      const input = wrapper.querySelector('input[type=file]');
+      if (input) input.value = '';
+      App.toast('파일 입력란은 최소 1개 필요합니다.', 'info');
+      return;
+    }
+    if (wrapper) wrapper.remove();
+    this._syncAddFileBtn();
+  },
+
+  _syncAddFileBtn() {
+    const MAX  = 5;
+    const list = document.getElementById('noticeFileList');
+    const btn  = document.getElementById('addFileBtn');
+    if (!list || !btn) return;
+    const count = list.children.length;
+    btn.disabled = count >= MAX;
+    btn.style.opacity = count >= MAX ? '0.4' : '1';
+    btn.style.cursor  = count >= MAX ? 'not-allowed' : '';
+  },
+
   openNoticeModal() {
     this._editId = null;
     document.getElementById('noticeModalTitle').textContent = '공지 등록';
@@ -75,6 +127,7 @@ const ContentAdmin = {
     });
     const r = document.querySelector('input[name="noticePinned"][value="0"]');
     if (r) r.checked = true;
+    this._resetFileList();
     App.openModal('noticeModal');
   },
 
@@ -87,6 +140,7 @@ const ContentAdmin = {
     const c = document.getElementById('noticeContent');  if (c) c.value = n.content;
     const r = document.querySelector(`input[name="noticePinned"][value="${n.pinned ? '1' : '0'}"]`);
     if (r) r.checked = true;
+    this._resetFileList();
     App.openModal('noticeModal');
   },
 

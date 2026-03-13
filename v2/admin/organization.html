@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>조직도/임원진 관리 | 관리자 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/admin.css">
+  <style>
+    /* ── 조직도 이미지 영역 */
+    .org-img-box {
+      border: 2px dashed var(--green-light);
+      border-radius: 10px;
+      background: var(--gray-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .org-img-box img { width: 100%; max-height: 320px; object-fit: contain; display: none; }
+    .org-img-placeholder { text-align: center; color: var(--gray-mid); pointer-events: none; }
+    .org-img-placeholder p { font-size: 13px; margin-top: 8px; }
+    .org-img-box input[type=file] { display: none; }
+
+    /* ── 그룹 카드 */
+    .officer-group {
+      background: var(--gray-light);
+      border-radius: 10px;
+      margin-bottom: 14px;
+    }
+    .officer-group-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--gray-border);
+    }
+    .officer-group-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--green-dark);
+      flex: 1;
+    }
+    .officer-group-body { padding: 14px 16px; }
+
+    /* ── 임원 행 */
+    .officer-row {
+      background: #fff;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+    .officer-row:last-child { margin-bottom: 0; }
+    .officer-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--gray-light);
+      border: 1px solid var(--gray-border);
+      display: block;
+    }
+    .officer-thumb-placeholder {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--gray-light);
+      border: 2px dashed var(--gray-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--gray-mid);
+      flex-shrink: 0;
+    }
+    .officer-fields { display: flex; flex-direction: column; gap: 8px; }
+    .officer-row-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; padding-top: 4px; }
+
+    /* ── 임원 이미지 업로드 라벨 */
+    .officer-img-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--green-dark);
+      cursor: pointer;
+      border: 1px dashed var(--green-light);
+      border-radius: 4px;
+      padding: 4px 8px;
+    }
+    .officer-img-label:hover { background: var(--green-pale); }
+    .officer-img-label input[type=file] { display: none; }
+    .officer-img-preview {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* ── 그룹 정렬 버튼 */
+    .order-btn {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--gray-border);
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-dark);
+    }
+    .order-btn:hover { background: var(--green-pale); border-color: var(--green-light); }
+    .order-btn:disabled { opacity: 0.3; cursor: default; }
+
+    /* ── 그룹명 인라인 편집 */
+    .group-name-input {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--green-dark);
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: transparent;
+      padding: 2px 6px;
+      min-width: 80px;
+    }
+    .group-name-input:focus {
+      outline: none;
+      border-color: var(--green-light);
+      background: #fff;
+    }
+  </style>
+</head>
+<body class="admin-body">
+  <div id="hdr"></div>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-head">
+        <span>🛠 관리자</span>
+        <button class="sidebar-toggle" onclick="AdminLayout.toggleSidebar()" aria-label="사이드바 토글">☰</button>
+      </div>
+      <nav class="admin-nav" id="adminNavMount" aria-label="관리자 메뉴"></nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">조직도 / 임원진 관리</h1>
+        <button class="btn btn-primary btn-sm" onclick="OrgAdmin.saveAll()">전체 저장</button>
+      </div>
+
+      <!-- 조직도 이미지 -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header">
+          <span class="card-title">조직도 이미지</span>
+          <span style="font-size:12px;color:var(--gray-mid)">사용자 페이지(조직도 메뉴)에 그대로 표시됩니다</span>
+        </div>
+        <div style="padding:20px">
+          <label class="org-img-box" id="orgImgBox" onclick="document.getElementById('orgImgFile').click()">
+            <img id="orgImgPreview" alt="조직도 미리보기">
+            <div class="org-img-placeholder" id="orgImgPlaceholder">
+              <div style="font-size:32px">🖼</div>
+              <p>이미지를 클릭하거나 파일을 선택하세요<br>
+                <span style="font-size:11px">JPG · PNG · SVG | 권장: 1200×800px 이상</span>
+              </p>
+            </div>
+            <input type="file" id="orgImgFile" accept="image/*" onchange="OrgAdmin.previewOrgImg(this)">
+          </label>
+          <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+            <button class="btn btn-outline btn-sm" onclick="document.getElementById('orgImgFile').click()">이미지 교체</button>
+            <button class="btn btn-gray btn-sm" onclick="OrgAdmin.removeOrgImg()">이미지 삭제</button>
+            <span id="orgImgName" style="font-size:12px;color:var(--gray-mid)"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 임원진 관리 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">임원진 관리</span>
+          <button class="btn btn-outline btn-sm" onclick="OrgAdmin.addGroup()">+ 그룹 추가</button>
+        </div>
+        <div style="padding:20px">
+          <div style="font-size:12px;color:var(--gray-mid);margin-bottom:16px">
+            그룹 순서를 ▲▼ 버튼으로 조정하고, 각 그룹 내 임원을 등록·수정하세요. 저장 버튼을 누르면 사용자 페이지에 반영됩니다.
+          </div>
+          <div id="groupList"></div>
+          <div id="groupEmpty" style="text-align:center;padding:32px;color:var(--gray-mid);font-size:14px;display:none">
+            그룹이 없습니다. [+ 그룹 추가] 버튼을 눌러 추가하세요.
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:16px">
+        <button class="btn btn-primary" onclick="OrgAdmin.saveAll()">전체 저장</button>
+      </div>
+    </main>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/admin.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('관리자', '../');
+    AdminSidebar.mount('organization');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    /* ── 직책 목록 (드롭다운 옵션) */
+    const TITLE_OPTIONS = [
+      '회장', '부회장', '상임이사', '이사', '감사',
+      '사무국장', '간사', '자문위원', '명예회장', '직접입력',
+    ];
+
+    /* ── 샘플 데이터 */
+    const OFFICER_SAMPLE = [
+      {
+        gid: 1, name: '회장단',
+        officers: [
+          { oid: 1, name: '홍길동', title: '회장',   detail: '제10대 회장 / 숲해설가 1급', img: null },
+          { oid: 2, name: '이순신', title: '부회장',  detail: '숲해설가 1급 / 강사 자격증', img: null },
+        ],
+      },
+      {
+        gid: 2, name: '이사회',
+        officers: [
+          { oid: 3, name: '김유신', title: '상임이사', detail: '교육위원장', img: null },
+          { oid: 4, name: '강감찬', title: '이사',    detail: '총무간사', img: null },
+          { oid: 5, name: '세종대왕', title: '이사',  detail: '교육홍보담당', img: null },
+        ],
+      },
+      {
+        gid: 3, name: '감사',
+        officers: [
+          { oid: 6, name: '박문수', title: '감사', detail: '전 숲해설 지도강사', img: null },
+        ],
+      },
+    ];
+
+    let _gCounter = 10;  /* 그룹 ID 카운터 */
+    let _oCounter = 20;  /* 임원 ID 카운터 */
+
+    const OrgAdmin = {
+      _groups: JSON.parse(JSON.stringify(OFFICER_SAMPLE)),
+
+      /* ── 조직도 이미지 미리보기 */
+      previewOrgImg(input) {
+        const preview = document.getElementById('orgImgPreview');
+        const placeholder = document.getElementById('orgImgPlaceholder');
+        const nameEl = document.getElementById('orgImgName');
+        if (!input.files?.[0]) return;
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = e => {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          if (placeholder) placeholder.style.display = 'none';
+          if (nameEl) nameEl.textContent = file.name;
+        };
+        reader.readAsDataURL(file);
+      },
+
+      removeOrgImg() {
+        const preview = document.getElementById('orgImgPreview');
+        const placeholder = document.getElementById('orgImgPlaceholder');
+        const nameEl = document.getElementById('orgImgName');
+        const fileInput = document.getElementById('orgImgFile');
+        if (preview) { preview.src = ''; preview.style.display = 'none'; }
+        if (placeholder) placeholder.style.display = '';
+        if (nameEl) nameEl.textContent = '';
+        if (fileInput) fileInput.value = '';
+      },
+
+      /* ── 전체 렌더 */
+      renderGroups() {
+        const container = document.getElementById('groupList');
+        const emptyEl   = document.getElementById('groupEmpty');
+        if (!container) return;
+        container.innerHTML = this._groups.map((g, gi) => this._renderGroup(g, gi)).join('');
+        if (emptyEl) emptyEl.style.display = this._groups.length ? 'none' : '';
+      },
+
+      _renderGroup(g, gi) {
+        const isFirst = gi === 0;
+        const isLast  = gi === this._groups.length - 1;
+        const officersHtml = g.officers.length
+          ? g.officers.map((o, oi) => this._renderOfficer(g.gid, o, oi, g.officers.length)).join('')
+          : `<div style="text-align:center;padding:16px;color:var(--gray-mid);font-size:13px">임원이 없습니다. [+ 임원 추가] 버튼을 눌러 추가하세요.</div>`;
+
+        return `
+          <div class="officer-group" id="group-${g.gid}">
+            <div class="officer-group-header">
+              <div style="display:flex;gap:4px;flex-shrink:0">
+                <button class="order-btn" onclick="OrgAdmin.moveGroup(${g.gid}, -1)" title="위로"
+                  ${isFirst ? 'disabled' : ''}>▲</button>
+                <button class="order-btn" onclick="OrgAdmin.moveGroup(${g.gid}, 1)" title="아래로"
+                  ${isLast ? 'disabled' : ''}>▼</button>
+              </div>
+              <input class="group-name-input" type="text"
+                id="gname-${g.gid}"
+                value="${this._esc(g.name)}"
+                placeholder="그룹명 입력"
+                onblur="OrgAdmin.syncGroupName(${g.gid})">
+              <div style="display:flex;gap:6px;margin-left:auto">
+                <button class="btn btn-outline btn-xs" onclick="OrgAdmin.addOfficer(${g.gid})">+ 임원 추가</button>
+                <button class="btn btn-danger btn-xs" onclick="OrgAdmin.removeGroup(${g.gid})">그룹 삭제</button>
+              </div>
+            </div>
+            <div class="officer-group-body" id="gbody-${g.gid}">
+              ${officersHtml}
+            </div>
+          </div>`;
+      },
+
+      _renderOfficer(gid, o, oi, total) {
+        const imgHtml = o.img
+          ? `<img src="${o.img}" class="officer-thumb" id="othumb-${gid}-${o.oid}" alt="${this._esc(o.name)}">`
+          : `<div class="officer-thumb-placeholder" id="othumb-${gid}-${o.oid}">👤</div>`;
+
+        const isFirst = oi === 0;
+        const isLast  = oi === total - 1;
+
+        const titleOpts = TITLE_OPTIONS.map(t =>
+          `<option value="${t}"${t === (o.title||'') ? ' selected' : ''}>${t}</option>`
+        ).join('');
+
+        return `
+          <div class="officer-row" id="orow-${gid}-${o.oid}">
+            <!-- 사진 -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              ${imgHtml}
+              <label class="officer-img-label" title="사진 변경">
+                <input type="file" accept="image/*"
+                  onchange="OrgAdmin.previewOfficerImg(this, ${gid}, ${o.oid})">
+                사진
+              </label>
+            </div>
+            <!-- 입력 필드 -->
+            <div class="officer-fields">
+              <div style="display:grid;grid-template-columns:1fr 1fr 2fr;gap:8px">
+                <div>
+                  <label class="form-label" style="font-size:11px">이름 <span class="req">*</span></label>
+                  <input type="text" class="form-control" id="oname-${gid}-${o.oid}"
+                    value="${this._esc(o.name)}" placeholder="이름" style="padding:6px 10px">
+                </div>
+                <div>
+                  <label class="form-label" style="font-size:11px">직책 <span class="req">*</span></label>
+                  <select class="form-control" id="otitle-${gid}-${o.oid}" style="padding:6px 8px">
+                    <option value="">선택</option>
+                    ${titleOpts}
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" style="font-size:11px">상세내용</label>
+                  <input type="text" class="form-control" id="odetail-${gid}-${o.oid}"
+                    value="${this._esc(o.detail || o.content || '')}" placeholder="상세내용 (선택)" style="padding:6px 10px">
+                </div>
+              </div>
+              ${o.img ? `<div style="font-size:11px;color:var(--gray-mid)">이미지 첨부됨</div>` : ''}
+            </div>
+            <!-- 액션 버튼 -->
+            <div class="officer-row-actions">
+              <button class="order-btn" onclick="OrgAdmin.moveOfficer(${gid}, ${o.oid}, -1)" title="위로"
+                ${isFirst ? 'disabled' : ''}>▲</button>
+              <button class="order-btn" onclick="OrgAdmin.moveOfficer(${gid}, ${o.oid}, 1)" title="아래로"
+                ${isLast ? 'disabled' : ''}>▼</button>
+              <button class="btn btn-danger btn-xs" style="margin-top:4px"
+                onclick="OrgAdmin.removeOfficer(${gid}, ${o.oid})">삭제</button>
+            </div>
+          </div>`;
+      },
+
+      _esc(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      },
+
+      /* ── 그룹 내 임원 순서 이동 */
+      moveOfficer(gid, oid, dir) {
+        const g = this._groups.find(g => g.gid === gid);
+        if (!g) return;
+        /* 이동 전 현재 입력값 동기화 */
+        this._syncOfficerInputs(g);
+        const idx = g.officers.findIndex(o => o.oid === oid);
+        if (idx < 0) return;
+        const target = idx + dir;
+        if (target < 0 || target >= g.officers.length) return;
+        [g.officers[idx], g.officers[target]] = [g.officers[target], g.officers[idx]];
+        this.renderGroups();
+      },
+
+      /* ── 그룹 내 입력값 데이터 동기화 */
+      _syncOfficerInputs(g) {
+        g.officers.forEach(o => {
+          const n  = document.getElementById(`oname-${g.gid}-${o.oid}`)?.value.trim()   || '';
+          const t  = document.getElementById(`otitle-${g.gid}-${o.oid}`)?.value         || '';
+          const d  = document.getElementById(`odetail-${g.gid}-${o.oid}`)?.value.trim() || '';
+          o.name   = n;
+          o.title  = t;
+          o.detail = d;
+        });
+      },
+
+      /* ── 그룹 순서 이동 */
+      moveGroup(gid, dir) {
+        const idx = this._groups.findIndex(g => g.gid === gid);
+        if (idx < 0) return;
+        const target = idx + dir;
+        if (target < 0 || target >= this._groups.length) return;
+        [this._groups[idx], this._groups[target]] = [this._groups[target], this._groups[idx]];
+        this.renderGroups();
+      },
+
+      /* ── 그룹명 동기화 */
+      syncGroupName(gid) {
+        const input = document.getElementById(`gname-${gid}`);
+        if (!input) return;
+        const g = this._groups.find(g => g.gid === gid);
+        if (g) g.name = input.value.trim();
+      },
+
+      /* ── 그룹 추가 */
+      addGroup() {
+        const newGid = ++_gCounter;
+        this._groups.push({ gid: newGid, name: '새 그룹', officers: [] });
+        this.renderGroups();
+        /* 스크롤 이동 + 이름 자동 포커스 */
+        setTimeout(() => {
+          const el = document.getElementById(`group-${newGid}`);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const nameInput = document.getElementById(`gname-${newGid}`);
+          if (nameInput) { nameInput.focus(); nameInput.select(); }
+        }, 80);
+      },
+
+      /* ── 그룹 삭제 */
+      removeGroup(gid) {
+        const g = this._groups.find(g => g.gid === gid);
+        if (!g) return;
+        if (!confirm(`"${g.name}" 그룹을 삭제하시겠습니까?\n소속된 임원 ${g.officers.length}명의 정보도 함께 삭제됩니다.`)) return;
+        this._groups = this._groups.filter(g => g.gid !== gid);
+        this.renderGroups();
+      },
+
+      /* ── 임원 추가 */
+      addOfficer(gid) {
+        const g = this._groups.find(g => g.gid === gid);
+        if (!g) return;
+        const newOid = ++_oCounter;
+        g.officers.push({ oid: newOid, name: '', content: '', img: null });
+        this.renderGroups();
+        setTimeout(() => {
+          const el = document.getElementById(`orow-${gid}-${newOid}`);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const nameInput = document.getElementById(`oname-${gid}-${newOid}`);
+          if (nameInput) nameInput.focus();
+        }, 80);
+      },
+
+      /* ── 임원 삭제 */
+      removeOfficer(gid, oid) {
+        const g = this._groups.find(g => g.gid === gid);
+        if (!g) return;
+        g.officers = g.officers.filter(o => o.oid !== oid);
+        this.renderGroups();
+      },
+
+      /* ── 임원 사진 미리보기 */
+      previewOfficerImg(input, gid, oid) {
+        if (!input.files?.[0]) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+          /* 썸네일 교체 */
+          const thumbEl = document.getElementById(`othumb-${gid}-${oid}`);
+          if (thumbEl) {
+            /* placeholder div → img 교체 */
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'officer-thumb';
+            img.id = `othumb-${gid}-${oid}`;
+            img.alt = '';
+            thumbEl.replaceWith(img);
+          }
+          /* 데이터 갱신 */
+          const g = this._groups.find(g => g.gid === gid);
+          if (g) {
+            const o = g.officers.find(o => o.oid === oid);
+            if (o) o.img = e.target.result;
+          }
+        };
+        reader.readAsDataURL(input.files[0]);
+      },
+
+      /* ── 전체 저장 (입력값 수집 → 유효성 검사 → 토스트) */
+      saveAll() {
+        /* 현재 입력값을 _groups에 동기화 */
+        let hasError = false;
+        this._groups.forEach(g => {
+          const nameInput = document.getElementById(`gname-${g.gid}`);
+          if (nameInput) g.name = nameInput.value.trim();
+          if (!g.name) {
+            App.toast('그룹명을 모두 입력해주세요.', 'warning');
+            hasError = true;
+            return;
+          }
+          g.officers.forEach(o => {
+            const n = document.getElementById(`oname-${g.gid}-${o.oid}`)?.value.trim()   || '';
+            const t = document.getElementById(`otitle-${g.gid}-${o.oid}`)?.value         || '';
+            const d = document.getElementById(`odetail-${g.gid}-${o.oid}`)?.value.trim() || '';
+            if (!n || !t) { hasError = true; }
+            o.name   = n;
+            o.title  = t;
+            o.detail = d;
+          });
+        });
+
+        if (hasError) {
+          App.toast('이름과 직책을 모두 입력해주세요.', 'warning');
+          return;
+        }
+
+        /* 실제 구현 시: POST /api/admin/organization 로 전송 */
+        App.toast('조직도 및 임원진 정보가 저장되었습니다.');
+      },
+
+      init() {
+        this.renderGroups();
+      },
+    };
+
+    OrgAdmin.init();
+  </script>
+</body>
+</html>

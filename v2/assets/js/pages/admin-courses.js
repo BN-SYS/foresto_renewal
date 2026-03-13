@@ -140,18 +140,25 @@ const CourseAdmin = {
       const applyN   = applyCountMap[c.id] || 0;
       const seq      = total - (this._page - 1) * this._pageSize - i;
 
-      return `<tr>
-        <td class="center">${seq}</td>
-        <td class="center"><span class="badge badge-green" style="font-size:12px">${c.type}</span></td>
-        <td style="cursor:pointer;font-weight:500" onclick="CourseAdmin.openEditModal(${c.id})">${c.title}</td>
-        <td class="center" style="font-size:13px">${c.from || c.date}</td>
+      return `<tr style="cursor:pointer" onclick="location.href='course-detail.html?id=${c.id}'"
+                  title="${c.title} 상세보기">
+        <td class="center" onclick="event.stopPropagation()">${seq}</td>
+        <td class="center" onclick="event.stopPropagation()">
+          <span class="badge badge-green" style="font-size:12px">${c.type}</span>
+        </td>
+        <td style="font-weight:500">${c.title}</td>
+        <td class="center" style="font-size:13px">${c.from || c.date || '-'}</td>
         <td class="center">${applyN}명</td>
         <td class="center">${capacity}명</td>
-        <td class="center"><span class="status-badge ${sm.cls}">${sm.label}</span></td>
-        <td class="center">
+        <td class="center" onclick="event.stopPropagation()">
+          <span class="status-badge ${sm.cls}">${sm.label}</span>
+        </td>
+        <td class="center" onclick="event.stopPropagation()">
           <div style="display:flex;gap:4px;justify-content:center">
-            <button class="btn btn-outline btn-xs" onclick="CourseAdmin.openEditModal(${c.id})">수정</button>
-            <button class="btn btn-danger btn-xs" onclick="CourseAdmin.deleteCourse(${c.id})">삭제</button>
+            <button class="btn btn-outline btn-xs"
+              onclick="event.stopPropagation();location.href='course-edit.html?id=${c.id}'">수정</button>
+            <button class="btn btn-danger btn-xs"
+              onclick="event.stopPropagation();CourseAdmin.deleteCourse(${c.id})">삭제</button>
           </div>
         </td>
       </tr>`;

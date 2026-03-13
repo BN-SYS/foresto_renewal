@@ -10,38 +10,113 @@ body.admin-body { background: var(--gray-bg); }
   min-height: calc(100vh - var(--header-h));
 }
 
+.admin-layout.sidebar-collapsed {
+  grid-template-columns: 56px 1fr;
+}
+
 /* ── 사이드바 */
 .admin-sidebar {
-  background: var(--green-dark); color: var(--white);
-  position: sticky; top: var(--header-h);
+  background: var(--green-dark); 
+  color: var(--white);
+  position: sticky; 
+  top: var(--header-h);
   height: calc(100vh - var(--header-h));
-  overflow-y: auto; transition: width .3s;
+  overflow-y: auto; 
+  transition: width .3s;
   z-index: 80;
 }
-.admin-sidebar.collapsed { width: 56px; }
+
+.admin-sidebar.collapsed { 
+  width: 56px; 
+}
+
+/* ── 사이드바 헤더 */
 .admin-sidebar-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px; font-size: var(--text-md); font-weight: 700;
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  padding: 16px; 
+  font-size: var(--text-md); 
+  font-weight: 700;
   border-bottom: 1px solid rgba(255, 255, 255, .1);
 }
-.sidebar-toggle { background: none; border: none; color: rgba(255, 255, 255, .7); font-size: var(--text-lg); cursor: pointer; }
-.sidebar-toggle:hover { color: var(--white); }
 
-.admin-nav { padding: 8px 0; }
+.sidebar-toggle { 
+  background: none; 
+  border: none; 
+  color: rgba(255, 255, 255, .7); 
+  font-size: var(--text-lg); 
+  cursor: pointer; 
+}
+
+.sidebar-toggle:hover { 
+  color: var(--white); 
+}
+
+/* ── 네비게이션 */
+.admin-nav { 
+  padding: 8px 0; 
+}
+
 .admin-nav-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 13px 18px; font-size: var(--text-md); font-weight: 500;
-  color: rgba(255, 255, 255, .75); transition: var(--trans);
-  text-decoration: none; border-left: 3px solid transparent;
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+  padding: 13px 18px; 
+  font-size: var(--text-md); 
+  font-weight: 500;
+  color: rgba(255, 255, 255, .75); 
+  transition: var(--trans);
+  text-decoration: none; 
+  border-left: 3px solid transparent;
   white-space: nowrap;
 }
-.admin-nav-item:hover { background: rgba(255, 255, 255, .08); color: var(--white); }
-.admin-nav-item.active { background: rgba(255, 255, 255, .12); color: var(--white); border-left-color: var(--green-light); font-weight: 700; }
-.nav-ico { font-size: var(--text-lg); flex-shrink: 0; }
-.nav-txt { transition: opacity .3s; }
-.admin-sidebar.collapsed .nav-txt { opacity: 0; width: 0; overflow: hidden; }
-.admin-sidebar.collapsed .admin-sidebar-head span { display: none; }
 
+.admin-nav-item:hover { 
+  background: rgba(255, 255, 255, .08); 
+  color: var(--white); 
+}
+
+.admin-nav-item.active { 
+  background: rgba(255, 255, 255, .12); 
+  color: var(--white); 
+  border-left-color: var(--green-light); 
+  font-weight: 700; 
+}
+
+/* ── 아이콘 */
+.nav-ico { 
+  font-size: var(--text-lg); 
+  flex-shrink: 0;
+  display: none;              /* 기본 상태에서는 아이콘 숨김 */
+}
+
+/* ── 텍스트 */
+.nav-txt { 
+  transition: opacity .3s; 
+}
+
+/* ── 사이드바 접힘 상태 */
+.admin-sidebar.collapsed .nav-ico {
+  display: block;             /* 접혔을 때만 아이콘 표시 */
+}
+
+.admin-sidebar.collapsed .nav-txt { 
+  opacity: 0; 
+  width: 0; 
+  overflow: hidden; 
+}
+
+/* 아이콘 중앙 정렬 */
+.admin-sidebar.collapsed .admin-nav-item {
+  justify-content: center;
+  padding: 13px 0;
+}
+
+/* 헤더 텍스트 숨김 */
+.admin-sidebar.collapsed .admin-sidebar-head span { 
+  display: none; 
+}
 /* ── 메인 */
 .admin-main { padding: 24px; overflow-x: hidden; }
 .admin-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }

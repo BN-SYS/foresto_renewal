@@ -19,6 +19,7 @@ const CalAdmin = {
   CAT_LABEL: { edu:'교육/강좌', activity:'봉사활동', meeting:'협회회의', club:'동아리' },
   _year: 2026, _month: 2,
   _editId: null,
+  _detailId: null,
 
   init() {
     this._renderCatFilter();
@@ -80,7 +81,7 @@ const CalAdmin = {
         <div class="${dateCls}" style="cursor:pointer" onclick="CalAdmin.openCreateModalOnDate('${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}')">${d}</div>
         ${evts.slice(0,2).map(e =>
           `<span class="event-tag ${this.CAT_COLOR[e.cat]}"
-                onclick="CalAdmin.openEditModal(${e.id})">${e.title}</span>`
+                onclick="event.stopPropagation();CalAdmin.openEventDetail(${e.id})">${e.title}</span>`
         ).join('')}
         ${evts.length > 2 ? `<span style="font-size:10px;color:var(--gray-mid)">+${evts.length-2}건</span>` : ''}
       </div>`;
@@ -106,7 +107,8 @@ const CalAdmin = {
             <div style="font-size:12px;color:var(--gray-mid)">${e.date} · ${this.CAT_LABEL[e.cat]}</div>
             <div style="font-size:13px;font-weight:600;margin:2px 0">${e.title}</div>
             <div style="display:flex;gap:4px;margin-top:4px">
-              <button class="btn btn-outline btn-xs" onclick="CalAdmin.openEditModal(${e.id})">수정</button>
+              <button class="btn btn-outline btn-xs" onclick="CalAdmin.openEventDetail(${e.id})">상세</button>
+              <button class="btn btn-outline btn-xs" onclick="location.href='calendar-edit.html?id=${e.id}'">수정</button>
               <button class="btn btn-danger btn-xs" onclick="CalAdmin.deleteEvent(${e.id})">삭제</button>
             </div>
           </div>`).join('')
@@ -119,27 +121,86 @@ const CalAdmin = {
     if (!tbody) return;
     const sorted = [...this._events].sort((a,b) => a.date.localeCompare(b.date));
     tbody.innerHTML = sorted.map((e, i) => `
-      <tr>
-        <td class="center">${i+1}</td>
+      <tr style="cursor:pointer" onclick="location.href='calendar-detail.html?id=${e.id}'"
+          title="${e.title} 상세보기">
+        <td class="center" onclick="event.stopPropagation()">${i+1}</td>
         <td class="center" style="font-size:13px">${e.date}</td>
         <td style="font-weight:500">${e.title}</td>
-        <td class="center"><span class="badge badge-green" style="font-size:11px">${this.CAT_LABEL[e.cat]}</span></td>
-        <td class="center"><span style="font-size:13px">${e.link ? '✅' : '-'}</span></td>
-        <td class="center">
+        <td class="center" onclick="event.stopPropagation()">
+          <span class="badge badge-green" style="font-size:11px">${this.CAT_LABEL[e.cat] || e.cat}</span>
+        </td>
+        <td class="center" onclick="event.stopPropagation()">
+          <span style="font-size:13px">${e.link ? '연결됨' : '-'}</span>
+        </td>
+        <td class="center" onclick="event.stopPropagation()">
           <div style="display:flex;gap:4px;justify-content:center">
-            <button class="btn btn-outline btn-xs" onclick="CalAdmin.openEditModal(${e.id})">수정</button>
-            <button class="btn btn-danger btn-xs" onclick="CalAdmin.deleteEvent(${e.id})">삭제</button>
+            <button class="btn btn-outline btn-xs"
+              onclick="event.stopPropagation();location.href='calendar-edit.html?id=${e.id}'">수정</button>
+            <button class="btn btn-danger btn-xs"
+              onclick="event.stopPropagation();CalAdmin.deleteEvent(${e.id})">삭제</button>
           </div>
         </td>
       </tr>`).join('');
   },
 
+  /* ── 일정 상세 모달 */
+  openEventDetail(id) {
+    const e = this._events.find(x => x.id === id);
+    if (!e) return;
+    this._detailId = id;
+
+    const catLabel = this.CAT_LABEL[e.cat] || e.cat;
+    const linkHtml = e.link
+      ? (e.link === true
+          ? `<span style="color:var(--green-dark)">연결됨</span>`
+          : `<a href="${e.link}" target="_blank" style="color:var(--green-dark);word-break:break-all">${e.link}</a>`)
+      : `<span style="color:var(--gray-mid)">없음</span>`;
+
+    document.getElementById('calDetailTitle').textContent = e.title;
+    document.getElementById('calDetailBody').innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:14px;font-size:14px">
+        <div style="background:var(--green-pale);border-radius:8px;padding:14px">
+          <div style="font-weight:700;font-size:16px;color:var(--green-dark);margin-bottom:6px">${e.title}</div>
+          <div style="font-size:12px;color:var(--gray-mid)">${e.date} · ${catLabel}</div>
+        </div>
+        ${[
+          ['날짜',     `<strong>${e.date}</strong>`],
+          ['카테고리', catLabel],
+          ['관련 링크', linkHtml],
+          ['설명',     e.desc ? `<span style="white-space:pre-line">${e.desc}</span>` : `<span style="color:var(--gray-mid)">-</span>`],
+        ].map(([k, v]) => `
+          <div style="display:flex;gap:16px;border-bottom:1px solid var(--gray-light);padding-bottom:10px">
+            <span style="width:70px;font-weight:700;color:var(--gray-mid);flex-shrink:0">${k}</span>
+            <span>${v}</span>
+          </div>`).join('')}
+      </div>`;
+
+    /* 수정 버튼 링크 연결 */
+    const editBtn = document.getElementById('calDetailEditBtn');
+    if (editBtn) editBtn.onclick = () => {
+      App.closeModal('calDetailModal');
+      location.href = `calendar-edit.html?id=${id}`;
+    };
+
+    App.openModal('calDetailModal');
+  },
+
+  deleteFromDetail() {
+    if (!this._detailId) return;
+    if (!confirm('이 일정을 삭제하시겠습니까?')) return;
+    this._events = this._events.filter(e => e.id !== this._detailId);
+    App.closeModal('calDetailModal');
+    this.render();
+    this._renderTable();
+    App.toast('일정이 삭제되었습니다.', 'error');
+    this._detailId = null;
+  },
+
   openCreateModal() {
     this._editId = null;
     document.getElementById('calEventModalTitle').textContent = '일정 등록';
-    ['evtDate','evtTitle','evtDesc'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    const c = document.getElementById('evtCat'); if (c) c.value = 'edu';
-    const l = document.getElementById('evtLink'); if (l) l.checked = false;
+    ['evtDate','evtTitle','evtLink'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    const c = document.getElementById('evtCat'); if (c) c.value = '';
     App.openModal('calEventModal');
   },
 
@@ -148,33 +209,18 @@ const CalAdmin = {
     const d = document.getElementById('evtDate'); if (d) d.value = date;
   },
 
-  openEditModal(id) {
-    const e = this._events.find(x => x.id === id);
-    if (!e) return;
-    this._editId = id;
-    document.getElementById('calEventModalTitle').textContent = '일정 수정';
-    const set = (elId, val) => { const el = document.getElementById(elId); if (el) el.value = val || ''; };
-    set('evtDate',  e.date);
-    set('evtTitle', e.title);
-    set('evtCat',   e.cat);
-    set('evtDesc',  e.desc);
-    const l = document.getElementById('evtLink'); if (l) l.checked = e.link;
-    App.openModal('calEventModal');
-  },
-
   saveEvent() {
     const get = id => document.getElementById(id)?.value.trim() || '';
     const date  = get('evtDate');
-    const title = get('evtTitle');
     const cat   = get('evtCat');
-    if (!date)  { App.toast('날짜를 선택해주세요.', 'warning');   return; }
-    if (!title) { App.toast('제목을 입력해주세요.', 'warning'); return; }
+    const title = get('evtTitle');
+    const link  = get('evtLink');
 
-    const payload = {
-      date,  title,  cat,
-      desc: get('evtDesc'),
-      link: document.getElementById('evtLink')?.checked || false,
-    };
+    if (!date)  { App.toast('날짜를 선택해주세요.', 'warning');    return; }
+    if (!cat)   { App.toast('카테고리를 선택해주세요.', 'warning'); return; }
+    if (!title) { App.toast('제목을 입력해주세요.', 'warning');    return; }
+
+    const payload = { date, cat, title, link: link || null };
 
     if (this._editId) {
       const idx = this._events.findIndex(e => e.id === this._editId);

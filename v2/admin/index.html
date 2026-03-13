@@ -20,7 +20,7 @@
     <!-- 사이드바 -->
     <aside class="admin-sidebar" id="adminSidebar">
       <div class="admin-sidebar-head">
-        <span>🛠 관리자</span>
+        <span>관리자</span>
         <button class="sidebar-toggle" onclick="AdminLayout.toggleSidebar()" aria-label="사이드바 토글">☰</button>
       </div>
       <nav class="admin-nav" id="adminNavMount" aria-label="관리자 메뉴"></nav>
@@ -36,7 +36,6 @@
       <!-- 통계 카드 -->
       <div class="stat-grid">
         <div class="stat-card">
-          <div class="stat-icon" style="background:#d8f3dc">👥</div>
           <div class="stat-body">
             <div class="stat-num">1,248</div>
             <div class="stat-label">전체 회원</div>
@@ -44,7 +43,6 @@
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon" style="background:#e3f2fd">📚</div>
           <div class="stat-body">
             <div class="stat-num">8</div>
             <div class="stat-label">진행 중 강좌</div>
@@ -52,7 +50,6 @@
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon" style="background:#fff3e0">📋</div>
           <div class="stat-body">
             <div class="stat-num">23</div>
             <div class="stat-label">이번 달 신청</div>
@@ -60,7 +57,6 @@
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon" style="background:#f3e5f5">🏆</div>
           <div class="stat-body">
             <div class="stat-num">89</div>
             <div class="stat-label">이번 달 수료</div>
@@ -115,7 +111,7 @@
       <!-- 미처리 업무 -->
       <div class="card" style="margin-top:20px">
         <div class="card-header">
-          <span class="card-title">⚠️ 미처리 업무</span>
+          <span class="card-title">미처리 업무</span>
           <span class="badge badge-red" id="todoCount">0건</span>
         </div>
         <div id="todoList"></div>
@@ -187,7 +183,7 @@
     document.getElementById('todoCount').textContent = TODOS.length + '건';
     document.getElementById('todoList').innerHTML = TODOS.map(t => `
       <div class="alert alert-${t.type==='warn'?'warning':'info'}" style="margin-bottom:8px">
-        ${t.type==='warn'?'⚠️':'ℹ️'} ${t.text}
+        ${t.text}
       </div>`).join('');
   </script>
 </body>

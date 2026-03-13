@@ -6,7 +6,7 @@
 .hero-slider {
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 400px;
   overflow: hidden;
   isolation: isolate;
 }
@@ -186,7 +186,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 15px;
-  height: 200px;
+  height: 150px;
   margin: 28px 0 0;
   overflow: hidden;
   box-shadow: var(--shadow-md);
@@ -254,9 +254,19 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  align-items: start;
+  align-items: stretch;   /* 모든 카드 높이 동일하게 */
 }
 
+/* 캘린더 카드: 내부를 flex column으로 채움 */
+.home-board-grid .card:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+/* cal-schedule이 남은 공간을 채우도록 */
+.home-board-grid .card:last-child .cal-schedule {
+  flex: 1;
+}
 /* 게시판 카드 타이틀 크기 */
 .card-title {
   font-size: var(--text-xl);   /* 원하는 크기로 변경 */
@@ -268,7 +278,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 20px 0;
+  padding: 25px 0;
   border-bottom: 2px solid var(--gray-light);
 }
 
@@ -323,7 +333,7 @@
 }
 
 .cal-schedule-item {
-  padding: 5px 0;
+  padding: 8px 0;
   border-bottom: 1px solid var(--gray-light);
   font-size: var(--text-md);
 }
@@ -336,7 +346,7 @@
 /* ── 유관기관 */
 .related-wrap {
   margin: 10px;
-  padding: 24px 0;
+  padding: 24px 5px;
   border-top: 1px solid var(--gray-light);
   overflow: hidden;
 }
@@ -480,7 +490,7 @@
 
 .cal-dh {
   text-align: center;
-  font-size: var(--text-xs);
+  font-size: var(--text-md);
   font-weight: 700;
   padding: 6px 18x;
   background: var(--green-pale);
@@ -496,11 +506,16 @@
 }
 
 .cal-cell {
+  position: relative;
   text-align: center;
   padding: 4px 2px;
-  font-size: var(--text-sm);
+  font-size: var(--text-lg);
   cursor: pointer;
-  min-height: 28px;
+  height: 44px;          /* 고정 높이 — 일정 유무와 무관하게 동일 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .cal-cell:hover {
@@ -523,10 +538,14 @@
   color: var(--info);
 }
 
+/* dot을 absolute로 배치 → 셀 높이에 영향 없음 */
 .cal-cell.has-event::after {
-  content: '•';
-  display: block;
-  color: var(--accent);
+  content: '●';
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--green-main);
   font-size: var(--text-xs);
   line-height: 1;
 }
