@@ -45,7 +45,7 @@
 .logo-text { display: none; }
 
 /* ── 네비게이션 */
-.main-nav { display: flex; align-items: center; gap: 2px; }
+.main-nav { display: flex; align-items: center; gap: 36px; }
 .nav-item { position: relative; }
 .nav-item > a {
   display: flex;
