@@ -112,54 +112,52 @@ const BoardDetail = {
     const prevItem = dataArr.find(d => d.id === item.id + 1);
     const nextItem = dataArr.find(d => d.id === item.id - 1);
 
+    const attachHtml = item.file ? `
+      <hr class="cd-divider">
+      <div class="cd-attach">
+        <a href="#" class="cd-attach-item"
+           onclick="App.toast('${item.file} 다운로드 — 실제 구현 시 서버 연동 예정', 'info');return false;">
+          <svg class="cd-attach-icon" viewBox="0 0 24 24" fill="none" width="15" height="15">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.41 17.41a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>${item.file}</span>
+        </a>
+      </div>` : '';
+
+    const navHtml = (nextItem || prevItem) ? `
+      <div class="cd-nav">
+        ${nextItem ? `<div class="cd-nav-item" onclick="location.href='?id=${nextItem.id}'">
+          <span class="cd-nav-label">다음글</span>
+          <span class="cd-nav-title">${nextItem.title}</span>
+        </div>` : ''}
+        ${prevItem ? `<div class="cd-nav-item" onclick="location.href='?id=${prevItem.id}'">
+          <span class="cd-nav-label">이전글</span>
+          <span class="cd-nav-title">${prevItem.title}</span>
+        </div>` : ''}
+      </div>` : '';
+
     el.innerHTML = `
-      <div class="post-wrap">
-        <div class="post-head">
-          <h2>${item.title}</h2>
-          <div class="post-meta">
-            <span>작성자 <strong>${item.author}</strong></span>
-            <span>작성일 <strong>${item.date}</strong></span>
-            <span>조회 <strong>${item.views}</strong></span>
+      <div class="cd-wrap">
+        <div class="cd-head">
+          <div class="cd-head-left">
+            <h2 class="cd-title">${item.title}</h2>
           </div>
+          <span class="cd-date">${item.date || ''}</span>
         </div>
-
-        <div class="post-body">
-          ${item.content || '<p>내용이 없습니다.</p>'}
+        <div class="cd-meta">
+          <span>작성자 <strong>${item.author}</strong></span>
+          <span>조회 <strong>${item.views}</strong></span>
         </div>
-
-        ${item.file ? `
-          <div class="post-attach">
-            <span class="attach-label">첨부파일</span>
-            <a class="attach-file" href="#">
-              📎 ${item.file}
-            </a>
-          </div>` : ''}
-
-        <div class="post-nav">
-          ${nextItem ? `
-            <div class="post-nav-item">
-              <span class="post-nav-label">다음글</span>
-              <span class="post-nav-title"
-                    onclick="location.href='?id=${nextItem.id}'">
-                ${nextItem.title}
-              </span>
-              <span class="post-nav-date">${nextItem.date}</span>
-            </div>` : ''}
-
-          ${prevItem ? `
-            <div class="post-nav-item">
-              <span class="post-nav-label">이전글</span>
-              <span class="post-nav-title"
-                    onclick="location.href='?id=${prevItem.id}'">
-                ${prevItem.title}
-              </span>
-              <span class="post-nav-date">${prevItem.date}</span>
-            </div>` : ''}
+        <hr class="cd-divider">
+        <div class="cd-body">
+          <div class="cd-content">${item.content || '<p>내용이 없습니다.</p>'}</div>
         </div>
-
-        <div class="post-actions">
-          <button class="btn btn-gray"
-                  onclick="history.back()">목록으로</button>
+        ${attachHtml}
+        ${navHtml}
+        <div class="cd-actions">
+          <button class="btn btn-primary btn-sm cd-btn-list"
+                  onclick="history.back()">목록</button>
         </div>
       </div>`;
   },
@@ -352,12 +350,13 @@ const COMPETENCY_DATA = Array.from({ length: COMPETENCY_TITLES.length }, (_, i) 
   id:       COMPETENCY_TITLES.length - i,
   type:     '역량강화',
   title:    `[역량강화] ${COMPETENCY_TITLES[i]}`,
-  date:     makeDate(i),
+  date:     makeDate(i) + ' 10:00:00',
   from:     makeDate(i),
   to:       makeDate(i, 1),
   status:   ['open', 'ready', 'closed', 'done'][i % 4],
   capacity: 20,
-  guide:    `• 강좌: ${COMPETENCY_TITLES[i]}\n• 대상: 정회원\n• 문의: 협회 사무국 02-000-0000`,
+  attachments: i % 2 === 0 ? [{ name: '역량강화_신청서.hwp', size: '26K' }] : [],
+  guide:    `■강좌: ${COMPETENCY_TITLES[i]}\n■대상: 정회원 (회원 우선 접수)\n■정원: 20명\n■교육 장소: 협회 강의실\n■문의: 협회 사무국 02-000-0000`,
   content:  `<p>[역량강화] ${COMPETENCY_TITLES[i]} 강좌 안내입니다.</p>`,
 }));
 
@@ -419,33 +418,98 @@ const CompetencyCtrl = {
       el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</div>`;
       return;
     }
-    const STATUS_LABELS = { open: '신청가능', ready: '준비중', closed: '마감', done: '수료완료' };
-    const STATUS_BADGES = { open: 'badge-green', ready: 'badge-blue', closed: 'badge-gray', done: 'badge-gray' };
-    const prev = COMPETENCY_DATA.find(d => d.id === item.id + 1);
-    const next = COMPETENCY_DATA.find(d => d.id === item.id - 1);
+
+    const SM = {
+      open:   { label: '접수중',   cls: 'open'   },
+      ready:  { label: '접수예정', cls: 'ready'  },
+      closed: { label: '접수마감', cls: 'closed' },
+      done:   { label: '수강완료', cls: 'done'   },
+    };
+    const sm = SM[item.status] || { label: item.status, cls: 'closed' };
+
+    /* 첨부파일 */
+    const atts = item.attachments || [];
+    const attHtml = atts.length
+      ? `<div class="cd-attach">
+           ${atts.map(a => `
+             <a href="#" class="cd-attach-item"
+                onclick="App.toast('첨부파일 다운로드 — 실제 구현 시 서버 연동 예정', 'info');return false;">
+               <svg class="cd-attach-icon" viewBox="0 0 24 24" fill="none" width="15" height="15">
+                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.41 17.41a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+               </svg>
+               <span>${a.name}</span>
+               <span class="cd-attach-size">(${a.size})</span>
+             </a>`).join('')}
+         </div>`
+      : '';
+
+    /* 접수하기 / 취소하기 버튼
+     * 취소하기는 이미 접수했고(isApplied) 신청기간 내(status==='open')인 경우에만 노출
+     * 프로토타입: URL 파라미터 applied=1 로 접수완료 상태 시뮬레이션
+     */
+    const isApplied     = App.getParam('applied') === '1';
+    const inApplyPeriod = item.status === 'open';
+
+    let applyBtn;
+    if (isApplied && inApplyPeriod) {
+      applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>접수완료</button>
+                  <button class="btn btn-danger btn-sm cd-btn-cancel"
+                          onclick="App.toast('신청이 취소되었습니다. (프로토타입)', 'info')">취소하기</button>`;
+    } else if (item.status === 'open') {
+      applyBtn = `<button class="btn btn-dark btn-sm cd-btn-apply"
+                          onclick="window._ctrl && window._ctrl.openApply(${item.id})">접수하기</button>`;
+    } else {
+      applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>${sm.label}</button>`;
+    }
+
     el.innerHTML = `
-      <div class="post-wrap">
-        <div class="post-head">
-          <div style="margin-bottom:8px">
-            <span class="badge ${STATUS_BADGES[item.status] || 'badge-gray'}">${STATUS_LABELS[item.status] || item.status}</span>
+      <div class="cd-wrap">
+
+        <div class="cd-head">
+          <div class="cd-head-left">
+            <h2 class="cd-title">${item.title}</h2>
+            <span class="cd-status-badge cd-status-${sm.cls}">${sm.label}</span>
           </div>
-          <h2>${item.title}</h2>
-          <div class="post-meta">
-            <span>교육 기간 <strong>${item.from} ~ ${item.to}</strong></span>
-            <span>정원 <strong>${item.capacity}명</strong></span>
+          <span class="cd-date">${item.date}</span>
+        </div>
+        <hr class="cd-divider">
+
+        ${attHtml}
+        ${attHtml ? '<hr class="cd-divider">' : ''}
+
+        <div class="cd-body">
+          <div class="cd-guide">${item.guide || ''}</div>
+          <div class="cd-map-placeholder">
+            <span>지도 / 이미지 영역 (실제 구현 시 삽입)</span>
           </div>
         </div>
-        <div class="post-body">
-          ${item.content || '<p>내용이 없습니다.</p>'}
-          ${item.guide ? `<pre style="background:var(--gray-bg);padding:16px 20px;border-radius:var(--radius);font-size:var(--text-sm);line-height:1.8;white-space:pre-wrap;color:var(--gray-dark);margin-top:20px">${item.guide}</pre>` : ''}
+
+        ${(() => {
+          const idx2  = COMPETENCY_DATA.findIndex(d => d.id === item.id);
+          const next2 = COMPETENCY_DATA[idx2 - 1];
+          const prev2 = COMPETENCY_DATA[idx2 + 1];
+          return (next2 || prev2) ? `
+          <div class="cd-nav">
+            ${next2 ? `<div class="cd-nav-item" onclick="location.href='competency-detail.html?id=${next2.id}'">
+              <span class="cd-nav-label">다음글</span>
+              <span class="cd-nav-title">${next2.title}</span>
+            </div>` : ''}
+            ${prev2 ? `<div class="cd-nav-item" onclick="location.href='competency-detail.html?id=${prev2.id}'">
+              <span class="cd-nav-label">이전글</span>
+              <span class="cd-nav-title">${prev2.title}</span>
+            </div>` : ''}
+          </div>` : '';
+        })()}
+
+        <div class="cd-actions">
+          <button class="btn btn-primary btn-sm cd-btn-list"
+                  onclick="location.href='competency.html'">목록</button>
+          <div class="cd-actions-right">
+            ${applyBtn}
+          </div>
         </div>
-        <div class="post-nav">
-          ${next ? `<div class="post-nav-item"><span class="post-nav-label">다음글</span><span class="post-nav-title" onclick="location.href='competency-detail.html?id=${next.id}'">${next.title}</span><span class="post-nav-date">${next.date}</span></div>` : ''}
-          ${prev ? `<div class="post-nav-item"><span class="post-nav-label">이전글</span><span class="post-nav-title" onclick="location.href='competency-detail.html?id=${prev.id}'">${prev.title}</span><span class="post-nav-date">${prev.date}</span></div>` : ''}
-        </div>
-        <div class="post-actions">
-          <button class="btn btn-gray" onclick="location.href='competency.html'">목록으로</button>
-        </div>
+
       </div>`;
   },
 };
@@ -574,41 +638,42 @@ const RecruitCtrl = {
           : `<button class="btn btn-gray" disabled>신청 링크 준비 중</button>`)
       : `<button class="btn btn-gray" disabled>모집 마감</button>`;
 
+    const statusBadge = `<span class="cd-status-badge ${item.status === 'open' ? 'cd-status-open' : 'cd-status-closed'}">${item.status === 'open' ? '모집중' : '마감'}</span>`;
+    const navHtml = (next || prev) ? `
+      <div class="cd-nav">
+        ${next ? `<div class="cd-nav-item" onclick="location.href='recruit-detail.html?id=${next.id}'">
+          <span class="cd-nav-label">다음글</span>
+          <span class="cd-nav-title">${next.title}</span>
+        </div>` : ''}
+        ${prev ? `<div class="cd-nav-item" onclick="location.href='recruit-detail.html?id=${prev.id}'">
+          <span class="cd-nav-label">이전글</span>
+          <span class="cd-nav-title">${prev.title}</span>
+        </div>` : ''}
+      </div>` : '';
     el.innerHTML = `
-      <div class="post-wrap">
-        <div class="post-head">
-          <div style="margin-bottom:8px">
-            <span class="badge ${item.status === 'open' ? 'badge-green' : 'badge-gray'}">
-              ${item.status === 'open' ? '모집중' : '마감'}
-            </span>
+      <div class="cd-wrap">
+        <div class="cd-head">
+          <div class="cd-head-left">
+            <h2 class="cd-title">${item.title}</h2>
+            ${statusBadge}
           </div>
-          <h2>${item.title}</h2>
-          <div class="post-meta">
-            <span>활동 기간 <strong>${item.period}</strong></span>
-            <span>모집 인원 <strong>${item.count}</strong></span>
-            <span>등록일 <strong>${item.date}</strong></span>
+          <span class="cd-date">${item.date}</span>
+        </div>
+        <div class="cd-meta">
+          <span>활동 기간 <strong>${item.period}</strong></span>
+          <span>모집 인원 <strong>${item.count}</strong></span>
+        </div>
+        <hr class="cd-divider">
+        <div class="cd-body">
+          <div class="cd-content">${item.content || ''}</div>
+        </div>
+        ${navHtml}
+        <div class="cd-actions">
+          <button class="btn btn-primary btn-sm cd-btn-list"
+                  onclick="location.href='recruit.html'">목록</button>
+          <div class="cd-actions-right">
+            ${applyBtnHtml}
           </div>
-        </div>
-        <div class="post-body">${item.content || ''}</div>
-        <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
-          ${applyBtnHtml}
-        </div>
-        <div class="post-nav">
-          ${next ? `<div class="post-nav-item">
-            <span class="post-nav-label">다음글</span>
-            <span class="post-nav-title"
-                  onclick="location.href='recruit-detail.html?id=${next.id}'">${next.title}</span>
-            <span class="post-nav-date">${next.date}</span>
-          </div>` : ''}
-          ${prev ? `<div class="post-nav-item">
-            <span class="post-nav-label">이전글</span>
-            <span class="post-nav-title"
-                  onclick="location.href='recruit-detail.html?id=${prev.id}'">${prev.title}</span>
-            <span class="post-nav-date">${prev.date}</span>
-          </div>` : ''}
-        </div>
-        <div class="post-actions">
-          <button class="btn btn-gray" onclick="location.href='recruit.html'">목록으로</button>
         </div>
       </div>`;
   },
@@ -820,8 +885,7 @@ const ClubCtrl = {
     });
 
     /* 탭 파라미터 복원 */
-    const tab = App.getParam('tab') || 'news';
-    this.switchTab(tab);
+    this.switchTab(App.getParam('tab') || 'news');
   },
 
   /* 탭 전환 */
@@ -977,47 +1041,61 @@ const QnaCtrl = {
     if (!el) return;
 
     const s = this.STATUS_MAP[item.status] || this.STATUS_MAP.waiting;
+    const statusCls = item.status === 'answered' ? 'cd-status-open' : 'cd-status-ready';
+
+    /* 이전글/다음글 */
+    const idx  = QNA_DATA.findIndex(d => d.id === item.id);
+    const next = QNA_DATA[idx - 1];
+    const prev = QNA_DATA[idx + 1];
+    const navHtml = (next || prev) ? `
+      <div class="cd-nav">
+        ${next ? `<div class="cd-nav-item" onclick="location.href='qna-detail.html?id=${next.id}'">
+          <span class="cd-nav-label">다음글</span>
+          <span class="cd-nav-title">${next.title}</span>
+        </div>` : ''}
+        ${prev ? `<div class="cd-nav-item" onclick="location.href='qna-detail.html?id=${prev.id}'">
+          <span class="cd-nav-label">이전글</span>
+          <span class="cd-nav-title">${prev.title}</span>
+        </div>` : ''}
+      </div>` : '';
+
+    /* 답변 영역 */
+    const answerHtml = item.answer
+      ? `<hr class="cd-divider">
+         <div style="background:var(--green-pale);border-left:4px solid var(--green-main);
+                     padding:20px 24px;">
+           <div style="font-size:13px;font-weight:700;color:var(--green-dark);margin-bottom:10px">
+             관리자 답변
+           </div>
+           <div style="font-size:14px;line-height:1.85;color:var(--gray-dark)">${item.answer}</div>
+         </div>`
+      : `<hr class="cd-divider">
+         <div style="padding:20px 24px;text-align:center;color:var(--gray-mid);font-size:14px;">
+           답변 준비 중입니다. 조금만 기다려 주세요.
+         </div>`;
 
     el.innerHTML = `
-      <div class="post-wrap">
-        <div class="post-head">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <span class="badge ${s.cls}">${s.label}</span>
+      <div class="cd-wrap">
+        <div class="cd-head">
+          <div class="cd-head-left">
+            <h2 class="cd-title">${item.title}</h2>
+            <span class="cd-status-badge ${statusCls}">${s.label}</span>
           </div>
-          <h2>${item.title}</h2>
-          <div class="post-meta">
-            <span>작성자 <strong>${item.author}</strong></span>
-            <span>작성일 <strong>${item.date}</strong></span>
-            <span>조회 <strong>${item.views}</strong></span>
-          </div>
+          <span class="cd-date">${item.date}</span>
         </div>
-
-        <div class="post-body">${item.content}</div>
-
-        ${item.answer ? `
-          <div style="background:var(--green-pale);
-                      border-left:4px solid var(--green-main);
-                      padding:20px 24px;
-                      margin:0;
-                      border-top:1px solid var(--gray-light)">
-            <div style="font-size:13px;font-weight:700;
-                        color:var(--green-dark);margin-bottom:10px">
-              ✅ 관리자 답변
-            </div>
-            <div style="font-size:14px;line-height:1.85;color:var(--gray-dark)">
-              ${item.answer}
-            </div>
-          </div>` : `
-          <div style="background:var(--gray-bg);
-                      padding:20px 24px;text-align:center;
-                      color:var(--gray-mid);font-size:14px;
-                      border-top:1px solid var(--gray-light)">
-            답변 준비 중입니다. 조금만 기다려 주세요.
-          </div>`}
-
-        <div class="post-actions">
-          <button class="btn btn-gray"
-                  onclick="history.back()">목록으로</button>
+        <div class="cd-meta">
+          <span>작성자 <strong>${item.author}</strong></span>
+          <span>조회 <strong>${item.views}</strong></span>
+        </div>
+        <hr class="cd-divider">
+        <div class="cd-body">
+          <div class="cd-content">${item.content}</div>
+        </div>
+        ${answerHtml}
+        ${navHtml}
+        <div class="cd-actions">
+          <button class="btn btn-primary btn-sm cd-btn-list"
+                  onclick="history.back()">목록</button>
         </div>
       </div>`;
   },

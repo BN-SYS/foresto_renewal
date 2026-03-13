@@ -15,11 +15,11 @@
 /* ── 헤더 */
 .site-header {
   background: var(--white);
-  border-bottom: 3px solid var(--green-main);
   position: sticky;
   top: 0; z-index: 100;
   box-shadow: var(--shadow);
   height: var(--header-h);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
 }
 .header-inner {
   display: flex;
@@ -145,6 +145,7 @@
   color: var(--white);
   padding: 58px 0;
   text-align: left;
+  margin-top: -10px
 }
 .page-header::before {
   content: '';
@@ -246,9 +247,26 @@
   flex-shrink: 0;
 }
 .footer-sns-btn:hover { transform: translateY(-2px); opacity: .85; }
-.footer-sns-naver  { background: #03c75a; }
-.footer-sns-yt     { background: #ff0000; }
-.footer-sns-insta  { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.footer-sns-naver  { background: rgba(255,255,255,.2); }
+.footer-sns-yt     { background: rgba(255,255,255,.2); }
+.footer-sns-insta  { background: rgba(255,255,255,.2); }
+
+/* 푸터 로고 이미지 */
+.footer-logo-img-wrap {
+  display: inline-block;
+  margin-bottom: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.footer-logo-img {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  /* 흰색 배경 이미지를 푸터 다크 배경에서 보이게: brightness 필터 */
+  filter: brightness(0) invert(1);
+  opacity: .9;
+}
 
 /* 패밀리사이트 드롭다운 */
 .footer-family { position: relative; }

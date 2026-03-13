@@ -8,38 +8,47 @@ const ALL_COURSES_RAW = [
   ...Array.from({ length: 12 }, (_, i) => ({
     id: 1000 + i, type: '전문과정',
     title: `[전문과정] ${55 - i}기 숲해설가 전문가과정`,
-    date:  `2026-0${(i % 9) + 1}-${String((i % 20) + 1).padStart(2, '0')}`,
+    date:  `2026-0${(i % 9) + 1}-${String((i % 20) + 1).padStart(2, '0')} 10:00:00`,
     from:  `2026-0${(i % 9) + 1}-${String((i % 20) + 1).padStart(2, '0')}`,
     to:    `2026-0${(i % 9) + 1}-${String((i % 20) + 5).padStart(2, '0')}`,
     status: ['open','open','ready','closed','done'][i % 5],
-    guide: `• 강좌: [전문과정] ${55 - i}기 숲해설가 전문가과정\n• 수료 시 수료증 발급\n• 문의: 협회 사무국 02-000-0000`,
+    attachments: i % 3 === 0 ? [
+      { name: '신청서_01.hwp', size: '34.5K' },
+      { name: '신청서_02.hwp', size: '34.5K' },
+    ] : i % 3 === 1 ? [
+      { name: '교육안내_공문.pdf', size: '128K' },
+    ] : [],
+    guide: `■신청기간 : ${(i%9)+1}월 ${(i%20)+1}일 오전 10시 - ${(i%9)+1}월 ${(i%20)+5}일 오후 3시\n■모집인원 : 선착순 30명\n■현장강의로 원활한 강의 진행을 위해 선착순 30명으로 참여인원을 제한합니다.\n■준비물 : 1000ml 유백/1개, 가위\n(해당 물품은 개인 준비 사항으로, 협회에서 별도 제공되지 않으니 꼭 준비해 오시기 바랍니다.)`,
   })),
   ...Array.from({ length: 10 }, (_, i) => ({
     id: 2000 + i, type: '시민아카데미',
     title: `[시민아카데미] ${['겨울나무의 이해','봄꽃 산책','여름 숲 탐방','가을 단풍 해설','야생화 특강','버섯 생태','새소리 탐조','나무 이름표 달기','숲 치유 체험','곤충 관찰'][i]}`,
-    date: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')}`,
+    date: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')} 10:00:00`,
     from: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')}`,
     to:   `2026-0${(i%9)+1}-${String((i%20)+5).padStart(2,'0')}`,
     status: ['open','ready','closed','cancel','done'][i % 5],
-    guide: `• 강좌: 시민아카데미\n• 대상: 일반 시민 누구나\n• 문의: 협회 사무국 02-000-0000`,
+    attachments: i % 2 === 0 ? [{ name: '시민아카데미_신청서.hwp', size: '28K' }] : [],
+    guide: `■강좌: 시민아카데미\n■대상: 일반 시민 누구나\n■교육 장소: 협회 지정 숲 현장\n■준비물: 편한 운동화, 긴 바지 권장\n■문의: 협회 사무국 02-000-0000`,
   })),
   ...Array.from({ length: 8 }, (_, i) => ({
     id: 3000 + i, type: '직무교육',
     title: `[직무교육] ${['직무 기본과정','현장 안전 교육','해설 역량 향상','디지털 자료 제작','생태 모니터링','환경 법령 이해','고객 응대 실습','보고서 작성'][i]}`,
-    date: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')}`,
+    date: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')} 09:00:00`,
     from: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')}`,
     to:   `2026-0${(i%9)+1}-${String((i%20)+5).padStart(2,'0')}`,
     status: ['open','ready','closed','done'][i % 4],
-    guide: `• 강좌: 직무교육\n• 대상: 현직 숲해설가\n• 문의: 협회 사무국 02-000-0000`,
+    attachments: i % 2 === 0 ? [{ name: '직무교육_신청서.hwp', size: '32K' }] : [],
+    guide: `■강좌: 직무교육\n■대상: 현직 숲해설가\n■이수 시 직무교육 이수증 발급\n■문의: 협회 사무국 02-000-0000`,
   })),
   ...Array.from({ length: 8 }, (_, i) => ({
     id: 4000 + i, type: '역량강화',
     title: `[역량강화] ${['리더십 워크숍','커뮤니케이션 역량','팀빌딩 프로그램','멘토링 과정','자기계발 세미나','전문가 특강','해외 사례 공유','네트워킹 데이'][i]}`,
-    date: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')}`,
+    date: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')} 10:00:00`,
     from: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')}`,
     to:   `2026-0${(i%9)+1}-${String((i%20)+5).padStart(2,'0')}`,
     status: ['open','ready','closed','done'][i % 4],
-    guide: `• 강좌: 역량강화\n• 대상: 회원 숲해설가\n• 문의: 협회 사무국 02-000-0000`,
+    attachments: i % 2 === 0 ? [{ name: '역량강화_신청서.hwp', size: '26K' }] : [],
+    guide: `■강좌: 역량강화\n■대상: 회원 숲해설가 (정회원 우선)\n■수료 시 이수증 발급\n■문의: 협회 사무국 02-000-0000`,
   })),
 ];
 
@@ -166,6 +175,11 @@ class CourseListController {
   applyPrev() {
     this._step--;
     this._updateStep();
+  }
+
+  cancelApply(id) {
+    /* 프로토타입: 실제 구현 시 서버 취소 API 연동 */
+    App.toast('신청이 취소되었습니다. (프로토타입 — 실제 구현 시 서버 연동)', 'info');
   }
 
   _injectModal() {
@@ -299,12 +313,8 @@ class CourseDetailController extends CourseListController {
         }
 
         const sm = STATUS_META[course.status];
-        const applyBtn = sm.canApply
-            ? `<button class="btn btn-primary" style="min-width:120px"
-                       onclick="window._ctrl.openApply(${course.id})">신청하기</button>`
-            : `<button class="btn btn-gray" style="min-width:120px" disabled>${sm.label}</button>`;
 
-        /* 목록으로 돌아갈 경로 판별 (referer 또는 type 기반) */
+        /* 목록으로 돌아갈 경로 */
         const backMap = {
             '전문과정':   'course-list.html',
             '시민아카데미': 'academy.html',
@@ -313,32 +323,99 @@ class CourseDetailController extends CourseListController {
         };
         const backHref = backMap[course.type] || 'course-list.html';
 
+        /* 첨부파일 렌더 */
+        const atts = course.attachments || [];
+        const attHtml = atts.length
+            ? `<div class="cd-attach">
+                 ${atts.map(a => `
+                   <a href="#" class="cd-attach-item"
+                      onclick="App.toast('첨부파일 다운로드 — 실제 구현 시 서버 연동 예정', 'info');return false;">
+                     <svg class="cd-attach-icon" viewBox="0 0 24 24" fill="none" width="15" height="15">
+                       <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.41 17.41a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                     </svg>
+                     <span>${a.name}</span>
+                     <span class="cd-attach-size">(${a.size})</span>
+                   </a>`).join('')}
+               </div>`
+            : '';
+
+        /* 접수하기 / 취소하기 버튼
+         * - 접수하기 : status === 'open' 이고 미신청인 경우
+         * - 취소하기 : 이미 접수했고(isApplied) 신청기간 내(status === 'open')인 경우에만 노출
+         * 프로토타입: URL 파라미터 applied=1 로 "이미 접수" 상태 시뮬레이션
+         */
+        const isApplied    = App.getParam('applied') === '1';
+        const inApplyPeriod = course.status === 'open';
+
+        let applyBtn;
+        if (isApplied && inApplyPeriod) {
+            /* 접수완료 + 신청기간 내 → 접수완료(비활성) + 취소하기(활성) */
+            applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>접수완료</button>
+                        <button class="btn btn-danger btn-sm cd-btn-cancel"
+                                onclick="window._ctrl.cancelApply(${course.id})">취소하기</button>`;
+        } else if (sm.canApply) {
+            /* 접수중 + 미신청 → 접수하기(활성) */
+            applyBtn = `<button class="btn btn-dark btn-sm cd-btn-apply"
+                                onclick="window._ctrl.openApply(${course.id})">접수하기</button>`;
+        } else {
+            /* 접수불가 상태 → 상태 레이블(비활성) */
+            applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>${sm.label}</button>`;
+        }
+
         el.innerHTML = `
-            <div class="post-wrap">
-              <div class="post-head">
-                <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
-                  <span class="badge badge-green">${course.type}</span>
-                  <span class="status-badge ${sm.cls}">${sm.label}</span>
+            <div class="cd-wrap">
+
+              <!-- 제목 행 -->
+              <div class="cd-head">
+                <div class="cd-head-left">
+                  <h2 class="cd-title">${course.title}</h2>
+                  <span class="cd-status-badge cd-status-${course.status}">${sm.label}</span>
                 </div>
-                <h2>${course.title}</h2>
-                <div class="post-meta">
-                  <span>접수일 <strong>${course.date}</strong></span>
-                  <span>교육 기간 <strong>${course.from} ~ ${course.to}</strong></span>
+                <span class="cd-date">${course.date}</span>
+              </div>
+              <hr class="cd-divider">
+
+              <!-- 첨부파일 -->
+              ${attHtml}
+              ${attHtml ? '<hr class="cd-divider">' : ''}
+
+              <!-- 본문 -->
+              <div class="cd-body">
+                <div class="cd-guide">${course.guide}</div>
+                <div class="cd-map-placeholder">
+                  <span>지도 / 이미지 영역 (실제 구현 시 삽입)</span>
                 </div>
               </div>
 
-              <div class="post-body">
-                <div style="background:var(--gray-bg);padding:20px 24px;
-                            border-radius:var(--radius);border-left:4px solid var(--green-main);
-                            font-size:var(--text-md);line-height:1.8;white-space:pre-line">
-                  ${course.guide}
+              <!-- 이전글/다음글 네비게이션 (같은 강좌 유형 내) -->
+              ${(() => {
+                const sameType = this.courses.filter(c => c.type === course.type);
+                const idx2  = sameType.findIndex(c => c.id === course.id);
+                const next2 = sameType[idx2 - 1];
+                const prev2 = sameType[idx2 + 1];
+                if (!next2 && !prev2) return '';
+                return `<div class="cd-nav">
+                  ${next2 ? `<div class="cd-nav-item" onclick="location.href='course-detail.html?id=${next2.id}'">
+                    <span class="cd-nav-label">다음글</span>
+                    <span class="cd-nav-title">${next2.title}</span>
+                  </div>` : ''}
+                  ${prev2 ? `<div class="cd-nav-item" onclick="location.href='course-detail.html?id=${prev2.id}'">
+                    <span class="cd-nav-label">이전글</span>
+                    <span class="cd-nav-title">${prev2.title}</span>
+                  </div>` : ''}
+                </div>`;
+              })()}
+
+              <!-- 액션 버튼 -->
+              <div class="cd-actions">
+                <button class="btn btn-primary btn-sm cd-btn-list"
+                        onclick="location.href='${backHref}'">목록</button>
+                <div class="cd-actions-right">
+                  ${applyBtn}
                 </div>
               </div>
 
-              <div style="margin-top:32px;display:flex;gap:12px">
-                ${applyBtn}
-                <button class="btn btn-gray" onclick="location.href='${backHref}'">목록으로</button>
-              </div>
             </div>`;
     }
 }

@@ -224,29 +224,34 @@ const RegionCtrl = {
         const next = this.DATA[idx + 1];
        
 
+        const navHtml = (next || prev) ? `
+          <div class="cd-nav">
+            ${next ? `<div class="cd-nav-item" onclick="location.href='region-detail.html?id=${next.id}'">
+              <span class="cd-nav-label">다음</span>
+              <span class="cd-nav-title">${next.name}</span>
+            </div>` : ''}
+            ${prev ? `<div class="cd-nav-item" onclick="location.href='region-detail.html?id=${prev.id}'">
+              <span class="cd-nav-label">이전</span>
+              <span class="cd-nav-title">${prev.name}</span>
+            </div>` : ''}
+          </div>` : '';
         el.innerHTML = `
-            <div class="post-wrap">
-              <div class="post-head">
-                <h2>${item.name}</h2>
+          <div class="cd-wrap">
+            <div class="cd-head">
+              <div class="cd-head-left">
+                <h2 class="cd-title">${item.name}</h2>
               </div>
-              <div class="post-body">${item.content || ''}</div>
-              
-              <div class="post-nav">
-                ${next ? `<div class="post-nav-item">
-                  <span class="post-nav-label">다음</span>
-                  <span class="post-nav-title"
-                        onclick="location.href='region-detail.html?id=${next.id}'">${next.name}</span>
-                </div>` : ''}
-                ${prev ? `<div class="post-nav-item">
-                  <span class="post-nav-label">이전</span>
-                  <span class="post-nav-title"
-                        onclick="location.href='region-detail.html?id=${prev.id}'">${prev.name}</span>
-                </div>` : ''}
-              </div>
-              <div class="post-actions">
-                <button class="btn btn-gray" onclick="location.href='regions.html'">목록으로</button>
-              </div>
-            </div>`;
+            </div>
+            <hr class="cd-divider">
+            <div class="cd-body">
+              <div class="cd-content">${item.content || ''}</div>
+            </div>
+            ${navHtml}
+            <div class="cd-actions">
+              <button class="btn btn-primary btn-sm cd-btn-list"
+                      onclick="location.href='regions.html'">목록</button>
+            </div>
+          </div>`;
     },
 };
 

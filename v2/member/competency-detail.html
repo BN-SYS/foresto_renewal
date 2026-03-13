@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
   <link rel="stylesheet" href="../assets/css/pages/community.css">
+  <link rel="stylesheet" href="../assets/css/pages/education.css">
 </head>
 
 <body data-page="competency-detail">
@@ -44,10 +45,12 @@
 
   <script src="../assets/js/app.js"></script>
   <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/education.js"></script>
   <script src="../assets/js/pages/member.js"></script>
   <script>
     document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
     document.getElementById('ftr').innerHTML = Footer.render('../');
+    CompetencyCtrl.renderDetail();
   </script>
 </body>
 

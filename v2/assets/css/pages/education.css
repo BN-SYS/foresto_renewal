@@ -353,6 +353,36 @@
 }
 
 
+/* ══════════════════════════════════════════
+   강좌 신청 상세 전용 스타일
+   (cd-* 공통 스타일은 components.css 참조)
+   ══════════════════════════════════════════ */
+
+/* 강좌 안내 본문 (pre-line 줄바꿈 처리) */
+.cd-guide {
+  font-size: var(--text-md);
+  line-height: 1.9;
+  color: var(--gray-dark);
+  white-space: pre-line;
+  margin-bottom: 20px;
+  word-break: keep-all;
+}
+
+/* 지도/이미지 플레이스홀더 */
+.cd-map-placeholder {
+  width: 100%;
+  max-width: 540px;
+  aspect-ratio: 16/7;
+  background: var(--gray-bg);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  color: var(--gray-mid);
+}
+
 /* ── 반응형 */
 @media (max-width: 900px) {
   .intro-layout  { grid-template-columns: 1fr; }

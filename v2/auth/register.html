@@ -262,27 +262,6 @@
             <div class="auth-success-msg" id="regPwConfirmOk">비밀번호가 일치합니다.</div>
           </div>
 
-          <!-- 비밀번호 찾기 질문 -->
-          <div style="margin-bottom:16px">
-            <label class="auth-label">비밀번호 찾기 질문 <span class="req">*</span></label>
-            <select class="auth-input" id="regPwQuestion"
-              style="padding:0 32px 0 14px;appearance:none;-webkit-appearance:none">
-              <option value="">질문을 선택하세요</option>
-              <option>가장 좋아하는 음식은?</option>
-              <option>어머니의 성함은?</option>
-              <option>졸업한 초등학교 이름은?</option>
-              <option>첫 번째 반려동물 이름은?</option>
-              <option>태어난 도시는?</option>
-            </select>
-          </div>
-
-          <!-- 비밀번호 찾기 답변 -->
-          <div style="margin-bottom:16px">
-            <label class="auth-label">비밀번호 찾기 답변 <span class="req">*</span></label>
-            <input type="text" class="auth-input" id="regPwAnswer" style="padding:0 14px"
-              placeholder="답변을 입력하세요">
-          </div>
-
           <!-- 휴대폰 + 알림문자 수신 동의 -->
           <div style="margin-bottom:16px">
             <label class="auth-label">휴대폰 번호 <span class="req">*</span></label>
@@ -636,14 +615,6 @@
         }
         if (pw !== pwConf) {
           App.toast('비밀번호가 일치하지 않습니다.', 'warning'); return;
-        }
-
-        /* 비밀번호 찾기 질문/답변 */
-        if (!get('regPwQuestion')) {
-          App.toast('비밀번호 찾기 질문을 선택해 주세요.', 'warning'); return;
-        }
-        if (!get('regPwAnswer')) {
-          App.toast('비밀번호 찾기 답변을 입력해 주세요.', 'warning'); return;
         }
 
         /* 주소 (해외거주 체크 시 생략 가능) */

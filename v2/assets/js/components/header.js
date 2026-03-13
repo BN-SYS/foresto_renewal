@@ -96,12 +96,12 @@ const Header = {
            ${App.user.name} (${App.user.grade})
          </span>
          <a href="${root}mypage/index.html"
-            class="btn btn-outline btn-sm">마이페이지</a>
+            class="btn btn-primary btn-sm">마이페이지</a>
          ${App.user.role === 'admin'
         ? `<a href="${root}admin/index.html"
-                 class="btn btn-gray btn-outline btn-sm">관리자</a>`
+                 class="btn btn-gray btn-sm">관리자</a>`
         : ''}
-         <button class="btn btn-gray btn-outline btn-sm"
+         <button class="btn btn-gray btn-sm"
                  onclick="App.logout()">로그아웃</button>`
       : `<a href="${root}auth/login.html"
             class="btn btn-outline btn-sm">로그인</a>
@@ -208,7 +208,9 @@ const Footer = {
 
         <!-- 좌측: 기관정보 + 정책링크 -->
         <div class="footer-info">
-          <strong class="footer-logo-text">사단법인 한국숲해설가협회</strong>
+          <a href="${root}index.html" class="footer-logo-img-wrap">
+            <img src="${root}assets/image/logo.png" alt="한국숲해설가협회" class="footer-logo-img">
+          </a>
           <p>주소: 06753 서울시 서초구 바우뫼로 158(양재동 유향빌딩 4층)</p>
           <p>대표전화: 02-747-6518 &nbsp;|&nbsp; FAX: 02-747-6519</p>
           <p>이메일: <a href="mailto:foresto123@hanmail.net">foresto123@hanmail.net</a></p>
@@ -266,7 +268,7 @@ const Footer = {
 
       <div class="footer-copy">
         <div class="container">
-          Copyright © 사단법인 한국숲해설가협회. All rights reserved.
+          Copyrights © 2026 www.foresto.org All right reserved.
         </div>
       </div>
     </footer>`;

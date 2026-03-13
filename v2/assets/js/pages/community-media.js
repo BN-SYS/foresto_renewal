@@ -235,39 +235,41 @@ const NewsletterCtrl = {
                </div>`
             : '';
 
+        const navHtml = (next || prev) ? `
+          <div class="cd-nav">
+            ${next ? `<div class="cd-nav-item" onclick="location.href='newsletter-detail.html?id=${next.id}'">
+              <span class="cd-nav-label">다음글</span>
+              <span class="cd-nav-title">${next.title}</span>
+            </div>` : ''}
+            ${prev ? `<div class="cd-nav-item" onclick="location.href='newsletter-detail.html?id=${prev.id}'">
+              <span class="cd-nav-label">이전글</span>
+              <span class="cd-nav-title">${prev.title}</span>
+            </div>` : ''}
+          </div>` : '';
         el.innerHTML = `
-            <div class="post-wrap">
-              <div class="post-head">
-                <div style="margin-bottom:8px">
-                  <span class="badge badge-green">${item.year}년 ${item.half}호</span>
-                </div>
-                <h2>${item.title}</h2>
-                <div class="post-meta">
-                  <span>발행처 <strong>${item.author}</strong></span>
-                  <span>발행일 <strong>${item.date}</strong></span>
-                  <span>조회 <strong>${item.views}</strong></span>
-                </div>
+          <div class="cd-wrap">
+            <div class="cd-head">
+              <div class="cd-head-left">
+                <h2 class="cd-title">${item.title}</h2>
+                <span class="cd-status-badge cd-status-open">${item.year}년 ${item.half}호</span>
               </div>
-              <div class="post-body">${item.content || ''}</div>
-              ${attachHtml}
-              <div class="post-nav">
-                ${next ? `<div class="post-nav-item">
-                  <span class="post-nav-label">다음글</span>
-                  <span class="post-nav-title"
-                        onclick="location.href='newsletter-detail.html?id=${next.id}'">${next.title}</span>
-                  <span class="post-nav-date">${next.date}</span>
-                </div>` : ''}
-                ${prev ? `<div class="post-nav-item">
-                  <span class="post-nav-label">이전글</span>
-                  <span class="post-nav-title"
-                        onclick="location.href='newsletter-detail.html?id=${prev.id}'">${prev.title}</span>
-                  <span class="post-nav-date">${prev.date}</span>
-                </div>` : ''}
-              </div>
-              <div class="post-actions">
-                <button class="btn btn-gray" onclick="location.href='newsletter.html'">목록으로</button>
-              </div>
-            </div>`;
+              <span class="cd-date">${item.date}</span>
+            </div>
+            <div class="cd-meta">
+              <span>발행처 <strong>${item.author}</strong></span>
+              <span>조회 <strong>${item.views}</strong></span>
+            </div>
+            <hr class="cd-divider">
+            <div class="cd-body">
+              <div class="cd-content">${item.content || ''}</div>
+            </div>
+            ${attachHtml ? `<hr class="cd-divider">${attachHtml}` : ''}
+            ${navHtml}
+            <div class="cd-actions">
+              <button class="btn btn-primary btn-sm cd-btn-list"
+                      onclick="location.href='newsletter.html'">목록</button>
+            </div>
+          </div>`;
     },
 
     download(file, name) {
@@ -673,40 +675,40 @@ const ArchiveCtrl = {
                </div>`
             : '';
 
+        const navHtml = (next || prev) ? `
+          <div class="cd-nav">
+            ${next ? `<div class="cd-nav-item" onclick="location.href='archive-detail.html?id=${next.id}'">
+              <span class="cd-nav-label">다음글</span>
+              <span class="cd-nav-title">${next.title}</span>
+            </div>` : ''}
+            ${prev ? `<div class="cd-nav-item" onclick="location.href='archive-detail.html?id=${prev.id}'">
+              <span class="cd-nav-label">이전글</span>
+              <span class="cd-nav-title">${prev.title}</span>
+            </div>` : ''}
+          </div>` : '';
         el.innerHTML = `
-            <div class="post-wrap">
-              <div class="post-head">
-                <h2>${item.title}</h2>
-                <div class="post-meta">
-                  <span>작성자 <strong>${item.author}</strong></span>
-                  <span>작성일 <strong>${item.date}</strong></span>
-                  <span>조회 <strong>${item.views}</strong></span>
-                </div>
+          <div class="cd-wrap">
+            <div class="cd-head">
+              <div class="cd-head-left">
+                <h2 class="cd-title">${item.title}</h2>
               </div>
-              <div class="post-body">${item.content || ''}</div>
-              ${attachHtml}
-              <div class="post-nav">
-                ${next
-                    ? `<div class="post-nav-item">
-                         <span class="post-nav-label">다음글</span>
-                         <span class="post-nav-title"
-                               onclick="location.href='archive-detail.html?id=${next.id}'">${next.title}</span>
-                         <span class="post-nav-date">${next.date}</span>
-                       </div>`
-                    : ''}
-                ${prev
-                    ? `<div class="post-nav-item">
-                         <span class="post-nav-label">이전글</span>
-                         <span class="post-nav-title"
-                               onclick="location.href='archive-detail.html?id=${prev.id}'">${prev.title}</span>
-                         <span class="post-nav-date">${prev.date}</span>
-                       </div>`
-                    : ''}
-              </div>
-              <div class="post-actions">
-                <button class="btn btn-gray" onclick="location.href='archive.html'">목록으로</button>
-              </div>
-            </div>`;
+              <span class="cd-date">${item.date}</span>
+            </div>
+            <div class="cd-meta">
+              <span>작성자 <strong>${item.author}</strong></span>
+              <span>조회 <strong>${item.views}</strong></span>
+            </div>
+            <hr class="cd-divider">
+            <div class="cd-body">
+              <div class="cd-content">${item.content || ''}</div>
+            </div>
+            ${attachHtml ? `<hr class="cd-divider">${attachHtml}` : ''}
+            ${navHtml}
+            <div class="cd-actions">
+              <button class="btn btn-primary btn-sm cd-btn-list"
+                      onclick="location.href='archive.html'">목록</button>
+            </div>
+          </div>`;
     },
 
     download(file, name) {

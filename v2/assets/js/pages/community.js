@@ -635,27 +635,56 @@ const NoticeCtrl = {
     },
 
     renderDetail() {
-        const id = App.getParam('id');
+        const id  = App.getParam('id');
         const all = [...NOTICE_DATA.pinned, ...NOTICE_DATA.normals];
         const item = all.find(d => String(d.id) === String(id));
-        if (!item) return;
-        const el = document.getElementById('noticeDetail');
+        const el   = document.getElementById('noticeDetail');
         if (!el) return;
+        if (!item) {
+            el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</div>`;
+            return;
+        }
+        const idx  = all.findIndex(d => d.id === item.id);
+        const next = all[idx - 1];
+        const prev = all[idx + 1];
+        const isPinned = NOTICE_DATA.pinned.some(d => d.id === item.id);
+        const badge = isPinned
+            ? `<span class="cd-status-badge" style="background:var(--accent);border-color:var(--accent);color:#fff">공지</span>`
+            : '';
+        const navHtml = (next || prev) ? `
+          <div class="cd-nav">
+            ${next ? `<div class="cd-nav-item" onclick="location.href='notice-detail.html?id=${next.id}'">
+              <span class="cd-nav-label">다음글</span>
+              <span class="cd-nav-title">${next.title}</span>
+            </div>` : ''}
+            ${prev ? `<div class="cd-nav-item" onclick="location.href='notice-detail.html?id=${prev.id}'">
+              <span class="cd-nav-label">이전글</span>
+              <span class="cd-nav-title">${prev.title}</span>
+            </div>` : ''}
+          </div>` : '';
         el.innerHTML = `
-      <div class="post-wrap">
-        <div class="post-head">
-          <h2>${item.title}</h2>
-          <div class="post-meta">
-            <span>작성자 <strong>${item.author}</strong></span>
-            <span>작성일 <strong>${item.date}</strong></span>
-            <span>조회 <strong>${item.views}</strong></span>
-          </div>
-        </div>
-        <div class="post-body">${item.content}</div>
-        <div class="post-actions">
-          <a href="notice-list.html" class="btn btn-gray">목록으로</a>
-        </div>
-      </div>`;
+          <div class="cd-wrap">
+            <div class="cd-head">
+              <div class="cd-head-left">
+                <h2 class="cd-title">${item.title}</h2>
+                ${badge}
+              </div>
+              <span class="cd-date">${item.date}</span>
+            </div>
+            <div class="cd-meta">
+              <span>작성자 <strong>${item.author}</strong></span>
+              <span>조회 <strong>${item.views}</strong></span>
+            </div>
+            <hr class="cd-divider">
+            <div class="cd-body">
+              <div class="cd-content">${item.content || '<p>내용이 없습니다.</p>'}</div>
+            </div>
+            ${navHtml}
+            <div class="cd-actions">
+              <button class="btn btn-primary btn-sm cd-btn-list"
+                      onclick="location.href='notice-list.html'">목록</button>
+            </div>
+          </div>`;
     },
 };
 
@@ -697,27 +726,42 @@ const FreeCtrl = {
             el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</div>`;
             return;
         }
-        const prev = all.find(d => d.id === item.id + 1);
-        const next = all.find(d => d.id === item.id - 1);
+        const idx  = all.findIndex(d => d.id === item.id);
+        const next = all[idx - 1];
+        const prev = all[idx + 1];
+        const navHtml = (next || prev) ? `
+          <div class="cd-nav">
+            ${next ? `<div class="cd-nav-item" onclick="location.href='free-detail.html?id=${next.id}'">
+              <span class="cd-nav-label">다음글</span>
+              <span class="cd-nav-title">${next.title}</span>
+            </div>` : ''}
+            ${prev ? `<div class="cd-nav-item" onclick="location.href='free-detail.html?id=${prev.id}'">
+              <span class="cd-nav-label">이전글</span>
+              <span class="cd-nav-title">${prev.title}</span>
+            </div>` : ''}
+          </div>` : '';
         el.innerHTML = `
-      <div class="post-wrap">
-        <div class="post-head">
-          <h2>${item.title}</h2>
-          <div class="post-meta">
-            <span>작성자 <strong>${item.author}</strong></span>
-            <span>작성일 <strong>${item.date}</strong></span>
-            <span>조회 <strong>${item.views}</strong></span>
-          </div>
-        </div>
-        <div class="post-body">${item.content || '<p>내용이 없습니다.</p>'}</div>
-        <div class="post-nav">
-          ${next ? `<div class="post-nav-item"><span class="post-nav-label">다음글</span><span class="post-nav-title" onclick="location.href='free-detail.html?id=${next.id}'">${next.title}</span><span class="post-nav-date">${next.date}</span></div>` : ''}
-          ${prev ? `<div class="post-nav-item"><span class="post-nav-label">이전글</span><span class="post-nav-title" onclick="location.href='free-detail.html?id=${prev.id}'">${prev.title}</span><span class="post-nav-date">${prev.date}</span></div>` : ''}
-        </div>
-        <div class="post-actions">
-          <button class="btn btn-gray" onclick="location.href='free.html'">목록으로</button>
-        </div>
-      </div>`;
+          <div class="cd-wrap">
+            <div class="cd-head">
+              <div class="cd-head-left">
+                <h2 class="cd-title">${item.title}</h2>
+              </div>
+              <span class="cd-date">${item.date}</span>
+            </div>
+            <div class="cd-meta">
+              <span>작성자 <strong>${item.author}</strong></span>
+              <span>조회 <strong>${item.views}</strong></span>
+            </div>
+            <hr class="cd-divider">
+            <div class="cd-body">
+              <div class="cd-content">${item.content || '<p>내용이 없습니다.</p>'}</div>
+            </div>
+            ${navHtml}
+            <div class="cd-actions">
+              <button class="btn btn-primary btn-sm cd-btn-list"
+                      onclick="location.href='free.html'">목록</button>
+            </div>
+          </div>`;
     },
 
     search() {
@@ -839,27 +883,47 @@ const JobCtrl = {
             el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</div>`;
             return;
         }
-        const prev = all.find(d => d.id === item.id + 1);
-        const next = all.find(d => d.id === item.id - 1);
+        const idx  = all.findIndex(d => d.id === item.id);
+        const next = all[idx - 1];
+        const prev = all[idx + 1];
+        const isPinned = (JOB_DATA.pinned || []).some(d => d.id === item.id);
+        const badge = isPinned
+            ? `<span class="cd-status-badge" style="background:var(--accent);border-color:var(--accent);color:#fff">공지</span>`
+            : '';
+        const navHtml = (next || prev) ? `
+          <div class="cd-nav">
+            ${next ? `<div class="cd-nav-item" onclick="location.href='job-detail.html?id=${next.id}'">
+              <span class="cd-nav-label">다음글</span>
+              <span class="cd-nav-title">${next.title}</span>
+            </div>` : ''}
+            ${prev ? `<div class="cd-nav-item" onclick="location.href='job-detail.html?id=${prev.id}'">
+              <span class="cd-nav-label">이전글</span>
+              <span class="cd-nav-title">${prev.title}</span>
+            </div>` : ''}
+          </div>` : '';
         el.innerHTML = `
-      <div class="post-wrap">
-        <div class="post-head">
-          <h2>${item.title}</h2>
-          <div class="post-meta">
-            <span>작성자 <strong>${item.author}</strong></span>
-            <span>작성일 <strong>${item.date}</strong></span>
-            <span>조회 <strong>${item.views}</strong></span>
-          </div>
-        </div>
-        <div class="post-body">${item.content || '<p>내용이 없습니다.</p>'}</div>
-        <div class="post-nav">
-          ${next ? `<div class="post-nav-item"><span class="post-nav-label">다음글</span><span class="post-nav-title" onclick="location.href='job-detail.html?id=${next.id}'">${next.title}</span><span class="post-nav-date">${next.date}</span></div>` : ''}
-          ${prev ? `<div class="post-nav-item"><span class="post-nav-label">이전글</span><span class="post-nav-title" onclick="location.href='job-detail.html?id=${prev.id}'">${prev.title}</span><span class="post-nav-date">${prev.date}</span></div>` : ''}
-        </div>
-        <div class="post-actions">
-          <button class="btn btn-gray" onclick="location.href='job.html'">목록으로</button>
-        </div>
-      </div>`;
+          <div class="cd-wrap">
+            <div class="cd-head">
+              <div class="cd-head-left">
+                <h2 class="cd-title">${item.title}</h2>
+                ${badge}
+              </div>
+              <span class="cd-date">${item.date}</span>
+            </div>
+            <div class="cd-meta">
+              <span>작성자 <strong>${item.author}</strong></span>
+              <span>조회 <strong>${item.views}</strong></span>
+            </div>
+            <hr class="cd-divider">
+            <div class="cd-body">
+              <div class="cd-content">${item.content || '<p>내용이 없습니다.</p>'}</div>
+            </div>
+            ${navHtml}
+            <div class="cd-actions">
+              <button class="btn btn-primary btn-sm cd-btn-list"
+                      onclick="location.href='job.html'">목록</button>
+            </div>
+          </div>`;
     },
 
     search() {
@@ -949,49 +1013,52 @@ const GalleryCtrl = {
         const el   = document.getElementById('galleryDetail');
         if (!el) return;
         if (!item) {
-            el.innerHTML = `
-                <div style="text-align:center;padding:48px;color:var(--gray-mid)">
-                  게시물을 찾을 수 없습니다.
-                </div>`;
+            el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</div>`;
             return;
         }
         const idx  = this._data.findIndex(d => d.id === item.id);
-        const prev = this._data[idx + 1];
         const next = this._data[idx - 1];
+        const prev = this._data[idx + 1];
         const linkBtn = item.link
             ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer"
-                  class="btn btn-outline">관련 페이지 바로가기</a>`
+                  class="btn btn-outline btn-sm">관련 페이지 바로가기</a>`
             : '';
+        const navHtml = (next || prev) ? `
+          <div class="cd-nav">
+            ${next ? `<div class="cd-nav-item" onclick="location.href='gallery-detail.html?id=${next.id}'">
+              <span class="cd-nav-label">다음글</span>
+              <span class="cd-nav-title">${next.title}</span>
+            </div>` : ''}
+            ${prev ? `<div class="cd-nav-item" onclick="location.href='gallery-detail.html?id=${prev.id}'">
+              <span class="cd-nav-label">이전글</span>
+              <span class="cd-nav-title">${prev.title}</span>
+            </div>` : ''}
+          </div>` : '';
         el.innerHTML = `
-            <div class="post-wrap">
-              <div class="post-head">
-                <h2>${item.title}</h2>
-                <div class="post-meta">
-                  <span>작성자 <strong>${item.author}</strong></span>
-                  <span>작성일 <strong>${item.date}</strong></span>
-                  <span>조회 <strong>${item.views}</strong></span>
-                </div>
+          <div class="cd-wrap">
+            <div class="cd-head">
+              <div class="cd-head-left">
+                <h2 class="cd-title">${item.title}</h2>
               </div>
-              <div class="post-body">${item.content || ''}</div>
-              ${linkBtn ? `<div style="margin-top:16px">${linkBtn}</div>` : ''}
-              <div class="post-nav">
-                ${next ? `<div class="post-nav-item">
-                  <span class="post-nav-label">다음글</span>
-                  <span class="post-nav-title"
-                        onclick="location.href='gallery-detail.html?id=${next.id}'">${next.title}</span>
-                  <span class="post-nav-date">${next.date}</span>
-                </div>` : ''}
-                ${prev ? `<div class="post-nav-item">
-                  <span class="post-nav-label">이전글</span>
-                  <span class="post-nav-title"
-                        onclick="location.href='gallery-detail.html?id=${prev.id}'">${prev.title}</span>
-                  <span class="post-nav-date">${prev.date}</span>
-                </div>` : ''}
+              <span class="cd-date">${item.date}</span>
+            </div>
+            <div class="cd-meta">
+              <span>작성자 <strong>${item.author}</strong></span>
+              <span>조회 <strong>${item.views}</strong></span>
+            </div>
+            <hr class="cd-divider">
+            <div class="cd-body">
+              <div class="cd-content">${item.content || ''}</div>
+            </div>
+            ${navHtml}
+            <div class="cd-actions">
+              <button class="btn btn-primary btn-sm cd-btn-list"
+                      onclick="location.href='gallery.html'">목록</button>
+              <div class="cd-actions-right">
+                ${linkBtn}
               </div>
-              <div class="post-actions">
-                <button class="btn btn-gray" onclick="location.href='gallery.html'">목록으로</button>
-              </div>
-            </div>`;
+            </div>
+          </div>`;
     },
 
     search() {
