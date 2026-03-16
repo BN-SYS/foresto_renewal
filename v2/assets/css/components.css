@@ -7,21 +7,21 @@
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   padding: 9px 20px; border-radius: var(--radius);
   font-size: var(--text-md); font-weight: 500;
-  border: none; transition: var(--trans); cursor: pointer;
+  border: 1.5px solid transparent; transition: var(--trans); cursor: pointer;
 }
-.btn-primary  { background: var(--green-main); color: var(--white); }
-.btn-primary:hover { background: var(--green-dark); }
-.btn-outline  { background: transparent; color: var(--green-main); border: 1.5px solid var(--green-main); }
+.btn-primary  { background: var(--green-main); color: var(--white); border-color: var(--green-main); }
+.btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+.btn-outline  { background: transparent; color: var(--green-main); border-color: var(--green-main); }
 .btn-outline:hover { background: var(--green-pale); }
-.btn-gray     { background: var(--gray-light); color: var(--gray-dark); }
-.btn-gray:hover { background: #c8d6d8; }
-.btn-accent   { background: var(--accent); color: var(--white); }
-.btn-accent:hover { background: #e08a4a; }
-.btn-danger   { background: var(--danger); color: var(--white); }
-.btn-danger:hover { background: #c62828; }
-.btn-white    { background: var(--white); color: var(--green-dark); font-weight: 700; }
-.btn-white:hover { background: var(--green-pale); }
-.btn-white-outline { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,.6); font-weight: 700; }
+.btn-gray     { background: var(--gray-light); color: var(--gray-dark); border-color: var(--gray-light); }
+.btn-gray:hover { background: #c8d6d8; border-color: #c8d6d8; }
+.btn-accent   { background: var(--accent); color: var(--white); border-color: var(--accent); }
+.btn-accent:hover { background: #e08a4a; border-color: #e08a4a; }
+.btn-danger   { background: var(--danger); color: var(--white); border-color: var(--danger); }
+.btn-danger:hover { background: #c62828; border-color: #c62828; }
+.btn-white    { background: var(--white); color: var(--green-dark); font-weight: 700; border-color: var(--white); }
+.btn-white:hover { background: var(--green-pale); border-color: var(--green-pale); }
+.btn-white-outline { background: transparent; color: var(--white); border-color: rgba(255,255,255,.6); font-weight: 700; }
 .btn-white-outline:hover { background: rgba(255,255,255,.1); }
 .btn-sm  { padding: 6px 14px;  font-size: var(--text-sm); }
 .btn-xs  { padding: 4px 10px;  font-size: var(--text-xs); }

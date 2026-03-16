@@ -50,7 +50,21 @@
   <script>
     document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
     document.getElementById('ftr').innerHTML = Footer.render('../');
-    CompetencyCtrl.renderDetail();
+
+    /* ── 신청 모달 + window._ctrl 초기화
+     * 목록 페이지(competency.html)에서는 CourseListController 생성 시 자동 주입되지만
+     * 상세 페이지 단독 진입 시에는 _ctrl 이 없어 접수하기 버튼이 무반응.
+     * 여기서 최소 컨트롤러를 생성해 모달을 inject 하고 window._ctrl 을 설정한다.
+     */
+    if (!window._ctrl) {
+      const _pool = ALL_COURSES_RAW.filter(
+        c => c.type === '역량강화' || c.type === '직무교육'
+      );
+      window._ctrl = new CourseListController('역량강화', '', '', '', 'competency-detail.html');
+      window._ctrl.courses  = _pool;
+      window._ctrl.filtered = [..._pool];
+    }
+    /* renderDetail() 은 member.js DOMContentLoaded initMap 에서 자동 호출됨 */
   </script>
 </body>
 
