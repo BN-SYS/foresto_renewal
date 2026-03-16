@@ -182,13 +182,30 @@ const Header = {
     </div>`;
   },
 
+  _lockScrollY: 0, /* 스크롤 잠금 시 저장 위치 */
+
   toggleMobileMenu() {
     const nav = document.getElementById('mobileNav');
     const btn = document.getElementById('hamburger');
     const open = nav.classList.toggle('open');
     btn.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    document.body.style.overflow = open ? 'hidden' : '';
+
+    if (open) {
+      /* 현재 스크롤 위치 저장 후 body를 fixed로 고정 (iOS Safari 대응) */
+      Header._lockScrollY = window.scrollY;
+      document.body.style.overflow   = 'hidden';
+      document.body.style.position   = 'fixed';
+      document.body.style.top        = `-${Header._lockScrollY}px`;
+      document.body.style.width      = '100%';
+    } else {
+      /* 스크롤 잠금 해제 후 위치 복원 */
+      document.body.style.overflow  = '';
+      document.body.style.position  = '';
+      document.body.style.top       = '';
+      document.body.style.width     = '';
+      window.scrollTo(0, Header._lockScrollY);
+    }
   },
 
   toggleMobileSub(id, el) {

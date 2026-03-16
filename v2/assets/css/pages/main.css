@@ -257,6 +257,11 @@
   gap: 20px;
   align-items: stretch;   /* 모든 카드 높이 동일하게 */
 }
+/* 그리드 아이템 기본 min-width:auto 오버플로우 방지 */
+.home-board-grid > .card {
+  min-width: 0;
+  overflow: hidden;
+}
 
 /* 캘린더 카드: 내부를 flex column으로 채움 */
 .home-board-grid .card:last-child {
@@ -296,6 +301,7 @@
 
 .board-title {
   flex: 1;
+  min-width: 0;            /* flex item 수축 허용 */
   font-size: var(--text-lg);
   color: var(--gray-dark);
   cursor: pointer;
@@ -554,6 +560,20 @@
 
 
 
+/* ── 모바일 팝업: 상단 중앙 고정 (좌우·상단 여백 2px) */
+@media (max-width: 768px) {
+  .popup-wrap {
+    top: calc(var(--header-h) + 6px); /* 헤더 바로 아래 2px */
+    left: 6px;
+    right: 6px;
+    bottom: auto;
+    width: auto;           /* left/right로 너비 자동 결정 */
+    border-radius: var(--radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.08);
+
+  }
+}
+
 /* 반응형 푸터 */
 @media (max-width: 768px) {
   .footer-inner {
@@ -572,6 +592,7 @@
     top: calc(100% + 6px);
     /* 모바일에선 아래로 */
   }
+  
 }
 
 @media (max-width: 900px) {
@@ -602,6 +623,10 @@
 
   .hero-dots {
     bottom: 16px;
+  }
+
+  .board-title {
+    font-size: var(--text-md);
   }
 }
 
@@ -646,4 +671,5 @@
     height: 30px;
     font-size: var(--text-md);
   }
+
 }

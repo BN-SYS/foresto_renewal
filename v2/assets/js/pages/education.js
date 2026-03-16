@@ -112,13 +112,13 @@ class CourseListController {
         ? `<a href="${this.detailBase}${this.detailPage}?id=${c.id}" class="status-badge ${sm.cls}">${sm.label}</a>`
         : `<span class="status-badge ${sm.cls}">${sm.label}</span>`;
       return `<tr>
-        <td class="center">${c.id}</td>
+        <td class="col-num center">${c.id}</td>
         <td class="td-title">
           <a href="${this.detailBase}${this.detailPage}?id=${c.id}">${c.title}</a>
         </td>
-        <td class="center">${c.date}</td>
-        <td class="center" style="font-size:13px;color:var(--gray-mid)">${c.from} ~ ${c.to}</td>
-        <td class="center">${badge}</td>
+        <td class="col-date center">${String(c.date).slice(0, 10)}</td>
+        <td class="col-period center" style="font-size:13px;color:var(--gray-mid)">${c.from} ~ ${c.to}</td>
+        <td class="col-status center">${badge}</td>
       </tr>`;
     }).join('');
 

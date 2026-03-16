@@ -399,8 +399,15 @@ const CompetencyCtrl = {
   },
 
   renderDetail() {
-    const id   = App.getParam('id');
-    const item = COMPETENCY_DATA.find(d => String(d.id) === String(id));
+    const id = App.getParam('id');
+
+    /* education.js 의 ALL_COURSES_RAW(역량강화 IDs 4000+, 직무교육 IDs 3000+)를 우선 조회.
+       ALL_COURSES_RAW 없을 경우 COMPETENCY_DATA 로 폴백 */
+    const _pool = window.ALL_COURSES_RAW
+      ? window.ALL_COURSES_RAW.filter(c => c.type === '역량강화' || c.type === '직무교육')
+      : COMPETENCY_DATA;
+    const item = _pool.find(d => String(d.id) === String(id));
+
     const el   = document.getElementById('competencyDetail');
     if (!el) return;
     if (!item) {
@@ -410,9 +417,9 @@ const CompetencyCtrl = {
 
     const SM = {
       open:   { label: '접수중',   cls: 'open'   },
-      ready:  { label: '접수예정', cls: 'ready'  },
+      ready:  { label: '준비중',   cls: 'ready'  },
       closed: { label: '접수마감', cls: 'closed' },
-      done:   { label: '수강완료', cls: 'done'   },
+      applied:{ label: '신청완료', cls: 'applied'},
     };
     const sm = SM[item.status] || { label: item.status, cls: 'closed' };
 
@@ -475,9 +482,9 @@ const CompetencyCtrl = {
         </div>
 
         ${(() => {
-          const idx2  = COMPETENCY_DATA.findIndex(d => d.id === item.id);
-          const next2 = COMPETENCY_DATA[idx2 - 1];
-          const prev2 = COMPETENCY_DATA[idx2 + 1];
+          const idx2  = _pool.findIndex(d => d.id === item.id);
+          const next2 = _pool[idx2 - 1];
+          const prev2 = _pool[idx2 + 1];
           return (next2 || prev2) ? `
           <div class="cd-nav">
             ${next2 ? `<div class="cd-nav-item" onclick="location.href='competency-detail.html?id=${next2.id}'">
@@ -518,12 +525,12 @@ const MentoringCtrl = {
       countId:      'mentoringCount',
       rowRenderer:  (row, seq) => `
         <tr>
-          <td class="center">${seq}</td>
+          <td class="col-num center">${seq}</td>
           <td class="td-title">
             <a href="mentoring-detail.html?id=${row.id}">${row.title}</a>
           </td>
-          <td class="center">${row.author}</td>
-          <td class="center">${row.date}</td>
+          <td class="col-author center">${row.author}</td>
+          <td class="col-date center">${row.date}</td>
         </tr>`,
     });
     this._board.init();
@@ -563,12 +570,12 @@ const RecruitCtrl = {
       countId:      'recruitCount',
       rowRenderer:  (row, seq) => `
         <tr>
-          <td class="center">${seq}</td>
+          <td class="col-num center">${seq}</td>
           <td class="td-title">
             <a href="recruit-detail.html?id=${row.id}">${row.title}</a>
           </td>
-          <td class="center">${row.author}</td>
-          <td class="center">${row.date}</td>
+          <td class="col-author center">${row.author}</td>
+          <td class="col-date center">${row.date}</td>
         </tr>`,
     });
     this._board.init();
@@ -704,12 +711,12 @@ const SagongdanCtrl = {
       countId:      'newsCount',
       rowRenderer:  (row, seq) => `
         <tr class="${row.isPin ? 'pinned' : ''}">
-          <td class="center">${row.isPin ? '<span class="badge-notice">공지</span>' : seq}</td>
+          <td class="col-num center">${row.isPin ? '<span class="badge-notice">공지</span>' : seq}</td>
           <td class="td-title">
             <a href="?type=news&id=${row.id}">${row.title}</a>
           </td>
-          <td class="center">${row.author}</td>
-          <td class="center">${row.date}</td>
+          <td class="col-author center">${row.author}</td>
+          <td class="col-date center">${row.date}</td>
         </tr>`,
     });
 
@@ -721,14 +728,14 @@ const SagongdanCtrl = {
       countId:      'logCount',
       rowRenderer:  (row, seq) => `
         <tr>
-          <td class="center">${seq}</td>
+          <td class="col-num center">${seq}</td>
           <td class="td-title">
             <a href="?type=log&id=${row.id}">${row.title}</a>
           </td>
-          <td class="center">${row.author}</td>
-          <td class="center">${row.actDate}</td>
-          <td class="center">${row.hasFile ? '📎' : '-'}</td>
-          <td class="center">${row.date}</td>
+          <td class="col-author center">${row.author}</td>
+          <td class="col-date center">${row.actDate}</td>
+          <td class="col-extra center">${row.hasFile ? '📎' : '-'}</td>
+          <td class="col-extra center">${row.date}</td>
         </tr>`,
     });
 
@@ -805,16 +812,16 @@ const ClubCtrl = {
       countId:      'clubNewsCount',
       rowRenderer:  (row, seq) => `
         <tr class="${row.isPin ? 'pinned' : ''}">
-          <td class="center">${row.isPin ? '<span class="badge-notice">공지</span>' : seq}</td>
-          <td class="center">
+          <td class="col-num center">${row.isPin ? '<span class="badge-notice">공지</span>' : seq}</td>
+          <td class="col-extra center">
             <span class="badge badge-green"
                   style="font-size:11px">${row.club}</span>
           </td>
           <td class="td-title">
             <a href="?tab=news&id=${row.id}">${row.title}</a>
           </td>
-          <td class="center">${row.author}</td>
-          <td class="center">${row.date}</td>
+          <td class="col-author center">${row.author}</td>
+          <td class="col-date center">${row.date}</td>
         </tr>`,
     });
 
@@ -826,13 +833,13 @@ const ClubCtrl = {
       countId:      'clubArchiveCount',
       rowRenderer:  (row, seq) => `
         <tr>
-          <td class="center">${seq}</td>
+          <td class="col-num center">${seq}</td>
           <td class="td-title">
             <a href="?tab=archive&id=${row.id}">${row.title}</a>
           </td>
-          <td class="center">${row.author}</td>
-          <td class="center">${row.date}</td>
-          <td class="center">
+          <td class="col-author center">${row.author}</td>
+          <td class="col-date center">${row.date}</td>
+          <td class="col-extra center">
             ${row.file
               ? `<a href="#"
                     class="attach-file"
@@ -931,15 +938,15 @@ const QnaCtrl = {
         const s = this.STATUS_MAP[row.status] || this.STATUS_MAP.waiting;
         return `
           <tr>
-            <td class="center">${seq}</td>
+            <td class="col-num center">${seq}</td>
             <td class="td-title">
               <a href="qna-detail.html?id=${row.id}">${row.title}</a>
             </td>
-            <td class="center">${row.author}</td>
-            <td class="center">
+            <td class="col-extra center">${row.author}</td>
+            <td class="col-status center">
               <span class="badge ${s.cls}">${s.label}</span>
             </td>
-            <td class="center">${row.date}</td>
+            <td class="col-date center">${row.date}</td>
           </tr>`;
       },
     });

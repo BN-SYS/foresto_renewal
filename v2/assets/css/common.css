@@ -100,6 +100,7 @@
   width: 32px; height: 32px;
   align-items: center; justify-content: center;
   background: none; border: none; cursor: pointer; padding: 4px;
+  
 }
 .hamburger span {
   display: block; width: 22px; height: 2px;
@@ -111,11 +112,23 @@
 
 /* ── 모바일 메뉴 드로어 */
 .mobile-nav {
-  display: none; position: fixed; inset: 0; top: var(--header-h);
-  background: var(--white); z-index: 99; overflow-y: auto;
-  padding: 16px 0 32px;
+  display: none;
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  /* 헤더 radius(16px) 뒤까지 올라가서 흰 배경이 곡선 아래를 채움
+     z-index:99 < header:100 이므로 헤더가 위에 덮임 → 곡선 형태 유지 */
+  top: calc(var(--header-h) - var(--radius-xl));
+  background: var(--white);
+  z-index: 99;
+  overflow-y: auto;
+  overscroll-behavior: contain;   /* 드로어 끝에서 배경 스크롤 전파 차단 */
+  /* padding-top: radius 겹침 보정 + 원래 16px */
+  padding: calc(var(--radius-xl) + 16px) 0 32px;
 }
-.mobile-nav.open { display: block; }
+.mobile-nav.open { 
+  display: block;
+}
+
 .mobile-nav-item {
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 24px;
