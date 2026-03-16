@@ -13,7 +13,7 @@ const NewsletterCtrl = {
         {
             id: 10, year: 2026, half: '상반기', isPin: true,
             title: '한국숲해설가협회 소식지 2026년 상반기호',
-            author: '사무국', date: '2026-06-30', views: 312,
+            author: '사무국', date: '2026-06-30',
             content: `<p>55기 전문가과정 수료, 사공단 봉사활동 성과, 동아리 정기총회 결과 등 2026년 상반기 주요 활동을 담았습니다.</p>
                       <p>이번 호에는 신규 정회원 소개와 협회 창립 25주년 기념 특집 기사를 수록했습니다.</p>`,
             attachments: [
@@ -23,7 +23,7 @@ const NewsletterCtrl = {
         {
             id: 9, year: 2025, half: '하반기',
             title: '한국숲해설가협회 소식지 2025년 하반기호',
-            author: '사무국', date: '2025-12-31', views: 487,
+            author: '사무국', date: '2025-12-31',
             content: `<p>2025년 하반기 협회 주요 활동 및 회원 소식을 담았습니다.</p>
                       <p>수료식, 정기총회, 봉사활동 성과를 정리했습니다.</p>`,
             attachments: [
@@ -33,7 +33,7 @@ const NewsletterCtrl = {
         {
             id: 8, year: 2025, half: '상반기',
             title: '한국숲해설가협회 소식지 2025년 상반기호',
-            author: '사무국', date: '2025-06-30', views: 524,
+            author: '사무국', date: '2025-06-30',
             content: `<p>2025년 상반기 협회 주요 활동 및 회원 소식을 담았습니다.</p>
                       <p>전문가과정 운영 현황, 역량강화 교육, 신입회원 활동 소식을 담았습니다.</p>`,
             attachments: [
@@ -43,7 +43,7 @@ const NewsletterCtrl = {
         {
             id: 7, year: 2024, half: '하반기',
             title: '한국숲해설가협회 소식지 2024년 하반기호',
-            author: '사무국', date: '2024-12-31', views: 612,
+            author: '사무국', date: '2024-12-31',
             content: `<p>2024년 하반기 협회 주요 활동을 담았습니다.</p>
                       <p>사공단 봉사활동, 동아리 활동, 교육 성과를 정리했습니다.</p>`,
             attachments: [
@@ -53,7 +53,7 @@ const NewsletterCtrl = {
         {
             id: 6, year: 2024, half: '상반기',
             title: '한국숲해설가협회 소식지 2024년 상반기호',
-            author: '사무국', date: '2024-06-30', views: 578,
+            author: '사무국', date: '2024-06-30',
             content: `<p>2024년 상반기 협회 주요 활동을 담았습니다.</p>
                       <p>전문가과정 운영과 멘토링 프로그램 소식을 중심으로 구성했습니다.</p>`,
             attachments: [
@@ -63,7 +63,7 @@ const NewsletterCtrl = {
         {
             id: 5, year: 2023, half: '하반기',
             title: '한국숲해설가협회 소식지 2023년 하반기호',
-            author: '사무국', date: '2023-12-31', views: 445,
+            author: '사무국', date: '2023-12-31',
             content: `<p>2023년 하반기 협회 주요 활동을 담았습니다.</p>
                       <p>봉사활동 현황과 수료식 소식을 정리했습니다.</p>`,
             attachments: [
@@ -73,7 +73,7 @@ const NewsletterCtrl = {
         {
             id: 4, year: 2023, half: '상반기',
             title: '한국숲해설가협회 소식지 2023년 상반기호',
-            author: '사무국', date: '2023-06-30', views: 390,
+            author: '사무국', date: '2023-06-30',
             content: `<p>2023년 상반기 협회 주요 활동을 담았습니다.</p>
                       <p>전문가과정 교육 현황과 회원 활동 소식을 담았습니다.</p>`,
             attachments: [
@@ -83,7 +83,7 @@ const NewsletterCtrl = {
         {
             id: 3, year: 2022, half: '하반기',
             title: '한국숲해설가협회 소식지 2022년 하반기호',
-            author: '사무국', date: '2022-12-31', views: 321,
+            author: '사무국', date: '2022-12-31',
             content: `<p>2022년 하반기 협회 주요 활동을 담았습니다.</p>
                       <p>사공단, 동아리 활동 소식을 중심으로 구성했습니다.</p>`,
             attachments: [
@@ -93,7 +93,7 @@ const NewsletterCtrl = {
         {
             id: 2, year: 2022, half: '상반기',
             title: '한국숲해설가협회 소식지 2022년 상반기호',
-            author: '사무국', date: '2022-06-30', views: 298,
+            author: '사무국', date: '2022-06-30',
             content: `<p>2022년 상반기 협회 주요 활동을 담았습니다.</p>
                       <p>전문가과정 50기 수료 소식을 담은 특집호입니다.</p>`,
             attachments: [
@@ -103,7 +103,7 @@ const NewsletterCtrl = {
         {
             id: 1, year: 2021, half: '하반기',
             title: '한국숲해설가협회 소식지 2021년 하반기호',
-            author: '사무국', date: '2021-12-31', views: 256,
+            author: '사무국', date: '2021-12-31',
             content: `<p>협회 창립 이후 처음 발행된 소식지입니다.</p>
                       <p>협회 출범 배경, 초대 임원진 소개, 첫 번째 전문가과정 수료 소식을 담았습니다.</p>`,
             attachments: [
@@ -180,7 +180,6 @@ const NewsletterCtrl = {
                 <div class="nl-info-title">${item.title}</div>
                 <div class="nl-info-meta">
                   <span>${item.date}</span>
-                  <span>조회 ${item.views}</span>
                 </div>
               </div>
             </div>`;
@@ -251,13 +250,11 @@ const NewsletterCtrl = {
             <div class="cd-head">
               <div class="cd-head-left">
                 <h2 class="cd-title">${item.title}</h2>
-                <span class="cd-status-badge cd-status-open">${item.year}년 ${item.half}호</span>
               </div>
               <span class="cd-date">${item.date}</span>
             </div>
             <div class="cd-meta">
-              <span>발행처 <strong>${item.author}</strong></span>
-              <span>조회 <strong>${item.views}</strong></span>
+              <span>작성자 <strong>${item.author}</strong></span>
             </div>
             <hr class="cd-divider">
             <div class="cd-body">
@@ -290,7 +287,7 @@ const ArchiveCtrl = {
             content: `<p>본 매뉴얼은 2026년 개정된 숲해설가 교육 과정 전체를 담고 있습니다.</p>
                       <p>1장 숲해설가의 역할과 자세, 2장 생태 해설 기법, 3장 현장 실습 가이드, 4장 안전 관리 수칙 등으로 구성되어 있습니다.</p>
                       <p>교육 매뉴얼은 정회원 대상으로 배포되며, 외부 공유를 금합니다.</p>`,
-            author: '사무국', date: '2026-03-01', views: 312,
+            author: '사무국', date: '2026-03-01',
             attachments: [
                 { name: '교육매뉴얼_2026.pdf', ext: 'pdf', size: '4.2MB' },
             ],
@@ -300,7 +297,7 @@ const ArchiveCtrl = {
             title: '봄철 식물 해설 참고자료',
             content: `<p>봄철 주요 식물 해설에 활용할 수 있는 사진·설명 자료집입니다.</p>
                       <p>진달래, 개나리, 목련 등 봄철 개화 식물 40여 종의 생태 특성과 해설 포인트를 정리했습니다.</p>`,
-            author: '사무국', date: '2026-02-20', views: 245,
+            author: '사무국', date: '2026-02-20',
             attachments: [
                 { name: '봄철식물자료.pdf', ext: 'pdf', size: '8.1MB' },
             ],
@@ -310,7 +307,7 @@ const ArchiveCtrl = {
             title: '숲 생태 해설 자료집 v3',
             content: `<p>숲 생태 관련 해설 자료 최신 버전(v3)입니다.</p>
                       <p>v2 대비 수목 도감 이미지 전면 교체, 해설 스크립트 보완, 계절별 포인트 정리가 추가되었습니다.</p>`,
-            author: '교육팀', date: '2025-11-15', views: 423,
+            author: '교육팀', date: '2025-11-15',
             attachments: [
                 { name: '생태해설자료_v3.pdf', ext: 'pdf', size: '6.7MB' },
                 { name: '생태해설자료_v3_요약본.pdf', ext: 'pdf', size: '1.2MB' },
@@ -321,7 +318,7 @@ const ArchiveCtrl = {
             title: '조류 생태 관찰 가이드',
             content: `<p>숲 해설 시 자주 만나는 조류 30종의 사진 및 설명 가이드입니다.</p>
                       <p>각 조류의 특징, 서식지, 계절별 관찰 포인트, 울음소리 특성을 담았습니다.</p>`,
-            author: '생태팀', date: '2025-09-10', views: 367,
+            author: '생태팀', date: '2025-09-10',
             attachments: [
                 { name: '조류가이드.pdf', ext: 'pdf', size: '5.3MB' },
             ],
@@ -331,7 +328,7 @@ const ArchiveCtrl = {
             title: '협회 회원 가입 신청서',
             content: `<p>협회 신규 회원 가입 시 제출하는 신청서 양식입니다.</p>
                       <p>작성 완료 후 사무국 이메일(foresto@example.com)로 제출하거나 직접 방문 제출해 주세요.</p>`,
-            author: '사무국', date: '2026-01-05', views: 521,
+            author: '사무국', date: '2026-01-05',
             attachments: [
                 { name: '회원가입신청서.hwp', ext: 'hwp', size: '0.3MB' },
                 { name: '회원가입신청서.docx', ext: 'docx', size: '0.3MB' },
@@ -342,7 +339,7 @@ const ArchiveCtrl = {
             title: '강사 활동 일지 양식',
             content: `<p>숲 해설 강사 활동 일지 작성 양식입니다.</p>
                       <p>매월 말일 사무국에 제출해 주시기 바랍니다. HWP 또는 DOCX 중 편한 형식으로 작성하세요.</p>`,
-            author: '사무국', date: '2026-01-05', views: 389,
+            author: '사무국', date: '2026-01-05',
             attachments: [
                 { name: '강사활동일지.hwp', ext: 'hwp', size: '0.2MB' },
                 { name: '강사활동일지.docx', ext: 'docx', size: '0.2MB' },
@@ -353,7 +350,7 @@ const ArchiveCtrl = {
             title: '사공단 활동 보고 양식',
             content: `<p>사회공헌사업단 활동 보고서 작성 양식입니다.</p>
                       <p>봉사 활동 완료 후 7일 이내 사무국에 제출해 주세요.</p>`,
-            author: '사무국', date: '2026-01-05', views: 278,
+            author: '사무국', date: '2026-01-05',
             attachments: [
                 { name: '사공단활동보고.hwp', ext: 'hwp', size: '0.2MB' },
             ],
@@ -363,7 +360,7 @@ const ArchiveCtrl = {
             title: '동아리 활동 계획서 양식',
             content: `<p>동아리 연간 활동 계획서 작성 양식입니다.</p>
                       <p>매년 1월 31일까지 작성하여 사무국에 제출해 주시기 바랍니다.</p>`,
-            author: '사무국', date: '2025-12-20', views: 234,
+            author: '사무국', date: '2025-12-20',
             attachments: [
                 { name: '동아리활동계획서.docx', ext: 'docx', size: '0.2MB' },
             ],
@@ -373,7 +370,7 @@ const ArchiveCtrl = {
             title: '2025년 사업 결과 보고서',
             content: `<p>2025년 협회 전체 사업 추진 결과 종합 보고서입니다.</p>
                       <p>전문가과정 운영, 사공단 봉사활동, 시민아카데미 강좌, 동아리 활동 현황 등을 포함합니다.</p>`,
-            author: '사무국', date: '2026-02-10', views: 445,
+            author: '사무국', date: '2026-02-10',
             attachments: [
                 { name: '2025사업결과보고서.pdf', ext: 'pdf', size: '3.5MB' },
             ],
@@ -383,7 +380,7 @@ const ArchiveCtrl = {
             title: '2025년 사공단 연간 활동 보고서',
             content: `<p>2025년 사회공헌사업단 연간 봉사 활동 실적 보고서입니다.</p>
                       <p>총 봉사 횟수, 참여 인원, 활동 지역 등 통계와 주요 활동 사진이 포함되어 있습니다.</p>`,
-            author: '사공단', date: '2026-02-05', views: 312,
+            author: '사공단', date: '2026-02-05',
             attachments: [
                 { name: '사공단_2025연간보고.pdf', ext: 'pdf', size: '2.1MB' },
             ],
@@ -393,7 +390,7 @@ const ArchiveCtrl = {
             title: '회원 현황 통계 보고서 2025',
             content: `<p>2025년 회원 현황 및 활동 통계 보고서입니다.</p>
                       <p>회원 등급별 현황, 지역별 분포, 신규 가입/탈퇴 추이 등을 엑셀 형식으로 정리했습니다.</p>`,
-            author: '사무국', date: '2026-01-20', views: 198,
+            author: '사무국', date: '2026-01-20',
             attachments: [
                 { name: '회원통계_2025.xlsx', ext: 'xlsx', size: '1.2MB' },
             ],
@@ -403,7 +400,7 @@ const ArchiveCtrl = {
             title: '협회 정관 (2026년 개정)',
             content: `<p>2026년 정기총회에서 개정된 최신 협회 정관입니다.</p>
                       <p>이번 개정에서는 정회원 자격 기준 명확화, 총회 의결 정족수 조정, 임원 임기 규정 보완 등이 반영되었습니다.</p>`,
-            author: '사무국', date: '2026-03-01', views: 567,
+            author: '사무국', date: '2026-03-01',
             attachments: [
                 { name: '협회정관_2026.pdf', ext: 'pdf', size: '0.8MB' },
             ],
@@ -413,7 +410,7 @@ const ArchiveCtrl = {
             title: '회원 규정집 (2025년 개정)',
             content: `<p>회원 등급, 권리/의무, 징계 등 회원 규정 전체를 담은 문서입니다.</p>
                       <p>회원 활동 시 반드시 숙지하시기 바랍니다.</p>`,
-            author: '사무국', date: '2025-08-15', views: 412,
+            author: '사무국', date: '2025-08-15',
             attachments: [
                 { name: '회원규정_2025.pdf', ext: 'pdf', size: '0.6MB' },
             ],
@@ -423,7 +420,7 @@ const ArchiveCtrl = {
             title: '윤리강령 및 행동지침',
             content: `<p>협회 임원 및 회원의 윤리강령과 행동지침을 담은 문서입니다.</p>
                       <p>모든 회원은 협회 활동 시 본 윤리강령을 준수하여야 합니다.</p>`,
-            author: '사무국', date: '2025-03-10', views: 289,
+            author: '사무국', date: '2025-03-10',
             attachments: [
                 { name: '윤리강령.pdf', ext: 'pdf', size: '0.4MB' },
             ],
@@ -433,7 +430,7 @@ const ArchiveCtrl = {
             title: '회원 혜택 안내문 2026',
             content: `<p>2026년 협회 회원 혜택 및 지원 사항 안내 문서입니다.</p>
                       <p>교육 수강 할인, 자격증 취득 지원, 도서 구입 지원 등 다양한 혜택이 포함되어 있습니다.</p>`,
-            author: '사무국', date: '2026-01-10', views: 478,
+            author: '사무국', date: '2026-01-10',
             attachments: [
                 { name: '회원혜택안내_2026.pdf', ext: 'pdf', size: '0.5MB' },
             ],
@@ -443,7 +440,7 @@ const ArchiveCtrl = {
             title: '숲해설가 자격 취득 안내',
             content: `<p>국가 공인 숲해설가 자격 취득 절차 및 준비 사항 안내입니다.</p>
                       <p>응시 자격, 시험 일정, 준비 서류, 교육 이수 요건 등을 상세히 안내합니다.</p>`,
-            author: '사무국', date: '2025-10-05', views: 634,
+            author: '사무국', date: '2025-10-05',
             attachments: [
                 { name: '자격취득안내.pdf', ext: 'pdf', size: '0.7MB' },
             ],
@@ -453,7 +450,7 @@ const ArchiveCtrl = {
             title: '협회 홍보 브로슈어 2025',
             content: `<p>협회 소개 및 주요 사업을 담은 홍보용 브로슈어 파일입니다.</p>
                       <p>협회 소개, 교육 사업, 사회공헌 활동 등을 한눈에 볼 수 있습니다.</p>`,
-            author: '홍보팀', date: '2025-06-01', views: 345,
+            author: '홍보팀', date: '2025-06-01',
             attachments: [
                 { name: '홍보브로슈어_2025.pdf', ext: 'pdf', size: '12.3MB' },
             ],
@@ -463,7 +460,7 @@ const ArchiveCtrl = {
             title: '2025 정기총회 자료집',
             content: `<p>2025년 정기총회 발표 자료 및 결의 사항을 담은 문서입니다.</p>
                       <p>사업 결과 보고, 결산 보고, 2026년 사업 계획, 임원 선출 결과가 포함되어 있습니다.</p>`,
-            author: '사무국', date: '2025-02-20', views: 512,
+            author: '사무국', date: '2025-02-20',
             attachments: [
                 { name: '정기총회_2025.pdf', ext: 'pdf', size: '2.8MB' },
             ],
@@ -473,7 +470,7 @@ const ArchiveCtrl = {
             title: '숲해설 프로그램 운영 가이드',
             content: `<p>숲해설 프로그램 기획부터 운영까지 전반적인 가이드입니다.</p>
                       <p>대상별 프로그램 설계, 현장 안전 관리, 사후 평가 방법 등을 단계별로 안내합니다.</p>`,
-            author: '교육팀', date: '2024-11-30', views: 423,
+            author: '교육팀', date: '2024-11-30',
             attachments: [
                 { name: '프로그램운영가이드.pdf', ext: 'pdf', size: '3.1MB' },
             ],
@@ -483,7 +480,7 @@ const ArchiveCtrl = {
             title: '협회 연혁 자료 모음',
             content: `<p>협회 설립부터 현재까지 주요 연혁을 정리한 자료입니다.</p>
                       <p>창립 총회 자료, 주요 사업 이력, 역대 임원 명단 등이 포함되어 있습니다.</p>`,
-            author: '사무국', date: '2024-06-15', views: 234,
+            author: '사무국', date: '2024-06-15',
             attachments: [
                 { name: '연혁자료.pdf', ext: 'pdf', size: '1.4MB' },
             ],
@@ -583,15 +580,6 @@ const ArchiveCtrl = {
         }
 
         const renderRow = (item, seqLabel) => {
-            const firstAtt = (item.attachments || [])[0];
-            const extLabel = firstAtt ? (firstAtt.ext || '').toUpperCase() : '';
-            const extCls   = firstAtt ? this._extClass(firstAtt.ext) : '';
-            const extBadge = extLabel
-                ? `<span class="file-type-badge ${extCls}" style="font-size:10px;padding:2px 6px;margin-left:6px;vertical-align:middle">${extLabel}</span>`
-                : '';
-            const extra = (item.attachments || []).length > 1
-                ? `<span class="badge badge-gray" style="font-size:10px;margin-left:4px;vertical-align:middle">+${item.attachments.length - 1}</span>`
-                : '';
             return `
                 <tr class="${item.isPin ? 'pinned' : ''}">
                   <td class="col-num" style="text-align:center">
@@ -599,12 +587,11 @@ const ArchiveCtrl = {
                   </td>
                   <td class="td-title">
                     <a href="archive-detail.html?id=${item.id}">
-                      ${item.title}${extBadge}${extra}
+                      ${item.title}
                     </a>
                   </td>
                   <td class="col-author">${item.author}</td>
                   <td class="col-date">${item.date}</td>
-                  <td class="col-views">${item.views}</td>
                 </tr>`;
         };
 
@@ -696,7 +683,6 @@ const ArchiveCtrl = {
             </div>
             <div class="cd-meta">
               <span>작성자 <strong>${item.author}</strong></span>
-              <span>조회 <strong>${item.views}</strong></span>
             </div>
             <hr class="cd-divider">
             <div class="cd-body">

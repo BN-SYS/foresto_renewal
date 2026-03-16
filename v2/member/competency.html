@@ -60,9 +60,8 @@
         <select class="form-control" id="filterStatus">
           <option value="">전체</option>
           <option value="open">접수중</option>
-          <option value="ready">접수예정</option>
+          <option value="ready">준비중</option>
           <option value="closed">접수마감</option>
-          <option value="done">수강완료</option>
         </select>
       </div>
       <button class="btn btn-primary search-btn" onclick="doSearch()">검색</button>
@@ -104,7 +103,7 @@
       c.type === '역량강화' || c.type === '직무교육'
     );
 
-    window._ctrl = new CourseListController('역량강화', 'competencyBody', 'competencyPagination');
+    window._ctrl = new CourseListController('역량강화', 'competencyBody', 'competencyPagination', '', 'competency-detail.html');
     window._ctrl.courses = merged;
     window._ctrl.filtered = [...merged];
     window._ctrl.render();

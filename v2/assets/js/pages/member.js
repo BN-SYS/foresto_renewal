@@ -147,7 +147,6 @@ const BoardDetail = {
         </div>
         <div class="cd-meta">
           <span>작성자 <strong>${item.author}</strong></span>
-          <span>조회 <strong>${item.views}</strong></span>
         </div>
         <hr class="cd-divider">
         <div class="cd-body">
@@ -202,7 +201,6 @@ const MENTORING_DATA = Array.from({ length: 18 }, (_, i) => ({
   title:   `[멘토링] ${MENTORING_TITLES[i % MENTORING_TITLES.length]}`,
   author:  pickAuthor('mentor', i),
   date:    makeDate(i),
-  views:   Math.floor(Math.random() * 200 + 20),
   content: `<p>멘토링 내용 ${18 - i}번 게시물입니다.</p>
             <p>현장에서 함께 배우는 숲 해설 멘토링 활동을 안내드립니다.</p>`,
   file:    i % 3 === 0 ? `멘토링자료_${18 - i}.pdf` : null,
@@ -220,15 +218,11 @@ const RECRUIT_LOCATIONS = [
 const RECRUIT_DATA = Array.from({ length: 15 }, (_, i) => ({
   id:        15 - i,
   title:     `[모집] ${RECRUIT_LOCATIONS[i]}`,
-  period:    `2026-0${(i % 9) + 1}`,
-  count:     `${(i % 5) + 2}명`,
-  status:    i % 3 === 0 ? 'closed' : 'open',
+  author:    '사무국',
   date:      makeDate(i),
   content:   `<p>수시숲해설 모집 ${15 - i}번 게시물입니다.</p>
               <p>현장 활동에 관심 있는 회원분들의 많은 참여 바랍니다.</p>
-              <p>활동 내용, 일정, 대상 기관 등 세부 안내는 아래 신청 링크에서 확인하세요.</p>`,
-  /* 외부 신청 링크 (실제 운영 시 네이버폼 등으로 교체, null이면 링크 없음) */
-  applyLink: i % 3 === 0 ? null : 'https://naver.me/xxxxx',
+              <p>활동 내용, 일정, 대상 기관 등 세부 안내는 첨부 파일을 참조하세요.</p>`,
 }));
 
 /* ── 1-3. 사공단 소식 데이터 (20건) */
@@ -246,7 +240,6 @@ const SAGONGDAN_NEWS_DATA = Array.from({ length: 20 }, (_, i) => ({
   title:   `[사공단] ${NEWS_SUBTITLES[i % NEWS_SUBTITLES.length]} ${Math.floor(i / NEWS_SUBTITLES.length) + 1}호`,
   author:  pickAuthor('staff', i),
   date:    makeDate(i),
-  views:   Math.floor(Math.random() * 150 + 10),
   content: `<p>사공단 소식 ${20 - i}번 게시물입니다.</p>
             <p>협회 사회공헌사업단의 활동 내용을 공유드립니다.</p>`,
   file:    null,
@@ -267,7 +260,6 @@ const SAGONGDAN_LOG_DATA = Array.from({ length: 15 }, (_, i) => ({
   actDate: makeDate(i),
   date:    makeDate(i, 1),
   hasFile: true,
-  views:   Math.floor(Math.random() * 100 + 5),
   content: `<p>사공단 일지 ${15 - i}번 게시물입니다.</p>
             <p>현장 활동 기록을 정리하여 공유드립니다.</p>`,
 }));
@@ -286,7 +278,6 @@ const CLUB_NEWS_DATA = Array.from({ length: 24 }, (_, i) => ({
   club:    CLUB_NAMES[i % 3],
   author:  pickAuthor('member', i),
   date:    makeDate(i),
-  views:   Math.floor(Math.random() * 120 + 10),
   content: `<p>동아리 소식 ${24 - i}번 게시물입니다.</p>
             <p>동아리 활동 내용을 공유드립니다.</p>`,
 }));
@@ -306,7 +297,6 @@ const CLUB_ARCHIVE_DATA = Array.from({ length: 12 }, (_, i) => ({
   title:   `${ARCHIVE_TITLES[i % ARCHIVE_TITLES.length]} v${i + 1}`,
   author:  '사무국',
   date:    makeDate(i),
-  views:   Math.floor(Math.random() * 80 + 5),
   file:    ARCHIVE_FILES[i % ARCHIVE_FILES.length],
   content: `<p>자료 ${12 - i}번 파일입니다.</p>`,
 }));
@@ -328,7 +318,6 @@ const QNA_DATA = Array.from({ length: QNA_QUESTIONS.length }, (_, i) => ({
   title:    QNA_QUESTIONS[i],
   author:   `회원${i + 1}`,
   date:     makeDate(i),
-  views:    Math.floor(Math.random() * 80 + 5),
   status:   i % 3 === 0 ? 'waiting' : 'answered',
   answer:   i % 3 === 0
     ? null
@@ -535,7 +524,6 @@ const MentoringCtrl = {
           </td>
           <td class="center">${row.author}</td>
           <td class="center">${row.date}</td>
-          <td class="center">${row.views}</td>
         </tr>`,
     });
     this._board.init();
@@ -579,13 +567,7 @@ const RecruitCtrl = {
           <td class="td-title">
             <a href="recruit-detail.html?id=${row.id}">${row.title}</a>
           </td>
-          <td class="center">${row.period}</td>
-          <td class="center">${row.count}</td>
-          <td class="center">
-            <span class="badge ${row.status === 'open' ? 'badge-green' : 'badge-gray'}">
-              ${row.status === 'open' ? '모집중' : '마감'}
-            </span>
-          </td>
+          <td class="center">${row.author}</td>
           <td class="center">${row.date}</td>
         </tr>`,
     });
@@ -594,24 +576,18 @@ const RecruitCtrl = {
 
   search() {
     const keyword = document.getElementById('recruitKeyword')?.value || '';
-    const status  = document.getElementById('recruitStatus')?.value  || '';
-
-    this._board?.filterFn(r => {
-      if (status  && r.status !== status)                                      return false;
-      if (keyword && !r.title.toLowerCase().includes(keyword.toLowerCase()))   return false;
-      return true;
-    });
+    this._board?.filterFn(r =>
+      !keyword || r.title.toLowerCase().includes(keyword.toLowerCase())
+    );
   },
 
   reset() {
-    ['recruitKeyword', 'recruitStatus'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = '';
-    });
+    const el = document.getElementById('recruitKeyword');
+    if (el) el.value = '';
     this._board?.filterFn(null);
   },
 
-  /* ── 상세 페이지 렌더 */
+  /* ── 상세 페이지 렌더 (공지사항과 동일 레이아웃) */
   renderDetail() {
     const id   = App.getParam('id');
     const item = RECRUIT_DATA.find(d => String(d.id) === String(id));
@@ -630,15 +606,6 @@ const RecruitCtrl = {
     const prev = RECRUIT_DATA[idx + 1];
     const next = RECRUIT_DATA[idx - 1];
 
-    /* 외부 신청 링크 버튼 */
-    const applyBtnHtml = item.status === 'open'
-      ? (item.applyLink
-          ? `<a href="${item.applyLink}" target="_blank" rel="noopener noreferrer"
-                class="btn btn-primary">신청하기 (외부 링크)</a>`
-          : `<button class="btn btn-gray" disabled>신청 링크 준비 중</button>`)
-      : `<button class="btn btn-gray" disabled>모집 마감</button>`;
-
-    const statusBadge = `<span class="cd-status-badge ${item.status === 'open' ? 'cd-status-open' : 'cd-status-closed'}">${item.status === 'open' ? '모집중' : '마감'}</span>`;
     const navHtml = (next || prev) ? `
       <div class="cd-nav">
         ${next ? `<div class="cd-nav-item" onclick="location.href='recruit-detail.html?id=${next.id}'">
@@ -650,18 +617,17 @@ const RecruitCtrl = {
           <span class="cd-nav-title">${prev.title}</span>
         </div>` : ''}
       </div>` : '';
+
     el.innerHTML = `
       <div class="cd-wrap">
         <div class="cd-head">
           <div class="cd-head-left">
             <h2 class="cd-title">${item.title}</h2>
-            ${statusBadge}
           </div>
           <span class="cd-date">${item.date}</span>
         </div>
         <div class="cd-meta">
-          <span>활동 기간 <strong>${item.period}</strong></span>
-          <span>모집 인원 <strong>${item.count}</strong></span>
+          <span>작성자 <strong>${item.author}</strong></span>
         </div>
         <hr class="cd-divider">
         <div class="cd-body">
@@ -671,9 +637,6 @@ const RecruitCtrl = {
         <div class="cd-actions">
           <button class="btn btn-primary btn-sm cd-btn-list"
                   onclick="location.href='recruit.html'">목록</button>
-          <div class="cd-actions-right">
-            ${applyBtnHtml}
-          </div>
         </div>
       </div>`;
   },
@@ -747,7 +710,6 @@ const SagongdanCtrl = {
           </td>
           <td class="center">${row.author}</td>
           <td class="center">${row.date}</td>
-          <td class="center">${row.views}</td>
         </tr>`,
     });
 
@@ -853,7 +815,6 @@ const ClubCtrl = {
           </td>
           <td class="center">${row.author}</td>
           <td class="center">${row.date}</td>
-          <td class="center">${row.views}</td>
         </tr>`,
     });
 
@@ -880,7 +841,6 @@ const ClubCtrl = {
                  </a>`
               : '-'}
           </td>
-          <td class="center">${row.views}</td>
         </tr>`,
     });
 
@@ -980,55 +940,10 @@ const QnaCtrl = {
               <span class="badge ${s.cls}">${s.label}</span>
             </td>
             <td class="center">${row.date}</td>
-            <td class="center">${row.views}</td>
           </tr>`;
       },
     });
     this._board.init();
-  },
-
-  /* 질문 등록 모달 */
-  openWriteModal() {
-    this._editId = null;
-    ['qnaTitle', 'qnaContent'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = '';
-    });
-    App.openModal('qnaWriteModal');
-  },
-
-  /* 질문 저장 */
-  saveQuestion() {
-    const title   = document.getElementById('qnaTitle')?.value.trim()   || '';
-    const content = document.getElementById('qnaContent')?.value.trim() || '';
-
-    if (!title)   { App.toast('제목을 입력해주세요.',   'warning'); return; }
-    if (!content) { App.toast('내용을 입력해주세요.', 'warning'); return; }
-
-    /* 샘플 데이터에 추가 (실제 구현 시 API 호출) */
-    QNA_DATA.unshift({
-      id:      Date.now(),
-      title,
-      content: `<p>${content}</p>`,
-      author:  App.user.name,
-      date:    new Date().toISOString().slice(0, 10),
-      views:   0,
-      status:  'waiting',
-      answer:  null,
-    });
-
-    this._board = createBoard({
-      data:         QNA_DATA,
-      tableBodyId:  'qnaTableBody',
-      paginationId: 'qnaPagination',
-      countId:      'qnaCount',
-      rowRenderer:  this._board._opts?.rowRenderer
-                    || ((row, seq) => `<tr><td>${seq}</td><td>${row.title}</td></tr>`),
-    });
-    this._board.init();
-
-    App.closeModal('qnaWriteModal');
-    App.toast('질문이 등록되었습니다.');
   },
 
   /* 상세 렌더 */
@@ -1074,6 +989,7 @@ const QnaCtrl = {
            답변 준비 중입니다. 조금만 기다려 주세요.
          </div>`;
 
+    const isAuthor = App.user?.name === item.author;
     el.innerHTML = `
       <div class="cd-wrap">
         <div class="cd-head">
@@ -1085,7 +1001,6 @@ const QnaCtrl = {
         </div>
         <div class="cd-meta">
           <span>작성자 <strong>${item.author}</strong></span>
-          <span>조회 <strong>${item.views}</strong></span>
         </div>
         <hr class="cd-divider">
         <div class="cd-body">
@@ -1096,6 +1011,8 @@ const QnaCtrl = {
         <div class="cd-actions">
           <button class="btn btn-primary btn-sm cd-btn-list"
                   onclick="history.back()">목록</button>
+          ${isAuthor ? `<button class="btn btn-gray btn-sm"
+                  onclick="location.href='qna-write.html?edit=${item.id}'">수정</button>` : ''}
         </div>
       </div>`;
   },

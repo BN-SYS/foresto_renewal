@@ -11,7 +11,7 @@ const ALL_COURSES_RAW = [
     date:  `2026-0${(i % 9) + 1}-${String((i % 20) + 1).padStart(2, '0')} 10:00:00`,
     from:  `2026-0${(i % 9) + 1}-${String((i % 20) + 1).padStart(2, '0')}`,
     to:    `2026-0${(i % 9) + 1}-${String((i % 20) + 5).padStart(2, '0')}`,
-    status: ['open','open','ready','closed','done'][i % 5],
+    status: ['open','open','ready','closed','closed'][i % 5],
     attachments: i % 3 === 0 ? [
       { name: '신청서_01.hwp', size: '34.5K' },
       { name: '신청서_02.hwp', size: '34.5K' },
@@ -26,7 +26,7 @@ const ALL_COURSES_RAW = [
     date: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')} 10:00:00`,
     from: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')}`,
     to:   `2026-0${(i%9)+1}-${String((i%20)+5).padStart(2,'0')}`,
-    status: ['open','ready','closed','cancel','done'][i % 5],
+    status: ['open','ready','closed','open','closed'][i % 5],
     attachments: i % 2 === 0 ? [{ name: '시민아카데미_신청서.hwp', size: '28K' }] : [],
     guide: `■강좌: 시민아카데미\n■대상: 일반 시민 누구나\n■교육 장소: 협회 지정 숲 현장\n■준비물: 편한 운동화, 긴 바지 권장\n■문의: 협회 사무국 02-000-0000`,
   })),
@@ -36,7 +36,7 @@ const ALL_COURSES_RAW = [
     date: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')} 09:00:00`,
     from: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')}`,
     to:   `2026-0${(i%9)+1}-${String((i%20)+5).padStart(2,'0')}`,
-    status: ['open','ready','closed','done'][i % 4],
+    status: ['open','ready','closed','closed'][i % 4],
     attachments: i % 2 === 0 ? [{ name: '직무교육_신청서.hwp', size: '32K' }] : [],
     guide: `■강좌: 직무교육\n■대상: 현직 숲해설가\n■이수 시 직무교육 이수증 발급\n■문의: 협회 사무국 02-000-0000`,
   })),
@@ -46,30 +46,37 @@ const ALL_COURSES_RAW = [
     date: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')} 10:00:00`,
     from: `2026-0${(i%9)+1}-${String((i%20)+1).padStart(2,'0')}`,
     to:   `2026-0${(i%9)+1}-${String((i%20)+5).padStart(2,'0')}`,
-    status: ['open','ready','closed','done'][i % 4],
+    status: ['open','ready','closed','closed'][i % 4],
     attachments: i % 2 === 0 ? [{ name: '역량강화_신청서.hwp', size: '26K' }] : [],
     guide: `■강좌: 역량강화\n■대상: 회원 숲해설가 (정회원 우선)\n■수료 시 이수증 발급\n■문의: 협회 사무국 02-000-0000`,
   })),
 ];
 
+/* ── 접수 상태 4단계
+ *  ready   : 준비중 (접수기간 이전)
+ *  open    : 접수중 (접수기간 이내 + 정원 남음)
+ *  closed  : 접수마감 (기간 초과 또는 정원 없음)
+ *  applied : 신청완료 (로그인 회원이 신청한 강좌 — UI 전용, 데이터에 없음)
+ */
 const STATUS_META = {
-  open:   { label: '접수중',   cls: 'status-open',   canApply: true  },
-  ready:  { label: '접수예정', cls: 'status-ready',  canApply: false },
-  closed: { label: '접수마감', cls: 'status-closed', canApply: false },
-  cancel: { label: '신청취소', cls: 'status-cancel', canApply: false },
-  done:   { label: '수강완료', cls: 'status-done',   canApply: false },
+  ready:   { label: '준비중',   cls: 'status-ready',   canApply: false },
+  open:    { label: '접수중',   cls: 'status-open',    canApply: true  },
+  closed:  { label: '접수마감', cls: 'status-closed',  canApply: false },
+  applied: { label: '신청완료', cls: 'status-applied', canApply: false },
 };
 
 /* ── 강좌 목록 공통 컨트롤러 */
 class CourseListController {
-  constructor(pageType, containerId, paginationId) {
-    this.pageType    = pageType;
-    this.containerId = containerId;
-    this.paginationId = paginationId;
-    this.courses     = ALL_COURSES_RAW.filter(c => c.type === pageType);
-    this.filtered    = [...this.courses];
-    this.currentPage = 1;
-    this.pageSize    = 10;
+  constructor(pageType, containerId, paginationId, detailBasePath, detailPage) {
+    this.pageType      = pageType;
+    this.containerId   = containerId;
+    this.paginationId  = paginationId;
+    this.detailBase    = detailBasePath || '';   // '' = 같은 폴더
+    this.detailPage    = detailPage    || 'course-detail.html';  // 상세 페이지 파일명 (기본: course-detail.html)
+    this.courses       = ALL_COURSES_RAW.filter(c => c.type === pageType);
+    this.filtered      = [...this.courses];
+    this.currentPage   = 1;
+    this.pageSize      = 10;
     this._injectModal();
   }
 
@@ -102,12 +109,12 @@ class CourseListController {
       const sm    = STATUS_META[c.status];
       /* 목록에서 타이틀 및 상태 배지 모두 상세 페이지로 이동 */
       const badge = sm.canApply
-        ? `<a href="course-detail.html?id=${c.id}" class="status-badge ${sm.cls}">${sm.label}</a>`
+        ? `<a href="${this.detailBase}${this.detailPage}?id=${c.id}" class="status-badge ${sm.cls}">${sm.label}</a>`
         : `<span class="status-badge ${sm.cls}">${sm.label}</span>`;
       return `<tr>
         <td class="center">${c.id}</td>
         <td class="td-title">
-          <a href="course-detail.html?id=${c.id}">${c.title}</a>
+          <a href="${this.detailBase}${this.detailPage}?id=${c.id}">${c.title}</a>
         </td>
         <td class="center">${c.date}</td>
         <td class="center" style="font-size:13px;color:var(--gray-mid)">${c.from} ~ ${c.to}</td>
@@ -144,7 +151,7 @@ class CourseListController {
       const panel = document.getElementById(`applyStep${s}`);
       const step  = document.getElementById(`step${s}`);
       if (panel) panel.style.display = s === this._step ? 'block' : 'none';
-      if (step)  step.className = 'step ' + (s < this._step ? 'done' : s === this._step ? 'active' : 'pending');
+      if (step)  step.className = 'step ' + (s < this._step ? 'closed' : s === this._step ? 'active' : 'pending');
     });
     const prev = document.getElementById('applyPrevBtn');
     const next = document.getElementById('applyNextBtn');
@@ -178,8 +185,24 @@ class CourseListController {
   }
 
   cancelApply(id) {
-    /* 프로토타입: 실제 구현 시 서버 취소 API 연동 */
-    App.toast('신청이 취소되었습니다. (프로토타입 — 실제 구현 시 서버 연동)', 'info');
+    /* 프로토타입: 실제 구현 시 서버 취소 API 연동
+     * 취소 후 → 강좌 status 에 따라 접수중/접수마감으로 자동 복귀
+     * URL에서 applied 파라미터 제거해 목록 상태로 재렌더링
+     */
+    const course = this.courses.find(c => c.id === id);
+    const reverted = course?.status || 'closed';
+    const msg = reverted === 'open'
+        ? '신청이 취소되었습니다. 접수기간 내이므로 재신청이 가능합니다.'
+        : '신청이 취소되었습니다. 접수마감 상태로 변경됩니다.';
+    App.toast(msg, 'info');
+    /* applied 파라미터 제거하여 상태 복귀 시뮬레이션 */
+    const url = new URL(location.href);
+    url.searchParams.delete('applied');
+    history.replaceState(null, '', url.toString());
+    /* 페이지 재렌더 */
+    if (window._ctrl && window._ctrl.init) {
+        setTimeout(() => window._ctrl.init(), 400);
+    }
   }
 
   _injectModal() {
@@ -312,7 +335,16 @@ class CourseDetailController extends CourseListController {
             return;
         }
 
-        const sm = STATUS_META[course.status];
+        /* ── 접수 상태 4단계 판별
+         * 프로토타입: URL ?applied=1 → 신청완료 시뮬레이션
+         * 신청 취소 후: 강좌 status 에 따라 접수중/접수마감 자동 복귀
+         */
+        const isApplied = App.getParam('applied') === '1';
+        const baseStatus = course.status; /* ready | open | closed */
+
+        /* 표시할 배지 상태 결정 */
+        const displayStatus = isApplied ? 'applied' : baseStatus;
+        const sm = STATUS_META[displayStatus] || STATUS_META['closed'];
 
         /* 목록으로 돌아갈 경로 */
         const backMap = {
@@ -340,26 +372,25 @@ class CourseDetailController extends CourseListController {
                </div>`
             : '';
 
-        /* 접수하기 / 취소하기 버튼
-         * - 접수하기 : status === 'open' 이고 미신청인 경우
-         * - 취소하기 : 이미 접수했고(isApplied) 신청기간 내(status === 'open')인 경우에만 노출
-         * 프로토타입: URL 파라미터 applied=1 로 "이미 접수" 상태 시뮬레이션
+        /* ── 버튼 로직
+         * 신청완료(isApplied) + 접수중 → 신청완료(비활성) + 취소하기
+         * 신청완료(isApplied) + 그 외  → 신청완료(비활성) (취소 불가 — 접수기간 아님)
+         * 접수중(open) + 미신청          → 접수하기
+         * 준비중/접수마감                 → 상태 레이블(비활성)
+         * 취소하기 클릭 시: 접수중이면 재신청 가능(접수중으로 복귀), 마감이면 마감으로 복귀
          */
-        const isApplied    = App.getParam('applied') === '1';
-        const inApplyPeriod = course.status === 'open';
-
         let applyBtn;
-        if (isApplied && inApplyPeriod) {
-            /* 접수완료 + 신청기간 내 → 접수완료(비활성) + 취소하기(활성) */
-            applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>접수완료</button>
+        if (isApplied && baseStatus === 'open') {
+            applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>신청완료</button>
                         <button class="btn btn-danger btn-sm cd-btn-cancel"
                                 onclick="window._ctrl.cancelApply(${course.id})">취소하기</button>`;
-        } else if (sm.canApply) {
-            /* 접수중 + 미신청 → 접수하기(활성) */
+        } else if (isApplied) {
+            /* 접수기간 지난 신청완료 — 취소 불가 */
+            applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>신청완료</button>`;
+        } else if (baseStatus === 'open') {
             applyBtn = `<button class="btn btn-dark btn-sm cd-btn-apply"
                                 onclick="window._ctrl.openApply(${course.id})">접수하기</button>`;
         } else {
-            /* 접수불가 상태 → 상태 레이블(비활성) */
             applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>${sm.label}</button>`;
         }
 
@@ -370,7 +401,7 @@ class CourseDetailController extends CourseListController {
               <div class="cd-head">
                 <div class="cd-head-left">
                   <h2 class="cd-title">${course.title}</h2>
-                  <span class="cd-status-badge cd-status-${course.status}">${sm.label}</span>
+                  <span class="cd-status-badge cd-status-${displayStatus}">${sm.label}</span>
                 </div>
                 <span class="cd-date">${course.date}</span>
               </div>

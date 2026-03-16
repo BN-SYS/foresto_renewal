@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="../assets/css/common.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
-  <link rel="stylesheet" href="../assets/css/pages/education.css">
   <link rel="stylesheet" href="../assets/css/pages/member.css">
 </head>
 
@@ -25,27 +24,19 @@
   </div>
 
   <div class="page-tabs">
-    <a href="competency.html" class="page-tab ">역량강화 교육강좌</a>
-    <a href="mentoring.html" class="page-tab ">멘토링 숲학교</a>
-    <a href="recruit.html" class="page-tab  active">수시숲해설 모집</a>
-    <a href="instructor.html" class="page-tab ">숲해설 강사 신청</a>
-    <a href="sagongdan.html" class="page-tab ">사공단 소식</a>
-    <a href="club.html" class="page-tab ">동아리 소식</a>
-    <a href="qna.html" class="page-tab ">이게뭐예요</a>
+    <a href="competency.html" class="page-tab">역량강화 교육강좌</a>
+    <a href="mentoring.html" class="page-tab">멘토링 숲학교</a>
+    <a href="recruit.html" class="page-tab active">수시숲해설 모집</a>
+    <a href="instructor.html" class="page-tab">숲해설 강사 신청</a>
+    <a href="sagongdan.html" class="page-tab">사공단 소식</a>
+    <a href="club.html" class="page-tab">동아리 소식</a>
+    <a href="qna.html" class="page-tab">이게뭐예요</a>
   </div>
 
   <div class="content-wrap">
 
     <!-- 검색 -->
     <div class="search-wrap">
-      <div class="search-field">
-        <label>모집 상태</label>
-        <select class="form-control" id="recruitStatus">
-          <option value="">전체</option>
-          <option value="open">모집중</option>
-          <option value="closed">마감</option>
-        </select>
-      </div>
       <div class="search-field">
         <label>키워드</label>
         <input type="text" class="form-control" id="recruitKeyword" placeholder="제목 검색" style="min-width:200px">
@@ -63,11 +54,9 @@
         <thead>
           <tr>
             <th style="width:60px">번호</th>
-            <th>모집 공고</th>
-            <th style="width:100px">활동 기간</th>
-            <th style="width:80px">모집 인원</th>
-            <th style="width:90px">상태</th>
-            <th style="width:110px">등록일</th>
+            <th>제목</th>
+            <th style="width:100px">작성자</th>
+            <th style="width:110px">작성일</th>
           </tr>
         </thead>
         <tbody id="recruitTableBody"></tbody>

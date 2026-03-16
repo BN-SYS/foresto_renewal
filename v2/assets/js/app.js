@@ -210,15 +210,17 @@ const App = {
       document.body.style.fontSize = size + 'px';
 
       /* 3. CSS 변수 px 값도 scale에 맞게 덮어쓰기
-            → variables.css 에서 px로 남아있는 곳까지 커버 */
+            기준(step=0): md=18px(목록/본문), lg=22px(타이틀 = md+4px) */
       const r = document.documentElement;
-      r.style.setProperty('--text-xs', Math.round(11 * scale) + 'px');
-      r.style.setProperty('--text-sm', Math.round(12 * scale) + 'px');
-      r.style.setProperty('--text-md', Math.round(14 * scale) + 'px');
-      r.style.setProperty('--text-base', Math.round(15 * scale) + 'px');
-      r.style.setProperty('--text-lg', Math.round(18 * scale) + 'px');
-      r.style.setProperty('--text-xl', Math.round(22 * scale) + 'px');
-      r.style.setProperty('--text-2xl', Math.round(26 * scale) + 'px');
+      r.style.setProperty('--text-xs',   Math.round(13 * scale) + 'px'); /* 13px */
+      r.style.setProperty('--text-sm',   Math.round(15 * scale) + 'px'); /* 15px */
+      r.style.setProperty('--text-md',   Math.round(18 * scale) + 'px'); /* 18px — 목록·본문 기준 */
+      r.style.setProperty('--text-base', Math.round(20 * scale) + 'px'); /* 20px */
+      r.style.setProperty('--text-lg',   Math.round(22 * scale) + 'px'); /* 22px — 타이틀 */
+      r.style.setProperty('--text-xl',   Math.round(24 * scale) + 'px'); /* 24px */
+      r.style.setProperty('--text-2xl',  Math.round(30 * scale) + 'px'); /* 30px */
+      r.style.setProperty('--text-3xl',  Math.round(36 * scale) + 'px'); /* 36px */
+      r.style.setProperty('--text-4xl',  Math.round(44 * scale) + 'px'); /* 44px */
 
       /* 4. 버튼 활성 상태 업데이트 */
       const upBtn = document.getElementById('fqBtnUp');

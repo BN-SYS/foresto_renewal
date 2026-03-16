@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이게뭐예요 질문 작성 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <style>
+    /* ── 글쓰기 페이지 전용 스타일 ── */
+    .write-wrap { max-width: 860px; margin: 0 auto; }
+    .write-section { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 16px; }
+    .write-field { margin-bottom: 20px; }
+    .write-field:last-child { margin-bottom: 0; }
+    .write-label { display: block; font-size: var(--text-sm); font-weight: 600; color: var(--gray-dark); margin-bottom: 7px; }
+    .write-label .req { color: var(--danger); margin-left: 2px; }
+    .write-input { width: 100%; padding: 10px 14px; border: 1px solid var(--gray-light); border-radius: var(--radius); font-size: var(--text-md); font-family: inherit; transition: border-color .15s; box-sizing: border-box; }
+    .write-input:focus { outline: none; border-color: var(--green-dark); }
+
+    /* ── SmartEditor2 스타일 에디터 (실제 SE2 연동 시 이 영역 교체) ── */
+    .se2-wrap { border: 1px solid var(--gray-light); border-radius: var(--radius); overflow: hidden; }
+    .se2-toolbar { display: flex; flex-wrap: wrap; gap: 2px; padding: 8px 10px; background: #f8f8f8; border-bottom: 1px solid var(--gray-light); }
+    .se2-btn { padding: 4px 9px; font-size: 12px; background: #fff; border: 1px solid #ddd; border-radius: 3px; cursor: pointer; font-family: inherit; color: var(--gray-dark); }
+    .se2-btn:hover { background: #eee; }
+    .se2-separator { width: 1px; background: #ddd; margin: 2px 4px; align-self: stretch; }
+    .se2-editor { width: 100%; min-height: 340px; padding: 14px 16px; border: none; resize: vertical; font-size: var(--text-md); font-family: inherit; line-height: 1.8; color: var(--gray-dark); outline: none; box-sizing: border-box; }
+    .se2-notice { font-size: 11px; color: var(--gray-mid); padding: 6px 12px; background: #f8f8f8; border-top: 1px solid var(--gray-light); }
+
+    /* ── 첨부파일 ── */
+    .attach-wrap { display: flex; flex-direction: column; gap: 10px; }
+    .attach-item { display: flex; align-items: center; gap: 10px; }
+    .attach-file-input { flex: 1; }
+    .attach-del-btn { flex-shrink: 0; padding: 5px 12px; font-size: 12px; background: #fff; border: 1px solid var(--gray-light); border-radius: var(--radius); cursor: pointer; color: var(--danger); }
+    .attach-del-btn:hover { background: #fff0f0; }
+    .attach-add-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; font-size: 13px; background: #fff; border: 1px solid var(--green-dark); border-radius: var(--radius); cursor: pointer; color: var(--green-dark); font-weight: 500; }
+    .attach-add-btn:hover { background: var(--green-pale, #f0f7f0); }
+    .attach-add-btn:disabled { opacity: 0.4; cursor: default; }
+    .attach-hint { font-size: 12px; color: var(--gray-mid); margin-top: 6px; }
+
+    /* ── 하단 버튼 ── */
+    .write-actions { display: flex; justify-content: space-between; align-items: center; padding: 20px 0 0; }
+  </style>
+</head>
+
+<body data-page="qna-write">
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>이게뭐예요</h1>
+      <p>정회원 전용 | 식물·곤충·버섯 등 자연물 식별 질문 게시판</p>
+    </div>
+  </div>
+
+  <div class="page-tabs">
+    <a href="competency.html" class="page-tab">역량강화 교육강좌</a>
+    <a href="mentoring.html" class="page-tab">멘토링 숲학교</a>
+    <a href="recruit.html" class="page-tab">수시숲해설 모집</a>
+    <a href="instructor.html" class="page-tab">숲해설 강사 신청</a>
+    <a href="sagongdan.html" class="page-tab">사공단 소식</a>
+    <a href="club.html" class="page-tab">동아리 소식</a>
+    <a href="qna.html" class="page-tab active">이게뭐예요</a>
+  </div>
+
+  <div class="content-wrap">
+    <div class="write-wrap">
+
+      <div class="write-section">
+
+        <!-- 제목 -->
+        <div class="write-field">
+          <label class="write-label" for="writeTitle">제목 <span class="req">*</span></label>
+          <input type="text" id="writeTitle" class="write-input"
+                 placeholder="식물/곤충/버섯 이름이 뭔가요?" maxlength="200">
+        </div>
+
+        <!-- 에디터 (SmartEditor2 UI — 실제 구현 시 SE2 SDK 연동) -->
+        <div class="write-field">
+          <label class="write-label">내용 <span class="req">*</span></label>
+          <!-- [SE2 연동 포인트] 실제 개발 시 아래 .se2-wrap을 SE2 초기화 대상 엘리먼트로 교체 -->
+          <div class="se2-wrap">
+            <div class="se2-toolbar" role="toolbar" aria-label="에디터 툴바">
+              <button type="button" class="se2-btn" onclick="SE2.exec('bold')" title="굵게"><b>B</b></button>
+              <button type="button" class="se2-btn" onclick="SE2.exec('italic')" title="기울임"><i>I</i></button>
+              <button type="button" class="se2-btn" onclick="SE2.exec('underline')" title="밑줄"><u>U</u></button>
+              <div class="se2-separator"></div>
+              <button type="button" class="se2-btn" onclick="SE2.exec('justifyLeft')" title="왼쪽 정렬">◀</button>
+              <button type="button" class="se2-btn" onclick="SE2.exec('justifyCenter')" title="가운데 정렬">▶◀</button>
+              <button type="button" class="se2-btn" onclick="SE2.exec('justifyRight')" title="오른쪽 정렬">▶</button>
+              <div class="se2-separator"></div>
+              <button type="button" class="se2-btn" onclick="SE2.exec('insertUnorderedList')" title="목록">≡</button>
+              <button type="button" class="se2-btn" onclick="SE2.exec('insertOrderedList')" title="번호 목록">1.</button>
+              <div class="se2-separator"></div>
+              <button type="button" class="se2-btn" onclick="SE2.insertLink()" title="링크 삽입">🔗</button>
+              <button type="button" class="se2-btn" onclick="SE2.insertImage()" title="이미지 삽입">🖼</button>
+            </div>
+            <!-- contenteditable 영역 — SE2 적용 시 iframe으로 교체 -->
+            <div id="se2Editor" class="se2-editor"
+                 contenteditable="true"
+                 role="textbox" aria-multiline="true"
+                 aria-label="본문 입력"
+                 data-placeholder="발견 장소, 특징, 색깔, 크기 등을 자세히 적어주세요."></div>
+            <div class="se2-notice">※ 실제 개발 시 SmartEditor2(SE2) 무료버전 SDK 연동 예정</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 첨부파일 (사진 첨부 권장) -->
+      <div class="write-section">
+        <div class="write-field">
+          <label class="write-label">첨부파일 <span style="font-weight:400;color:var(--gray-mid)">(최대 5개 / 사진 첨부 권장)</span></label>
+          <div class="attach-wrap" id="attachWrap">
+            <div class="attach-item" id="attachItem_0">
+              <input type="file" class="write-input attach-file-input" id="attachFile_0"
+                     accept=".jpg,.jpeg,.png,.pdf,.hwp,.docx">
+              <!-- 첫 번째 항목은 삭제 버튼 없음 -->
+            </div>
+          </div>
+          <button type="button" class="attach-add-btn" id="attachAddBtn" onclick="AttachMgr.add()">
+            + 추가
+          </button>
+          <p class="attach-hint">허용 형식: JPG, PNG, PDF, HWP, DOCX / 파일당 최대 10MB</p>
+        </div>
+      </div>
+
+      <!-- 하단 버튼 -->
+      <div class="write-actions">
+        <button type="button" class="btn btn-gray" onclick="history.back()">취소</button>
+        <button type="button" class="btn btn-dark" onclick="WriteCtrl.submit()">등록</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/member.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    /* ── SE2 placeholder 동작 ── */
+    const editorEl = document.getElementById('se2Editor');
+    if (editorEl) {
+      editorEl.style.color = editorEl.textContent.trim() ? '' : 'var(--gray-mid)';
+      editorEl.addEventListener('focus', () => {
+        if (!editorEl.textContent.trim()) {
+          editorEl.textContent = '';
+          editorEl.style.color = '';
+        }
+      });
+      editorEl.addEventListener('blur', () => {
+        if (!editorEl.textContent.trim()) {
+          editorEl.style.color = 'var(--gray-mid)';
+        }
+      });
+    }
+
+    /* ── SE2 exec (contenteditable 명령 — 실제 SE2 교체 시 삭제) ── */
+    const SE2 = {
+      exec(cmd) { document.execCommand(cmd, false, null); editorEl?.focus(); },
+      insertLink() {
+        const url = prompt('링크 URL을 입력하세요:');
+        if (url) document.execCommand('createLink', false, url);
+        editorEl?.focus();
+      },
+      insertImage() {
+        App.toast('이미지 삽입 — 실제 SE2 연동 시 서버 업로드 처리', 'info');
+      },
+      getContent() {
+        return editorEl?.innerHTML || '';
+      },
+    };
+    window.SE2 = SE2;
+
+    /* ── 첨부파일 관리 ── */
+    const AttachMgr = {
+      _count: 1,
+      _max: 5,
+      add() {
+        if (this._count >= this._max) return;
+        const wrap = document.getElementById('attachWrap');
+        const idx  = this._count++;
+        const item = document.createElement('div');
+        item.className = 'attach-item';
+        item.id = `attachItem_${idx}`;
+        item.innerHTML = `
+          <input type="file" class="write-input attach-file-input" id="attachFile_${idx}"
+                 accept=".jpg,.jpeg,.png,.pdf,.hwp,.docx">
+          <button type="button" class="attach-del-btn" onclick="AttachMgr.remove(${idx})">✕ 삭제</button>`;
+        wrap.appendChild(item);
+        if (this._count >= this._max) {
+          document.getElementById('attachAddBtn').disabled = true;
+        }
+      },
+      remove(idx) {
+        const item = document.getElementById(`attachItem_${idx}`);
+        if (item) item.remove();
+        this._count--;
+        const addBtn = document.getElementById('attachAddBtn');
+        if (addBtn) addBtn.disabled = false;
+      },
+    };
+    window.AttachMgr = AttachMgr;
+
+    /* ── 질문 등록/수정 ── */
+    const editId = App.getParam ? App.getParam('edit') : null;
+
+    const WriteCtrl = {
+      submit() {
+        const title   = document.getElementById('writeTitle')?.value.trim() || '';
+        const content = SE2.getContent().trim();
+        if (!title)   { App.toast('제목을 입력해주세요.', 'warning'); return; }
+        if (!content || content === '') { App.toast('내용을 입력해주세요.', 'warning'); return; }
+
+        if (editId) {
+          /* 수정 모드 */
+          const item = QNA_DATA.find(d => String(d.id) === String(editId));
+          if (item) {
+            item.title   = title;
+            item.content = content;
+          }
+          App.toast('수정이 완료되었습니다.');
+          location.href = 'qna-detail.html?id=' + editId;
+        } else {
+          /* 신규 등록 */
+          QNA_DATA.unshift({
+            id:      Date.now(),
+            title,
+            content,
+            author:  App?.user?.name || '회원',
+            date:    new Date().toISOString().slice(0, 10),
+            status:  'waiting',
+            answer:  null,
+          });
+          App.toast('질문이 등록되었습니다.');
+          location.href = 'qna.html';
+        }
+      },
+    };
+    window.WriteCtrl = WriteCtrl;
+
+    /* ── 수정 모드 진입 시 기존 데이터 로드 ── */
+    if (editId) {
+      document.title = '이게뭐예요 질문 수정 | 한국숲해설가협회';
+      const item = QNA_DATA?.find(d => String(d.id) === String(editId));
+      if (item) {
+        document.getElementById('writeTitle').value = item.title;
+        if (editorEl) editorEl.innerHTML = item.content;
+      }
+    }
+  </script>
+</body>
+
+</html>

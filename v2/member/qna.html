@@ -43,7 +43,7 @@
     <div class="list-top" style="margin-bottom:16px">
       <div class="list-count">전체 <strong id="qnaCount">0</strong>건</div>
       <button class="btn btn-primary"
-              onclick="QnaCtrl.openWriteModal()">✏️ 질문 작성</button>
+              onclick="location.href='qna-write.html'">질문 작성</button>
     </div>
 
     <!-- 테이블 -->
@@ -56,7 +56,6 @@
             <th style="width:90px">작성자</th>
             <th style="width:120px">상태</th>
             <th style="width:180px">등록일</th>
-            <th style="width:70px">조회</th>
           </tr>
         </thead>
         <tbody id="qnaTableBody"></tbody>
@@ -64,35 +63,6 @@
     </div>
     <div class="pagination" id="qnaPagination"></div>
 
-  </div>
-
-  <!-- 질문 작성 모달 -->
-  <div class="modal-overlay" id="qnaWriteModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>질문 작성</h3>
-        <button class="modal-close"
-                onclick="App.closeModal('qnaWriteModal')">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">제목 <span class="req">*</span></label>
-          <input type="text" class="form-control" id="qnaTitle"
-                 placeholder="식물/곤충/버섯 이름이 뭔가요?">
-        </div>
-        <div class="form-group">
-          <label class="form-label">내용 <span class="req">*</span></label>
-          <textarea class="form-control" id="qnaContent" rows="5"
-                    placeholder="발견 장소, 특징 등을 자세히 적어주세요."></textarea>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-gray"
-                onclick="App.closeModal('qnaWriteModal')">취소</button>
-        <button class="btn btn-primary"
-                onclick="QnaCtrl.saveQuestion()">등록</button>
-      </div>
-    </div>
   </div>
 
   <div id="ftr"></div>

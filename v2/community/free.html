@@ -40,7 +40,6 @@
 
       <!-- 권한 안내 배너 -->
       <div class="alert alert-info" style="margin-bottom:20px">
-        <span>✏️</span>
         <div>
           <strong>자유게시판은 일반회원 이상</strong> 이용 가능합니다.
           건전한 토론 문화를 위해 비방·욕설 게시물은 삭제될 수 있습니다.
@@ -69,7 +68,7 @@
       <!-- 목록 상단 -->
       <div class="list-top">
         <span class="list-count">전체 <strong id="freeCount">0</strong>건</span>
-        <button class="btn btn-primary btn-sm" onclick="FreeCtrl.openWriteModal()">✏️ 글쓰기</button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='free-write.html'">글쓰기</button>
       </div>
 
       <!-- 게시판 테이블 -->
@@ -81,7 +80,6 @@
               <th>제목</th>
               <th style="width:90px">작성자</th>
               <th style="width:110px">작성일</th>
-              <th style="width:60px">조회</th>
               <th style="width:60px">추천</th>
             </tr>
           </thead>
@@ -95,36 +93,6 @@
 
     </div>
   </main>
-
-  <!-- 글쓰기 모달 -->
-  <div class="modal-overlay" id="freeWriteModal">
-    <div class="modal" style="max-width:640px">
-      <div class="modal-header">
-        <h3>글쓰기</h3>
-        <button class="modal-close" onclick="App.closeModal('freeWriteModal')">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">제목 <span class="req">*</span></label>
-          <input type="text" class="form-control" id="freeTitle" placeholder="제목을 입력하세요">
-        </div>
-        <div class="form-group">
-          <label class="form-label">내용 <span class="req">*</span></label>
-          <textarea class="form-control" id="freeContent" rows="8"
-            placeholder="내용을 입력하세요.&#10;비방·욕설은 삭제될 수 있습니다."></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">첨부파일</label>
-          <input type="file" class="form-control" accept=".jpg,.png,.pdf,.hwp,.docx">
-          <div class="form-hint">최대 10MB / JPG, PNG, PDF, HWP, DOCX</div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-gray" onclick="App.closeModal('freeWriteModal')">취소</button>
-        <button class="btn btn-primary" onclick="FreeCtrl.savePost()">등록</button>
-      </div>
-    </div>
-  </div>
 
   <div id="ftr"></div>
 

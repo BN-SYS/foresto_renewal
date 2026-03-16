@@ -108,9 +108,16 @@ select.form-control {
 .board-table tbody td {
   padding: 12px 16px; text-align: center;
   color: var(--gray-dark); vertical-align: middle;
+  white-space: nowrap; /* 번호·작성자·날짜·상태 등 고정폭 컬럼 개행 방지 */
 }
-.board-table tbody td.td-title { text-align: left; }
-.board-table tbody td.td-title a { color: var(--gray-dark); text-decoration: none; font-weight: 500; }
+.board-table tbody td.td-title {
+  text-align: left;
+  white-space: normal;       /* 제목 컬럼만 줄바꿈 허용 */
+  max-width: 0;              /* flex-like 확장 — table-layout: fixed 없이도 남은 너비 차지 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.board-table tbody td.td-title a { color: var(--gray-dark); text-decoration: none; font-weight: 500; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .board-table tbody td.td-title a:hover { color: var(--green-main); text-decoration: underline; }
 
 /* ── 알림박스 */
@@ -418,11 +425,13 @@ select.form-control {
   white-space: nowrap;
   flex-shrink: 0;
 }
-.cd-status-open   { background: var(--green-dark);  color: #fff; }
-.cd-status-ready  { background: var(--info);         color: #fff; }
-.cd-status-closed { background: var(--gray-mid);     color: #fff; }
-.cd-status-cancel { background: var(--danger);       color: #fff; }
-.cd-status-done   { background: var(--gray-light);   color: var(--gray-mid); }
+.cd-status-open    { background: var(--green-dark);  color: #fff; }
+.cd-status-ready   { background: var(--info);         color: #fff; }
+.cd-status-closed  { background: var(--gray-mid);     color: #fff; }
+.cd-status-applied { background: var(--success, #2d6a4f); color: #fff; }
+/* 이전 상태 — 하위 호환 유지 */
+.cd-status-cancel  { background: var(--danger);       color: #fff; }
+.cd-status-done    { background: var(--gray-light);   color: var(--gray-mid); }
 
 /* 메타 정보 (작성자·조회수 등) */
 .cd-meta {

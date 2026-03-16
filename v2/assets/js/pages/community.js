@@ -106,14 +106,14 @@ const NOTICE_DATA = {
         {
             id: 9999,
             title: '[필독] 2026년 협회 운영 방침 안내',
-            author: '관리자', date: '2026-01-02', views: 1240,
+            author: '관리자', date: '2026-01-02',
             content: `<p>2026년 협회 운영 방침에 대해 안내드립니다.</p>
                 <p>주요 변경 사항은 다음과 같습니다.</p>`,
         },
         {
             id: 9998,
             title: '[공지] 개인정보처리방침 개정 안내',
-            author: '관리자', date: '2026-01-10', views: 890,
+            author: '관리자', date: '2026-01-10',
             content: `<p>개인정보처리방침 개정 내용을 안내드립니다.</p>`,
         },
     ],
@@ -128,7 +128,6 @@ const NOTICE_DATA = {
         ][i % 10],
         author: '관리자',
         date: commMakeDate(i),
-        views: Math.floor(Math.random() * 300 + 30),
         content: `<p>공지사항 ${25 - i}번 게시물 내용입니다.</p>
               <p>자세한 사항은 사무국(02-000-0000)으로 문의 바랍니다.</p>`,
     })),
@@ -146,7 +145,6 @@ const FREE_DATA = {
         ][i % 6],
         author: `회원${(i % 15) + 1}`,
         date: commMakeDate(i),
-        views: Math.floor(Math.random() * 150 + 5),
         likes: Math.floor(Math.random() * 30),
         content: `<p>자유게시판 ${30 - i}번 게시물입니다.</p>
               <p>여러분과 소통하고 싶어 글을 남깁니다.</p>`,
@@ -174,7 +172,6 @@ const PRESS_DATA = {
         ][i % 6],
         author: ['사무국', '김회원', '이회원', '박회원', '최회원', '정회원'][i % 6],
         date: commMakeDate(i),
-        views: Math.floor(Math.random() * 200 + 50),
         link: '#',
         content: `<p>언론보도 ${18 - i}번 게시물입니다.</p>`,
     })),
@@ -185,13 +182,13 @@ const JOB_DATA = {
     pinned: [
         {
             id: 9901, title: '[필독] 일자리·교육정보 게시판 이용 안내',
-            author: '관리자', date: '2026-01-05', views: 720,
+            author: '관리자', date: '2026-01-05',
             content: `<p>일자리·교육정보 게시판 이용 방법을 안내합니다.</p>
                       <p>채용, 교육, 자격, 공모 관련 정보를 공유하는 공간입니다.</p>`,
         },
         {
             id: 9900, title: '[고정] 2026년 산림 관련 자격시험 일정 총정리',
-            author: '사무국', date: '2026-01-15', views: 1150,
+            author: '사무국', date: '2026-01-15',
             content: `<p>2026년 산림 관련 국가자격시험 일정을 정리하였습니다.</p>
                       <p>산림교육전문가, 숲해설가 등 주요 자격 시험 일정을 확인하세요.</p>`,
         },
@@ -208,7 +205,6 @@ const JOB_DATA = {
         ][i % 6],
         author: '사무국',
         date: commMakeDate(i),
-        views: Math.floor(Math.random() * 180 + 20),
         content: `<p>일자리/교육정보 ${22 - i}번 게시물입니다.</p>
                   <p>세부 내용은 원문 공고를 확인하시기 바랍니다.</p>`,
     })),
@@ -239,16 +235,22 @@ const GALLERY_CONTENTS = [
     `<p>어린이 생태교육 현장 사진입니다.</p>
      <p>유치원 어린이들과 함께 숲 속 곤충과 식물을 관찰하는 체험 교육을 진행했습니다.</p>`,
 ];
-const GALLERY_DATA = Array.from({ length: 24 }, (_, i) => ({
-    id: 24 - i,
-    title: GALLERY_TITLES[i % 8],
-    author: ['사무국', '김회원', '이회원', '박회원'][i % 4],
-    date: commMakeDate(i),
-    views: Math.floor(Math.random() * 200 + 20),
-    imgUrl: null,
-    content: GALLERY_CONTENTS[i % 8],
-    link: i % 3 === 0 ? '#' : null,   /* 일부 게시물에 외부 링크 샘플 */
-}));
+/* 갤러리 샘플 이미지 — Picsum Photos (숲/자연 테마 시드) */
+const GALLERY_IMG_IDS = [15, 28, 56, 74, 82, 110, 133, 148, 175, 190, 213, 237];
+const GALLERY_DATA = Array.from({ length: 24 }, (_, i) => {
+    const seed = GALLERY_IMG_IDS[i % GALLERY_IMG_IDS.length];
+    const imgUrl = `https://picsum.photos/seed/${seed + i}/600/400`;
+    return {
+        id: 24 - i,
+        title: GALLERY_TITLES[i % 8],
+        author: ['사무국', '김회원', '이회원', '박회원'][i % 4],
+        date: commMakeDate(i),
+        imgUrl,
+        content: `<img src="${imgUrl}" alt="${GALLERY_TITLES[i % 8]}" style="width:100%;border-radius:6px;margin-bottom:16px">
+${GALLERY_CONTENTS[i % 8]}`,
+        link: i % 3 === 0 ? '#' : null,
+    };
+});
 
 /* ── 1-6. 협회 일정 이벤트 */
 const CALENDAR_EVENTS = [
@@ -440,8 +442,14 @@ const CalendarCtrl = {
             const evtTags = [
                 ...evts.slice(0, 2).map(e => {
                     const encoded = encodeURIComponent(JSON.stringify(e));
+                    /* 링크 있음: 밑줄 + 포인터 / 없음: 클릭 없음 */
+                    const linkStyle = e.link
+                        ? 'cursor:pointer;text-decoration:underline;'
+                        : 'cursor:default;';
                     return `<span class="event-tag ${this.CAT_META[e.cat]?.cls || ''}"
-                        data-evt="${encoded}">${e.title}</span>`;
+                        style="${linkStyle}"
+                        data-evt="${encoded}"
+                        data-link="${e.link || ''}">${e.title}</span>`;
                 }),
                 evts.length > 2
                     ? `<span style="font-size:10px;color:var(--gray-mid)">
@@ -461,10 +469,11 @@ const CalendarCtrl = {
         if (!grid) return;
         grid.innerHTML = html;
         grid.querySelectorAll('.event-tag[data-evt]').forEach(el => {
-            el.addEventListener('click', () => {
-                const evt = JSON.parse(decodeURIComponent(el.dataset.evt));
-                CalendarCtrl.openEventModal(evt);
-            });
+            const link = el.dataset.link;
+            if (link) {
+                el.addEventListener('click', () => { location.href = link; });
+            }
+            /* 링크 없는 경우 클릭 이벤트 없음 */
         });
     },
 
@@ -610,7 +619,6 @@ const NoticeCtrl = {
     </td>
     <td class="col-author">${row.author}</td>
     <td class="col-date">${row.date}</td>
-    <td class="col-views">${row.views}</td>
   </tr>`,
 
         });
@@ -673,7 +681,6 @@ const NoticeCtrl = {
             </div>
             <div class="cd-meta">
               <span>작성자 <strong>${item.author}</strong></span>
-              <span>조회 <strong>${item.views}</strong></span>
             </div>
             <hr class="cd-divider">
             <div class="cd-body">
@@ -710,7 +717,6 @@ const FreeCtrl = {
     </td>
     <td class="col-author">${row.author}</td>
     <td class="col-date">${row.date}</td>
-    <td class="col-views">${row.views}</td>
   </tr>`,
         });
         this._board.init();
@@ -740,6 +746,7 @@ const FreeCtrl = {
               <span class="cd-nav-title">${prev.title}</span>
             </div>` : ''}
           </div>` : '';
+        const isAuthor = App.user?.name === item.author;
         el.innerHTML = `
           <div class="cd-wrap">
             <div class="cd-head">
@@ -750,7 +757,6 @@ const FreeCtrl = {
             </div>
             <div class="cd-meta">
               <span>작성자 <strong>${item.author}</strong></span>
-              <span>조회 <strong>${item.views}</strong></span>
             </div>
             <hr class="cd-divider">
             <div class="cd-body">
@@ -760,6 +766,8 @@ const FreeCtrl = {
             <div class="cd-actions">
               <button class="btn btn-primary btn-sm cd-btn-list"
                       onclick="location.href='free.html'">목록</button>
+              ${isAuthor ? `<button class="btn btn-gray btn-sm"
+                      onclick="location.href='free-write.html?edit=${item.id}'">수정</button>` : ''}
             </div>
           </div>`;
     },
@@ -774,31 +782,6 @@ const FreeCtrl = {
         this._board?.search('');
     },
 
-    openWriteModal() {
-        ['freeTitle', 'freeContent'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.value = '';
-        });
-        App.openModal('freeWriteModal');
-    },
-
-    savePost() {
-        const title = document.getElementById('freeTitle')?.value.trim() || '';
-        const content = document.getElementById('freeContent')?.value.trim() || '';
-        if (!title) { App.toast('제목을 입력해주세요.', 'warning'); return; }
-        if (!content) { App.toast('내용을 입력해주세요.', 'warning'); return; }
-        FREE_DATA.normals.unshift({
-            id: Date.now(),
-            title,
-            content: `<p>${content}</p>`,
-            author: App.user.name,
-            date: new Date().toISOString().slice(0, 10),
-            views: 0, likes: 0,
-        });
-        this.init();
-        App.closeModal('freeWriteModal');
-        App.toast('게시글이 등록되었습니다.');
-    },
 };
 
 
@@ -807,6 +790,7 @@ const FreeCtrl = {
 ══════════════════════════════════════════════ */
 const PressCtrl = {
     _board: null,
+    _allData() { return [...PRESS_DATA.pinned, ...PRESS_DATA.normals]; },
 
     init() {
         this._board = createCommunityBoard({
@@ -821,17 +805,59 @@ const PressCtrl = {
       ${isPinned ? '<span class="badge-notice">공지</span>' : seq}
     </td>
     <td class="td-title">
-      <a href="${row.link || '#'}"
-         target="_blank" rel="noopener noreferrer">
+      <a href="press-detail.html?id=${row.id}">
         ${row.title}
       </a>
     </td>
     <td class="col-author">${row.author}</td>
     <td class="col-date">${row.date}</td>
-    <td class="col-views">${row.views}</td>
   </tr>`,
         });
         this._board.init();
+    },
+
+    renderDetail() {
+        const all  = this._allData();
+        const id   = Number(App.getParam('id'));
+        const el   = document.getElementById('pressDetail');
+        if (!el) return;
+        const item = all.find(d => d.id === id);
+        if (!item) { el.innerHTML = '<p style="padding:40px;text-align:center;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</p>'; return; }
+        const idx  = all.findIndex(d => d.id === id);
+        const next = all[idx - 1];
+        const prev = all[idx + 1];
+        el.innerHTML = `
+          <div class="cd-wrap">
+            <div class="cd-head">
+              <div class="cd-head-left">
+                <h2 class="cd-title">${item.title}</h2>
+              </div>
+              <span class="cd-date">${item.date}</span>
+            </div>
+            <div class="cd-meta">
+              <span>작성자 <strong>${item.author}</strong></span>
+            </div>
+            <hr class="cd-divider">
+            <div class="cd-body">
+              <div class="cd-content">${item.content}</div>
+            </div>
+            ${(next || prev) ? `<div class="cd-nav">
+              ${next ? `<div class="cd-nav-item" onclick="location.href='press-detail.html?id=${next.id}'">
+                <span class="cd-nav-label">다음글</span>
+                <span class="cd-nav-title">${next.title}</span>
+              </div>` : ''}
+              ${prev ? `<div class="cd-nav-item" onclick="location.href='press-detail.html?id=${prev.id}'">
+                <span class="cd-nav-label">이전글</span>
+                <span class="cd-nav-title">${prev.title}</span>
+              </div>` : ''}
+            </div>` : ''}
+            <div class="cd-actions">
+              <button class="btn btn-primary btn-sm" onclick="location.href='press.html'">목록</button>
+              <div class="cd-actions-right">
+                ${item.link && item.link !== '#' ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="btn btn-gray btn-sm">원문 보기</a>` : ''}
+              </div>
+            </div>
+          </div>`;
     },
 
     search() {
@@ -867,7 +893,6 @@ const JobCtrl = {
     </td>
     <td class="col-author">${row.author}</td>
     <td class="col-date">${row.date}</td>
-    <td class="col-views">${row.views}</td>
   </tr>`,
         });
         this._board.init();
@@ -912,7 +937,6 @@ const JobCtrl = {
             </div>
             <div class="cd-meta">
               <span>작성자 <strong>${item.author}</strong></span>
-              <span>조회 <strong>${item.views}</strong></span>
             </div>
             <hr class="cd-divider">
             <div class="cd-body">
@@ -989,7 +1013,6 @@ const GalleryCtrl = {
                     <div class="gallery-meta">
                       <span>${item.author}</span>
                       <span>${item.date}</span>
-                      <span>조회 ${item.views}</span>
                     </div>
                   </div>
                 </div>`;
@@ -1044,7 +1067,6 @@ const GalleryCtrl = {
             </div>
             <div class="cd-meta">
               <span>작성자 <strong>${item.author}</strong></span>
-              <span>조회 <strong>${item.views}</strong></span>
             </div>
             <hr class="cd-divider">
             <div class="cd-body">
@@ -1094,6 +1116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'free':            () => FreeCtrl.init(),
         'free-detail':     () => FreeCtrl.renderDetail(),
         'press':           () => PressCtrl.init(),
+        'press-detail':    () => PressCtrl.renderDetail(),
         'job':             () => JobCtrl.init(),
         'job-detail':      () => JobCtrl.renderDetail(),
         'gallery':         () => GalleryCtrl.init(),
