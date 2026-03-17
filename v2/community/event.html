@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>협회 일정 | 한국숲해설가협회</title>
+  <title>행사 안내 | 한국숲해설가협회</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/reset.css">
   <link rel="stylesheet" href="../assets/css/common.css">
@@ -13,37 +13,52 @@
   <link rel="stylesheet" href="../assets/css/pages/community.css">
 </head>
 
-<body data-page="calendar">
+<body data-page="event">
 
   <div id="hdr"></div>
 
   <div class="page-header">
     <div class="container">
-      <h1>협회 일정</h1>
-      <p>협회의 교육·행사·모임 일정을 한눈에 확인하세요</p>
+      <h1>행사 안내</h1>
+      <p>협회 주요 행사 및 이벤트 안내</p>
     </div>
   </div>
 
   <div class="page-tabs">
     <span class="page-tab-group">알림</span>
     <a href="notice-list.html" class="page-tab">공지사항</a>
-    <a href="calendar.html" class="page-tab active">협회 캘린더</a>
+    <a href="calendar.html" class="page-tab">협회 캘린더</a>
     <a href="press.html" class="page-tab">언론 보도</a>
-    <a href="event.html" class="page-tab">행사 안내</a>
+    <a href="event.html" class="page-tab active">행사 안내</a>
     <a href="job.html" class="page-tab">일자리정보</a>
   </div>
 
   <div class="content-wrap">
 
-    <!-- 월 이동 네비게이션 -->
-    <div class="card" style="padding:0;overflow:hidden">
-      <div class="cal-main-nav">
-        <button onclick="CalendarCtrl.changeMonth(-1)">&#8249;</button>
-        <h2 id="calMonthTitle">2026년 3월</h2>
-        <button onclick="CalendarCtrl.changeMonth(1)">&#8250;</button>
+    <div class="list-top">
+      <span class="list-count">Total <strong id="eventCount">0</strong>건</span>
+      <div class="list-search">
+        <input type="text" class="list-search-input" id="eventKeyword" placeholder="검색어를 입력하세요"
+          onkeydown="if(event.key==='Enter') EventBoard.search(this.value)">
+        <button class="list-search-btn"
+          onclick="EventBoard.search(document.getElementById('eventKeyword').value)">검색</button>
       </div>
-      <div class="full-cal-grid" id="fullCalGrid"></div>
     </div>
+
+    <div class="table-wrap">
+      <table class="board-table">
+        <thead>
+          <tr>
+            <th style="width:120px">번호</th>
+            <th class="col-title">제목</th>
+            <th style="width:90px">작성자</th>
+            <th style="width:110px">작성일</th>
+          </tr>
+        </thead>
+        <tbody id="eventTableBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="eventPagination"></div>
 
   </div>
 
@@ -55,7 +70,7 @@
   <script>
     document.getElementById('hdr').innerHTML = Header.render('커뮤니티', '../');
     document.getElementById('ftr').innerHTML = Footer.render('../');
-    CalendarCtrl.init();
+    typeof EventBoard !== 'undefined' && EventBoard.init && EventBoard.init();
   </script>
 </body>
 

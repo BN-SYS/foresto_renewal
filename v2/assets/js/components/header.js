@@ -77,10 +77,12 @@ const NAV_DATA = [
       {
         label: '동아리', href: 'member/club.html',
         children: [
-          { label: '동아리 소식',   href: 'member/club.html' },
-          { label: '동아리 사람책', href: 'member/qna.html' },
+          { label: '동아리 소개',  href: 'member/club.html' },
+          { label: '동아리 소식',  href: 'member/club.html?tab=news' },
+          { label: '동아리 자료방', href: 'member/club.html?tab=archive' },
         ],
       },
+      { label: '이게뭐예요', href: 'member/qna.html' },
     ],
   },
   {
@@ -92,6 +94,7 @@ const NAV_DATA = [
           { label: '공지사항',   href: 'community/notice-list.html' },
           { label: '협회 캘린더', href: 'community/calendar.html' },
           { label: '언론 보도',  href: 'community/press.html' },
+          { label: '행사 안내',  href: 'community/event.html' },
           { label: '일자리정보', href: 'community/job.html' },
         ],
       },

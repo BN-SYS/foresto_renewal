@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사이트맵 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    .sitemap-wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+    .sitemap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 32px;
+    }
+    .sitemap-section {
+      border-top: 2px solid var(--green-dark);
+      padding-top: 16px;
+    }
+    .sitemap-depth1 {
+      font-size: var(--text-md);
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 12px;
+      display: block;
+      text-decoration: none;
+    }
+    .sitemap-depth1:hover { text-decoration: underline; }
+    .sitemap-group-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-mid);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin: 14px 0 6px;
+    }
+    .sitemap-depth2 {
+      display: block;
+      font-size: 13px;
+      color: var(--gray-dark);
+      padding: 4px 0 4px 12px;
+      text-decoration: none;
+      border-left: 2px solid var(--gray-light);
+      margin-bottom: 2px;
+      line-height: 1.5;
+      transition: color .15s, border-color .15s;
+    }
+    .sitemap-depth2:hover {
+      color: var(--green-dark);
+      border-left-color: var(--green-dark);
+    }
+    .sitemap-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-left: 4px;
+      vertical-align: middle;
+      line-height: 1.6;
+    }
+    .badge-member { background: #e8f5e9; color: #2e7d32; }
+    .badge-admin  { background: #fff3e0; color: #e65100; }
+
+    @media (max-width: 767px) {
+      .sitemap-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+    }
+    @media (max-width: 479px) {
+      .sitemap-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>사이트맵</h1>
+      <p>한국숲해설가협회 전체 메뉴 구조</p>
+    </div>
+  </div>
+
+  <div class="sitemap-wrap">
+    <div class="sitemap-grid">
+
+      <!-- 1. 소개 -->
+      <div class="sitemap-section">
+        <a href="about/index.html" class="sitemap-depth1">소개</a>
+
+        <div class="sitemap-group-label">협회 소개</div>
+        <a href="about/index.html"       class="sitemap-depth2">인사말</a>
+        <a href="about/vision.html"      class="sitemap-depth2">미션 &amp; 비전</a>
+        <a href="about/project.html"     class="sitemap-depth2">주요사업</a>
+        <a href="about/history.html"     class="sitemap-depth2">연혁</a>
+
+        <div class="sitemap-group-label">조직 안내</div>
+        <a href="about/members.html"     class="sitemap-depth2">조직도 · 임원진</a>
+        <a href="about/regions.html"     class="sitemap-depth2">전국 지역협회</a>
+
+        <div class="sitemap-group-label">협회 정보</div>
+        <a href="about/constitution.html" class="sitemap-depth2">정관</a>
+        <a href="about/regulation.html"  class="sitemap-depth2">회원 규정</a>
+        <a href="about/contact.html"     class="sitemap-depth2">오시는 길</a>
+      </div>
+
+      <!-- 2. 교육신청 -->
+      <div class="sitemap-section">
+        <a href="education/forester.html" class="sitemap-depth1">교육신청</a>
+
+        <div class="sitemap-group-label">숲해설가 알아보기</div>
+        <a href="education/forester.html"    class="sitemap-depth2">숲해설가란?</a>
+        <a href="education/faq.html"         class="sitemap-depth2">자주 묻는 질문</a>
+
+        <div class="sitemap-group-label">전문가 과정</div>
+        <a href="education/course-intro.html" class="sitemap-depth2">교육 개요</a>
+        <a href="education/course-list.html"  class="sitemap-depth2">전문과정 신청</a>
+
+        <div class="sitemap-group-label">기타 교육</div>
+        <a href="education/academy.html"     class="sitemap-depth2">시민 아카데미</a>
+        <a href="education/job-training.html" class="sitemap-depth2">직무교육</a>
+      </div>
+
+      <!-- 3. 회원활동 -->
+      <div class="sitemap-section">
+        <a href="member/competency.html" class="sitemap-depth1">회원활동</a>
+
+        <div class="sitemap-group-label">역량 강화</div>
+        <a href="member/competency.html" class="sitemap-depth2">교육강좌 <span class="sitemap-badge badge-member">정회원</span></a>
+        <a href="member/mentoring.html"  class="sitemap-depth2">멘토링 숲학교 <span class="sitemap-badge badge-member">정회원</span></a>
+
+        <div class="sitemap-group-label">사회공헌</div>
+        <a href="member/sagongdan.html"  class="sitemap-depth2">사회공헌단</a>
+
+        <div class="sitemap-group-label">숲해설</div>
+        <a href="member/recruit.html"    class="sitemap-depth2">숲해설 모집</a>
+        <a href="member/instructor.html" class="sitemap-depth2">숲해설 신청</a>
+
+        <div class="sitemap-group-label">동아리</div>
+        <a href="member/club.html"               class="sitemap-depth2">동아리 소개</a>
+        <a href="member/club.html?tab=news"      class="sitemap-depth2">동아리 소식 <span class="sitemap-badge badge-member">정회원</span></a>
+        <a href="member/club.html?tab=archive"   class="sitemap-depth2">동아리 자료방 <span class="sitemap-badge badge-member">정회원</span></a>
+
+        <div class="sitemap-group-label">이게뭐예요</div>
+        <a href="member/qna.html" class="sitemap-depth2">이게뭐예요? <span class="sitemap-badge badge-member">정회원</span></a>
+      </div>
+
+      <!-- 4. 커뮤니티 -->
+      <div class="sitemap-section">
+        <a href="community/notice-list.html" class="sitemap-depth1">커뮤니티</a>
+
+        <div class="sitemap-group-label">알림</div>
+        <a href="community/notice-list.html" class="sitemap-depth2">공지사항</a>
+        <a href="community/calendar.html"    class="sitemap-depth2">협회 캘린더</a>
+        <a href="community/press.html"       class="sitemap-depth2">언론 보도</a>
+        <a href="community/event.html"       class="sitemap-depth2">행사 안내</a>
+        <a href="community/job.html"         class="sitemap-depth2">일자리정보</a>
+
+        <div class="sitemap-group-label">자유게시판</div>
+        <a href="community/free.html"        class="sitemap-depth2">자유게시판</a>
+
+        <div class="sitemap-group-label">갤러리 &amp; 자료</div>
+        <a href="community/gallery.html"     class="sitemap-depth2">사진 갤러리</a>
+        <a href="community/newsletter.html"  class="sitemap-depth2">협회 소식지</a>
+        <a href="community/archive.html"     class="sitemap-depth2">자료실</a>
+      </div>
+
+      <!-- 5. 참여 -->
+      <div class="sitemap-section">
+        <a href="participate/membership.html" class="sitemap-depth1">참여</a>
+
+        <a href="participate/membership.html"  class="sitemap-depth2">정회원 가입 안내</a>
+
+        <div class="sitemap-group-label">후원</div>
+        <a href="participate/donate-info.html" class="sitemap-depth2">후원 안내</a>
+        <a href="participate/donate.html"      class="sitemap-depth2">후원하기</a>
+      </div>
+
+      <!-- 6. 회원 전용 -->
+      <div class="sitemap-section">
+        <span class="sitemap-depth1" style="cursor:default;">회원 전용</span>
+
+        <a href="auth/login.html"      class="sitemap-depth2">로그인</a>
+        <a href="auth/register.html"   class="sitemap-depth2">회원가입</a>
+        <a href="mypage/index.html"    class="sitemap-depth2">마이페이지</a>
+        <a href="mypage/profile.html"  class="sitemap-depth2">프로필 수정</a>
+        <a href="mypage/courses.html"  class="sitemap-depth2">교육이수 내역</a>
+
+        <div class="sitemap-group-label">관리자</div>
+        <a href="admin/index.html" class="sitemap-depth2">관리자 대시보드 <span class="sitemap-badge badge-admin">관리자</span></a>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/components/header.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('', '');
+    document.getElementById('ftr').innerHTML = Footer.render('');
+    Footer.initFamilyOutsideClick && Footer.initFamilyOutsideClick();
+  </script>
+</body>
+
+</html>

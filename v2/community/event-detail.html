@@ -4,51 +4,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>전국 지역협회 | 한국숲해설가협회</title>
+  <title>행사 안내 상세 | 한국숲해설가협회</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/reset.css">
   <link rel="stylesheet" href="../assets/css/common.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
-  <link rel="stylesheet" href="../assets/css/pages/about.css">
   <link rel="stylesheet" href="../assets/css/pages/community.css">
 </head>
 
-<body data-page="regions">
+<body data-page="event-detail">
 
   <div id="hdr"></div>
 
   <div class="page-header">
     <div class="container">
-      <h1>협회 소개</h1>
-      <p>한국숲해설가협회를 소개합니다.</p>
+      <h1>행사 안내</h1>
+      <p>협회 주요 행사 및 이벤트 안내</p>
     </div>
   </div>
 
   <div class="page-tabs">
-    <span class="page-tab-group">조직 안내</span>
-    <a href="members.html" class="page-tab">조직도·임원진</a>
-    <a href="regions.html" class="page-tab active">전국 지역협회</a>
+    <span class="page-tab-group">알림</span>
+    <a href="notice-list.html" class="page-tab">공지사항</a>
+    <a href="calendar.html" class="page-tab">협회 캘린더</a>
+    <a href="press.html" class="page-tab">언론 보도</a>
+    <a href="event.html" class="page-tab active">행사 안내</a>
+    <a href="job.html" class="page-tab">일자리정보</a>
   </div>
 
   <div class="content-wrap">
-
-    <div class="list-top" style="margin-bottom:16px">
-      <span class="list-count">전국 <strong>12개</strong> 지역협회 운영 중</span>
+    <div id="eventDetail">
+      <div style="text-align:center;padding:48px;color:var(--gray-mid)">불러오는 중...</div>
     </div>
-
-    <!-- 썸네일 카드 그리드 (RegionCtrl.init()이 JS로 채움) -->
-    <div class="gallery-grid" id="regionGrid"></div>
-
   </div>
 
   <div id="ftr"></div>
 
   <script src="../assets/js/app.js"></script>
   <script src="../assets/js/components/header.js"></script>
-  <script src="../assets/js/pages/about.js"></script>
+  <script src="../assets/js/pages/community.js"></script>
   <script>
-    document.getElementById('hdr').innerHTML = Header.render('협회소개', '../');
+    document.getElementById('hdr').innerHTML = Header.render('커뮤니티', '../');
     document.getElementById('ftr').innerHTML = Footer.render('../');
   </script>
 </body>

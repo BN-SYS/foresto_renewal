@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>동아리 소식 | 한국숲해설가협회</title>
+    <title>동아리단 | 한국숲해설가협회</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/reset.css">
     <link rel="stylesheet" href="../assets/css/common.css">
@@ -21,15 +21,16 @@
     <div class="page-header">
         <div class="container">
             <h1>숲동아리단</h1>
-            <p>정회원 전용 | 동아리 소식 · 자료 · 소개 · Q&A</p>
+            <p>정회원 전용 | 동아리 소개 · 소식 · 자료방</p>
         </div>
     </div>
 
     <div class="page-tabs">
-    <span class="page-tab-group">동아리</span>
-    <a href="club.html" class="page-tab  active">동아리 소식</a>
-    <a href="qna.html" class="page-tab ">동아리 사람책</a>
-  </div>
+        <span class="page-tab-group">동아리</span>
+        <a href="club.html" class="page-tab" id="tabLink_intro">동아리 소개</a>
+        <a href="club.html?tab=news" class="page-tab" id="tabLink_news">동아리 소식</a>
+        <a href="club.html?tab=archive" class="page-tab" id="tabLink_archive">동아리 자료방</a>
+    </div>
 
     <div class="content-wrap">
 
@@ -37,77 +38,8 @@
             동아리 게시판은 <strong>정회원 전용</strong> 메뉴입니다.
         </div>
 
-        <!-- 목록 영역 -->
-        <div id="clubListWrap">
-          <!-- 내부 탭 -->
-          <div class="tabs" style="margin-bottom:24px">
-              <button class="tab-btn active" onclick="ClubCtrl.switchTab('news', this)">동아리 소식</button>
-              <button class="tab-btn" onclick="ClubCtrl.switchTab('archive', this)">자료방</button>
-              <button class="tab-btn" onclick="ClubCtrl.switchTab('intro', this)">동아리 소개</button>
-          </div>
-
-        <!-- 소식 탭 -->
-        <div id="tab-news">
-            <div class="list-top">
-                <span class="list-count">Total <strong id="clubNewsCount">0</strong>건</span>
-                <div class="list-search">
-                    <select class="list-search-type" id="clubFilter" onchange="ClubCtrl.searchNews()">
-                        <option value="">전체</option>
-                        <option>숲사랑단</option>
-                        <option>초록나무</option>
-                        <option>산들바람</option>
-                    </select>
-                    <input type="text" class="list-search-input" id="clubNewsKeyword" placeholder="제목 검색"
-                        onkeydown="if(event.key==='Enter') ClubCtrl.searchNews()">
-                    <button class="list-search-btn" onclick="ClubCtrl.searchNews()">검색</button>
-                </div>
-            </div>
-            <div class="table-wrap">
-                <table class="board-table">
-                    <thead>
-                        <tr>
-                            <th style="width:120px">번호</th>
-                            <th style="width:150px">동아리</th>
-                            <th>제목</th>
-                            <th style="width:120px">작성자</th>
-                            <th style="width:180px">작성일</th>
-                        </tr>
-                    </thead>
-                    <tbody id="clubNewsTableBody"></tbody>
-                </table>
-            </div>
-            <div class="pagination" id="clubNewsPagination"></div>
-        </div>
-
-        <!-- 자료방 탭 -->
-        <div id="tab-archive" style="display:none">
-            <div class="list-top">
-                <span class="list-count">Total <strong id="clubArchiveCount">0</strong>건</span>
-                <div class="list-search">
-                    <input type="text" class="list-search-input" id="clubArchiveKeyword" placeholder="검색어를 입력하세요"
-                        onkeydown="if(event.key==='Enter') ClubCtrl.searchArchive()">
-                    <button class="list-search-btn" onclick="ClubCtrl.searchArchive()">검색</button>
-                </div>
-            </div>
-            <div class="table-wrap">
-                <table class="board-table">
-                    <thead>
-                        <tr>
-                            <th style="width:60px">번호</th>
-                            <th>제목</th>
-                            <th style="width:90px">작성자</th>
-                            <th style="width:60px">첨부</th>
-                            <th style="width:110px">작성일</th>
-                        </tr>
-                    </thead>
-                    <tbody id="clubArchiveTableBody"></tbody>
-                </table>
-            </div>
-            <div class="pagination" id="clubArchivePagination"></div>
-        </div>
-
-        <!-- 동아리 소개 탭 -->
-        <div id="tab-intro" style="display:none">
+        <!-- ===== 동아리 소개 탭 ===== -->
+        <div id="tab-intro">
             <div class="gallery-grid">
                 <div class="gallery-card">
                     <div class="gallery-thumb-placeholder">🌲</div>
@@ -151,11 +83,86 @@
                 </div>
             </div>
         </div>
-        </div><!-- /#clubListWrap -->
+
+        <!-- ===== 동아리 소식 탭 ===== -->
+        <div id="tab-news" style="display:none">
+            <div class="list-top">
+                <span class="list-count">Total <strong id="clubNewsCount">0</strong>건</span>
+                <div class="list-search">
+                    <select class="list-search-type" id="clubFilter" onchange="ClubCtrl.searchNews()">
+                        <option value="">전체</option>
+                        <option>숲사랑단</option>
+                        <option>초록나무</option>
+                        <option>산들바람</option>
+                    </select>
+                    <input type="text" class="list-search-input" id="clubNewsKeyword" placeholder="제목 검색"
+                        onkeydown="if(event.key==='Enter') ClubCtrl.searchNews()">
+                    <button class="list-search-btn" onclick="ClubCtrl.searchNews()">검색</button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table class="board-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60px">번호</th>
+                            <th style="width:120px">동아리</th>
+                            <th>제목</th>
+                            <th style="width:90px">작성자</th>
+                            <th style="width:110px">작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clubNewsTableBody"></tbody>
+                </table>
+            </div>
+            <div class="pagination" id="clubNewsPagination"></div>
+        </div>
+
+        <!-- ===== 동아리 자료방 탭 ===== -->
+        <div id="tab-archive" style="display:none">
+            <div class="list-top">
+                <span class="list-count">Total <strong id="clubArchiveCount">0</strong>건</span>
+                <div class="list-top-right">
+                    <select class="list-search-type" id="clubArchiveSortSelect"
+                            onchange="ClubCtrl.changeArchiveSort(this.value)">
+                        <option value="latest">최신순</option>
+                    </select>
+                    <div class="list-search">
+                        <select class="list-search-type" id="clubArchiveFilter"
+                                onchange="ClubCtrl.searchArchive()"
+                                style="border-right: none; border-radius: var(--radius) 0 0 var(--radius);">
+                            <option value="">전체 동아리</option>
+                            <option>숲사랑단</option>
+                            <option>초록나무</option>
+                            <option>산들바람</option>
+                        </select>
+                        <input type="text" class="list-search-input" id="clubArchiveKeyword"
+                            placeholder="검색어를 입력하세요"
+                            style="border-radius: 0; border-left: none;"
+                            onkeydown="if(event.key==='Enter') ClubCtrl.searchArchive()">
+                        <button class="list-search-btn" onclick="ClubCtrl.searchArchive()">검색</button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table class="board-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60px">번호</th>
+                            <th style="width:100px">동아리</th>
+                            <th>제목</th>
+                            <th style="width:80px">작성자</th>
+                            <th style="width:110px">등록일</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clubArchiveTableBody"></tbody>
+                </table>
+            </div>
+            <div class="pagination" id="clubArchivePagination"></div>
+        </div>
 
         <!-- 상세 영역 (id 파라미터 있을 때 노출) -->
         <div id="clubDetailWrap" style="display:none">
-          <div id="clubDetail"></div>
+            <div id="clubDetail"></div>
         </div>
 
     </div>
@@ -168,7 +175,31 @@
     <script>
         document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
         document.getElementById('ftr').innerHTML = Footer.render('../');
-        ClubCtrl.init();
+
+        /* URL 파라미터로 탭 초기 선택 (?tab=news | ?tab=archive, 기본: intro) */
+        (function () {
+            const tab = new URLSearchParams(location.search).get('tab') || 'intro';
+
+            // 모든 탭 콘텐츠 숨기기
+            ['intro', 'news', 'archive'].forEach(function (t) {
+                document.getElementById('tab-' + t).style.display = 'none';
+                const link = document.getElementById('tabLink_' + t);
+                if (link) link.classList.remove('active');
+            });
+
+            // 선택된 탭 보이기
+            const showTab = document.getElementById('tab-' + tab);
+            if (showTab) showTab.style.display = '';
+            const activeLink = document.getElementById('tabLink_' + tab);
+            if (activeLink) activeLink.classList.add('active');
+
+            // ClubCtrl 초기화 (소식/자료방 탭일 때만)
+            if (tab === 'news') {
+                ClubCtrl.init && ClubCtrl.init();
+            } else if (tab === 'archive') {
+                ClubCtrl.initArchive && ClubCtrl.initArchive();
+            }
+        })();
     </script>
 </body>
 
