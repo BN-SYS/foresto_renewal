@@ -27,39 +27,30 @@
 
   <!-- 서브 내비 -->
   <div class="page-tabs">
-    <a href="notice-list.html" class="page-tab">공지사항</a>
-    <a href="calendar.html" class="page-tab">협회일정</a>
-    <a href="free.html" class="page-tab">자유게시판</a>
-    <a href="press.html" class="page-tab">언론보도</a>
-    <a href="job.html" class="page-tab">일자리 및 교육정보</a>
-    <a href="gallery.html" class="page-tab">갤러리</a>
-    <a href="newsletter.html" class="page-tab">협회소식지</a>
-    <a href="archive.html" class="page-tab active">자료실</a>
+    <span class="page-tab-group">갤러리 & 자료</span>
+    <a href="gallery.html" class="page-tab ">사진 갤러리</a>
+    <a href="newsletter.html" class="page-tab ">협회 소식지</a>
+    <a href="archive.html" class="page-tab  active">자료실</a>
   </div>
 
   <main>
     <div class="content-wrap">
 
-      <!-- 검색 영역 -->
-      <div class="search-wrap">
-        <div class="search-field" style="flex:1;min-width:160px;">
-          <label>검색어</label>
-          <input type="text" class="form-control" id="archiveKeyword"
-                 placeholder="제목 검색"
-                 onkeydown="if(event.key==='Enter') ArchiveCtrl.search()">
-        </div>
-        <button class="btn btn-primary search-btn" onclick="ArchiveCtrl.search()">검색</button>
-        <button class="btn btn-gray search-btn"    onclick="ArchiveCtrl.reset()">초기화</button>
-      </div>
-
-      <!-- 목록 상단 바 -->
+      <!-- 목록 상단 -->
       <div class="list-top">
-        <span class="list-count">전체 <strong id="archiveCount">0</strong>건</span>
-        <select class="form-control" id="archiveSortSelect"
-                style="width:auto;height:36px;font-size:13px"
-                onchange="ArchiveCtrl.changeSort(this.value)">
-          <option value="latest">최신순</option>
-        </select>
+        <span class="list-count">Total <strong id="archiveCount">0</strong>건</span>
+        <div class="list-top-right">
+          <select class="list-search-type" id="archiveSortSelect"
+                  onchange="ArchiveCtrl.changeSort(this.value)">
+            <option value="latest">최신순</option>
+          </select>
+          <div class="list-search">
+            <input type="text" class="list-search-input" id="archiveKeyword" placeholder="검색어를 입력하세요"
+              onkeydown="if(event.key==='Enter') ArchiveCtrl.search()">
+            <button class="list-search-btn" onclick="ArchiveCtrl.search()">검색</button>
+          </div>
+        </div>
+      </div>
       </div>
 
       <!-- 자료 목록 테이블 -->

@@ -26,14 +26,10 @@
     </div>
 
     <div class="page-tabs">
-        <a href="competency.html" class="page-tab ">역량강화 교육강좌</a>
-        <a href="mentoring.html" class="page-tab ">멘토링 숲학교</a>
-        <a href="recruit.html" class="page-tab ">수시숲해설 모집</a>
-        <a href="instructor.html" class="page-tab ">숲해설 강사 신청</a>
-        <a href="sagongdan.html" class="page-tab ">사공단 소식</a>
-        <a href="club.html" class="page-tab  active">동아리 소식</a>
-        <a href="qna.html" class="page-tab ">이게뭐예요</a>
-    </div>
+    <span class="page-tab-group">동아리</span>
+    <a href="club.html" class="page-tab  active">동아리 소식</a>
+    <a href="qna.html" class="page-tab ">동아리 사람책</a>
+  </div>
 
     <div class="content-wrap">
 
@@ -52,26 +48,19 @@
 
         <!-- 소식 탭 -->
         <div id="tab-news">
-            <div class="search-wrap">
-                <div class="search-field">
-                    <label>동아리</label>
-                    <select class="form-control" id="clubFilter" onchange="ClubCtrl.searchNews()">
+            <div class="list-top">
+                <span class="list-count">Total <strong id="clubNewsCount">0</strong>건</span>
+                <div class="list-search">
+                    <select class="list-search-type" id="clubFilter" onchange="ClubCtrl.searchNews()">
                         <option value="">전체</option>
                         <option>숲사랑단</option>
                         <option>초록나무</option>
                         <option>산들바람</option>
                     </select>
+                    <input type="text" class="list-search-input" id="clubNewsKeyword" placeholder="제목 검색"
+                        onkeydown="if(event.key==='Enter') ClubCtrl.searchNews()">
+                    <button class="list-search-btn" onclick="ClubCtrl.searchNews()">검색</button>
                 </div>
-                <div class="search-field">
-                    <label>검색</label>
-                    <input type="text" class="form-control" id="clubNewsKeyword" placeholder="제목 검색"
-                        style="min-width:180px" onkeydown="if(event.key==='Enter') ClubCtrl.searchNews()">
-                </div>
-                <button class="btn btn-primary search-btn" onclick="ClubCtrl.searchNews()">검색</button>
-                <button class="btn btn-gray search-btn" onclick="ClubCtrl.resetNews()">초기화</button>
-            </div>
-            <div class="list-top">
-                <span class="list-count">전체 <strong id="clubNewsCount">0</strong>건</span>
             </div>
             <div class="table-wrap">
                 <table class="board-table">
@@ -92,17 +81,13 @@
 
         <!-- 자료방 탭 -->
         <div id="tab-archive" style="display:none">
-            <div class="search-wrap">
-                <div class="search-field">
-                    <label>검색</label>
-                    <input type="text" class="form-control" id="clubArchiveKeyword" placeholder="제목 검색"
-                        style="min-width:220px" onkeydown="if(event.key==='Enter') ClubCtrl.searchArchive()">
-                </div>
-                <button class="btn btn-primary search-btn" onclick="ClubCtrl.searchArchive()">검색</button>
-                <button class="btn btn-gray search-btn" onclick="ClubCtrl.resetArchive()">초기화</button>
-            </div>
             <div class="list-top">
-                <span class="list-count">전체 <strong id="clubArchiveCount">0</strong>건</span>
+                <span class="list-count">Total <strong id="clubArchiveCount">0</strong>건</span>
+                <div class="list-search">
+                    <input type="text" class="list-search-input" id="clubArchiveKeyword" placeholder="검색어를 입력하세요"
+                        onkeydown="if(event.key==='Enter') ClubCtrl.searchArchive()">
+                    <button class="list-search-btn" onclick="ClubCtrl.searchArchive()">검색</button>
+                </div>
             </div>
             <div class="table-wrap">
                 <table class="board-table">

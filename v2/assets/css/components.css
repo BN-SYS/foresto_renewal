@@ -232,12 +232,71 @@ select.form-control {
 .search-btn { height: 40px; padding: 0 24px; white-space: nowrap; align-self: flex-end; }
 
 /* ── 목록 상단 */
-.list-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.list-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 12px; }
 .list-count {
-  font-size: var(--text-base);
-  color: var(--gray-dark);
+  font-size: var(--text-md);
+  color: var(--gray-mid);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-.list-count strong { font-weight: 700; }
+.list-count strong { color: var(--gray-dark); font-weight: 700; }
+.list-top-right { display: flex; align-items: center; gap: 8px; }
+
+/* ── 목록 인라인 검색 바 (리뉴얼 — 2026.03) */
+.list-search {
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid var(--gray-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--white);
+}
+.list-search-type {
+  padding: 0 22px 0 10px;
+  height: 36px;
+  border: none;
+  border-right: 1.5px solid var(--gray-light);
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--gray-dark);
+  background: var(--white);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 64px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23636e72' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  flex-shrink: 0;
+}
+.list-search-input {
+  padding: 0 12px;
+  height: 36px;
+  border: none;
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--gray-dark);
+  min-width: 200px;
+  outline: none;
+  background: var(--white);
+  flex: 1;
+}
+.list-search-input::placeholder { color: var(--gray-mid); }
+.list-search-btn {
+  padding: 0 16px;
+  height: 36px;
+  border: none;
+  border-left: 1.5px solid var(--gray-light);
+  background: var(--white);
+  color: var(--gray-dark);
+  font-size: var(--text-md);
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--trans);
+  flex-shrink: 0;
+}
+.list-search-btn:hover { background: var(--green-pale); color: var(--green-dark); }
 
 /* ── 강좌 상태 배지 */
 .status-badge {
@@ -277,6 +336,11 @@ select.form-control {
   margin-bottom: 36px;
 }
 
+/* 그룹 레이블이 있을 때: 줄바꿈 허용 → 레이블이 1행, 탭이 2행 */
+.page-tabs:has(.page-tab-group) {
+  flex-wrap: wrap;
+}
+
 .page-tab {
   padding: 14px 40px;
   font-size: var(--text-lg);
@@ -300,6 +364,32 @@ select.form-control {
   color: var(--green-dark);
   font-weight: 700;
   border-bottom-color: var(--green-main);
+}
+
+/* ── 탭 그룹 레이블 (2뎁스 메뉴명 — 탭 위에 별도 행으로 표시)
+   · width: 100% → 혼자 1행을 차지, 탭들은 2행으로 내려감
+   · justify-content: center → 레이블 가운데 정렬
+   · border-bottom: none → 탭 행의 밑줄과 분리 */
+.page-tab-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px 0 8px;
+  font-size: var(--text-sm);    /* 15px — 탭보다 작게 */
+  font-weight: 500;
+  color: var(--green-main);
+  text-decoration: none;
+  background: none;
+  border-bottom: none;
+  white-space: nowrap;
+  cursor: default;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+/* 세로 구분자 제거 — 인라인이 아닌 별도 행이므로 불필요 */
+.page-tab-group::after {
+  display: none;
 }
 
 /* ── 글자 크기 퀵메뉴 (app.js에서 HTML만 삽입, 스타일은 여기서 관리) */

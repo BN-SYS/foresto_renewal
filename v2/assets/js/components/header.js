@@ -5,61 +5,119 @@
 
 const NAV_DATA = [
   {
-    label: '협회소개', href: 'about/index.html',
+    label: '소개', href: 'about/index.html',
+    /* ── 2뎁스 그룹 구조 (children 이 있는 항목은 그룹명만 드롭다운에 노출,
+         3뎁스는 각 페이지 내 탭으로 표시) */
     children: [
-      { label: '인사말', href: 'about/index.html' },
-      { label: '미션 & 비전', href: 'about/vision.html' },
-      { label: '주요사업', href: 'about/project.html' },
-      { label: '연혁', href: 'about/history.html' },
-      { label: '조직도·임원진', href: 'about/members.html' },
-      { label: '전국 지역협회', href: 'about/regions.html' },
-      { label: '정관', href: 'about/constitution.html' },
-      { label: '오시는 길', href: 'about/contact.html' },
-    ]
+      {
+        label: '협회 소개', href: 'about/index.html',
+        children: [
+          { label: '인사말',      href: 'about/index.html' },
+          { label: '미션 & 비전', href: 'about/vision.html' },
+          { label: '주요사업',    href: 'about/project.html' },
+          { label: '연혁',        href: 'about/history.html' },
+        ],
+      },
+      {
+        label: '조직 안내', href: 'about/members.html',
+        children: [
+          { label: '조직도·임원진',  href: 'about/members.html' },
+          { label: '전국 지역협회', href: 'about/regions.html' },
+        ],
+      },
+      {
+        label: '협회 정보', href: 'about/constitution.html',
+        children: [
+          { label: '정관',      href: 'about/constitution.html' },
+          { label: '회원 규정', href: 'about/regulation.html' },
+          { label: '오시는 길', href: 'about/contact.html' },
+        ],
+      },
+    ],
   },
   {
-    label: '숲해설가교육', href: 'education/forester.html',
+    label: '교육신청', href: 'education/forester.html',
     children: [
-      { label: '숲해설가란', href: 'education/forester.html' },
-      { label: '자주 묻는 질문', href: 'education/faq.html' },
-      { label: '전문과정 안내', href: 'education/course-intro.html' },
-      { label: '전문과정 신청', href: 'education/course-list.html' },
-      { label: '시민아카데미', href: 'education/academy.html' },
-      { label: '직무교육', href: 'education/job-training.html' },
-    ]
+      {
+        label: '숲해설가 알아보기', href: 'education/forester.html',
+        children: [
+          { label: '숲해설가란?',    href: 'education/forester.html' },
+          { label: '자주 묻는 질문', href: 'education/faq.html' },
+        ],
+      },
+      {
+        label: '전문가 과정', href: 'education/course-intro.html',
+        children: [
+          { label: '교육 개요',     href: 'education/course-intro.html' },
+          { label: '전문과정 신청', href: 'education/course-list.html' },
+        ],
+      },
+      { label: '시민 아카데미', href: 'education/academy.html' },
+      { label: '직무교육',     href: 'education/job-training.html' },
+    ],
   },
   {
     label: '회원활동', href: 'member/competency.html',
     children: [
-      { label: '역량강화 교육강좌', href: 'member/competency.html' },
-      { label: '멘토링 숲학교', href: 'member/mentoring.html' },
-      { label: '수시숲해설 모집', href: 'member/recruit.html' },
-      { label: '숲해설 강사 신청', href: 'member/instructor.html' },
-      { label: '사공단 소식', href: 'member/sagongdan.html' },
-      { label: '동아리 소식', href: 'member/club.html' },
-      { label: '이게뭐예요', href: 'member/qna.html' },
-    ]
+      {
+        label: '역량 강화', href: 'member/competency.html',
+        children: [
+          { label: '교육강좌',      href: 'member/competency.html' },
+          { label: '멘토링 숲학교', href: 'member/mentoring.html' },
+        ],
+      },
+      { label: '사회공헌', href: 'member/sagongdan.html' },
+      {
+        label: '숲해설', href: 'member/recruit.html',
+        children: [
+          { label: '숲해설 모집', href: 'member/recruit.html' },
+          { label: '숲해설 신청', href: 'member/instructor.html' },
+        ],
+      },
+      {
+        label: '동아리', href: 'member/club.html',
+        children: [
+          { label: '동아리 소식',   href: 'member/club.html' },
+          { label: '동아리 사람책', href: 'member/qna.html' },
+        ],
+      },
+    ],
   },
   {
     label: '커뮤니티', href: 'community/notice-list.html',
     children: [
-      { label: '공지사항', href: 'community/notice-list.html' },
-      { label: '협회일정', href: 'community/calendar.html' },
+      {
+        label: '알림', href: 'community/notice-list.html',
+        children: [
+          { label: '공지사항',   href: 'community/notice-list.html' },
+          { label: '협회 캘린더', href: 'community/calendar.html' },
+          { label: '언론 보도',  href: 'community/press.html' },
+          { label: '일자리정보', href: 'community/job.html' },
+        ],
+      },
       { label: '자유게시판', href: 'community/free.html' },
-      { label: '언론보도', href: 'community/press.html' },
-      { label: '일자리 및 교육정보', href: 'community/job.html' },
-      { label: '갤러리', href: 'community/gallery.html' },
-      { label: '협회소식지', href: 'community/newsletter.html' },
-      { label: '자료실', href: 'community/archive.html' },
-    ]
+      {
+        label: '갤러리 & 자료', href: 'community/gallery.html',
+        children: [
+          { label: '사진 갤러리', href: 'community/gallery.html' },
+          { label: '협회 소식지', href: 'community/newsletter.html' },
+          { label: '자료실',     href: 'community/archive.html' },
+        ],
+      },
+    ],
   },
   {
     label: '참여', href: 'participate/membership.html',
     children: [
-      { label: '정회원 가입안내', href: 'participate/membership.html' },
-      { label: '후원안내', href: 'participate/donate-info.html' },
-      { label: '후원하기', href: 'participate/donate.html' },
-    ]
+      { label: '정회원 가입 안내', href: 'participate/membership.html' },
+      {
+        label: '후원', href: 'participate/donate-info.html',
+        children: [
+          { label: '후원 안내', href: 'participate/donate-info.html' },
+          { label: '후원하기',  href: 'participate/donate.html' },
+        ],
+      },
+    ],
   },
 ];
 
@@ -67,8 +125,16 @@ const Header = {
 
   render(activePage = '', root = '../') {
     const navHtml = NAV_DATA.map(n => {
+      /* isActive: 레이블 일치 or 직접 children href 일치 or 중첩 3뎁스 href 일치 */
       const isActive = n.label === activePage
-        || n.children?.some(c => c.href === activePage);
+        || n.children?.some(c =>
+            c.href === activePage
+            || c.children?.some(gc => gc.href === activePage)
+          );
+
+      /* 드롭다운 렌더:
+         children 이 있는 child (2뎁스 그룹) → 그룹명만 노출
+         children 이 없는 child (기존 flat)  → 그대로 */
       const subHtml = n.children
         ? n.children.map(c =>
           `<a href="${root}${c.href}" class="sub-item">${c.label}</a>`

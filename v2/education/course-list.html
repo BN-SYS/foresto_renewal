@@ -24,12 +24,9 @@
   </div>
 
   <div class="page-tabs">
-    <a href="forester.html" class="page-tab ">숲해설가란</a>
-    <a href="faq.html" class="page-tab ">자주 묻는 질문</a>
-    <a href="course-intro.html" class="page-tab ">전문과정 안내</a>
+    <span class="page-tab-group">전문가 과정</span>
+    <a href="course-intro.html" class="page-tab ">교육 개요</a>
     <a href="course-list.html" class="page-tab  active">전문과정 신청</a>
-    <a href="academy.html" class="page-tab ">시민아카데미</a>
-    <a href="job-training.html" class="page-tab ">직무교육</a>
   </div>
   
   <div class="content-wrap">
@@ -37,47 +34,32 @@
       <strong>55기 전문가과정</strong> 모집 중입니다. 접수 마감: <strong>2026.03.20</strong> — 정원 마감 시 조기 종료될 수 있습니다.
     </div> -->
 
-    <!-- 검색 필터 -->
-    <div class="search-wrap">
-      <div class="search-field">
-        <label>과정 구분</label>
-        <select class="form-control" id="searchType">
-          <option value="">전체</option>
-          <option value="전문과정">전문과정</option>
-          <option value="시민아카데미">시민아카데미</option>
-          <option value="직무교육">직무교육</option>
-          <option value="역량강화">역량강화</option>
-        </select>
-      </div>
-      <div class="search-field">
-        <label>접수 상태</label>
-        <select class="form-control" id="searchStatus">
-          <option value="">전체</option>
-          <option value="open">접수중</option>
-          <option value="ready">준비중</option>
-          <option value="closed">접수마감</option>
-        </select>
-      </div>
-      <div class="search-field">
-        <label>교육 기간</label>
-        <div class="date-range">
-          <input type="date" class="form-control" id="searchFrom">
-          <span>~</span>
-          <input type="date" class="form-control" id="searchTo">
-        </div>
-      </div>
-      <button class="btn btn-primary search-btn" onclick="doSearch()">검색</button>
-      <button class="btn btn-gray search-btn" onclick="resetSearch()">초기화</button>
-    </div>
-
     <div class="list-top">
-      <div class="list-count">총 <strong id="totalCount">0</strong>건</div>
-      <select class="form-control" style="width:auto;height:36px;font-size:13px"
-        onchange="window._ctrl && window._ctrl.changePageSize(+this.value)">
-        <option value="10">10개씩</option>
-        <option value="20">20개씩</option>
-        <option value="50">50개씩</option>
-      </select>
+      <span class="list-count">Total <strong id="totalCount">0</strong>건</span>
+      <div class="list-top-right">
+        <div class="list-search">
+          <select class="list-search-type" id="searchType" style="min-width:100px">
+            <option value="">과정 구분</option>
+            <option value="전문과정">전문과정</option>
+            <option value="시민아카데미">시민아카데미</option>
+            <option value="직무교육">직무교육</option>
+            <option value="역량강화">역량강화</option>
+          </select>
+          <select class="list-search-type" id="searchStatus" style="min-width:90px; border-left: 1.5px solid var(--gray-light);">
+            <option value="">접수 상태</option>
+            <option value="open">접수중</option>
+            <option value="ready">준비중</option>
+            <option value="closed">접수마감</option>
+          </select>
+          <button class="list-search-btn" onclick="doSearch()">검색</button>
+        </div>
+        <select class="list-search-type" style="border: 1.5px solid var(--gray-light); border-radius: var(--radius); height:36px; padding: 0 10px;"
+          onchange="window._ctrl && window._ctrl.changePageSize(+this.value)">
+          <option value="10">10개씩</option>
+          <option value="20">20개씩</option>
+          <option value="50">50개씩</option>
+        </select>
+      </div>
     </div>
 
     <div class="table-wrap">
@@ -112,16 +94,12 @@
     function doSearch() {
       const type = document.getElementById('searchType').value;
       const status = document.getElementById('searchStatus').value;
-      const from = document.getElementById('searchFrom').value;
-      const to = document.getElementById('searchTo').value;
-      window._ctrl.filter(status, from, to);
-    }
-
-    function resetSearch() {
-      ['searchType', 'searchStatus', 'searchFrom', 'searchTo'].forEach(id => {
-        document.getElementById(id).value = '';
-      });
-      window._ctrl.filter('', '', '');
+      if (type) {
+        window._ctrl.courses = ALL_COURSES_RAW.filter(c => c.type === type);
+      } else {
+        window._ctrl.courses = [...ALL_COURSES_RAW];
+      }
+      window._ctrl.filter(status, '', '');
     }
   </script>
 </body>

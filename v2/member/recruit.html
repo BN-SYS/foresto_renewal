@@ -24,29 +24,20 @@
   </div>
 
   <div class="page-tabs">
-    <a href="competency.html" class="page-tab">역량강화 교육강좌</a>
-    <a href="mentoring.html" class="page-tab">멘토링 숲학교</a>
-    <a href="recruit.html" class="page-tab active">수시숲해설 모집</a>
-    <a href="instructor.html" class="page-tab">숲해설 강사 신청</a>
-    <a href="sagongdan.html" class="page-tab">사공단 소식</a>
-    <a href="club.html" class="page-tab">동아리 소식</a>
-    <a href="qna.html" class="page-tab">이게뭐예요</a>
+    <span class="page-tab-group">숲해설</span>
+    <a href="recruit.html" class="page-tab  active">숲해설 모집</a>
+    <a href="instructor.html" class="page-tab ">숲해설 신청</a>
   </div>
 
   <div class="content-wrap">
 
-    <!-- 검색 -->
-    <div class="search-wrap">
-      <div class="search-field">
-        <label>키워드</label>
-        <input type="text" class="form-control" id="recruitKeyword" placeholder="제목 검색" style="min-width:200px">
-      </div>
-      <button class="btn btn-primary search-btn" onclick="RecruitCtrl.search()">검색</button>
-      <button class="btn btn-gray search-btn" onclick="RecruitCtrl.reset()">초기화</button>
-    </div>
-
     <div class="list-top">
-      <div class="list-count">전체 <strong id="recruitCount">0</strong>건</div>
+      <span class="list-count">Total <strong id="recruitCount">0</strong>건</span>
+      <div class="list-search">
+        <input type="text" class="list-search-input" id="recruitKeyword" placeholder="검색어를 입력하세요"
+          onkeydown="if(event.key==='Enter') RecruitCtrl.search()">
+        <button class="list-search-btn" onclick="RecruitCtrl.search()">검색</button>
+      </div>
     </div>
 
     <div class="table-wrap">

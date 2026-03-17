@@ -21,14 +21,10 @@
   </div>
 
 <div class="page-tabs">
-      <a href="competency.html"  class="page-tab ">역량강화 교육강좌</a>
-      <a href="mentoring.html"   class="page-tab ">멘토링 숲학교</a>
-      <a href="recruit.html"     class="page-tab ">수시숲해설 모집</a>
-      <a href="instructor.html"  class="page-tab ">숲해설 강사 신청</a>
-      <a href="sagongdan.html"   class="page-tab ">사공단 소식</a>
-      <a href="club.html"        class="page-tab ">동아리 소식</a>
-      <a href="qna.html"         class="page-tab  active">이게뭐예요</a>
-    </div>
+    <span class="page-tab-group">동아리</span>
+    <a href="club.html" class="page-tab ">동아리 소식</a>
+    <a href="qna.html" class="page-tab  active">동아리 사람책</a>
+  </div>
   </div>
 
   <div class="content-wrap">
@@ -41,9 +37,16 @@
 
     <!-- 상단 액션 -->
     <div class="list-top" style="margin-bottom:16px">
-      <div class="list-count">전체 <strong id="qnaCount">0</strong>건</div>
-      <button class="btn btn-primary"
-              onclick="location.href='qna-write.html'">질문 작성</button>
+      <span class="list-count">Total <strong id="qnaCount">0</strong>건</span>
+      <div class="list-top-right">
+        <div class="list-search">
+          <input type="text" class="list-search-input" id="qnaKeyword" placeholder="검색어를 입력하세요"
+            onkeydown="if(event.key==='Enter') QnaCtrl.search()">
+          <button class="list-search-btn" onclick="QnaCtrl.search()">검색</button>
+        </div>
+        <button class="btn btn-primary"
+                onclick="location.href='qna-write.html'">질문 작성</button>
+      </div>
     </div>
 
     <!-- 테이블 -->
