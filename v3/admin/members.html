@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원관리 | 관리자 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/admin.css">
+</head>
+<body class="admin-body">
+  <div id="hdr"></div>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-head">
+        <span>🛠 관리자</span>
+        <button class="sidebar-toggle" onclick="AdminLayout.toggleSidebar()" aria-label="사이드바 토글">☰</button>
+      </div>
+      <nav class="admin-nav" id="adminNavMount" aria-label="관리자 메뉴"></nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">회원관리</h1>
+        <button class="btn btn-primary btn-sm" onclick="MemberAdmin.exportExcel()">엑셀 다운로드</button>
+      </div>
+
+      <div class="admin-filter-bar">
+        <div class="search-field">
+          <label>회원등급</label>
+          <select class="form-control" id="filterGrade">
+            <option value="">전체</option>
+            <option value="admin">관리자</option>
+            <option value="fullMember">정회원</option>
+            <option value="member">일반회원</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>상태</label>
+          <select class="form-control" id="filterStatus">
+            <option value="">전체</option>
+            <option value="active">정상</option>
+            <option value="inactive">비활성</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>이름/이메일</label>
+          <input type="text" class="form-control" id="filterKeyword" placeholder="검색어 입력" style="min-width:180px"
+            onkeydown="if(event.key==='Enter') MemberAdmin.search()">
+        </div>
+        <button class="btn btn-primary search-btn" onclick="MemberAdmin.search()">검색</button>
+        <button class="btn btn-gray search-btn" onclick="MemberAdmin.resetFilter()">초기화</button>
+      </div>
+
+      <div class="list-top">
+        <div class="list-count">총 <strong id="memberCount">0</strong>명</div>
+        <select class="form-control" id="pageSizeSelect"
+          onchange="MemberAdmin.changePageSize(+this.value)"
+          style="width:130px;height:36px;font-size:13px">
+          <option value="10">10개씩 보기</option>
+          <option value="20">20개씩 보기</option>
+          <option value="50">50개씩 보기</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width:44px" class="center">NO.</th>
+              <th style="width:80px">이름</th>
+              <th>이메일</th>
+              <th style="width:120px" class="center">연락처</th>
+              <th style="width:80px" class="center">등급</th>
+              <th style="width:100px" class="center">가입일</th>
+              <th style="width:70px" class="center">상태</th>
+            </tr>
+          </thead>
+          <tbody id="memberTableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="memberPagination"></div>
+    </main>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/admin.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('관리자', '../');
+    AdminSidebar.mount('members');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    /* ── 샘플 데이터 (가입 시 입력 항목 전체 포함) */
+    const NAMES  = ['김숲해','이정회','박초록','최나무','정바람','한생태','윤들판','임해설','조산림','강자연'];
+    const REGIONS = ['서울','경기','인천','부산','대구','광주','대전','울산','강원','제주'];
+    const CHANNELS = ['인터넷 검색','지인 추천','SNS (블로그·인스타·유튜브)','협회 교육 이수 후','기타'];
+    const GRADES = [
+      { key:'fullMember', label:'정회원'  },
+      { key:'member',     label:'일반회원' },
+      { key:'member',     label:'일반회원' },
+      { key:'fullMember', label:'정회원'  },
+      { key:'member',     label:'일반회원' },
+    ];
+
+    const ALL_MEMBERS = Array.from({ length: 50 }, (_, i) => {
+      const g = GRADES[i % 5];
+      return {
+        id:       50 - i,
+        name:     NAMES[i % 10],
+        email:    `user${50 - i}@example.com`,
+        phone:    `010-${String(1000 + i).padStart(4,'0')}-${String(5000 + i).padStart(4,'0')}`,
+        birth:    `${1970 + (i % 30)}-${String((i % 12)+1).padStart(2,'0')}-${String((i % 28)+1).padStart(2,'0')}`,
+        region:   REGIONS[i % 10],
+        channel:  CHANNELS[i % 5],
+        grade:    g.key,
+        gradeLabel: g.label,
+        joinDate: `2026-0${(i % 9)+1}-${String((i % 20)+1).padStart(2,'0')}`,
+        status:   i % 7 === 0 ? 'inactive' : 'active',
+        marketing: i % 3 === 0,
+        memo:     i % 4 === 0 ? '정회원 전환 요청 확인 완료' : '',
+      };
+    });
+
+    const GRADE_BADGE = { fullMember:'badge-green', member:'badge-blue', admin:'badge-red' };
+
+    const MemberAdmin = {
+      filtered:    [...ALL_MEMBERS],
+      currentPage: 1,
+      pageSize:    10,
+
+      search() {
+        const grade  = document.getElementById('filterGrade').value;
+        const status = document.getElementById('filterStatus').value;
+        const kw     = document.getElementById('filterKeyword').value.trim().toLowerCase();
+        this.filtered = ALL_MEMBERS.filter(m => {
+          if (grade  && m.grade  !== grade)  return false;
+          if (status && m.status !== status) return false;
+          if (kw && !m.name.toLowerCase().includes(kw) && !m.email.toLowerCase().includes(kw)) return false;
+          return true;
+        });
+        this.currentPage = 1;
+        this.render();
+      },
+
+      resetFilter() {
+        document.getElementById('filterGrade').value   = '';
+        document.getElementById('filterStatus').value  = '';
+        document.getElementById('filterKeyword').value = '';
+        this.filtered = [...ALL_MEMBERS];
+        this.currentPage = 1;
+        this.render();
+      },
+
+      changePageSize(size) { this.pageSize = size; this.currentPage = 1; this.render(); },
+
+      render() {
+        const total = this.filtered.length;
+        const slice = this.filtered.slice((this.currentPage-1)*this.pageSize, this.currentPage*this.pageSize);
+        document.getElementById('memberCount').textContent = total.toLocaleString();
+
+        document.getElementById('memberTableBody').innerHTML = slice.map((m, i) => `
+          <tr style="cursor:pointer" onclick="location.href='member-detail.html?id=${m.id}'"
+              title="${m.name} 상세보기">
+            <td class="center">${(this.currentPage-1)*this.pageSize + i + 1}</td>
+            <td><strong>${m.name}</strong></td>
+            <td style="font-size:13px;color:var(--gray-mid)">${m.email}</td>
+            <td class="center" style="font-size:13px">${m.phone}</td>
+            <td class="center">
+              <span class="badge ${GRADE_BADGE[m.grade]||'badge-gray'}">${m.gradeLabel}</span>
+            </td>
+            <td class="center" style="font-size:13px;color:var(--gray-mid)">${m.joinDate}</td>
+            <td class="center">
+              <span class="badge ${m.status==='active'?'badge-green':'badge-gray'}">
+                ${m.status==='active'?'정상':'비활성'}
+              </span>
+            </td>
+          </tr>`).join('');
+
+        App.renderPagination('memberPagination', this.currentPage,
+          Math.ceil(total/this.pageSize)||1,
+          p => { this.currentPage = p; this.render(); });
+      },
+
+      exportExcel() {
+        App.toast('엑셀 다운로드 기능은 실제 구현 시 서버 API와 연동됩니다.');
+      },
+    };
+
+    MemberAdmin.render();
+  </script>
+</body>
+</html>

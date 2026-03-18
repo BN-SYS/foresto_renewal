@@ -1,0 +1,151 @@
+/* =============================================
+   mypage.css | 마이페이지 전용 스타일
+   ============================================= */
+
+/* ── 레이아웃 */
+.my-layout {
+  display: grid; grid-template-columns: 220px 1fr;
+  gap: 24px; align-items: start; padding: 32px 0 60px;
+}
+
+/* ── 사이드바 */
+.my-sidebar {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 20px; box-shadow: var(--shadow);
+  position: sticky; top: calc(var(--header-h) + 16px);
+}
+.my-profile {
+  text-align: center; padding-bottom: 20px;
+  border-bottom: 1px solid var(--gray-light); margin-bottom: 16px;
+}
+.my-avatar {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--green-main), var(--green-dark));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--text-2xl);           /* 28px → 가장 근접: --text-2xl(26px). 아바타 이모지라 32px 고정 유지도 무방 */
+  margin: 0 auto 10px;
+}
+.my-name {
+  font-size: var(--text-lg);            /* 17px → 가장 근접: --text-lg(18px) */
+  font-weight: 700; margin-bottom: 4px;
+}
+.my-grade {
+  font-size: var(--text-sm);            /* 12px */
+  padding: 3px 10px; background: var(--green-pale);
+  color: var(--green-dark); border-radius: 12px;
+  display: inline-block; font-weight: 600;
+}
+.my-join {
+  font-size: var(--text-xs);            /* 11px */
+  color: var(--gray-mid); margin-top: 6px;
+}
+
+.side-nav a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px; border-radius: var(--radius);
+  font-size: var(--text-md);            /* 14px */
+  color: var(--gray-mid); transition: var(--trans);
+  margin-bottom: 2px; text-decoration: none; cursor: pointer;
+}
+.side-nav a:hover,
+.side-nav a.active {
+  background: var(--green-pale); color: var(--green-dark); font-weight: 700;
+}
+
+/* ── 패널 */
+.my-panel { display: none; }
+.my-panel.active { display: block; }
+
+/* ── 정보 카드 */
+.info-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 24px 28px; box-shadow: var(--shadow); margin-bottom: 20px;
+}
+.info-card-title {
+  font-size: var(--text-base);          /* 15px */
+  font-weight: 700; color: var(--green-dark);
+  margin-bottom: 18px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--green-pale);
+}
+
+/* ── 폼 그리드 */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
+.form-row  { display: flex; flex-direction: column; gap: 5px; }
+.form-row label {
+  font-size: var(--text-sm);            /* 12px */
+  font-weight: 600; color: var(--green-main);
+}
+.form-row .form-control { height: 40px; }
+.pw-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px 20px; }
+
+/* ── 액션 */
+.action-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+
+/* ── 교육이수 통계 */
+.edu-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 16px;
+}
+.edu-stat-card {
+  background: var(--gray-bg); border-radius: var(--radius);
+  padding: 14px; text-align: center;
+}
+.stat-n {
+  font-size: var(--text-2xl);           /* 24px → --text-2xl(26px) */
+  font-weight: 700; color: var(--green-dark);
+}
+.stat-l {
+  font-size: var(--text-xs);            /* 11px */
+  color: var(--gray-mid); margin-top: 2px;
+}
+
+/* ── 교육 필터 탭 */
+.edu-filter-tabs {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--gray-light); margin-bottom: 16px;
+}
+.edu-tab {
+  padding: 9px 18px;
+  font-size: var(--text-md);            /* 13px */
+  font-weight: 500; color: var(--gray-mid);
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px; cursor: pointer; transition: var(--trans);
+}
+.edu-tab:hover { color: var(--green-main); }
+.edu-tab.active {
+  color: var(--green-dark); font-weight: 700;
+  border-bottom-color: var(--green-dark);
+}
+
+/* ── 교육 배지 */
+.edu-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: var(--text-xs);            /* 11px */
+  font-weight: 700; white-space: nowrap;
+}
+.edu-badge.done     { background: var(--green-pale); color: #1b4332; }
+.edu-badge.progress { background: #fff3e0;            color: #e65100; }
+.edu-badge.applied  { background: var(--info-pale);   color: var(--info); }
+.edu-badge.cancel   {
+  background: var(--gray-bg); color: var(--gray-mid);
+  border: 1px solid var(--gray-light);
+}
+
+/* ── 반응형 */
+@media (max-width: 900px) {
+  .my-layout { grid-template-columns: 1fr; }
+  .my-sidebar { position: static; }
+}
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .pw-grid   { grid-template-columns: 1fr; }
+  .edu-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── 탈퇴 탭 강조 */
+.side-nav a.nav-danger { color: var(--danger); }
+.side-nav a.nav-danger:hover,
+.side-nav a.nav-danger.active { background: #fff5f5; color: var(--danger); border-left-color: var(--danger); }

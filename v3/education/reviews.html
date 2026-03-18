@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수료생 후기 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/layout-lnb.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+  <style>
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .review-card {
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    .review-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+    .review-card-img {
+      width: 100%;
+      height: 180px;
+      background: var(--gray-light);
+      object-fit: cover;
+      display: block;
+    }
+    .review-card-img-placeholder {
+      width: 100%;
+      height: 180px;
+      background: var(--green-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green-dark);
+      font-size: 32px;
+    }
+    .review-card-body {
+      padding: 16px;
+    }
+    .review-card-badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      margin-bottom: 8px;
+    }
+    .review-card-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 6px;
+      color: var(--gray-dark);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .review-card-excerpt {
+      font-size: 13px;
+      color: var(--gray-mid);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .review-card-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--gray-mid);
+    }
+    .review-write-btn-wrap {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+    .list-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+
+<body data-page="reviews">
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>수료생 후기</h1>
+      <p>숲해설가 과정 수료생들의 생생한 교육 후기를 소개합니다.</p>
+    </div>
+  </div>
+
+  <div id="bc"></div>
+  <div class="sub-layout">
+    <div id="lnb"></div>
+    <main class="sub-content">
+
+    <div class="content-wrap">
+
+      <div class="list-top">
+        <span class="list-count">Total <strong id="reviewCount">0</strong>건</span>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+          <div class="list-search">
+            <input type="text" class="list-search-input" id="reviewKeyword" placeholder="검색어를 입력하세요"
+              onkeydown="if(event.key==='Enter') ReviewCtrl.search()">
+            <button class="list-search-btn" onclick="ReviewCtrl.search()">검색</button>
+          </div>
+          <!-- 회원 로그인 시 글쓰기 버튼 노출 -->
+          <div id="reviewWriteArea"></div>
+        </div>
+      </div>
+
+      <!-- 후기 카드 그리드 -->
+      <div class="review-grid" id="reviewGrid"></div>
+
+      <div id="reviewPagination" class="pagination" style="margin-top:32px"></div>
+
+    </div>
+    </main>
+  </div>
+
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('교육과정', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', 'education/reviews.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'education/reviews.html');
+    Footer.initFamilyOutsideClick && Footer.initFamilyOutsideClick();
+
+    /* ── 수료생 후기 Mock 컨트롤러 */
+    const ReviewCtrl = {
+      data: [
+        { id: 1, course: '전문가 과정', title: '숲과 함께하는 삶을 시작하다', author: '김*영', date: '2025-12-10',
+          excerpt: '처음에는 단순한 호기심으로 신청했는데, 교육을 받으면서 숲이 얼마나 다양한 이야기를 담고 있는지 알게 됐습니다. 강사님들의 열정이 정말 인상적이었어요.', img: null },
+        { id: 2, course: '전문가 과정', title: '기대 이상의 알찬 커리큘럼', author: '이*진', date: '2025-11-22',
+          excerpt: '이론과 실습이 균형 있게 구성되어 있어 현장에서 바로 활용할 수 있었습니다. 수료 후 지역 숲해설 활동에 참여하게 됐습니다.', img: null },
+        { id: 3, course: '전문가 과정', title: '자연을 새로운 눈으로 바라보게 된 계기', author: '박*수', date: '2025-10-05',
+          excerpt: '도시에서만 살아왔는데 이 과정을 통해 자연의 소중함을 다시 느꼈습니다. 아이들에게도 숲 이야기를 들려줄 수 있게 됐어요.', img: null },
+      ],
+      filtered: [],
+
+      init() {
+        this.filtered = [...this.data];
+        this.render();
+        /* 로그인 회원만 글쓰기 버튼 표시 */
+        if (App.user.isLoggedIn) {
+          document.getElementById('reviewWriteArea').innerHTML =
+            '<a href="review-write.html" class="btn btn-primary btn-sm">후기 작성</a>';
+        }
+      },
+
+      search() {
+        const kw = document.getElementById('reviewKeyword').value.trim().toLowerCase();
+        this.filtered = kw
+          ? this.data.filter(d => d.title.toLowerCase().includes(kw) || d.excerpt.toLowerCase().includes(kw))
+          : [...this.data];
+        this.render();
+      },
+
+      render() {
+        document.getElementById('reviewCount').textContent = this.filtered.length;
+        const grid = document.getElementById('reviewGrid');
+        if (!this.filtered.length) {
+          grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--gray-mid);padding:60px 0">등록된 후기가 없습니다.</p>';
+          return;
+        }
+        grid.innerHTML = this.filtered.map(d => `
+          <a href="review-detail.html?id=${d.id}" class="review-card" style="text-decoration:none">
+            <div class="review-card-img-placeholder">🌿</div>
+            <div class="review-card-body">
+              <span class="review-card-badge">${d.course}</span>
+              <div class="review-card-title">${d.title}</div>
+              <div class="review-card-excerpt">${d.excerpt}</div>
+              <div class="review-card-meta">
+                <span>${d.author}</span>
+                <span>${d.date}</span>
+              </div>
+            </div>
+          </a>`).join('');
+      },
+    };
+
+    ReviewCtrl.init();
+  </script>
+</body>
+
+</html>

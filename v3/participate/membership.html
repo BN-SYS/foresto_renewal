@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정회원 가입안내 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/layout-lnb.css">
+  <link rel="stylesheet" href="../assets/css/pages/participate.css">
+</head>
+
+<body data-page="membership">
+
+  <div id="hdr"></div>
+
+  <!-- 페이지 헤더 -->
+  <div class="page-header">
+    <div class="container">
+      <h1>정회원 가입안내</h1>
+      <p>한국숲해설가협회 정회원이 되어 더 많은 혜택을 누려보세요.</p>
+    </div>
+</div>
+
+  <!-- 서브 내비 -->
+  
+  <div id="bc"></div>
+  <div class="sub-layout">
+    <div id="lnb"></div>
+    <main class="sub-content">
+
+    <div class="content-wrap">
+
+      <!-- 1. 회원 등급 비교 -->
+      <div class="info-section">
+        <h2 class="info-section-title">회원 등급 안내</h2>
+        <div class="grade-grid">
+
+          <!-- 비회원 -->
+          <div class="grade-card">
+            <div class="grade-card-head guest">
+              <div class="grade-name" style="color:var(--gray-dark)">비회원</div>
+              <div class="grade-desc" style="color:var(--gray-mid)">
+                미로그인 상태
+              </div>
+            </div>
+            <div class="grade-card-body">
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>공개 정보 페이지 열람</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>공지사항 열람</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>교육 안내 확인</span>
+              </div>
+              <div class="grade-item disabled">
+                <span class="grade-item-icon">❌</span>
+                <span>강좌 신청 불가</span>
+              </div>
+              <div class="grade-item disabled">
+                <span class="grade-item-icon">❌</span>
+                <span>자유게시판 이용 불가</span>
+              </div>
+              <div class="grade-item disabled">
+                <span class="grade-item-icon">❌</span>
+                <span>회원 전용 자료 열람 불가</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 일반회원 -->
+          <div class="grade-card">
+            <div class="grade-card-head member">
+              <div class="grade-name" style="color:#1565c0">일반회원</div>
+              <div class="grade-desc" style="color:#1565c0;opacity:.8">
+                본인인증 후 직접 가입
+              </div>
+            </div>
+            <div class="grade-card-body">
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>비회원 모든 권한 포함</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>자유게시판 이용</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>일자리 및 교육정보 열람</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>강좌 신청</span>
+              </div>
+              <div class="grade-item disabled">
+                <span class="grade-item-icon">❌</span>
+                <span>역량강화·사공단·동아리 게시판 불가</span>
+              </div>
+              <div class="grade-item disabled">
+                <span class="grade-item-icon">❌</span>
+                <span>정회원 전용 자료실 불가</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 정회원 -->
+          <div class="grade-card featured">
+            <div class="grade-card-head full">
+              <div class="grade-name">정회원</div>
+              <div class="grade-desc">교육 수료 + 월 회비 납부</div>
+              <!-- <div class="grade-badge">✨ RECOMMENDED</div> -->
+            </div>
+            <div class="grade-card-body">
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>일반회원 모든 권한 포함</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>역량강화 교육강좌 참여</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>사회공헌사업단 활동</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>숲동아리단 활동</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>정회원 전용 자료실 이용</span>
+              </div>
+              <div class="grade-item">
+                <span class="grade-item-icon">✅</span>
+                <span>수료증 PDF 발급</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 2. 정회원 자격 요건 -->
+      <div class="info-section">
+        <h2 class="info-section-title">정회원 자격 요건</h2>
+        <table class="req-table">
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th>내용</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>교육 수료</td>
+              <td>한국숲해설가협회 전문가과정 수료</td>
+              <td>수료증 발급 기준</td>
+            </tr>
+            <tr>
+              <td>월 회비 납부</td>
+              <td>정기 월 회비 납부 유지</td>
+              <td>미납 시 권한 제한 가능</td>
+            </tr>
+            <tr>
+              <td>등급 전환</td>
+              <td>관리자가 수동으로 정회원 등급 부여</td>
+              <td>자동 전환 없음</td>
+            </tr>
+            <tr>
+              <td>본인인증</td>
+              <td>회원가입 시 휴대폰 본인인증 필수</td>
+              <td>NICE 또는 이니시스 연동</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert alert-warning" style="margin-top:-32px;margin-bottom:0">
+          <div>
+            정회원 등급은 <strong>자동 부여되지 않습니다.</strong>
+            교육 수료 및 회비 납부 확인 후 관리자가 수동으로 등급을 변경합니다.
+            전환 문의는 사무국(02-000-0000)으로 연락해 주세요.
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 가입 절차 -->
+      <div class="info-section">
+        <h2 class="info-section-title">가입 절차</h2>
+        <div class="join-steps">
+          <div class="join-step">
+            <div class="join-step-num">
+              <span class="step-emoji">📝</span>
+            </div>
+            <div class="join-step-title">STEP 1<br>회원가입</div>
+            <div class="join-step-desc">
+              홈페이지 회원가입<br>
+              휴대폰 본인인증 필수<br>
+              (NICE / 이니시스)
+            </div>
+          </div>
+          <div class="join-step">
+            <div class="join-step-num">
+              <span class="step-emoji">🎓</span>
+            </div>
+            <div class="join-step-title">STEP 2<br>교육 수료</div>
+            <div class="join-step-desc">
+              전문가과정 신청 후<br>
+              정해진 교육 이수<br>
+              수료증 발급
+            </div>
+          </div>
+          <div class="join-step">
+            <div class="join-step-num">
+              <span class="step-emoji">💳</span>
+            </div>
+            <div class="join-step-title">STEP 3<br>회비 납부</div>
+            <div class="join-step-desc">
+              월 정기 회비 납부<br>
+              계좌이체 또는<br>
+              자동이체 신청
+            </div>
+          </div>
+          <div class="join-step">
+            <div class="join-step-num">
+              <span class="step-emoji">🌳</span>
+            </div>
+            <div class="join-step-title">STEP 4<br>정회원 전환</div>
+            <div class="join-step-desc">
+              사무국 확인 후<br>
+              관리자 수동 등급 변경<br>
+              마이페이지에서 확인
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. 회비 안내 -->
+      <div class="info-section">
+        <h2 class="info-section-title">회비 안내</h2>
+        <div class="fee-box">
+          <div class="fee-item">
+            <div class="fee-label">월 정기 회비</div>
+            <div class="fee-amount">월 OO,000원</div>
+            <div class="fee-note">
+              매월 정기 납부<br>
+              계좌이체 또는 자동이체 가능<br>
+              <strong style="color:var(--green-dark)">
+                납부 계좌: 은행명 000-000-000000 (예금주: 한국숲해설가협회)
+              </strong>
+            </div>
+          </div>
+          <div class="fee-item">
+            <div class="fee-label">연 회비 일시납</div>
+            <div class="fee-amount">연 OO0,000원</div>
+            <div class="fee-note">
+              연간 일시 납부 시 혜택 적용<br>
+              자세한 내용은 사무국 문의<br>
+              <strong style="color:var(--green-dark)">
+                문의: 02-000-0000 / info@forest-guide.or.kr
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <div>
+            회비 금액 및 납부 계좌는 협회 정책에 따라 변경될 수 있습니다.
+            정확한 금액은 사무국(02-000-0000)으로 문의해 주세요.
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. 정회원 혜택 -->
+      <div class="info-section">
+        <h2 class="info-section-title">정회원 혜택</h2>
+        <div class="benefit-grid">
+          <div class="benefit-card">
+            <div class="benefit-title">역량강화 교육강좌</div>
+            <div class="benefit-desc">
+              정회원 전용 역량강화 특강 및 교육 프로그램에 우선 참여할 수 있습니다.
+            </div>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-title">사회공헌사업단 활동</div>
+            <div class="benefit-desc">
+              사회공헌사업단에 참여하여 의미 있는 봉사 활동을 함께할 수 있습니다.
+            </div>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-title">숲동아리단 참여</div>
+            <div class="benefit-desc">
+              다양한 숲 동아리에 참여하여 회원들과 정기 활동을 이어갈 수 있습니다.
+            </div>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-title">전용 자료실 이용</div>
+            <div class="benefit-desc">
+              정회원 전용 자료실의 교육 자료, 양식 서류 등 다양한 자료를 이용할 수 있습니다.
+            </div>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-title">수료증 PDF 발급</div>
+            <div class="benefit-desc">
+              교육 이수 내역을 마이페이지에서 확인하고 수료증을 PDF로 즉시 발급받을 수 있습니다.
+            </div>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-title">협회 행사 우선 참여</div>
+            <div class="benefit-desc">
+              협회 주요 행사 및 특별 프로그램에 정회원 우선 신청 혜택이 제공됩니다.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. CTA -->
+      <div class="cta-join">
+        <div>
+          <h3>지금 바로 가입하세요!</h3>
+          <p>
+            한국숲해설가협회와 함께 숲과 사람을 잇는 전문가로 성장하세요.<br>
+            가입 문의는 사무국(02-000-0000)으로 연락 주시면 안내해 드립니다.
+          </p>
+        </div>
+        <div class="cta-join-btns">
+          <a href="../mypage/index.html" class="btn btn-white">
+            회원가입 바로가기
+          </a>
+          <a href="../education/course-list.html" class="btn btn-white-outline">
+            전문가과정 신청
+          </a>
+        </div>
+      </div>
+
+    </div>
+    </main>
+  </div>
+
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('참여', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', 'participate/membership.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'participate/membership.html');
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>역량강화 교육강좌 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+  <link rel="stylesheet" href="../assets/css/pages/education.css">
+</head>
+
+<body data-page="competency-detail">
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>역량강화 교육강좌</h1>
+      <p>정회원 전용 | 회원 역량강화 교육 프로그램</p>
+    </div>
+  </div>
+
+  
+<div class="page-tabs">
+  <span class="page-tab-group">회원아카데미</span>
+  <a href="competency.html" class="page-tab active">특강</a>
+  <a href="competency.html?tab=course" class="page-tab">강좌</a>
+  <a href="mentoring.html" class="page-tab">멘토링 숲학교</a>
+</div>
+
+  <div class="content-wrap">
+    <div id="competencyDetail">
+      <div style="text-align:center;padding:48px;color:var(--gray-mid)">불러오는 중...</div>
+    </div>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/education.js"></script>
+  <script src="../assets/js/pages/member.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    /* ── 신청 모달 + window._ctrl 초기화
+     * 목록 페이지(competency.html)에서는 CourseListController 생성 시 자동 주입되지만
+     * 상세 페이지 단독 진입 시에는 _ctrl 이 없어 접수하기 버튼이 무반응.
+     * 여기서 최소 컨트롤러를 생성해 모달을 inject 하고 window._ctrl 을 설정한다.
+     */
+    if (!window._ctrl) {
+      const _pool = ALL_COURSES_RAW.filter(
+        c => c.type === '역량강화' || c.type === '직무교육'
+      );
+      window._ctrl = new CourseListController('역량강화', '', '', '', 'competency-detail.html');
+      window._ctrl.courses  = _pool;
+      window._ctrl.filtered = [..._pool];
+    }
+    /* renderDetail() 은 member.js DOMContentLoaded initMap 에서 자동 호출됨 */
+  </script>
+</body>
+
+</html>

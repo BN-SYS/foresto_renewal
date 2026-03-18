@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>멘토링 숲학교 상세 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+</head>
+
+<body data-page="mentoring-detail">
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>멘토링 숲학교</h1>
+      <p>회원 전용 게시판</p>
+    </div>
+  </div>
+
+  
+<div class="page-tabs">
+  <span class="page-tab-group">회원아카데미</span>
+  <a href="competency.html" class="page-tab">특강</a>
+  <a href="competency.html?tab=course" class="page-tab">강좌</a>
+  <a href="mentoring.html" class="page-tab active">멘토링 숲학교</a>
+</div>
+
+  <div class="content-wrap">
+    <div id="mentoringDetail">
+      <div style="text-align:center;padding:48px;color:var(--gray-mid)">불러오는 중...</div>
+    </div>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/member.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+  </script>
+</body>
+
+</html>

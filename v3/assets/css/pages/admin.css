@@ -1,0 +1,168 @@
+/* =============================================
+   admin.css | 관리자 페이지 전용 스타일
+   ============================================= */
+
+body.admin-body { background: var(--gray-bg); }
+
+/* ── 관리자 레이아웃 */
+.admin-layout {
+  display: grid; grid-template-columns: 220px 1fr;
+  min-height: calc(100vh - var(--header-h));
+}
+
+.admin-layout.sidebar-collapsed {
+  grid-template-columns: 56px 1fr;
+}
+
+/* ── 사이드바 */
+.admin-sidebar {
+  background: var(--green-dark); 
+  color: var(--white);
+  position: sticky; 
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto; 
+  transition: width .3s;
+  z-index: 80;
+}
+
+.admin-sidebar.collapsed { 
+  width: 56px; 
+}
+
+/* ── 사이드바 헤더 */
+.admin-sidebar-head {
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  padding: 16px; 
+  font-size: var(--text-md); 
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+}
+
+.sidebar-toggle { 
+  background: none; 
+  border: none; 
+  color: rgba(255, 255, 255, .7); 
+  font-size: var(--text-lg); 
+  cursor: pointer; 
+}
+
+.sidebar-toggle:hover { 
+  color: var(--white); 
+}
+
+/* ── 네비게이션 */
+.admin-nav { 
+  padding: 8px 0; 
+}
+
+.admin-nav-item {
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+  padding: 13px 18px; 
+  font-size: var(--text-md); 
+  font-weight: 500;
+  color: rgba(255, 255, 255, .75); 
+  transition: var(--trans);
+  text-decoration: none; 
+  border-left: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.admin-nav-item:hover { 
+  background: rgba(255, 255, 255, .08); 
+  color: var(--white); 
+}
+
+.admin-nav-item.active { 
+  background: rgba(255, 255, 255, .12); 
+  color: var(--white); 
+  border-left-color: var(--green-light); 
+  font-weight: 700; 
+}
+
+/* ── 아이콘 */
+.nav-ico { 
+  font-size: var(--text-lg); 
+  flex-shrink: 0;
+  display: none;              /* 기본 상태에서는 아이콘 숨김 */
+}
+
+/* ── 텍스트 */
+.nav-txt { 
+  transition: opacity .3s; 
+}
+
+/* ── 사이드바 접힘 상태 */
+.admin-sidebar.collapsed .nav-ico {
+  display: block;             /* 접혔을 때만 아이콘 표시 */
+}
+
+.admin-sidebar.collapsed .nav-txt { 
+  opacity: 0; 
+  width: 0; 
+  overflow: hidden; 
+}
+
+/* 아이콘 중앙 정렬 */
+.admin-sidebar.collapsed .admin-nav-item {
+  justify-content: center;
+  padding: 13px 0;
+}
+
+/* 헤더 텍스트 숨김 */
+.admin-sidebar.collapsed .admin-sidebar-head span { 
+  display: none; 
+}
+/* ── 메인 */
+.admin-main { padding: 24px; overflow-x: hidden; }
+.admin-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+.admin-page-title { font-size: var(--text-xl); font-weight: 700; color: var(--green-dark); }
+
+/* ── 통계 카드 */
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: var(--white); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 16px; }
+.stat-icon { width: 52px; height: 52px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: var(--text-2xl); flex-shrink: 0; }
+.stat-num   { font-size: var(--text-2xl); font-weight: 700; color: var(--gray-dark); line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: var(--text-sm); color: var(--gray-mid); margin-bottom: 4px; }
+.stat-diff  { font-size: var(--text-xs); color: var(--gray-mid); }
+.stat-diff.up { color: var(--green-main); }
+
+/* ── 2단 그리드 */
+.admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* ── 관리자 테이블 강화 */
+.admin-table { width: 100%; border-collapse: collapse; font-size: var(--text-md); }
+.admin-table thead { background: var(--green-dark); color: var(--white); }
+.admin-table thead th { padding: 11px 14px; font-size: var(--text-sm); font-weight: 600; text-align: left; white-space: nowrap; }
+.admin-table tbody tr { border-bottom: 1px solid var(--gray-light); transition: background .12s; }
+.admin-table tbody tr:hover { background: var(--gray-bg); }
+.admin-table tbody td { padding: 10px 14px; vertical-align: middle; }
+.admin-table tbody td.center { text-align: center; }
+
+/* ── 검색 필터바 (관리자) */
+.admin-filter-bar {
+  background: var(--white); border: 1px solid var(--gray-light);
+  border-radius: var(--radius); padding: 16px 20px; margin-bottom: 20px;
+  display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;
+}
+.admin-filter-bar .form-control { height: 36px; font-size: var(--text-sm); }
+.admin-filter-bar .btn { height: 36px; }
+
+/* ── 반응형 */
+@media (max-width: 1200px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .admin-layout  { grid-template-columns: 1fr; }
+  .admin-sidebar { position: fixed; left: -220px; top: var(--header-h); height: calc(100vh - var(--header-h)); transition: left .3s; }
+  .admin-sidebar.mobile-open { left: 0; }
+  .admin-grid-2  { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .admin-main { padding: 16px; }
+}

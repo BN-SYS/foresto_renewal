@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>후기 작성 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/layout-lnb.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+  <style>
+    .write-form-wrap { max-width: 760px; }
+    .write-title-input {
+      width: 100%; font-size: var(--text-lg); padding: 10px 14px;
+      border: 1px solid var(--gray-light); border-radius: 6px;
+      font-family: inherit; box-sizing: border-box; margin-bottom: 16px;
+    }
+    .write-title-input:focus { outline: none; border-color: var(--green-dark); }
+    .editor-area {
+      width: 100%; min-height: 320px; padding: 14px;
+      border: 1px solid var(--gray-light); border-radius: 6px;
+      font-size: var(--text-md); font-family: inherit;
+      resize: vertical; line-height: 1.8; box-sizing: border-box;
+    }
+    .editor-area:focus { outline: none; border-color: var(--green-dark); }
+    .write-meta-row {
+      display: flex; gap: 12px; align-items: center;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .write-meta-row select, .write-meta-row input[type="text"] {
+      padding: 8px 12px; border: 1px solid var(--gray-light);
+      border-radius: 6px; font-size: 14px; font-family: inherit;
+    }
+    .write-action { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }
+  </style>
+</head>
+<body data-page="review-write">
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>후기 작성</h1>
+      <p>수료생 교육 후기를 작성해 주세요.</p>
+    </div>
+  </div>
+
+  <div id="bc"></div>
+  <div class="sub-layout">
+    <div id="lnb"></div>
+    <main class="sub-content">
+      <div class="content-wrap">
+        <div class="write-form-wrap">
+
+          <div class="write-meta-row">
+            <select id="writeCourse">
+              <option value="">과정 선택</option>
+              <option>전문가 과정</option>
+              <option>시민 아카데미</option>
+              <option>역량강화 과정</option>
+            </select>
+          </div>
+
+          <input type="text" class="write-title-input" id="writeTitle" placeholder="제목을 입력하세요">
+
+          <textarea class="editor-area" id="writeContent"
+                    placeholder="교육 후기를 자유롭게 작성해 주세요."></textarea>
+
+          <div class="write-action">
+            <a href="reviews.html" class="btn btn-gray">취소</a>
+            <button class="btn btn-primary" onclick="ReviewWrite.submit()">등록하기</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script>
+    if (!App.user.isLoggedIn) {
+      location.href = '../auth/login.html';
+    }
+    document.getElementById('hdr').innerHTML = Header.render('교육과정', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('bc').innerHTML  = LNB.breadcrumb('../', 'education/reviews.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'education/reviews.html');
+
+    const ReviewWrite = {
+      submit() {
+        const title   = document.getElementById('writeTitle').value.trim();
+        const content = document.getElementById('writeContent').value.trim();
+        const course  = document.getElementById('writeCourse').value;
+        if (!course)   { App.toast('과정을 선택해 주세요.', 'warning'); return; }
+        if (!title)    { App.toast('제목을 입력해 주세요.', 'warning'); return; }
+        if (!content)  { App.toast('내용을 입력해 주세요.', 'warning'); return; }
+        App.toast('후기가 등록되었습니다.');
+        setTimeout(() => { location.href = 'reviews.html'; }, 1200);
+      },
+    };
+  </script>
+</body>
+</html>

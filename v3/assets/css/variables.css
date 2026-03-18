@@ -1,0 +1,61 @@
+/* =============================================
+   variables.css | CSS 커스텀 프로퍼티
+   ============================================= */
+
+/* ── 기본 font-size 설정 (글자 크기 조절 기준 REQ-003)
+   FontSize JS 객체가 html[data-font] 속성을 제어
+   sm: 14px / md: 16px(기본) / lg: 18px
+*/
+html { font-size: 16px; }
+html[data-font="sm"] { font-size: 14px; }
+html[data-font="md"] { font-size: 16px; }
+html[data-font="lg"] { font-size: 18px; }
+
+:root {
+  /* 색상 */
+  --green-dark: #1d4b36;
+  --green-main: #05803e;
+  --green-light: #5c977a;
+  --green-pale: #d8f3dc;
+  --gray-dark: #2d3436;
+  --gray-mid: #636e72;
+  --gray-light: #dfe6e9;
+  --gray-bg: #f4f6f4;
+  --white: #ffffff;
+  --accent: #f4a261;
+  --danger: #e74c3c;
+  --warning: #f9a825;
+  --warning-pale: #fff8e1;
+  --info: #1976d2;
+  --info-pale: #e3f2fd;
+
+  /* 타이포 — rem 기준 (html font-size 16px 기준)
+     글자 크기 조절 버튼: JS가 html font-size를 ±2px 단위로 변경 → 전체 스케일 유지
+  */
+  --font-base: 'Noto Sans KR', sans-serif;
+  --text-2xs:   0.6rem; /* 메인 캘리더 닷 */
+  --text-xs:   0.8125rem; /* 13px — 배지·태그·힌트·메타 보조 */
+  --text-sm:   0.9375rem; /* 15px — 날짜·카운트·서브 UI     */
+  --text-md:   1.125rem;  /* 18px — 목록·본문·표·폼 기준    */
+  --text-base: 1.25rem;   /* 20px — 강조 본문               */
+  --text-lg:   1.375rem;  /* 22px — 타이틀 (md + 4px)       */
+  --text-xl:   1.5rem;    /* 24px — 섹션 소제목             */
+  --text-2xl:  1.875rem;  /* 30px — 카드 대제목             */
+  --text-3xl:  2.25rem;   /* 36px — 페이지 헤더 H1          */
+  --text-4xl:  2.75rem;   /* 44px — 히어로 대형 타이틀      */
+
+
+
+  /* 레이아웃 */
+  --container-max: 1800px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow: 0 2px 12px rgba(0, 0, 0, .08);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, .12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .16);
+  --trans: all .22s ease;
+
+  /* 헤더 높이 */
+  --header-h: 96px;
+}

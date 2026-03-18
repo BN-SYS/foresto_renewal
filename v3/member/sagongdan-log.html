@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사공단 일지 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/layout-lnb.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+</head>
+
+<body data-page="sagongdan-log">
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>사공단 일지</h1>
+      <p>정회원 전용 | 봉사활동 일지 및 활동보고서</p>
+    </div>
+  </div>
+
+  <div id="bc"></div>
+  <div class="sub-layout">
+    <div id="lnb"></div>
+    <main class="sub-content">
+
+    <div class="content-wrap">
+
+      <div class="alert alert-info" style="margin-bottom:16px">
+        사공단 일지는 <strong>정회원 전용</strong> 게시판입니다.
+      </div>
+      <div class="alert alert-warning" style="margin-bottom:24px">
+        파일 업로드 용량: 파일당 최대 <strong>10MB</strong> &nbsp;|&nbsp; 허용 형식: JPG, PNG, PDF, HWP, DOCX
+      </div>
+
+      <div class="list-top">
+        <span class="list-count">Total <strong id="logCount">0</strong>건</span>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+          <div class="list-search">
+            <input type="text" class="list-search-input" id="logKeyword" placeholder="검색어를 입력하세요"
+              onkeydown="if(event.key==='Enter') SagongdanLogCtrl.search()">
+            <button class="list-search-btn" onclick="SagongdanLogCtrl.search()">검색</button>
+          </div>
+          <div id="logWriteArea"></div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="board-table">
+          <thead>
+            <tr>
+              <th style="width:60px">번호</th>
+              <th>제목</th>
+              <th style="width:90px">작성자</th>
+              <th style="width:90px">활동일</th>
+              <th style="width:50px">첨부</th>
+              <th style="width:110px">작성일</th>
+            </tr>
+          </thead>
+          <tbody id="logTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="logPagination" class="pagination"></div>
+
+    </div>
+    </main>
+  </div>
+
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', 'member/sagongdan-log.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'member/sagongdan-log.html');
+    Footer.initFamilyOutsideClick && Footer.initFamilyOutsideClick();
+
+    const SagongdanLogCtrl = {
+      data: [
+        { id: 1, title: '2025년 11월 서울숲 봉사 활동 일지',    author: '홍*동', actDate: '2025-11-10', file: true,  date: '2025-11-12' },
+        { id: 2, title: '2025년 10월 북한산 탐방로 정비 일지',   author: '이*영', actDate: '2025-10-22', file: true,  date: '2025-10-24' },
+        { id: 3, title: '2025년 9월 어린이 숲 체험 봉사 일지',   author: '김*수', actDate: '2025-09-14', file: false, date: '2025-09-16' },
+      ],
+      filtered: [],
+
+      init() {
+        this.filtered = [...this.data];
+        this.render();
+        if (App.user.isLoggedIn) {
+          document.getElementById('logWriteArea').innerHTML =
+            '<a href="sagongdan-log-write.html" class="btn btn-primary btn-sm">일지 작성</a>';
+        }
+      },
+      search() {
+        const kw = document.getElementById('logKeyword').value.trim().toLowerCase();
+        this.filtered = kw ? this.data.filter(d => d.title.toLowerCase().includes(kw)) : [...this.data];
+        this.render();
+      },
+      render() {
+        document.getElementById('logCount').textContent = this.filtered.length;
+        const tbody = document.getElementById('logTableBody');
+        if (!this.filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--gray-mid)">등록된 일지가 없습니다.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = this.filtered.map((d, i) => `
+          <tr>
+            <td style="text-align:center">${this.filtered.length - i}</td>
+            <td><a href="sagongdan-log-detail.html?id=${d.id}" style="color:inherit;text-decoration:none">${d.title}</a></td>
+            <td style="text-align:center">${d.author}</td>
+            <td style="text-align:center">${d.actDate}</td>
+            <td style="text-align:center">${d.file ? '📎' : '-'}</td>
+            <td style="text-align:center">${d.date}</td>
+          </tr>`).join('');
+      },
+    };
+
+    SagongdanLogCtrl.init();
+  </script>
+</body>
+
+</html>

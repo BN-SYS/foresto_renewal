@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>숲해설 강사 신청 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/layout-lnb.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+</head>
+<body data-page="instructor">
+
+<div id="hdr"></div>
+
+<div class="page-header">
+  <div class="container">
+    <h1>숲해설 강사 신청</h1>
+    <p>정회원 전용 | 숲해설 강사 활동 참여 신청</p>
+  </div>
+</div>
+
+  <div id="bc"></div>
+  <div class="sub-layout">
+    <div id="lnb"></div>
+    <main class="sub-content">
+  <div class="content-wrap">
+  <div style="max-width:700px;margin:0 auto">
+
+    <!-- 안내 -->
+    <div class="card" style="margin-bottom:28px">
+      <div class="card-header"><span class="card-title">신청 안내</span></div>
+      <div style="font-size:14px;line-height:2;color:var(--gray-dark)">
+        <p>숲해설 강사 신청은 <strong>신청 접수만</strong> 진행되며, 별도 결과 공지는 없습니다.</p>
+        <p>활동 배정은 협회 사무국에서 개별 연락드립니다.</p>
+        <ul style="list-style:disc;padding-left:20px;margin-top:8px">
+          <li>대상: 정회원 (숲해설가 전문과정 수료자)</li>
+          <li>활동: 지역 내 숲 체험 교육, 생태 해설 등</li>
+          <li>문의: 협회 사무국 02-000-0000</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 신청 폼 -->
+    <div class="card" id="formCard">
+      <div class="card-header"><span class="card-title">강사 신청서</span></div>
+
+      <div class="form-group">
+        <label class="form-label">이름 <span class="req">*</span></label>
+        <input type="text" class="form-control" id="iName" placeholder="이름을 입력하세요">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label class="form-label">연락처 <span class="req">*</span></label>
+          <input type="tel" class="form-control" id="iPhone" placeholder="010-0000-0000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">이메일 <span class="req">*</span></label>
+          <input type="email" class="form-control" id="iEmail" placeholder="example@email.com">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label class="form-label">거주 지역 <span class="req">*</span></label>
+          <select class="form-control" id="iRegion">
+            <option value="">선택</option>
+            <option>서울</option><option>경기</option><option>인천</option>
+            <option>부산</option><option>대구</option><option>광주</option>
+            <option>대전</option><option>울산</option><option>기타</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">활동 가능 요일</label>
+          <select class="form-control" id="iDay">
+            <option value="">선택</option>
+            <option>평일(월~금)</option><option>주말(토/일)</option><option>무관</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">활동 가능 지역 / 분야</label>
+        <textarea class="form-control" id="iArea" rows="2"
+                  placeholder="활동 가능한 지역 또는 해설 분야를 입력해주세요."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">전문가과정 수료 기수</label>
+        <input type="text" class="form-control" id="iCourse" placeholder="예: 50기">
+        <div class="form-hint">수료증이 있는 경우 기수를 입력해주세요.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">기타 사항</label>
+        <textarea class="form-control" id="iNote" rows="3"
+                  placeholder="기타 문의사항이나 특이사항을 입력해주세요."></textarea>
+      </div>
+
+      <div style="background:var(--gray-bg);border-radius:var(--radius);padding:14px;margin-bottom:20px">
+        <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:14px">
+          <input type="checkbox" id="iAgree" style="margin-top:3px">
+          <span>개인정보 수집 및 이용에 동의합니다. <span style="color:var(--danger)">(필수)</span><br>
+            <span style="font-size:12px;color:var(--gray-mid)">수집 항목: 이름, 연락처, 이메일, 지역 / 목적: 강사 활동 배정 / 보유 기간: 1년</span>
+          </span>
+        </label>
+      </div>
+
+      <div style="display:flex;justify-content:center;gap:12px">
+        <button class="btn btn-gray btn-lg" onclick="history.back()">취소</button>
+        <button class="btn btn-primary btn-lg" onclick="InstructorForm.submit()">신청하기</button>
+      </div>
+    </div>
+
+    <!-- 완료 메시지 (숨김) -->
+    <div class="card" id="doneCard" style="display:none;text-align:center;padding:48px 24px">
+      <div style="font-size:48px;margin-bottom:16px">✅</div>
+      <h3 style="font-size:22px;font-weight:700;color:var(--green-dark);margin-bottom:12px">신청이 완료되었습니다!</h3>
+      <p style="font-size:14px;color:var(--gray-mid);line-height:1.8;margin-bottom:24px">
+        활동 배정이 결정되면 협회 사무국에서 개별 연락드립니다.<br>
+        문의: 02-000-0000 / info@forest-guide.or.kr
+      </p>
+      <a href="../index.html" class="btn btn-primary">홈으로 돌아가기</a>
+    </div>
+
+  </div>
+</div>
+    </main>
+  </div>
+
+
+<div id="ftr"></div>
+
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/components/header.js"></script>
+<script>
+  document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+  document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', 'member/instructor.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'member/instructor.html');
+
+  const InstructorForm = {
+    submit() {
+      const name   = document.getElementById('iName').value.trim();
+      const phone  = document.getElementById('iPhone').value.trim();
+      const email  = document.getElementById('iEmail').value.trim();
+      const region = document.getElementById('iRegion').value;
+      const agree  = document.getElementById('iAgree').checked;
+
+      if (!name)   { App.toast('이름을 입력해주세요.', 'warning');      return; }
+      if (!phone)  { App.toast('연락처를 입력해주세요.', 'warning');    return; }
+      if (!email)  { App.toast('이메일을 입력해주세요.', 'warning');    return; }
+      if (!region) { App.toast('거주 지역을 선택해주세요.', 'warning'); return; }
+      if (!agree)  { App.toast('개인정보 수집 동의가 필요합니다.', 'warning'); return; }
+
+      document.getElementById('formCard').style.display = 'none';
+      document.getElementById('doneCard').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>후원하기 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/layout-lnb.css">
+  <link rel="stylesheet" href="../assets/css/pages/participate.css">
+</head>
+
+<body data-page="donate">
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>후원하기</h1>
+      <p>숲과 사람을 잇는 일에 함께해 주세요.</p>
+    </div>
+  </div>
+
+  <div id="bc"></div>
+  <div class="sub-layout">
+    <div id="lnb"></div>
+    <main class="sub-content">
+
+    <div class="content-wrap">
+      <div class="donate-wrap">
+
+        <!-- 스텝 인디케이터 -->
+        <div class="step-indicator" id="donateStepIndicator">
+          <div class="step active" id="dStep1">
+            <div class="step-num">1</div>
+            <span>후원 정보</span>
+          </div>
+          <div class="step-divider"></div>
+          <div class="step pending" id="dStep2">
+            <div class="step-num">2</div>
+            <span>신청자 정보</span>
+          </div>
+          <div class="step-divider"></div>
+          <div class="step pending" id="dStep3">
+            <div class="step-num">3</div>
+            <span>완료</span>
+          </div>
+        </div>
+
+        <!-- ── STEP 1: 후원 정보 -->
+        <div class="donate-step-wrap active" id="donateStep1">
+          <div class="card" style="margin-bottom:0">
+
+            <!-- 후원 유형 선택 -->
+            <div class="form-group">
+              <label class="form-label">후원 유형 <span class="req">*</span></label>
+              <div class="donate-type-tabs">
+                <button class="donate-type-btn active" id="typeRegular" onclick="DonateCtrl.setType('regular', this)">
+                  정기 후원<br>
+                  <span style="font-size:12px;font-weight:400">매월 자동이체</span>
+                </button>
+                <button class="donate-type-btn" id="typeOnce" onclick="DonateCtrl.setType('once', this)">
+                  일시 후원<br>
+                  <span style="font-size:12px;font-weight:400">1회 자유 입금</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 금액 선택 -->
+            <div class="form-group">
+              <label class="form-label">
+                후원 금액 <span class="req">*</span>
+                <span style="font-size:12px;color:var(--gray-mid);font-weight:400;margin-left:6px">
+                  (월 기준)
+                </span>
+              </label>
+              <div class="amount-grid">
+                <button class="amount-btn" data-amount="10000" onclick="DonateCtrl.selectAmount(10000, this)">
+                  1만원
+                </button>
+                <button class="amount-btn" data-amount="30000" onclick="DonateCtrl.selectAmount(30000, this)">
+                  3만원
+                </button>
+                <button class="amount-btn" data-amount="50000" onclick="DonateCtrl.selectAmount(50000, this)">
+                  5만원
+                </button>
+                <button class="amount-btn" data-amount="100000" onclick="DonateCtrl.selectAmount(100000, this)">
+                  10만원
+                </button>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <input type="number" class="form-control" id="donateAmountInput" placeholder="직접 입력 (원)" min="1000"
+                  oninput="DonateCtrl.onAmountInput(this.value)" style="flex:1">
+                <span style="font-size:14px;color:var(--gray-mid);white-space:nowrap">원 이상</span>
+              </div>
+              <div class="form-hint">최소 1,000원 이상 입력해 주세요.</div>
+            </div>
+
+            <!-- 후원 목적 -->
+            <div class="form-group">
+              <label class="form-label">후원 목적</label>
+              <select class="form-control" id="donatePurpose">
+                <option value="">선택 (자유)</option>
+                <option value="edu">교육 프로그램 지원</option>
+                <option value="volunteer">사회공헌 활동 지원</option>
+                <option value="resource">교육 자료 개발 지원</option>
+                <option value="free">자유 사용 (지정 없음)</option>
+              </select>
+            </div>
+
+            <!-- 계좌 안내 -->
+            <div class="account-box">
+              <h4>후원 계좌 안내</h4>
+              <div class="account-row">
+                <span class="account-label">은행</span>
+                <span class="account-value">OO은행</span>
+              </div>
+              <div class="account-row">
+                <span class="account-label">계좌번호</span>
+                <span class="account-value">
+                  <strong>000-000-000000</strong>
+                </span>
+              </div>
+              <div class="account-row">
+                <span class="account-label">예금주</span>
+                <span class="account-value">한국숲해설가협회</span>
+              </div>
+              <div class="account-row">
+                <span class="account-label">입금자명</span>
+                <span class="account-value">
+                  본인 성명으로 입금해 주세요.<br>
+                  <span style="font-size:12px;color:var(--gray-mid)">
+                    신청서 작성 후 입금하시면 확인이 빠릅니다.
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <div style="display:flex;justify-content:flex-end">
+              <button class="btn btn-primary" onclick="DonateCtrl.nextStep1()">
+                다음 → 신청자 정보
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STEP 2: 신청자 정보 -->
+        <div class="donate-step-wrap" id="donateStep2">
+          <div class="card" style="margin-bottom:0">
+
+            <!-- 요약 -->
+            <div style="background:var(--green-pale);border-radius:var(--radius);
+                        padding:14px 18px;margin-bottom:24px;font-size:14px;line-height:1.8;
+                        border-left:3px solid var(--green-main)">
+              <div style="display:flex;gap:8px">
+                <span style="font-weight:700;color:var(--green-dark);min-width:70px">후원 유형</span>
+                <span id="summaryType">-</span>
+              </div>
+              <div style="display:flex;gap:8px">
+                <span style="font-weight:700;color:var(--green-dark);min-width:70px">후원 금액</span>
+                <span id="summaryAmount">-</span>
+              </div>
+              <div style="display:flex;gap:8px">
+                <span style="font-weight:700;color:var(--green-dark);min-width:70px">후원 목적</span>
+                <span id="summaryPurpose">-</span>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="form-group">
+                <label class="form-label">성명 <span class="req">*</span></label>
+                <input type="text" class="form-control" id="donateName" placeholder="홍길동">
+              </div>
+              <div class="form-group">
+                <label class="form-label">연락처 <span class="req">*</span></label>
+                <input type="tel" class="form-control" id="donatePhone" placeholder="010-0000-0000">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">이메일 <span class="req">*</span></label>
+              <input type="email" class="form-control" id="donateEmail" placeholder="example@email.com">
+              <div class="form-hint">영수증 및 감사 메일을 발송합니다.</div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="form-group">
+                <label class="form-label">생년월일</label>
+                <input type="date" class="form-control" id="donateBirth">
+              </div>
+              <div class="form-group">
+                <label class="form-label">영수증 발급 여부</label>
+                <select class="form-control" id="donateReceipt">
+                  <option value="yes">발급 요청</option>
+                  <option value="no">발급 불필요</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">후원자 명단 공개</label>
+              <div style="display:flex;gap:16px;margin-top:6px">
+                <label style="display:flex;align-items:center;gap:6px;
+                               font-size:14px;cursor:pointer">
+                  <input type="radio" name="donatePublic" value="yes" checked> 동의합니다
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;
+                               font-size:14px;cursor:pointer">
+                  <input type="radio" name="donatePublic" value="no"> 비공개 요청
+                </label>
+              </div>
+              <div class="form-hint">
+                동의 시 협회 소식지 및 홈페이지에 후원자명을 게재합니다.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">남기실 말씀</label>
+              <textarea class="form-control" id="donateMessage" rows="3" placeholder="후원 메시지를 남겨주세요. (선택)"></textarea>
+            </div>
+
+            <!-- 개인정보 동의 -->
+            <div class="form-group">
+              <label class="form-label">
+                개인정보 수집·이용 동의 <span class="req">*</span>
+              </label>
+              <div class="privacy-box">
+                <strong>수집 항목:</strong> 성명, 연락처, 이메일, 생년월일<br>
+                <strong>수집 목적:</strong> 후원 접수, 기부금 영수증 발급, 후원 감사 연락<br>
+                <strong>보유 기간:</strong> 후원 관계 종료 후 5년<br>
+                <strong>제3자 제공:</strong> 없음 (세무 신고 목적 제외)<br><br>
+                위 내용에 동의하지 않으실 경우 후원 신청이 제한될 수 있습니다.
+              </div>
+              <label style="display:flex;align-items:center;gap:8px;
+                             font-size:14px;cursor:pointer;margin-top:8px">
+                <input type="checkbox" id="donatePrivacyAgree">
+                개인정보 수집·이용에 동의합니다. <span style="color:var(--danger)">(필수)</span>
+              </label>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;gap:10px">
+              <button class="btn btn-gray" onclick="DonateCtrl.prevStep()">
+                ← 이전
+              </button>
+              <button class="btn btn-primary" onclick="DonateCtrl.submitDonate()">
+                후원 신청 완료
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── STEP 3: 완료 -->
+        <div class="donate-done" id="donateStep3">
+          <div class="done-title">후원 신청이 완료되었습니다!</div>
+          <div class="done-desc" id="doneDescript">
+            소중한 후원에 진심으로 감사드립니다.<br>
+            입금 확인 후 담당자가 연락드릴 예정입니다.<br>
+            영수증 발급 신청 건은 이메일로 안내해 드립니다.
+          </div>
+          <div style="background:var(--green-pale);border-radius:var(--radius-lg);
+                      padding:20px 28px;display:inline-block;text-align:left;
+                      margin-bottom:28px;font-size:14px;line-height:1.9" id="doneDetail">
+            <!-- JS 렌더 -->
+          </div>
+          <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+            <a href="donate-info.html" class="btn btn-outline">후원안내 보기</a>
+            <a href="../index.html" class="btn btn-primary">메인으로</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    </main>
+  </div>
+
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('참여', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', 'participate/donate.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'participate/donate.html');
+
+    /* ══════════════════════════════════════
+       DonateCtrl | 후원하기 신청 폼 컨트롤러
+    ══════════════════════════════════════ */
+    const DonateCtrl = {
+      _step: 1,
+      _type: 'regular',   // 'regular' | 'once'
+      _amount: 0,
+
+      /* ── 후원 유형 선택 */
+      setType(type, btn) {
+        this._type = type;
+        document.querySelectorAll('.donate-type-btn')
+          .forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+
+        /* 금액 레이블 변경 */
+        const label = document.querySelector(
+          'label[for="donateAmountInput"], .form-label .req'
+        );
+        const hint = document.querySelector('.form-hint');
+      },
+
+      /* ── 금액 선택 버튼 */
+      selectAmount(amount, btn) {
+        this._amount = amount;
+        document.querySelectorAll('.amount-btn')
+          .forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        const input = document.getElementById('donateAmountInput');
+        if (input) input.value = amount;
+      },
+
+      /* ── 직접 입력 */
+      onAmountInput(val) {
+        this._amount = parseInt(val) || 0;
+        /* 금액 버튼 선택 해제 */
+        document.querySelectorAll('.amount-btn')
+          .forEach(b => {
+            b.classList.toggle(
+              'active',
+              parseInt(b.dataset.amount) === this._amount
+            );
+          });
+      },
+
+      /* ── STEP1 → STEP2 */
+      nextStep1() {
+        const amount = parseInt(
+          document.getElementById('donateAmountInput')?.value || '0'
+        );
+        if (!amount || amount < 1000) {
+          App.toast('최소 1,000원 이상 입력해 주세요.', 'warning');
+          return;
+        }
+        this._amount = amount;
+
+        /* 요약 채우기 */
+        const PURPOSE_LABEL = {
+          edu: '교육 프로그램 지원',
+          volunteer: '사회공헌 활동 지원',
+          resource: '교육 자료 개발 지원',
+          free: '자유 사용',
+          '': '지정 없음',
+        };
+        const purpose = document.getElementById('donatePurpose')?.value || '';
+
+        document.getElementById('summaryType').textContent =
+          this._type === 'regular' ? '정기 후원 (매월 자동이체)' : '일시 후원';
+        document.getElementById('summaryAmount').textContent =
+          `${amount.toLocaleString()}원` +
+          (this._type === 'regular' ? ' / 월' : '');
+        document.getElementById('summaryPurpose').textContent =
+          PURPOSE_LABEL[purpose] || '지정 없음';
+
+        this._goStep(2);
+      },
+
+      /* ── STEP2 → 완료 */
+      submitDonate() {
+        const name = document.getElementById('donateName')?.value.trim() || '';
+        const phone = document.getElementById('donatePhone')?.value.trim() || '';
+        const email = document.getElementById('donateEmail')?.value.trim() || '';
+        const agree = document.getElementById('donatePrivacyAgree')?.checked;
+
+        if (!name) { App.toast('성명을 입력해주세요.', 'warning'); return; }
+        if (!phone) { App.toast('연락처를 입력해주세요.', 'warning'); return; }
+        if (!email) { App.toast('이메일을 입력해주세요.', 'warning'); return; }
+        if (!agree) {
+          App.toast('개인정보 수집·이용 동의가 필요합니다.', 'warning');
+          return;
+        }
+
+        /* 완료 화면 상세 정보 */
+        document.getElementById('doneDetail').innerHTML = `
+          <div style="display:flex;gap:12px;margin-bottom:6px">
+            <span style="font-weight:700;color:var(--green-dark);min-width:70px">후원자</span>
+            <span>${name}</span>
+          </div>
+          <div style="display:flex;gap:12px;margin-bottom:6px">
+            <span style="font-weight:700;color:var(--green-dark);min-width:70px">후원 유형</span>
+            <span>${this._type === 'regular' ? '정기 후원' : '일시 후원'}</span>
+          </div>
+          <div style="display:flex;gap:12px;margin-bottom:6px">
+            <span style="font-weight:700;color:var(--green-dark);min-width:70px">후원 금액</span>
+            <span><strong>${this._amount.toLocaleString()}원</strong>${this._type === 'regular' ? ' / 월' : ''}</span>
+          </div>
+          <div style="display:flex;gap:12px">
+            <span style="font-weight:700;color:var(--green-dark);min-width:70px">연락처</span>
+            <span>${phone}</span>
+          </div>`;
+
+        this._goStep(3);
+        App.toast('후원 신청이 완료되었습니다. 감사합니다!');
+      },
+
+      /* ── 이전 */
+      prevStep() {
+        if (this._step > 1) this._goStep(this._step - 1);
+      },
+
+      /* ── 스텝 이동 */
+      _goStep(n) {
+        this._step = n;
+
+        /* 스텝 패널 전환 */
+        [1, 2].forEach(s => {
+          const el = document.getElementById(`donateStep${s}`);
+          if (el) el.classList.toggle('active', s === n);
+        });
+        const done = document.getElementById('donateStep3');
+        if (done) done.classList.toggle('active', n === 3);
+
+        /* 스텝 인디케이터 */
+        const indicator = document.getElementById('donateStepIndicator');
+        if (indicator) {
+          indicator.style.display = n === 3 ? 'none' : 'flex';
+        }
+        [1, 2, 3].forEach(s => {
+          const el = document.getElementById(`dStep${s}`);
+          if (!el) return;
+          el.className = 'step ' + (s < n ? 'done' : s === n ? 'active' : 'pending');
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+    };
+  </script>
+</body>
+
+</html>

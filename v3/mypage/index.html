@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이페이지 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/mypage.css">
+</head>
+<body>
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>마이페이지</h1>
+      <p>회원정보 및 교육이수내역을 관리하세요.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="my-layout">
+      <!-- 사이드바 -->
+      <aside class="my-sidebar">
+        <div class="my-profile">
+          <div class="my-avatar">🌿</div>
+          <div class="my-name" id="sidebarName">김숲해설</div>
+          <div class="my-grade">정회원</div>
+          <div class="my-join" id="sidebarJoin">2022.03.15 가입</div>
+        </div>
+        <nav class="side-nav">
+          <a onclick="MyPage.showPanel('info')"     id="nav-info"     class="active">회원정보 수정</a>
+          <a onclick="MyPage.showPanel('pw')"       id="nav-pw">비밀번호 변경</a>
+          <a onclick="MyPage.showPanel('cert')"     id="nav-cert">교육신청내역</a>
+          <a onclick="MyPage.showPanel('withdraw')" id="nav-withdraw" class="nav-danger">탈퇴하기</a>
+        </nav>
+      </aside>
+
+      <!-- 메인 -->
+      <main>
+        <!-- 회원정보 패널 -->
+        <div class="my-panel active" id="panel-info">
+          <div class="info-card">
+            <div class="info-card-title">기본 정보</div>
+            <div class="form-grid">
+              <div class="form-row"><label>이름</label><input class="form-control" id="infoName" value="김숲해설"></div>
+              <div class="form-row"><label>아이디</label><input class="form-control" id="infoId" value="forest2022" readonly></div>
+              <div class="form-row"><label>생년월일</label><input class="form-control" id="infoBirth" value="1990-03-15" readonly></div>
+              <div class="form-row"><label>성별</label><input class="form-control" id="infoGender" value="여성" readonly></div>
+              <div class="form-row"><label>이메일</label><input type="email" class="form-control" id="infoEmail" value="forest@example.com"></div>
+              <div class="form-row">
+                <label>연락처</label>
+                <div style="display:flex;gap:8px;">
+                  <input class="form-control" id="infoPhone" value="010-1234-5678" readonly style="flex:1">
+                  <button class="btn btn-outline btn-sm" onclick="App.toast('본인인증 서비스 준비 중입니다.')">본인인증</button>
+                </div>
+              </div>
+              <div class="form-row" style="grid-column:1/-1;">
+                <label>주소</label>
+                <div style="display:flex;gap:8px;margin-bottom:6px;">
+                  <input class="form-control" id="infoPostcode" value="03152" style="max-width:120px;" readonly placeholder="우편번호">
+                  <button class="btn btn-outline btn-sm" onclick="App.toast('주소 검색 서비스 준비 중입니다.')">주소 검색</button>
+                </div>
+                <input class="form-control" id="infoAddr1" value="서울특별시 종로구 삼청로 00" readonly style="margin-bottom:6px;">
+                <input class="form-control" id="infoAddr2" placeholder="상세주소">
+              </div>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-title">협회 정보</div>
+            <div class="form-grid">
+              <div class="form-row"><label>가입일</label><input class="form-control" value="2022-03-15" readonly></div>
+              <div class="form-row"><label>기수</label><input class="form-control" value="15기" readonly></div>
+              <div class="form-row">
+                <label>소속 지역협회</label>
+                <select class="form-control">
+                  <option>서울</option><option>경기</option><option selected>인천</option>
+                  <option>강원</option><option>충북</option><option>충남</option>
+                  <option>전북</option><option>전남</option><option>경북</option>
+                  <option>경남</option><option>제주</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>소속 동아리</label>
+                <select class="form-control">
+                  <option value="">동아리 미가입</option>
+                  <option selected>나무반지</option>
+                  <option>초록발자국</option>
+                  <option>숲소리</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-primary" onclick="App.toast('회원정보가 저장되었습니다.')">저장하기</button>
+          </div>
+        </div>
+
+        <!-- 비밀번호 변경 패널 (REQ-053) -->
+        <div class="my-panel" id="panel-pw">
+          <div class="info-card">
+            <div class="info-card-title">비밀번호 변경</div>
+            <div class="pw-grid">
+              <div class="form-row"><label>현재 비밀번호</label><input type="password" class="form-control" id="pwCurrent" placeholder="현재 비밀번호"></div>
+              <div class="form-row"><label>새 비밀번호</label><input type="password" class="form-control" id="pwNew" placeholder="영문+숫자+특수 8자 이상"></div>
+              <div class="form-row">
+                <label>새 비밀번호 확인</label>
+                <div style="display:flex;gap:8px;">
+                  <input type="password" class="form-control" id="pwConfirm" placeholder="비밀번호 재입력" style="flex:1">
+                  <button class="btn btn-primary btn-sm" onclick="MyPage.changePw()">변경하기</button>
+                </div>
+              </div>
+            </div>
+            <p id="pwMsg" style="font-size:13px;margin-top:10px;"></p>
+          </div>
+        </div>
+
+        <!-- 교육신청내역 패널 (REQ-055) -->
+        <div class="my-panel" id="panel-cert">
+          <div class="info-card">
+            <div class="info-card-title">교육이수내역</div>
+
+            <div class="edu-stats">
+              <div class="edu-stat-card"><div class="stat-n" id="statTotal">0</div><div class="stat-l">전체</div></div>
+              <div class="edu-stat-card"><div class="stat-n" id="statDone">0</div><div class="stat-l">이수완료</div></div>
+              <div class="edu-stat-card"><div class="stat-n" id="statProgress">0</div><div class="stat-l">수강중</div></div>
+              <div class="edu-stat-card"><div class="stat-n" id="statApplied">0</div><div class="stat-l">신청완료</div></div>
+            </div>
+
+            <div class="edu-filter-tabs">
+              <button class="edu-tab active" onclick="MyPage.filterEdu('all',this)">전체</button>
+              <button class="edu-tab" onclick="MyPage.filterEdu('done',this)">이수완료</button>
+              <button class="edu-tab" onclick="MyPage.filterEdu('progress',this)">수강중</button>
+              <button class="edu-tab" onclick="MyPage.filterEdu('applied',this)">신청완료</button>
+              <button class="edu-tab" onclick="MyPage.filterEdu('cancel',this)">취소</button>
+            </div>
+
+            <div class="table-wrap">
+              <table class="board-table" style="min-width:600px">
+                <thead>
+                  <tr>
+                    <th style="width:44px;">NO.</th>
+                    <th>강좌명</th>
+                    <th style="width:120px;">구분</th>
+                    <th style="width:110px;">수강일자</th>
+                    <th style="width:80px;">이수시간</th>
+                    <th style="width:80px;">상태</th>
+                    <th style="width:80px;">수료증</th>
+                  </tr>
+                </thead>
+                <tbody id="eduTableBody"></tbody>
+              </table>
+            </div>
+            <div class="pagination" id="eduPagination"></div>
+          </div>
+        </div>
+
+        <!-- 탈퇴하기 패널 (REQ-054) -->
+        <div class="my-panel" id="panel-withdraw">
+          <div class="info-card">
+            <div class="info-card-title" style="color:var(--danger)">회원 탈퇴</div>
+            <div class="alert alert-warning" style="margin-bottom:20px">
+              탈퇴 시 모든 정보가 삭제되며 <strong>복구가 불가능</strong>합니다. 신중하게 결정해 주세요.
+            </div>
+            <div class="form-row" style="flex-direction:column;gap:8px;margin-bottom:16px">
+              <label>탈퇴 사유</label>
+              <textarea id="withdrawReason" rows="4" class="form-control" placeholder="탈퇴 사유를 입력하세요." style="resize:vertical;"></textarea>
+            </div>
+            <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;margin-bottom:20px">
+              <input type="checkbox" id="withdrawAgree"> 위 내용을 확인하였으며 탈퇴에 동의합니다.
+            </label>
+            <div class="action-row" style="justify-content:flex-end">
+              <button class="btn btn-danger" onclick="MyPage.doWithdraw()">탈퇴하기</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="ftr"></div>
+
+  <!-- 탈퇴 모달 -->
+  <div class="modal-overlay" id="withdrawModal">
+    <div class="modal" style="max-width:420px">
+      <div class="modal-header">
+        <h3>회원 탈퇴</h3>
+        <button class="modal-close" onclick="App.closeModal('withdrawModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:14px;color:var(--gray-mid);line-height:1.7;margin-bottom:14px;">탈퇴 시 모든 정보가 삭제되며 복구가 불가능합니다.</p>
+        <textarea id="withdrawReason" rows="4" class="form-control" placeholder="탈퇴 사유를 입력하세요." style="resize:none;"></textarea>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:12px;cursor:pointer;">
+          <input type="checkbox" id="withdrawAgree"> 위 내용을 확인하였으며 탈퇴에 동의합니다.
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-gray" onclick="App.closeModal('withdrawModal')">취소</button>
+        <button class="btn btn-danger" onclick="MyPage.doWithdraw()">탈퇴하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 수료증 모달 -->
+  <div class="modal-overlay" id="certModal">
+    <div class="modal" style="max-width:560px">
+      <div class="modal-header">
+        <h3>수료증 확인</h3>
+        <button class="modal-close" onclick="App.closeModal('certModal')">×</button>
+      </div>
+      <div class="modal-body" id="certPreviewArea"></div>
+      <div class="modal-footer">
+        <button class="btn btn-gray" onclick="App.closeModal('certModal')">닫기</button>
+        <button class="btn btn-primary" onclick="App.toast('수료증 다운로드가 준비 중입니다.')">다운로드</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/mypage.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('마이페이지', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    MyPage.init();
+  </script>
+</body>
+</html>

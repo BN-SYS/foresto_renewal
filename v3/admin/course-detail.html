@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>강좌 상세 | 관리자 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/pages/admin.css">
+</head>
+<body class="admin-body">
+  <div id="hdr"></div>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-head">
+        <span>🛠 관리자</span>
+        <button class="sidebar-toggle" onclick="AdminLayout.toggleSidebar()" aria-label="사이드바 토글">☰</button>
+      </div>
+      <nav class="admin-nav" id="adminNavMount" aria-label="관리자 메뉴"></nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title" id="pageTitle">강좌 상세</h1>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-gray btn-sm" onclick="history.back()">목록으로</button>
+          <button class="btn btn-gray btn-sm" onclick="CourseDetail.exportExcel()">엑셀 다운로드</button>
+          <button class="btn btn-primary btn-sm" id="editBtn">수정하기</button>
+        </div>
+      </div>
+
+      <div id="detailWrap">
+        <div style="text-align:center;padding:60px;color:var(--gray-mid)">강좌 정보를 불러오는 중입니다...</div>
+      </div>
+    </main>
+  </div>
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/admin.js"></script>
+  <script src="../assets/js/pages/education.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('관리자', '../');
+    AdminSidebar.mount('courses');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+
+    const STATUS_LABEL = {
+      open:   { label: '접수중',   cls: 'status-open'   },
+      ready:  { label: '접수예정', cls: 'status-ready'  },
+      closed: { label: '접수마감', cls: 'status-closed' },
+      done:   { label: '수강완료', cls: 'status-done'   },
+    };
+
+    /* ── 샘플 신청자 데이터 */
+    const NAMES = ['김숲해설','이초록','박자연','최나무','정바람','윤하늘','강숲속','조생태','신나뭇잎','한자연'];
+    const STATUS_LIST = ['approved','approved','pending','approved','rejected','approved','cancel','approved','pending','approved'];
+
+    function makeApplicants(courseId, count) {
+      return Array.from({ length: count }, (_, i) => ({
+        id:        `${courseId}-${i}`,
+        name:      NAMES[i % NAMES.length],
+        phone:     `010-${String(1000+i).padStart(4,'0')}-${String(2000+i).padStart(4,'0')}`,
+        email:     `applicant${i}@example.com`,
+        region:    ['서울','경기','인천','부산','대구'][i % 5],
+        applyDate: `2026-03-${String(i+1).padStart(2,'0')}`,
+        status:    STATUS_LIST[i % STATUS_LIST.length],
+        complete:  STATUS_LIST[i % STATUS_LIST.length] === 'approved' && i % 3 !== 2,
+      }));
+    }
+
+    const APPLY_STATUS = {
+      approved: { label:'승인',   cls:'badge-green' },
+      pending:  { label:'검토중', cls:'badge-orange' },
+      rejected: { label:'반려',   cls:'badge-red'   },
+      cancel:   { label:'취소',   cls:'badge-gray'  },
+    };
+
+    const CourseDetail = {
+      _course: null,
+      _applicants: [],
+
+      init() {
+        const id = Number(App.getParam('id'));
+        const c  = (typeof ALL_COURSES_RAW !== 'undefined' ? ALL_COURSES_RAW : []).find(x => x.id === id);
+
+        if (!c) {
+          document.getElementById('detailWrap').innerHTML =
+            `<div style="text-align:center;padding:60px;color:var(--gray-mid)">강좌를 찾을 수 없습니다.</div>`;
+          return;
+        }
+
+        this._course     = c;
+        this._applicants = makeApplicants(id, c.capacity ? Math.min(c.capacity, 12) : 8);
+
+        document.getElementById('pageTitle').textContent = `강좌 상세 — ${c.title}`;
+        document.getElementById('editBtn').onclick = () => location.href = `course-edit.html?id=${id}`;
+
+        const sm       = STATUS_LABEL[c.status] || { label: c.status, cls: '' };
+        const approved = this._applicants.filter(a => a.status === 'approved').length;
+        const pending  = this._applicants.filter(a => a.status === 'pending').length;
+        const capacity = c.capacity || 20;
+
+        document.getElementById('detailWrap').innerHTML = `
+          <!-- 강좌 기본 정보 -->
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-header">
+              <span class="card-title">강좌 정보</span>
+              <span class="status-badge ${sm.cls}">${sm.label}</span>
+            </div>
+            <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px 32px">
+              <div>
+                <div style="font-size:12px;color:var(--gray-mid);margin-bottom:4px">강좌명</div>
+                <div style="font-weight:700;font-size:16px">${c.title}</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-mid);margin-bottom:4px">구분</div>
+                <div><span class="badge badge-green">${c.type}</span></div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-mid);margin-bottom:4px">교육 기간</div>
+                <div>${c.from || c.date || '-'} ~ ${c.to || '-'}</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-mid);margin-bottom:4px">총 교육시간</div>
+                <div>${c.hours || '-'}시간</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-mid);margin-bottom:4px">접수 기간</div>
+                <div>${c.applyFrom || '-'} ~ ${c.applyTo || '-'}</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-mid);margin-bottom:4px">정원</div>
+                <div>${capacity}명</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-mid);margin-bottom:4px">교육 장소</div>
+                <div>${c.location || '미정'}</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-mid);margin-bottom:4px">수강료</div>
+                <div>${c.fee || '무료'}</div>
+              </div>
+              ${c.guide ? `<div style="grid-column:1/-1">
+                <div style="font-size:12px;color:var(--gray-mid);margin-bottom:4px">강좌 안내</div>
+                <div style="background:var(--gray-light);border-radius:6px;padding:12px;font-size:13px;line-height:1.7">${c.guide}</div>
+              </div>` : ''}
+            </div>
+          </div>
+
+          <!-- 신청자 현황 요약 -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+            ${[
+              { label:'총 신청', val: this._applicants.length, color:'var(--green-dark)' },
+              { label:'승인',    val: approved,                color:'var(--green-main)' },
+              { label:'검토중',  val: pending,                 color:'var(--accent)'     },
+              { label:'정원 잔여', val: capacity - approved,   color:'var(--gray-dark)'  },
+            ].map(s => `
+              <div class="card" style="padding:16px 20px;text-align:center">
+                <div style="font-size:26px;font-weight:800;color:${s.color}">${s.val}</div>
+                <div style="font-size:12px;color:var(--gray-mid);margin-top:4px">${s.label}</div>
+              </div>`).join('')}
+          </div>
+
+          <!-- 신청자 목록 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">신청자 목록</span>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-gray btn-sm" onclick="CourseDetail.exportApplicantsExcel()">신청자 엑셀 다운</button>
+                <button class="btn btn-outline btn-sm"
+                  onclick="location.href='courses.html'">
+                  신청자 관리 탭으로 이동
+                </button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th class="center" style="width:44px">NO.</th>
+                    <th style="width:80px">이름</th>
+                    <th>이메일</th>
+                    <th class="center" style="width:120px">연락처</th>
+                    <th class="center" style="width:60px">지역</th>
+                    <th class="center" style="width:100px">신청일</th>
+                    <th class="center" style="width:70px">상태</th>
+                    <th class="center" style="width:80px">수료</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${this._applicants.map((a, i) => {
+                    const as = APPLY_STATUS[a.status] || { label: a.status, cls: 'badge-gray' };
+                    return `<tr>
+                      <td class="center">${i+1}</td>
+                      <td><strong>${a.name}</strong></td>
+                      <td style="font-size:13px;color:var(--gray-mid)">${a.email}</td>
+                      <td class="center" style="font-size:13px">${a.phone}</td>
+                      <td class="center">${a.region}</td>
+                      <td class="center" style="font-size:13px;color:var(--gray-mid)">${a.applyDate}</td>
+                      <td class="center"><span class="badge ${as.cls}">${as.label}</span></td>
+                      <td class="center">
+                        <span class="badge ${a.complete?'badge-green':'badge-gray'}">
+                          ${a.complete?'수료':'미수료'}
+                        </span>
+                      </td>
+                    </tr>`;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>`;
+      },
+
+      exportExcel() {
+        App.toast('강좌 정보 엑셀 다운로드 (실제 구현 시 API 연동)');
+      },
+
+      exportApplicantsExcel() {
+        App.toast('신청자 명단 엑셀 다운로드 (실제 구현 시 API 연동)');
+      },
+    };
+
+    CourseDetail.init();
+  </script>
+</body>
+</html>

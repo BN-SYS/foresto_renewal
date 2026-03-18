@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사공단 소개 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/layout-lnb.css">
+  <link rel="stylesheet" href="../assets/css/pages/community.css">
+</head>
+
+<body data-page="sagongdan">
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>사공단 소개</h1>
+      <p>정회원 전용 | 사회공헌사업단 활동 소개</p>
+    </div>
+
+  <div id="bc"></div>
+  <div class="sub-layout">
+    <div id="lnb"></div>
+    <main class="sub-content">
+
+    <div class="content-wrap">
+
+      <div class="alert alert-info" style="margin-bottom:24px">
+        사회공헌사업단은 <strong>정회원 전용</strong> 메뉴입니다.
+      </div>
+
+      <div class="intro-layout" style="margin-bottom:40px">
+        <div class="intro-text">
+          <span class="section-label">COMMUNITY SERVICE</span>
+          <div class="section-title">사회공헌사업단(사공단)</div>
+          <div class="section-desc">
+            한국숲해설가협회 사회공헌사업단은 소외 계층·취약 환경을 대상으로
+            숲 생태 교육 및 자연 치유 활동을 펼치는 봉사 조직입니다.<br>
+            지역 복지관, 장애인 시설, 어르신 요양원, 저소득 아동 기관 등에
+            전문 숲해설가가 직접 찾아가 맞춤형 프로그램을 진행합니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">주요 활동</div>
+        <table class="info-table">
+          <tbody>
+            <tr>
+              <th>대상</th>
+              <td>저소득 아동·청소년, 장애인, 어르신, 다문화 가정 등 취약 계층</td>
+            </tr>
+            <tr>
+              <th>활동 내용</th>
+              <td>숲 탐방, 자연물 공예, 산림 치유 프로그램, 절기별 자연 교육</td>
+            </tr>
+            <tr>
+              <th>참여 자격</th>
+              <td>협회 정회원 (자발적 신청, 봉사 시간 인정)</td>
+            </tr>
+            <tr>
+              <th>운영 시기</th>
+              <td>연중 수시 (활동 일정은 사공단 소식 게시판 참조)</td>
+            </tr>
+            <tr>
+              <th>문의</th>
+              <td>사무국 02-747-6518 | foresto123@hanmail.net</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    </main>
+  </div>
+
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/member.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', 'member/sagongdan.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'member/sagongdan.html');
+  </script>
+</body>
+
+</html>

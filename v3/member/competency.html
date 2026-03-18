@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원아카데미 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/layout-lnb.css">
+  <link rel="stylesheet" href="../assets/css/pages/education.css">
+  <link rel="stylesheet" href="../assets/css/pages/member.css">
+</head>
+
+<body data-page="competency">
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>회원아카데미</h1>
+      <p>정회원 전용 | 특강·강좌·멘토링 숲학교 교육 프로그램</p>
+    </div>
+  </div>
+
+  <div id="bc"></div>
+  <div class="sub-layout">
+    <div id="lnb"></div>
+    <main class="sub-content">
+  <div class="content-wrap">
+
+    <!-- 안내 배너 -->
+    <div class="member-intro-banner">
+      <div class="member-intro-text">
+        <h3>회원아카데미 특강</h3>
+        <p>현직 숲해설가 회원의 전문성 향상을 위한 특강·워크숍·세미나를 운영합니다.<br>
+          정회원은 대부분의 강좌를 무료 또는 실비로 수강할 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="list-top">
+      <span class="list-count">Total <strong id="totalCount">0</strong>건</span>
+      <div class="list-search">
+        <select class="list-search-type" id="filterType" style="min-width:90px">
+          <option value="">강좌 유형</option>
+          <option value="역량강화">역량강화</option>
+          <option value="직무교육">직무교육</option>
+        </select>
+        <select class="list-search-type" id="filterStatus" style="min-width:90px; border-left: 1.5px solid var(--gray-light);">
+          <option value="">접수 상태</option>
+          <option value="open">접수중</option>
+          <option value="ready">준비중</option>
+          <option value="closed">접수마감</option>
+        </select>
+        <button class="list-search-btn" onclick="doSearch()">검색</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="board-table">
+        <thead>
+          <tr>
+            <th style="width:60px">번호</th>
+            <!-- <th style="width:90px">구분</th> -->
+            <th class="td-title">강좌명</th>
+            <th style="width:180px">교육일자</th>
+            <th style="width:230px">교육기간</th>
+            <th style="width:100px">상태</th>
+          </tr>
+        </thead>
+        <tbody id="competencyBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="competencyPagination"></div>
+  </div>
+    </main>
+  </div>
+
+
+  <div id="ftr"></div>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/education.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', 'member/competency.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'member/competency.html');
+
+    /* 역량강화 + 직무교육 통합 목록 */
+    const merged = ALL_COURSES_RAW.filter(c =>
+      c.type === '역량강화' || c.type === '직무교육'
+    );
+
+    window._ctrl = new CourseListController('역량강화', 'competencyBody', 'competencyPagination', '', 'competency-detail.html');
+    window._ctrl.courses = merged;
+    window._ctrl.filtered = [...merged];
+    window._ctrl.render();
+
+    function doSearch() {
+      const type = document.getElementById('filterType').value;
+      const status = document.getElementById('filterStatus').value;
+      window._ctrl.courses = type
+        ? ALL_COURSES_RAW.filter(c => c.type === type)
+        : ALL_COURSES_RAW.filter(c => c.type === '역량강화' || c.type === '직무교육');
+      window._ctrl.filter(status, '', '');
+    }
+
+    function resetSearch() {
+      document.getElementById('filterType').value = '';
+      document.getElementById('filterStatus').value = '';
+      window._ctrl.courses = merged;
+      window._ctrl.filtered = [...merged];
+      window._ctrl.currentPage = 1;
+      window._ctrl.render();
+    }
+  </script>
+</body>
+
+</html>

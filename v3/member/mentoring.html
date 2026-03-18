@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>멘토링 숲학교 | 한국숲해설가협회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/layout-lnb.css">
+</head> 
+<body data-page="mentoring">
+
+  <div id="hdr"></div>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>멘토링 숲학교</h1>
+      <p>회원 전용 | 선배 해설가와 함께하는 현장 멘토링 프로그램</p>
+    </div>
+  </div>
+
+  <div id="bc"></div>
+  <div class="sub-layout">
+    <div id="lnb"></div>
+    <main class="sub-content">
+  <div class="content-wrap">
+
+    <div class="alert alert-info" style="margin-bottom:24px">
+      멘토링 숲학교는 <strong>정회원 전용</strong> 메뉴입니다.
+    </div>
+
+    <div class="list-top">
+      <span class="list-count">Total <strong id="mentoringCount">0</strong>건</span>
+      <div class="list-search">
+        <input type="text" class="list-search-input" id="searchKeyword" placeholder="검색어를 입력하세요"
+          onkeydown="if(event.key==='Enter') MentoringBoard.search(document.getElementById('searchKeyword').value)">
+        <button class="list-search-btn"
+          onclick="MentoringBoard.search(document.getElementById('searchKeyword').value)">검색</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="board-table">
+        <thead>
+          <tr>
+            <th style="width:60px">번호</th>
+            <th>제목</th>
+            <th style="width:90px">작성자</th>
+            <th style="width:180px">작성일</th>
+          </tr>
+        </thead>
+        <tbody id="mentoringTableBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="mentoringPagination"></div>
+
+  </div>
+    </main>
+  </div>
+
+
+  <div id="ftr"></div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/components/header.js"></script>
+  <script src="../assets/js/pages/member.js"></script>
+  <script>
+    document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
+    document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', 'member/mentoring.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'member/mentoring.html');
+    MentoringBoard.init();
+  </script>
+</body>
+
+</html>
