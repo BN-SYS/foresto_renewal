@@ -68,8 +68,12 @@ const MyPage = {
   filterEdu(type, btn) {
     this.eduFilter = type;
     this.eduPage = 1;
+    // 탭 active 동기화
     document.querySelectorAll('.edu-tab').forEach(t => t.classList.remove('active'));
     if (btn) btn.classList.add('active');
+    // 드롭다운 동기화 (탭 클릭 시)
+    const sel = document.getElementById('eduFilterSelect');
+    if (sel) sel.value = type;
     this.renderEduTable();
   },
 

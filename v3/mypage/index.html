@@ -131,6 +131,7 @@
               <div class="edu-stat-card"><div class="stat-n" id="statApplied">0</div><div class="stat-l">신청완료</div></div>
             </div>
 
+            <!-- 데스크탑: 탭 필터 -->
             <div class="edu-filter-tabs">
               <button class="edu-tab active" onclick="MyPage.filterEdu('all',this)">전체</button>
               <button class="edu-tab" onclick="MyPage.filterEdu('done',this)">이수완료</button>
@@ -138,6 +139,15 @@
               <button class="edu-tab" onclick="MyPage.filterEdu('applied',this)">신청완료</button>
               <button class="edu-tab" onclick="MyPage.filterEdu('cancel',this)">취소</button>
             </div>
+            <!-- 모바일: 드롭다운 필터 -->
+            <select class="edu-filter-select" id="eduFilterSelect"
+                    onchange="MyPage.filterEdu(this.value,null)">
+              <option value="all">전체</option>
+              <option value="done">이수완료</option>
+              <option value="progress">수강중</option>
+              <option value="applied">신청완료</option>
+              <option value="cancel">취소</option>
+            </select>
 
             <div class="table-wrap">
               <table class="board-table" style="min-width:600px">

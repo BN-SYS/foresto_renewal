@@ -105,6 +105,22 @@
   display: flex; gap: 0;
   border-bottom: 1px solid var(--gray-light); margin-bottom: 16px;
 }
+
+/* ── 교육 필터 드롭다운 (모바일 전용) */
+.edu-filter-select {
+  display: none; /* 기본 숨김 — 모바일에서만 노출 */
+  width: 100%;
+  padding: 9px 12px;
+  font-size: var(--text-md);
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--gray-dark);
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  cursor: pointer;
+  appearance: auto;
+}
 .edu-tab {
   padding: 9px 18px;
   font-size: var(--text-md);            /* 13px */
@@ -147,17 +163,22 @@
 
 /* ── 모바일 교육이수 테이블 반응형 (≤ 768px) */
 @media (max-width: 768px) {
-  /* 테이블 전체 스크롤 컨테이너 해제 → 카드 레이아웃으로 전환 */
-  .my-panel .table-wrap {
-    overflow-x: visible;
+  /* 탭 숨기고 드롭다운 표시 */
+  .edu-filter-tabs { display: none; }
+  .edu-filter-select { display: block; }
+
+  /* 테이블 min-width 해제 → 카드 레이아웃 */
+  .my-panel .table-wrap { overflow-x: visible; }
+  .my-panel .board-table { min-width: 0 !important; }
+
+  /* col-status: 1행만 차지 (global responsive의 1/3 span 덮어쓰기) */
+  .my-panel .board-table tbody td.col-status {
+    grid-row: 1 !important;
+    align-items: flex-start;
+    padding-top: 2px;
   }
 
-  /* 테이블 min-width 해제 */
-  .my-panel .board-table {
-    min-width: 0 !important;
-  }
-
-  /* col-cert: 수료증 PDF 버튼 — 2열 2행에 배치 */
+  /* col-cert: 2열 2행 — 상태 배지와 겹치지 않게 + 상단 여백 */
   .my-panel .board-table tbody td.col-cert {
     display: flex;
     align-items: center;
@@ -165,6 +186,7 @@
     grid-column: 2;
     grid-row: 2;
     padding-left: 10px;
+    padding-top: 6px;
   }
 
   /* 사이드바 nav 모바일: 아바타 영역 콤팩트 */
