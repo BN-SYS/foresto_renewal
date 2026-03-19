@@ -284,7 +284,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 25px 0;
+  padding: 14px 0;
   border-bottom: 2px solid var(--gray-light);
 }
 
@@ -533,7 +533,7 @@
 .cal-cell.today {
   background: var(--green-main);
   color: #fff;
-  border-radius: 50%;
+  border-radius: 10%;
   font-weight: 700;
 }
 
