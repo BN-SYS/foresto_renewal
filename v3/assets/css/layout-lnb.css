@@ -55,22 +55,9 @@
   top: auto;
 }
 
-/* 그룹 타이틀 (카테고리명, 예: 소식 / 소개 / 교육과정) */
+/* 그룹 타이틀 (카테고리명) — 탭 위 노출 안 함 */
 .lnb-group-title {
-  display: inline-block;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gray-mid);
-  text-decoration: none;
-  margin-bottom: 16px;
-  line-height: 1;
-  background: none;
-  padding: 0;
-  cursor: default;
-  pointer-events: none;
+  display: none;
 }
 
 /* 탭 아이템 행 wrapper */
