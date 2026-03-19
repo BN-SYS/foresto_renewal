@@ -415,10 +415,10 @@ const LNB = {
     ).join('');
 
     return `
-      <aside class="sub-lnb" aria-label="서브 메뉴">
-        <a href="${root}${groupHref}" class="lnb-group-title">${groupLabel}</a>
-        ${itemsHtml}
-      </aside>`;
+      <nav class="sub-lnb" aria-label="서브 메뉴">
+        <span class="lnb-group-title">${groupLabel}</span>
+        <div class="lnb-items">${itemsHtml}</div>
+      </nav>`;
   },
 
   /**
