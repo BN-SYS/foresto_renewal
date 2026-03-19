@@ -12,23 +12,57 @@
 }
 .section { padding: 48px 0; }
 
-/* ── 헤더 */
+/* ── 헤더 wrapper: 2-row (row1 고정 util + row2 메인 내비)
+   핵심: width:100% 명시 → position:sticky + display:flex 조합에서 width collapse 방지 */
 .site-header {
   background: var(--white);
   position: sticky;
   top: 0; z-index: 100;
   box-shadow: var(--shadow);
-  height: var(--header-h);
+  height: var(--header-h);               /* --pre-header-h(32px) + 68px = 100px */
   border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  width: 100%;                            /* ← 핵심 fix: sticky+flex 조합 width 고정 */
 }
+
+/* ── row 1: 사이트맵 + 글자크기 (px 단위 고정 → 폰트 크기 변경 시 위치 불변) */
+.header-util {
+  height: var(--pre-header-h);   /* 32px 고정 */
+  flex-shrink: 0;
+  position: absolute;
+  top: 0;
+  right: 0;                     /* ← 핵심: 우측 정렬 */
+  width: 100%;                  /* 필요 시 유지 (내부 정렬용) */
+}
+
+.header-util-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  gap: 6px;
+}
+/* 유틸 row 내 버튼: px 고정 크기 (rem 비사용 → 글자크기 조절 영향 없음) */
+.header-util .font-ctrl    { background: none; padding: 0; gap: 1px; }
+.header-util .font-btn     { width: 20px; height: 20px; font-size: 10px; }
+.header-util .sitemap-link { padding: 2px 8px; font-size: 11px; }
+.header-util .sitemap-link svg { width: 13px; height: 13px; }
+
+/* ── row 2: 로고 + 내비 + 인증 */
 .header-inner {
+  flex: 1;                               /* 남은 높이(68px) 모두 차지 */
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 24px;
-  height: 100%;
+  width: 100%;                           /* flex child cross-axis 보정 */
+  box-sizing: border-box;
   gap: 16px;
 }
 .logo {
@@ -36,11 +70,11 @@
   text-decoration: none; flex-shrink: 0;
 }
 .logo-img {
-  height: 48px;
+  height: 44px;
   display: flex; align-items: center; justify-content: center;
 }
 .logo-img img {
-  height: 48px; width: auto; object-fit: contain; display: block;
+  height: 44px; width: auto; object-fit: contain; display: block;
 }
 .logo-text { display: none; }
 
@@ -396,7 +430,61 @@
 }
 .related-arrow:hover { background: rgba(255,255,255,.25); color: #fff; }
 
-/* 카피라이트 */
+/* ─────────────────────────────────────────────
+   유관기관 바로가기 자동슬라이드 밴드 (footer 내 copyright 위)
+   .org-band — footer .related-* 와 prefix 분리
+───────────────────────────────────────────── */
+.org-band {
+  /* full-width로 두어야 overflow:hidden 클리핑이 정확히 작동 */
+  width: 100%;
+  border-top: 1px solid rgba(255,255,255,.15);
+  padding: 18px 0 16px;
+  overflow: hidden;   /* 스크롤 트랙 좌우 클리핑 */
+}
+.org-band-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,.6);
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.org-band-viewport {
+  overflow: hidden;
+  width: 100%;
+  /* will-change:transform 자식 요소 GPU 가속 시 overflow:hidden 미적용 이슈 방어 */
+  clip-path: inset(0);
+}
+.org-band-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  will-change: transform;
+  padding: 2px 0;
+}
+.org-band-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,.92);
+  border: 1.5px solid rgba(255,255,255,.5);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--green-dark, #2d6a4f);
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.org-band-card:hover {
+  background: #fff;
+  border-color: var(--green-main, #52b788);
+}
 .footer-copy {
   border-top: 1px solid rgba(255,255,255,.1);
   padding: 14px 0;

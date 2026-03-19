@@ -30,10 +30,10 @@
     display: none;
   }
 
-  /* 로고 이미지 크기 축소 (56px 헤더 대응) */
+  /* 로고 이미지 크기 축소 (모바일 헤더 대응) */
   .logo-img,
   .logo-img img {
-    height: 36px;
+    height: 34px;
   }
 }
 
@@ -46,8 +46,12 @@
 /* ── 태블릿 소형 (≤ 768px) */
 @media (max-width: 768px) {
   :root {
-    --header-h: 56px;
+    --header-h: 54px;  /* 모바일: row1(util) 숨김 → row2 단독 사용 */
   }
+
+  /* row1 전체 숨김 → row2(header-inner)가 전체 헤더 높이 차지 */
+  .header-util { display: none; }
+  .header-inner { flex: none; height: 100%; }
 
   .container {
     padding: 0 16px;

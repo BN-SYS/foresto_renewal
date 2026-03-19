@@ -176,8 +176,11 @@
     <script>
         document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
         document.getElementById('ftr').innerHTML = Footer.render('../');
-    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', 'member/club.html');
-    document.getElementById('lnb').innerHTML = LNB.render('../', 'member/club.html');
+    /* 탭 파라미터에 따라 LNB active 항목 동적 결정 */
+    const _lnbTab = new URLSearchParams(location.search).get('tab') || 'intro';
+    const _lnbPath = _lnbTab === 'intro' ? 'member/club.html' : `member/club.html?tab=${_lnbTab}`;
+    document.getElementById('bc').innerHTML = LNB.breadcrumb('../', _lnbPath);
+    document.getElementById('lnb').innerHTML = LNB.render('../', _lnbPath);
 
         /* URL 파라미터로 탭 초기 선택 (?tab=news | ?tab=archive, 기본: intro) */
         (function () {

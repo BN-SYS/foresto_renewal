@@ -57,5 +57,6 @@ html[data-font="lg"] { font-size: 18px; }
   --trans: all .22s ease;
 
   /* 헤더 높이 */
-  --header-h: 96px;
+  --pre-header-h: 32px;                          /* row1: 사이트맵 + 글자크기 고정 row */
+  --header-h: calc(var(--pre-header-h) + 68px);  /* = 100px (row1 + row2) */
 }

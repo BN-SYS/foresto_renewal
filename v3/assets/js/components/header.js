@@ -14,27 +14,27 @@ const NAV_DATA = [
       {
         label: '협회 소개', href: 'about/index.html',
         children: [
-          { label: '인사말',      href: 'about/index.html' },
+          { label: '인사말', href: 'about/index.html' },
           { label: '미션 & 비전', href: 'about/vision.html' },
-          { label: '주요 사업',   href: 'about/project.html' },
-          { label: '연혁',        href: 'about/history.html' },
-          { label: '오시는 길',   href: 'about/contact.html' },
+          { label: '주요 사업', href: 'about/project.html' },
+          { label: '연혁', href: 'about/history.html' },
+          { label: '오시는 길', href: 'about/contact.html' },
         ],
       },
       {
         label: '조직 안내', href: 'about/members.html',
         children: [
-          { label: '조직도·임원진',  href: 'about/members.html' },
+          { label: '조직도·임원진', href: 'about/members.html' },
           { label: '전국 지역협회', href: 'about/regions.html' },
         ],
       },
       {
         label: '회원 안내', href: 'about/regulation.html',
         children: [
-          { label: '회원 규정',        href: 'about/regulation.html' },
+          { label: '회원 규정', href: 'about/regulation.html' },
           { label: '정회원 가입 안내', href: 'participate/membership.html' },
-          { label: '후원 안내',        href: 'participate/donate-info.html' },
-          { label: '후원하기',         href: 'participate/donate.html' },
+          { label: '후원 안내', href: 'participate/donate-info.html' },
+          { label: '후원하기', href: 'participate/donate.html' },
         ],
       },
     ],
@@ -51,21 +51,21 @@ const NAV_DATA = [
         label: '숲해설가란', href: 'education/forester.html',
         children: [
           { label: '숲해설가 알아보기', href: 'education/forester.html' },
-          { label: '자주 묻는 질문',    href: 'education/faq.html' },
+          { label: '자주 묻는 질문', href: 'education/faq.html' },
         ],
       },
       {
         label: '기초 과정', href: 'education/academy.html',
         children: [
           { label: '기초 과정 개요', href: 'education/academy.html' },
-          { label: '교육 신청',      href: 'education/academy.html' },
+          { label: '교육 신청', href: 'education/academy.html' },
         ],
       },
       {
         label: '자격취득 과정', href: 'education/course-intro.html',
         children: [
-          { label: '교육 개요',   href: 'education/course-intro.html' },
-          { label: '교육 신청',   href: 'education/course-list.html' },
+          { label: '교육 개요', href: 'education/course-intro.html' },
+          { label: '교육 신청', href: 'education/course-list.html' },
           { label: '수료생 후기', href: 'education/reviews.html' },
         ],
       },
@@ -89,8 +89,8 @@ const NAV_DATA = [
       {
         label: '회원아카데미', href: 'member/competency.html',
         children: [
-          { label: '특강',          href: 'member/competency.html' },
-          { label: '강좌',          href: 'member/competency.html?tab=course' },
+          { label: '특강', href: 'member/competency.html' },
+          { label: '강좌', href: 'member/competency.html?tab=course' },
           { label: '멘토링 숲학교', href: 'member/mentoring.html' },
         ],
       },
@@ -105,8 +105,8 @@ const NAV_DATA = [
       {
         label: '숲동아리단', href: 'member/club.html',
         children: [
-          { label: '동아리 소개',   href: 'member/club.html' },
-          { label: '동아리 소식',   href: 'member/club.html?tab=news' },
+          { label: '동아리 소개', href: 'member/club.html' },
+          { label: '동아리 소식', href: 'member/club.html?tab=news' },
           { label: '동아리 자료방', href: 'member/club.html?tab=archive' },
         ],
       },
@@ -124,14 +124,14 @@ const NAV_DATA = [
       {
         label: '소식', href: 'community/notice-list.html',
         children: [
-          { label: '공지사항',    href: 'community/notice-list.html' },
+          { label: '공지사항', href: 'community/notice-list.html' },
           { label: '협회 캘린더', href: 'community/calendar.html' },
-          { label: '협회지',      href: 'community/newsletter.html' },
-          { label: '언론 보도',   href: 'community/press.html' },
+          { label: '협회지', href: 'community/newsletter.html' },
+          { label: '언론 보도', href: 'community/press.html' },
         ],
       },
       { label: '사진 갤러리', href: 'community/gallery.html' },
-      { label: '자료실',      href: 'community/archive.html' },
+      { label: '자료실', href: 'community/archive.html' },
     ],
   },
 
@@ -187,9 +187,9 @@ const Header = {
       /* isActive: 레이블 일치 or 직접 children href 일치 or 중첩 3뎁스 href 일치 */
       const isActive = n.label === activePage
         || n.children?.some(c =>
-            c.href === activePage
-            || c.children?.some(gc => gc.href === activePage)
-          );
+          c.href === activePage
+          || c.children?.some(gc => gc.href === activePage)
+        );
 
       /* 드롭다운 렌더 */
       const subHtml = n.children
@@ -272,22 +272,18 @@ const Header = {
 
     return `
     <header class="site-header">
-      <div class="header-inner">
 
-        <!-- ── 로고 -->
-        <a href="${root}index.html" class="logo">
-          <div class="logo-img">
-            <img src="${root}assets/image/logo.png" alt="한국숲해설가협회">
-          </div>
-        </a>
-
-        <!-- ── 메인 내비 -->
-        <nav class="main-nav" id="mainNav">${navHtml}</nav>
-
-        <!-- ── 헤더 우측 유틸리티 영역 -->
-        <div class="header-actions">
-
-          <!-- 글자 크기 (REQ-003) -->
+      <!-- ── row 1: 사이트맵 + 글자크기 (고정 row → 폰트 크기 변경 시 버튼 위치 불변) -->
+      <div class="header-util">
+        <div class="header-util-inner">
+          <a href="${root}sitemap.html" class="sitemap-link" title="사이트맵">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            <span class="sitemap-label">사이트맵</span>
+          </a>
           <div class="font-ctrl" aria-label="글자 크기 조절">
             <button class="font-btn" data-size="sm"
                     onclick="App.fontSize.down()" title="글자 축소"
@@ -299,21 +295,21 @@ const Header = {
                     onclick="App.fontSize.up()" title="글자 확대"
                     aria-label="글자 확대">가+</button>
           </div>
+        </div>
+      </div>
 
-          <!-- 사이트맵 (REQ-011) -->
-          <a href="${root}sitemap.html" class="sitemap-link" title="사이트맵">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-            </svg>
-            <span class="sitemap-label">사이트맵</span>
-          </a>
+      <!-- ── row 2: 로고 + 내비 + 인증 -->
+      <div class="header-inner">
+        <a href="${root}index.html" class="logo">
+          <div class="logo-img">
+            <img src="${root}assets/image/logo.png" alt="한국숲해설가협회">
+          </div>
+        </a>
 
-          <!-- 로그인/회원가입 or 마이페이지 -->
+        <nav class="main-nav" id="mainNav">${navHtml}</nav>
+
+        <div class="header-actions">
           <div id="authArea">${authHtml}</div>
-
-          <!-- 햄버거 (모바일) -->
           <button class="hamburger" id="hamburger"
                   onclick="Header.toggleMobileMenu()"
                   aria-label="메뉴 열기/닫기"
@@ -323,6 +319,7 @@ const Header = {
           </button>
         </div>
       </div>
+
     </header>
 
     <div class="mobile-nav" id="mobileNav">
@@ -345,15 +342,15 @@ const Header = {
 
     if (open) {
       Header._lockScrollY = window.scrollY;
-      document.body.style.overflow   = 'hidden';
-      document.body.style.position   = 'fixed';
-      document.body.style.top        = `-${Header._lockScrollY}px`;
-      document.body.style.width      = '100%';
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${Header._lockScrollY}px`;
+      document.body.style.width = '100%';
     } else {
-      document.body.style.overflow  = '';
-      document.body.style.position  = '';
-      document.body.style.top       = '';
-      document.body.style.width     = '';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
       window.scrollTo(0, Header._lockScrollY);
     }
   },
@@ -381,8 +378,8 @@ const LNB = {
    */
   render(root, currentPath) {
     let groupLabel = '';
-    let groupHref  = '';
-    let items      = [];
+    let groupHref = '';
+    let items = [];
 
     /* NAV_DATA에서 currentPath가 속한 2depth 그룹 탐색 */
     for (const n1 of NAV_DATA) {
@@ -392,7 +389,7 @@ const LNB = {
         if (!n2.children) {
           if (n2.href === currentPath) {
             groupLabel = n1.label;
-            groupHref  = n1.href;
+            groupHref = n1.href;
             items = [{ label: n2.label, href: n2.href }];
           }
           continue;
@@ -401,8 +398,8 @@ const LNB = {
           || n2.href === currentPath;
         if (match) {
           groupLabel = n2.label;
-          groupHref  = n2.href;
-          items      = n2.children;
+          groupHref = n2.href;
+          items = n2.children;
           break;
         }
       }
@@ -480,11 +477,11 @@ const LNB = {
 
 /* ── 유관기관 목록 ────────────────────────────── */
 const RELATED_ORGS = [
-  { label: '산림청',        href: 'https://www.forest.go.kr' },
-  { label: '국립수목원',    href: 'https://www.kna.go.kr' },
+  { label: '산림청', href: 'https://www.forest.go.kr' },
+  { label: '국립수목원', href: 'https://www.kna.go.kr' },
   { label: '산림복지진흥원', href: 'https://www.fowi.or.kr' },
   { label: '숲해설가 자격', href: '#' },
-  { label: '녹색연합',      href: 'https://www.greenkorea.org' },
+  { label: '녹색연합', href: 'https://www.greenkorea.org' },
 ];
 
 const Footer = {
@@ -498,6 +495,15 @@ const Footer = {
       `<a href="${o.href}" class="related-item"
           target="_blank" rel="noopener noreferrer">${o.label}</a>`
     ).join('');
+
+    /* 유관기관 자동슬라이드 밴드 카드 */
+    const orgBandCards = RELATED_ORGS.map(o =>
+      `<a href="${o.href}" class="org-band-card"
+          target="_blank" rel="noopener noreferrer">${o.label}</a>`
+    ).join('');
+
+    /* 렌더 완료 후 자동슬라이드 초기화 (innerHTML 할당 후 다음 tick에 실행) */
+    setTimeout(() => Footer.initOrgBand(), 0);
 
     return `
     <footer class="site-footer">
@@ -550,29 +556,20 @@ const Footer = {
           <!-- 구 홈페이지 링크 -->
           <a href="https://www.foresto.org" target="_blank" rel="noopener noreferrer"
              class="footer-old-site">
-            구 홈페이지 바로가기 &rarr;
+            구 홈페이지 바로가기
           </a>
-
-          <!-- 유관기관 슬라이드 -->
-          <div class="footer-related">
-            <span class="related-label">유관기관</span>
-            <div class="related-slider-wrap">
-              <button class="related-arrow related-prev"
-                      onclick="Footer.slideRelated(-1)"
-                      aria-label="이전 기관">&#9664;</button>
-              <div class="related-viewport" id="relatedViewport">
-                <div class="related-track" id="relatedTrack">
-                  ${relItems}
-                </div>
-              </div>
-              <button class="related-arrow related-next"
-                      onclick="Footer.slideRelated(1)"
-                      aria-label="다음 기관">&#9654;</button>
-            </div>
-          </div>
-
         </div>
       </div>
+
+      <!-- 유관기관 바로가기 자동슬라이드 밴드 -->
+    <div class="org-band">
+      <div class="org-band-label">유관기관 바로가기</div>
+      <div class="org-band-viewport">
+        <div class="org-band-track" id="orgBandTrack">
+          ${orgBandCards}
+        </div>
+      </div>
+    </div>
 
       <div class="footer-copy">
         <div class="container">
@@ -604,7 +601,40 @@ const Footer = {
     return 3;
   },
 
+  /* 유관기관 자동슬라이드 밴드 초기화 */
+  initOrgBand() {
+    const track = document.getElementById('orgBandTrack');
+    if (!track) return;
+
+    /* 원본 1세트 HTML·너비 저장 */
+    const originalHTML  = track.innerHTML;
+    const originalWidth = track.scrollWidth;   /* 복제 전 측정 */
+
+    /* 뷰포트 3배 이상 채울 때까지 복제 → 어떤 화면 크기에서도 끊김 없이 채움 */
+    const vw = window.innerWidth || document.documentElement.clientWidth;
+    while (track.scrollWidth < vw * 3) {
+      track.innerHTML += originalHTML;
+    }
+
+    let pos = 0;
+    const speed = 0.5;
+    let paused = false;
+    const viewport = track.parentElement;
+    viewport.addEventListener('mouseenter', () => { paused = true; });
+    viewport.addEventListener('mouseleave', () => { paused = false; });
+
+    (function animate() {
+      if (!paused) {
+        pos += speed;
+        /* 원본 1세트 너비만큼 이동하면 리셋 → seamless loop */
+        if (pos >= originalWidth) pos -= originalWidth;
+        track.style.transform = `translateX(-${pos}px)`;
+      }
+      requestAnimationFrame(animate);
+    })();
+  },
+
   /* 구 패밀리사이트 compat (기존 호출부 오류 방지) */
-  toggleFamilySite() {},
-  initFamilyOutsideClick() {},
+  toggleFamilySite() { },
+  initFamilyOutsideClick() { },
 };

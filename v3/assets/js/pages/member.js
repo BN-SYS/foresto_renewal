@@ -91,11 +91,20 @@ function createBoard(opts) {
 ══════════════════════════════════════════════ */
 const BoardDetail = {
   /**
-   * @param {string}   containerId  - 렌더링 대상 요소 id
-   * @param {Array}    dataArr      - 게시판 데이터 배열
-   * @param {string|number} id      - 대상 게시물 id
+   * @param {string}        containerId  - 렌더링 대상 요소 id
+   * @param {Array}         dataArr      - 게시판 데이터 배열
+   * @param {string|number} id           - 대상 게시물 id
+   * @param {string}        [listUrl=''] - 삭제 후 이동할 목록 URL (history.back() 대신)
    */
-  render(containerId, dataArr, id) {
+  _ctx: null,   /* 현재 상세 삭제 컨텍스트 {id, array, listUrl} */
+
+  deleteCurrent() {
+    if (!BoardDetail._ctx) return;
+    const { id, array, listUrl } = BoardDetail._ctx;
+    App.deletePost(id, array, listUrl || '');
+  },
+
+  render(containerId, dataArr, id, listUrl = '') {
     const el = document.getElementById(containerId);
     if (!el) return;
 
@@ -137,6 +146,10 @@ const BoardDetail = {
         </div>` : ''}
       </div>` : '';
 
+    const canMod = App.canModify(item);
+    /* 삭제 컨텍스트 저장 — onclick 인라인에서 클로저 변수 직접 참조 불가 */
+    BoardDetail._ctx = { id: item.id, array: dataArr, listUrl };
+
     el.innerHTML = `
       <div class="cd-wrap">
         <div class="cd-head">
@@ -157,6 +170,10 @@ const BoardDetail = {
         <div class="cd-actions">
           <button class="btn btn-primary btn-sm cd-btn-list"
                   onclick="history.back()">목록</button>
+          ${canMod ? `<div class="cd-actions-right">
+            <button class="btn btn-danger btn-sm"
+                    onclick="BoardDetail.deleteCurrent()">삭제</button>
+          </div>` : ''}
         </div>
       </div>`;
   },
@@ -996,7 +1013,7 @@ const QnaCtrl = {
            답변 준비 중입니다. 조금만 기다려 주세요.
          </div>`;
 
-    const isAuthor = App.user?.name === item.author;
+    const canMod = App.canModify(item);
     el.innerHTML = `
       <div class="cd-wrap">
         <div class="cd-head">
@@ -1018,8 +1035,12 @@ const QnaCtrl = {
         <div class="cd-actions">
           <button class="btn btn-primary btn-sm cd-btn-list"
                   onclick="history.back()">목록</button>
-          ${isAuthor ? `<button class="btn btn-gray btn-sm"
-                  onclick="location.href='qna-write.html?edit=${item.id}'">수정</button>` : ''}
+          ${canMod ? `<div class="cd-actions-right">
+            <button class="btn btn-gray btn-sm"
+                    onclick="location.href='qna-write.html?edit=${item.id}'">수정</button>
+            <button class="btn btn-danger btn-sm"
+                    onclick="App.deletePost(${item.id}, QNA_DATA, 'qna.html')">삭제</button>
+          </div>` : ''}
         </div>
       </div>`;
   },

@@ -163,33 +163,6 @@
 
       </div>
 
-      <!-- ⑤ 유관기관 무한 슬라이드 -->
-      <div class="related-wrap">
-        <div class="related-label">유관기관 바로가기</div>
-        <div class="related-track-wrap">
-          <div class="related-track" id="relatedTrack">
-            <a href="#" class="related-card" onclick="App.toast('산림청으로 이동합니다.');return false;">
-              <span class="related-card-name">산림청</span>
-            </a>
-            <a href="#" class="related-card" onclick="App.toast('국립수목원으로 이동합니다.');return false;">
-              <span class="related-card-name">국립수목원</span>
-            </a>
-            <a href="#" class="related-card" onclick="App.toast('산림복지진흥원으로 이동합니다.');return false;">
-              <span class="related-card-name">산림복지진흥원</span>
-            </a>
-            <a href="#" class="related-card" onclick="App.toast('숲해설가 자격으로 이동합니다.');return false;">
-              <span class="related-card-name">숲해설가 자격</span>
-            </a>
-            <a href="#" class="related-card" onclick="App.toast('한국산림복지진흥원으로 이동합니다.');return false;">
-              <span class="related-card-name">한국산림복지진흥원</span>
-            </a>
-            <a href="#" class="related-card" onclick="App.toast('녹색연합으로 이동합니다.');return false;">
-              <span class="related-card-name">녹색연합</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
     </div>
   </main>
 
@@ -201,7 +174,7 @@
 
     /* ── 헤더 / 푸터 렌더 */
     document.getElementById('hdr').innerHTML = Header.render('', '');
-    document.getElementById('ftr').innerHTML = Footer.render('../');
+    document.getElementById('ftr').innerHTML = Footer.render('');
     Footer.initFamilyOutsideClick();
 
     /* ── 게시판 데이터 */
@@ -312,27 +285,6 @@
     }
     function heroSlide(dir) { goSlide(_slideIdx + dir); }
     setInterval(() => heroSlide(1), 5000);
-
-    /* ── 유관기관 무한 슬라이드 */
-    (function () {
-      const track = document.getElementById('relatedTrack');
-      if (!track) return;
-      track.innerHTML += track.innerHTML;   // 복제
-      let pos = 0;
-      const speed = 0.5;
-      let paused = false;
-      track.parentElement.addEventListener('mouseenter', () => paused = true);
-      track.parentElement.addEventListener('mouseleave', () => paused = false);
-      function animate() {
-        if (!paused) {
-          pos += speed;
-          if (pos >= track.scrollWidth / 2) pos = 0;
-          track.style.transform = `translateX(-${pos}px)`;
-        }
-        requestAnimationFrame(animate);
-      }
-      animate();
-    })();
 
   </script>
 </body>

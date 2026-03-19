@@ -690,6 +690,10 @@ const NoticeCtrl = {
             <div class="cd-actions">
               <button class="btn btn-primary btn-sm cd-btn-list"
                       onclick="location.href='notice-list.html'">목록</button>
+              ${App.user?.role === 'admin' ? `<div class="cd-actions-right">
+                <button class="btn btn-danger btn-sm"
+                        onclick="App.deletePost(${item.id},[NOTICE_DATA.pinned,NOTICE_DATA.normals],'notice-list.html')">삭제</button>
+              </div>` : ''}
             </div>
           </div>`;
     },
@@ -746,7 +750,7 @@ const FreeCtrl = {
               <span class="cd-nav-title">${prev.title}</span>
             </div>` : ''}
           </div>` : '';
-        const isAuthor = App.user?.name === item.author;
+        const canMod = App.canModify(item);
         el.innerHTML = `
           <div class="cd-wrap">
             <div class="cd-head">
@@ -766,8 +770,12 @@ const FreeCtrl = {
             <div class="cd-actions">
               <button class="btn btn-primary btn-sm cd-btn-list"
                       onclick="location.href='free.html'">목록</button>
-              ${isAuthor ? `<button class="btn btn-gray btn-sm"
-                      onclick="location.href='free-write.html?edit=${item.id}'">수정</button>` : ''}
+              ${canMod ? `<div class="cd-actions-right">
+                <button class="btn btn-gray btn-sm"
+                        onclick="location.href='free-write.html?edit=${item.id}'">수정</button>
+                <button class="btn btn-danger btn-sm"
+                        onclick="App.deletePost(${item.id},[FREE_DATA.pinned,FREE_DATA.normals],'free.html')">삭제</button>
+              </div>` : ''}
             </div>
           </div>`;
     },
@@ -926,6 +934,7 @@ const JobCtrl = {
               <span class="cd-nav-title">${prev.title}</span>
             </div>` : ''}
           </div>` : '';
+        const canMod = App.canModify(item);
         el.innerHTML = `
           <div class="cd-wrap">
             <div class="cd-head">
@@ -946,6 +955,12 @@ const JobCtrl = {
             <div class="cd-actions">
               <button class="btn btn-primary btn-sm cd-btn-list"
                       onclick="location.href='job.html'">목록</button>
+              ${canMod ? `<div class="cd-actions-right">
+                <button class="btn btn-gray btn-sm"
+                        onclick="location.href='job-write.html?edit=${item.id}'">수정</button>
+                <button class="btn btn-danger btn-sm"
+                        onclick="App.deletePost(${item.id},[JOB_DATA.pinned,JOB_DATA.normals],'job.html')">삭제</button>
+              </div>` : ''}
             </div>
           </div>`;
     },

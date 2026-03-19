@@ -157,6 +157,36 @@ const App = {
     return new URLSearchParams(location.search).get(key);
   },
 
+  /* ── 게시물 수정·삭제 권한 체크 (CLAUDE.md 2026-03-19 정책)
+   *    관리자: 전체 게시판 모든 글
+   *    작성자 본인: 자신이 작성한 글만
+   *    실제 서버 환경에서는 item.authorId === App.user.id 로 비교
+   */
+  canModify(item) {
+    if (!App.user?.isLoggedIn) return false;
+    if (App.user.role === 'admin') return true;
+    return App.user.name === (item.author || '');
+  },
+
+  /* ── 게시물 소프트 삭제
+   *    @param {string|number} id       - 삭제할 게시물 id
+   *    @param {Array|Array[]} arrays   - 탐색할 데이터 배열 (단일 또는 배열의 배열)
+   *    @param {string}        listUrl  - 삭제 후 이동할 목록 URL
+   */
+  deletePost(id, arrays, listUrl) {
+    if (!confirm('게시물을 삭제하시겠습니까?\n삭제된 게시물은 복구되지 않습니다.')) return;
+    const targets = (Array.isArray(arrays[0]) ? arrays : [arrays]);
+    for (const arr of targets) {
+      const idx = arr.findIndex(d => String(d.id) === String(id));
+      if (idx !== -1) {
+        arr[idx].deleted_at = new Date().toISOString(); /* 소프트 삭제 */
+        break;
+      }
+    }
+    App.toast('게시물이 삭제되었습니다.', 'success');
+    setTimeout(() => { location.href = listUrl; }, 700);
+  },
+
   /* ── 글자 크기 조절 */
   fontSize: {
     _step: 0,          // 현재 단계 (-2 ~ +3)
