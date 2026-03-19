@@ -90,7 +90,7 @@ const NAV_DATA = [
         label: '회원아카데미', href: 'member/competency.html',
         children: [
           { label: '특강', href: 'member/competency.html' },
-          { label: '강좌', href: 'member/competency.html?tab=course' },
+          { label: '강좌', href: 'member/academy-course.html' },
           { label: '멘토링 숲학교', href: 'member/mentoring.html' },
         ],
       },

@@ -109,8 +109,8 @@
         </a>
       </div>
 
-      <!-- ④ 게시판 3개 + 캘린더 (4열 균등) -->
-      <div class="home-board-grid section">
+      <!-- ④ 게시판 + 캘린더 (2열 균등) -->
+      <div class="home-board-grid section" style="grid-template-columns: 1fr 1fr;">
 
         <div class="card">
           <div class="card-header">
@@ -118,22 +118,6 @@
             <a href="community/notice-list.html" class="btn btn-outline btn-xs">전체</a>
           </div>
           <div id="noticeList"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">동아리단 활동</span>
-            <a href="member/club.html" class="btn btn-outline btn-xs">전체</a>
-          </div>
-          <div id="clubList"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">사회공헌단 활동</span>
-            <a href="member/sagongdan.html" class="btn btn-outline btn-xs">전체</a>
-          </div>
-          <div id="socialList"></div>
         </div>
 
         <div class="card" style="padding:0;overflow:hidden">
@@ -149,15 +133,9 @@
           <div class="cal-grid" id="miniCal"></div>
           <div class="cal-schedule">
             <div class="cal-schedule-title"> 다가올 일정 3 건</div>
-            <div class="cal-schedule-item">
-              03.15 전문가과정 접수 마감
-            </div>
-            <div class="cal-schedule-item">
-              03.20 동아리 정기모임
-            </div>
-            <div class="cal-schedule-item">
-              03.28 사공단 봉사활동
-            </div>
+            <div class="cal-schedule-item">03.15 전문가과정 접수 마감</div>
+            <div class="cal-schedule-item">03.20 동아리 정기모임</div>
+            <div class="cal-schedule-item">03.28 사공단 봉사활동</div>
           </div>
         </div>
 
@@ -185,20 +163,6 @@
       { n: 2, t: '홈페이지 개편 작업 예고', d: '2026.02.15' },
       { n: 1, t: '2025년 우수회원 표창 결과', d: '2026.02.10' },
     ];
-    const CLUBS = [
-      { n: 5, t: '[숲사랑단] 3월 정기모임 후기', d: '2026.03.07' },
-      { n: 4, t: '[초록나무] 봄맞이 탐방 활동', d: '2026.03.05' },
-      { n: 3, t: '[산들바람] 2월 활동 정리', d: '2026.03.01' },
-      { n: 2, t: '[숲사랑단] 겨울숲 사진전', d: '2026.02.22' },
-      { n: 1, t: '[초록나무] 신입회원 환영모임', d: '2026.02.18' },
-    ];
-    const SOCIAL = [
-      { n: 5, t: '도봉구 숲 정화 봉사 완료', d: '2026.03.08' },
-      { n: 4, t: '3월 초등학교 숲 체험 교육', d: '2026.03.03' },
-      { n: 3, t: '다문화가족 숲 힐링 프로그램', d: '2026.02.25' },
-      { n: 2, t: '노인복지관 자연치유 특강', d: '2026.02.17' },
-      { n: 1, t: '장애인시설 숲 나들이 봉사', d: '2026.02.10' },
-    ];
 
     function renderBoard(data, id) {
       document.getElementById(id).innerHTML = data.map(r => `
@@ -209,8 +173,6 @@
         </div>`).join('');
     }
     renderBoard(NOTICES, 'noticeList');
-    renderBoard(CLUBS, 'clubList');
-    renderBoard(SOCIAL, 'socialList');
 
     /* ── 미니캘린더 (동적 날짜 기반) */
     (function () {

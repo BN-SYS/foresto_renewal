@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>회원아카데미 특강 상세 | 한국숲해설가협회</title>
+  <title>회원아카데미 강좌 상세 | 한국숲해설가협회</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/common.css">
   <link rel="stylesheet" href="../assets/css/components.css">
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="../assets/css/pages/member.css">
 </head>
 
-<body data-page="competency-detail">
+<body data-page="academy-course-detail">
 
   <div id="hdr"></div>
 
@@ -30,7 +30,7 @@
     <div id="lnb"></div>
     <main class="sub-content">
       <div class="content-wrap">
-        <div id="competencyDetail">
+        <div id="academyCourseDetail">
           <div style="text-align:center;padding:48px;color:var(--gray-mid)">불러오는 중...</div>
         </div>
       </div>
@@ -46,17 +46,15 @@
   <script>
     document.getElementById('hdr').innerHTML = Header.render('회원활동', '../');
     document.getElementById('ftr').innerHTML = Footer.render('../');
-    document.getElementById('bc').innerHTML  = LNB.breadcrumb('../', 'member/competency.html');
-    document.getElementById('lnb').innerHTML = LNB.render('../', 'member/competency.html');
+    document.getElementById('bc').innerHTML  = LNB.breadcrumb('../', 'member/academy-course.html');
+    document.getElementById('lnb').innerHTML = LNB.render('../', 'member/academy-course.html');
 
-    /* 상세 페이지 단독 진입 시 _ctrl 초기화 */
     if (!window._ctrl) {
-      const _pool = ALL_COURSES_RAW.filter(c => c.type === '역량강화' || c.type === '직무교육');
-      window._ctrl = new CourseListController('역량강화', '', '', '', 'competency-detail.html');
+      const _pool = ALL_COURSES_RAW.filter(c => c.type === '회원강좌');
+      window._ctrl = new CourseListController('회원강좌', '', '', '', 'academy-course-detail.html');
       window._ctrl.courses  = _pool;
       window._ctrl.filtered = [..._pool];
     }
-    /* renderDetail() 은 member.js DOMContentLoaded initMap 에서 자동 호출됨 */
   </script>
 </body>
 

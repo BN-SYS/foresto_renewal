@@ -529,6 +529,109 @@ const CompetencyCtrl = {
 
 
 /* ══════════════════════════════════════════════
+   2-B. 강좌 상세 공통 렌더러 (academy-course-detail / mentoring-course-detail 공유)
+══════════════════════════════════════════════ */
+function renderCourseDetail(containerId, types, detailPage, listPage) {
+  const id    = App.getParam('id');
+  const _pool = (window.ALL_COURSES_RAW || []).filter(c => types.includes(c.type));
+  const item  = _pool.find(d => String(d.id) === String(id));
+  const el    = document.getElementById(containerId);
+  if (!el) return;
+  if (!item) {
+    el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--gray-mid)">게시물을 찾을 수 없습니다.</div>`;
+    return;
+  }
+
+  const SM = {
+    open:   { label: '접수중',   cls: 'open'   },
+    ready:  { label: '준비중',   cls: 'ready'  },
+    closed: { label: '접수마감', cls: 'closed' },
+    applied:{ label: '신청완료', cls: 'applied'},
+  };
+  const sm = SM[item.status] || { label: item.status, cls: 'closed' };
+
+  const atts = item.attachments || [];
+  const attHtml = atts.length
+    ? `<div class="cd-attach">
+         ${atts.map(a => `
+           <a href="#" class="cd-attach-item"
+              onclick="App.toast('첨부파일 다운로드 — 실제 구현 시 서버 연동 예정', 'info');return false;">
+             <svg class="cd-attach-icon" viewBox="0 0 24 24" fill="none" width="15" height="15">
+               <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.41 17.41a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+             </svg>
+             <span>${a.name}</span><span class="cd-attach-size">(${a.size})</span>
+           </a>`).join('')}
+       </div>` : '';
+
+  const isApplied = App.getParam('applied') === '1';
+  let applyBtn;
+  if (isApplied && item.status === 'open') {
+    applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>접수완료</button>
+                <button class="btn btn-danger btn-sm cd-btn-cancel"
+                        onclick="App.toast('신청이 취소되었습니다. (프로토타입)', 'info')">취소하기</button>`;
+  } else if (item.status === 'open') {
+    applyBtn = `<button class="btn btn-dark btn-sm cd-btn-apply"
+                        onclick="window._ctrl && window._ctrl.openApply(${item.id})">접수하기</button>`;
+  } else {
+    applyBtn = `<button class="btn btn-gray btn-sm cd-btn-apply" disabled>${sm.label}</button>`;
+  }
+
+  const idx  = _pool.findIndex(d => d.id === item.id);
+  const next = _pool[idx - 1];
+  const prev = _pool[idx + 1];
+  const navHtml = (next || prev) ? `
+    <div class="cd-nav">
+      ${next ? `<div class="cd-nav-item" onclick="location.href='${detailPage}?id=${next.id}'">
+        <span class="cd-nav-label">다음글</span><span class="cd-nav-title">${next.title}</span>
+      </div>` : ''}
+      ${prev ? `<div class="cd-nav-item" onclick="location.href='${detailPage}?id=${prev.id}'">
+        <span class="cd-nav-label">이전글</span><span class="cd-nav-title">${prev.title}</span>
+      </div>` : ''}
+    </div>` : '';
+
+  el.innerHTML = `
+    <div class="cd-wrap">
+      <div class="cd-head">
+        <div class="cd-head-left">
+          <h2 class="cd-title">${item.title}</h2>
+          <span class="cd-status-badge cd-status-${sm.cls}">${sm.label}</span>
+        </div>
+        <span class="cd-date">${item.date}</span>
+      </div>
+      <hr class="cd-divider">
+      ${attHtml}${attHtml ? '<hr class="cd-divider">' : ''}
+      <div class="cd-body">
+        <div class="cd-guide">${item.guide || ''}</div>
+        <div class="cd-map-placeholder">
+          <span>지도 / 이미지 영역 (실제 구현 시 삽입)</span>
+        </div>
+      </div>
+      ${navHtml}
+      <div class="cd-actions">
+        <button class="btn btn-primary btn-sm cd-btn-list"
+                onclick="location.href='${listPage}'">목록</button>
+        <div class="cd-actions-right">${applyBtn}</div>
+      </div>
+    </div>`;
+}
+
+/* ── 강좌(academy-course) 컨트롤러 */
+const AcademyCourseCtrl = {
+  renderDetail() {
+    renderCourseDetail('academyCourseDetail', ['회원강좌'], 'academy-course-detail.html', 'academy-course.html');
+  },
+};
+
+/* ── 멘토링 숲학교 강좌 컨트롤러 */
+const MentoringCourseCtrl = {
+  renderDetail() {
+    renderCourseDetail('mentoringCourseDetail', ['멘토링'], 'mentoring-detail.html', 'mentoring.html');
+  },
+};
+
+
+/* ══════════════════════════════════════════════
    3. 멘토링 게시판 컨트롤러
 ══════════════════════════════════════════════ */
 const MentoringCtrl = {
@@ -1055,17 +1158,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const page = document.body.dataset.page;
 
   const initMap = {
-    'competency':        () => CompetencyCtrl.init(),
-    'competency-detail': () => CompetencyCtrl.renderDetail(),
-    'mentoring':         () => MentoringCtrl.init(),
-    'mentoring-detail':  () => MentoringCtrl.renderDetail(),
-    'recruit':           () => RecruitCtrl.init(),
-    'recruit-detail':    () => RecruitCtrl.renderDetail(),
-    'instructor':        () => InstructorCtrl.init(),
-    'sagongdan':         () => SagongdanCtrl.init(),
-    'club':              () => ClubCtrl.init(),
-    'qna':               () => QnaCtrl.init(),
-    'qna-detail':        () => QnaCtrl.renderDetail(),
+    'competency':               () => CompetencyCtrl.init(),
+    'competency-detail':        () => CompetencyCtrl.renderDetail(),
+    'academy-course-detail':    () => AcademyCourseCtrl.renderDetail(),
+    'mentoring-course-detail':  () => MentoringCourseCtrl.renderDetail(),
+    'mentoring':                () => MentoringCtrl.init(),
+    'mentoring-detail':         () => MentoringCtrl.renderDetail(),
+    'recruit':                  () => RecruitCtrl.init(),
+    'recruit-detail':           () => RecruitCtrl.renderDetail(),
+    'instructor':               () => InstructorCtrl.init(),
+    'sagongdan':                () => SagongdanCtrl.init(),
+    'club':                     () => ClubCtrl.init(),
+    'qna':                      () => QnaCtrl.init(),
+    'qna-detail':               () => QnaCtrl.renderDetail(),
   };
 
   if (page && initMap[page]) {
