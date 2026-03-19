@@ -50,7 +50,7 @@
   border-left: none;
   border-right: none;
   border-top: none;
-  overflow: visible;
+  overflow-y: hidden; /* 탭 상하 스크롤 방지 */
   position: static;
   top: auto;
 }
@@ -147,9 +147,11 @@
   .lnb-items {
     justify-content: flex-start;
     overflow-x: auto;
+    overflow-y: hidden;       /* 상하 스크롤 완전 차단 */
     flex-wrap: nowrap;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;      /* 좌우 스와이프만 허용 */
     padding: 0 16px;
   }
   .lnb-items::-webkit-scrollbar { display: none; }

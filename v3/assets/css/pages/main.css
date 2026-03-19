@@ -650,8 +650,18 @@
     height: 100px;
   }
 
+  /* inline style(1fr 1fr) 무력화 → 단일 컬럼으로 적층 */
   .home-board-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+  }
+
+  /* 공지사항: 모바일에서도 전체(7개) 표시 — 제한 없음 */
+
+  /* 협회 일정: 모바일에서도 전체 표시 — 제한 없음 */
+
+  /* 미니 캘린더 모바일 가로 스크롤 */
+  .cal-grid {
+    font-size: var(--text-xs);
   }
 
   .hero-slider {

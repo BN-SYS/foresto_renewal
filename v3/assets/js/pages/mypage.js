@@ -98,13 +98,13 @@ const MyPage = {
       tbody.innerHTML = slice.map((e, i) => {
         const s = this.EDU_STATUS[e.status] || { label: e.status, cls: '' };
         return `<tr>
-          <td class="center">${(this.eduPage - 1) * this.EDU_PAGE_SZ + i + 1}</td>
-          <td>${e.title}</td>
-          <td class="center">${e.type}</td>
-          <td class="center">${e.date}</td>
-          <td class="center">${e.hours}시간</td>
-          <td class="center"><span class="${s.cls}">${s.label}</span></td>
-          <td class="center">${e.cert
+          <td class="col-num center">${(this.eduPage - 1) * this.EDU_PAGE_SZ + i + 1}</td>
+          <td class="td-title">${e.title}</td>
+          <td class="col-extra center">${e.type}</td>
+          <td class="col-date center">${e.date}</td>
+          <td class="col-extra center">${e.hours}시간</td>
+          <td class="col-status center"><span class="${s.cls}">${s.label}</span></td>
+          <td class="col-cert center">${e.cert
             ? `<button class="btn btn-outline btn-xs" onclick="MyPage.downloadCert(${e.id})">PDF</button>`
             : '-'}</td>
         </tr>`;

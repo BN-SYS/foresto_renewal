@@ -145,6 +145,33 @@
   .edu-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* ── 모바일 교육이수 테이블 반응형 (≤ 768px) */
+@media (max-width: 768px) {
+  /* 테이블 전체 스크롤 컨테이너 해제 → 카드 레이아웃으로 전환 */
+  .my-panel .table-wrap {
+    overflow-x: visible;
+  }
+
+  /* 테이블 min-width 해제 */
+  .my-panel .board-table {
+    min-width: 0 !important;
+  }
+
+  /* col-cert: 수료증 PDF 버튼 — 2열 2행에 배치 */
+  .my-panel .board-table tbody td.col-cert {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-column: 2;
+    grid-row: 2;
+    padding-left: 10px;
+  }
+
+  /* 사이드바 nav 모바일: 아바타 영역 콤팩트 */
+  .my-avatar { width: 52px; height: 52px; font-size: 22px; }
+  .my-name { font-size: var(--text-md); }
+}
+
 /* ── 탈퇴 탭 강조 */
 .side-nav a.nav-danger { color: var(--danger); }
 .side-nav a.nav-danger:hover,
