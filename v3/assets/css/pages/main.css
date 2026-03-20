@@ -46,7 +46,7 @@
   width: 100%;
   max-width: 1800px;
   margin: 0 auto;
-  padding: 50px 0 40px 0;
+  padding: 50px 60px 40px;
   box-sizing: border-box;
 }
 
@@ -79,20 +79,22 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--green-main);
-  border: none;
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, .75);
   color: #fff;
-  padding: 11px 24px;
-  border-radius: var(--radius);
-  font-size: var(--text-lg);
-  font-weight: 700;
+  padding: 10px 24px;
+  border-radius: var(--radius);   /* 부드러운 라운드 */
+  font-size: var(--text-md);
+  font-weight: 600;
   text-decoration: none;
   transition: var(--trans);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(2px);
 }
 
 .hero-slide-btn:hover {
-  background: var(--green-dark);
+  background: rgba(255, 255, 255, .18);
+  border-color: #fff;
   transform: translateY(-1px);
 }
 
@@ -134,9 +136,14 @@
 
 .hero-dots {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  /* 버튼 left 정렬:
+     hero-slide-inner 는 max-width:var(--container-max) + margin:0 auto 로 중앙 정렬됨
+     → 뷰포트 > container 일 때: (슬라이더폭 - 1800px)/2 + inner padding(60px)
+     → 뷰포트 < container 일 때: 0px + 60px (max 로 음수 방지) */
+  left: calc(max((100% - var(--container-max)) / 2, 0px) + 60px);
+  bottom: 40px;          /* JS(positionHeroDots)가 동적으로 갱신 — 이 값은 초기 fallback */
+  top: auto;
+  transform: none;
   z-index: 10;
   display: flex;
   gap: 6px;
@@ -164,20 +171,25 @@
 /* ── ② 협회 소개 한줄 */
 .assoc-intro {
   background: var(--white);
-  border-bottom: 1px solid var(--gray-light);
-  padding: 16px 0;
+  padding: 24px 0 20px;
+}
+
+.assoc-intro-box {
+  background: var(--gray-bg);        /* 연한 회색 배경 */
+  border-radius: var(--radius-lg);   /* 부드러운 라운드 */
+  padding: 18px 32px;
+  /* text-align: center; */
 }
 
 .assoc-intro p {
   font-size: var(--text-lg);
   color: var(--gray-dark);
-  text-align: center;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .assoc-intro em {
   font-style: normal;
-  color: var(--green-main);
+  color: var(--green-light);
   font-weight: 700;
 }
 
@@ -250,32 +262,95 @@
 }
 
 
-/* ── ④ 게시판 3개 + 캘린더 (4열 균등) */
+/* ── 카드 헤더 ">" 더보기 화살표 */
+.card-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  color: var(--green-dark);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--trans);
+  line-height: 1;
+}
+.card-more:hover {
+  background: var(--green-main);
+  color: #fff;
+}
+
+/* ── ④ 공지사항 + 협회일정 (섹션 형태, 동일 세로높이) */
 .home-board-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  align-items: stretch;   /* 모든 카드 높이 동일하게 */
-}
-/* 그리드 아이템 기본 min-width:auto 오버플로우 방지 */
-.home-board-grid > .card {
-  min-width: 0;
-  overflow: hidden;
+  gap: 40px;
+  align-items: stretch;   /* 두 섹션 높이 동일하게 */
 }
 
-/* 캘린더 카드: 내부를 flex column으로 채움 */
-.home-board-grid .card:last-child {
+/* home-section: 섹션 제목 영역 — 배경 없음, flex column 구조만 */
+.home-section {
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  padding: 22px 0;
 }
 
-/* cal-schedule이 남은 공간을 채우도록 */
-.home-board-grid .card:last-child .cal-schedule {
-  flex: 1;
+/* 섹션 헤더: 하단 진한 녹색 보더 */
+.home-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--green-dark);
+  margin-bottom: 10px;
+  flex-shrink: 0;
 }
-/* 게시판 카드 타이틀 크기 */
+
+.home-section-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--gray-dark);
+}
+
+/* 공지사항 리스트: 녹색 배경 + 라운드 박스 */
+.home-section #noticeList {
+  flex: 1;
+  background: var(--green-pale);
+  border-radius: var(--radius-lg);
+  padding: 4px 16px;
+}
+
+/* 캘린더 섹션: 내부도 flex column */
+.home-section.cal-section {
+  /* flex column 이미 적용됨 */
+}
+
+/* 미니캘린더 래퍼: 라운드 + 오버플로우 */
+.mini-cal-wrap {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.07);
+  box-shadow: var(--shadow);
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+/* cal-schedule: 녹색 배경 + 라운드 박스 */
+.home-section.cal-section .cal-schedule {
+  flex: 1;
+  padding: 6px 16px 10px;
+  background: var(--green-pale);
+  border-radius: var(--radius-lg);
+  margin-top: 10px;
+}
+
+/* 게시판 카드 타이틀 크기 (기존 card-title 호환) */
 .card-title {
-  font-size: var(--text-xl);   /* 원하는 크기로 변경 */
+  font-size: var(--text-xl);
   font-weight: 700;
 }
 
@@ -284,8 +359,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 0;
-  border-bottom: 2px solid var(--gray-light);
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .07);
 }
 
 .board-row:last-child {
@@ -327,7 +402,7 @@
 
 /* ── 캘린더 일정 목록 */
 .cal-schedule {
-  padding: 12px 16px;
+  padding: 14px 4px 0;
   font-size: var(--text-md);
   color: var(--gray-mid);
 }
@@ -335,14 +410,26 @@
 .cal-schedule-title {
   font-weight: 700;
   color: var(--green-dark);
-  margin-bottom: 6px;
+  margin-bottom: 10px;
   font-size: var(--text-md);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .cal-schedule-item {
-  padding: 8px 0;
+  padding: 9px 0;
   border-bottom: 1px solid var(--gray-light);
   font-size: var(--text-md);
+  color: var(--gray-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: var(--trans);
+}
+.cal-schedule-item:hover {
+  color: var(--green-main);
 }
 
 .cal-schedule-item:last-child {
@@ -474,20 +561,30 @@
 .cal-nav {
   background: var(--green-dark);
   color: #fff;
-  padding: 11px 16px;
+  padding: 10px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: 700;
-  font-size: var(--text-base);
+  font-size: var(--text-md);
 }
 
 .cal-nav button {
   background: none;
   border: none;
   color: #fff;
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--trans);
+}
+.cal-nav button:hover {
+  background: rgba(255,255,255,.2);
 }
 
 .cal-grid {
@@ -531,7 +628,7 @@
 }
 
 .cal-cell.today {
-  background: var(--green-main);
+  background: var(--green-dark);
   color: #fff;
   border-radius: 10%;
   font-weight: 700;
@@ -552,7 +649,7 @@
   bottom: 1px;
   left: 50%;
   transform: translateX(-50%);
-  color: var(--green-main);
+  color: var(--green-light);
   font-size: var(--text-2xs);
   line-height: 1;
 }

@@ -41,16 +41,18 @@
   <div class="hero-slider" id="heroSlider">
     <div class="hero-slide active" style="background-image:url('assets/image/banner/banner1.jpg')">
       <div class="hero-slide-inner">
-        <h2 class="hero-slide-title">숲 해설가가 되고 싶습니다</h2>
+        <p class="hero-slide-tag">[ 산림청 인증 숲해설가 양성기관 ]</p>
+        <h2 class="hero-slide-title">"숲 해설가가 되고 싶습니다"</h2>
         <p class="hero-slide-desc">자연과 인간의 통역자, 숲해설가가 되는 방법을 안내합니다.</p>
-        <a href="education/course-list.html" class="hero-slide-btn">자세히 <span>›</span></a>
+        <a href="education/course-list.html" class="hero-slide-btn">더보기 <span>></span></a>
       </div>
     </div>
     <div class="hero-slide" style="background-image:url('assets/image/banner/banner2.jpg')">
       <div class="hero-slide-inner">
+        <p class="hero-slide-tag">[ 산림청 인증 숲해설가 양성기관 ]</p>
         <h2 class="hero-slide-title">숲과 자연이 주는 이야기를<br>함께 나누는 사람들</h2>
         <p class="hero-slide-desc">한국숲해설가협회는 숲과 사람을 잇는 전문 해설가를 양성합니다.</p>
-        <a href="education/course-list.html" class="hero-slide-btn">자세히 <span>›</span></a>
+        <a href="education/course-list.html" class="hero-slide-btn">더보기 <span>></span></a>
       </div>
     </div>
     <button class="hero-arrow hero-prev" onclick="heroSlide(-1)">&#10094;</button>
@@ -61,7 +63,9 @@
   <!-- ② 협회 소개 한줄 -->
   <div class="assoc-intro">
     <div class="container">
-      <p>(사)한국숲해설가협회는 <em>"숲이 사람에게 사람이 숲에게"</em> 라는 숲과 사람이 동행하는 가치를 제시하고 있습니다.</p>
+      <div class="assoc-intro-box">
+        <p>(사)한국숲해설가협회는 <em>"숲이 사람에게 사람이 숲에게"</em> 라는 숲과 사람이 동행하는 가치를 제시하고 있습니다.</p>
+      </div>
     </div>
   </div>
 
@@ -109,33 +113,37 @@
         </a>
       </div>
 
-      <!-- ④ 게시판 + 캘린더 (2열 균등) -->
+      <!-- ④ 공지사항 + 협회일정 (섹션 형태, 카드 chrome 없음) -->
       <div class="home-board-grid section" style="grid-template-columns: 1fr 1fr;">
 
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">공지사항</span>
-            <a href="community/notice-list.html" class="btn btn-outline btn-xs">전체</a>
+        <!-- 공지사항 섹션 -->
+        <div class="home-section">
+          <div class="home-section-head">
+            <span class="home-section-title">공지사항</span>
+            <a href="community/notice-list.html" class="card-more" aria-label="공지사항 전체보기">></a>
           </div>
           <div id="noticeList"></div>
         </div>
 
-        <div class="card" style="padding:0;overflow:hidden">
-          <div class="card-header" style="padding:15px 19px;margin:0;border-radius:0">
-            <span class="card-title">협회 일정</span>
-            <a href="community/calendar.html" class="btn btn-outline btn-xs">전체</a>
+        <!-- 협회 일정 섹션 -->
+        <div class="home-section cal-section">
+          <div class="home-section-head">
+            <span class="home-section-title">협회 일정</span>
+            <a href="community/calendar.html" class="card-more" aria-label="협회 일정 전체보기">></a>
           </div>
-          <div class="cal-nav">
-            <button onclick="App.toast('이전 달')">‹</button>
-            <span id="miniCalTitle"></span>
-            <button onclick="App.toast('다음 달')">›</button>
+          <!-- 라운드 적용 캘린더 래퍼 -->
+          <div class="mini-cal-wrap">
+            <div class="cal-nav">
+              <button onclick="App.toast('이전 달')">‹</button>
+              <span id="miniCalTitle"></span>
+              <button onclick="App.toast('다음 달')">›</button>
+            </div>
+            <div class="cal-grid" id="miniCal"></div>
           </div>
-          <div class="cal-grid" id="miniCal"></div>
           <div class="cal-schedule">
-            <div class="cal-schedule-title"> 다가올 일정 3 건</div>
-            <div class="cal-schedule-item">03.15 전문가과정 접수 마감</div>
-            <div class="cal-schedule-item">03.20 동아리 정기모임</div>
-            <div class="cal-schedule-item">03.28 사공단 봉사활동</div>
+            <div class="cal-schedule-item" onclick="App.toast('전문가과정 접수 마감')">03.15 전문가과정 접수 마감</div>
+            <div class="cal-schedule-item" onclick="App.toast('동아리 정기모임')">03.20 동아리 정기모임</div>
+            <div class="cal-schedule-item" onclick="App.toast('사공단 봉사활동')">03.28 사공단 봉사활동</div>
           </div>
         </div>
 
@@ -169,7 +177,6 @@
     function renderBoard(data, id) {
       document.getElementById(id).innerHTML = data.map(r => `
         <div class="board-row">
-          <span class="board-num">${r.n}</span>
           <span class="board-title" onclick="App.toast('${r.t}')">${r.t}</span>
           <span class="board-date">${r.d}</span>
         </div>`).join('');
@@ -240,15 +247,36 @@
       _dotsWrap.appendChild(d);
     });
 
+    function positionHeroDots() {
+      /* 활성 슬라이드의 버튼 실제 위치를 측정해 dots를 버튼 바로 아래 배치
+         — 1줄/2줄 타이틀 등 콘텐츠 길이 변화에도 겹침 없이 동작 */
+      const activeSlide = _slides[_slideIdx];
+      const btn = activeSlide.querySelector('.hero-slide-btn');
+      const slider = document.getElementById('heroSlider');
+      if (!btn || !slider) return;
+      const btnRect = btn.getBoundingClientRect();
+      const sliderRect = slider.getBoundingClientRect();
+      const GAP = 12;   /* 버튼 하단 ~ dots 상단 간격 (px) */
+      const DOTS_H = 8; /* .hero-dot 높이 */
+      /* bottom = 슬라이더 하단 ~ dots 하단 거리 */
+      const bottomVal = sliderRect.bottom - btnRect.bottom - GAP - DOTS_H;
+      _dotsWrap.style.bottom = Math.max(bottomVal, 16) + 'px';
+    }
+
     function goSlide(idx) {
       _slides[_slideIdx].classList.remove('active');
       _dotsWrap.children[_slideIdx].classList.remove('active');
       _slideIdx = (idx + _slides.length) % _slides.length;
       _slides[_slideIdx].classList.add('active');
       _dotsWrap.children[_slideIdx].classList.add('active');
+      positionHeroDots();
     }
     function heroSlide(dir) { goSlide(_slideIdx + dir); }
     setInterval(() => heroSlide(1), 5000);
+
+    /* 초기 위치 설정 + 리사이즈 대응 */
+    positionHeroDots();
+    window.addEventListener('resize', positionHeroDots);
 
   </script>
 </body>

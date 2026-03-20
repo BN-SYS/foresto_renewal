@@ -13,10 +13,10 @@ html[data-font="lg"] { font-size: 18px; }
 
 :root {
   /* 색상 */
-  --green-dark: #1d4b36;
+  --green-dark: #20281A;
   --green-main: #05803e;
-  --green-light: #5c977a;
-  --green-pale: #d8f3dc;
+  --green-light: #508829;
+  --green-pale: #F1F5EE;
   --gray-dark: #2d3436;
   --gray-mid: #636e72;
   --gray-light: #dfe6e9;
@@ -56,7 +56,7 @@ html[data-font="lg"] { font-size: 18px; }
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, .16);
   --trans: all .22s ease;
 
-  /* 헤더 높이 */
-  --pre-header-h: 32px;                          /* row1: 사이트맵 + 글자크기 고정 row */
-  --header-h: calc(var(--pre-header-h) + 68px);  /* = 100px (row1 + row2) */
+  /* 헤더 높이 — 피그마 스펙: 유틸바 40px + 메인 nav 80px = 120px */
+  --pre-header-h: 40px;                          /* row1: 사이트맵 + 글자크기 고정 row */
+  --header-h: calc(var(--pre-header-h) + 80px);  /* = 120px (row1 + row2) */
 }

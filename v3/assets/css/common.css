@@ -13,27 +13,33 @@
 .section { padding: 48px 0; }
 
 /* ── 헤더 wrapper: 2-row (row1 고정 util + row2 메인 내비)
-   핵심: width:100% 명시 → position:sticky + display:flex 조합에서 width collapse 방지 */
+   position: fixed → 스크롤해도 항상 상단 고정
+   body에 padding-top: var(--header-h) 으로 콘텐츠 밀림 보정 */
 .site-header {
   background: var(--white);
-  position: sticky;
-  top: 0; z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
   box-shadow: var(--shadow);
-  height: var(--header-h);               /* --pre-header-h(32px) + 68px = 100px */
+  height: var(--header-h);
   border-radius: 0 0 var(--radius-xl) var(--radius-xl);
   display: flex;
   flex-direction: column;
-  width: 100%;                            /* ← 핵심 fix: sticky+flex 조합 width 고정 */
+}
+
+/* fixed 헤더 높이만큼 본문 상단 보정 */
+body {
+  padding-top: var(--header-h);
 }
 
 /* ── row 1: 사이트맵 + 글자크기 (px 단위 고정 → 폰트 크기 변경 시 위치 불변) */
 .header-util {
-  height: var(--pre-header-h);   /* 32px 고정 */
+  height: var(--pre-header-h);   /* 40px — 피그마 스펙 */
   flex-shrink: 0;
-  position: absolute;
-  top: 0;
-  right: 0;                     /* ← 핵심: 우측 정렬 */
-  width: 100%;                  /* 필요 시 유지 (내부 정렬용) */
+  width: 100%;
+  background: var(--green-dark); /* 진한 녹색 배경 */
 }
 
 .header-util-inner {
@@ -42,19 +48,20 @@
   justify-content: flex-end;
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 8px 24px;   /* 피그마: 상하 8px / 좌우는 container max-width 로 처리 */
   height: 100%;
-  gap: 6px;
+  gap: 8px;            /* 피그마: 간격 8px */
+  box-sizing: border-box;
 }
 /* 유틸 row 내 버튼: px 고정 크기 (rem 비사용 → 글자크기 조절 영향 없음) */
-.header-util .font-ctrl    { background: none; padding: 0; gap: 1px; }
-.header-util .font-btn     { width: 20px; height: 20px; font-size: 10px; }
-.header-util .sitemap-link { padding: 2px 8px; font-size: 11px; }
+.header-util .font-ctrl    { background: none; padding: 0; gap: 2px; }
+.header-util .font-btn     { width: 24px; height: 24px; font-size: 11px; }
+.header-util .sitemap-link { padding: 2px 10px; font-size: 12px; }
 .header-util .sitemap-link svg { width: 13px; height: 13px; }
 
 /* ── row 2: 로고 + 내비 + 인증 */
 .header-inner {
-  flex: 1;                               /* 남은 높이(68px) 모두 차지 */
+  flex: 1;                               /* 남은 높이(80px) 모두 차지 — 컨텐츠 상하 중앙 정렬 */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -132,7 +139,7 @@
   display: flex;
   align-items: center;
   gap: 2px;
-  background: var(--gray-bg);
+  background: transparent;
   border-radius: var(--radius);
   padding: 2px;
   flex-shrink: 0;
@@ -143,28 +150,37 @@
   background: none; border: none;
   border-radius: 6px;
   font-size: 12px; font-weight: 700;
-  color: var(--gray-mid);
+  color: rgba(255,255,255,.7);   /* 유틸바 다크그린 배경 위 흰색 */
   cursor: pointer;
   transition: var(--trans);
   font-family: inherit;
   line-height: 1;
 }
-.font-btn:hover { background: var(--green-pale); color: var(--green-dark); }
-.font-btn.active { background: var(--green-dark); color: #fff; }
+.font-btn:hover {
+  background: #fff;
+  color: var(--green-dark);
+}
+.font-btn.active {
+  background: #fff;               /* 흰 배경 + 진한녹색 텍스트 */
+  color: var(--green-dark);
+}
 
 /* ── 사이트맵 링크 (REQ-011) */
 .sitemap-link {
   display: flex; align-items: center; gap: 4px;
   padding: 6px 10px;
   border-radius: var(--radius);
-  color: var(--gray-mid);
+  color: rgba(255,255,255,.8);    /* 유틸바 다크그린 배경 위 흰색 */
   font-size: var(--text-xs);
   font-weight: 600;
   white-space: nowrap;
   text-decoration: none;
   transition: var(--trans);
 }
-.sitemap-link:hover { background: var(--green-pale); color: var(--green-dark); }
+.sitemap-link:hover {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+}
 .sitemap-label { font-size: 12px; }
 
 /* ── 모바일 햄버거 */
@@ -265,8 +281,9 @@
    푸터
    ══════════════════════════════════════════ */
 .site-footer {
-  background: var(--green-dark);
-  color: rgba(255,255,255,.75);
+  background: #f0f2f0;   /* 연한 회색 */
+  color: var(--gray-dark);
+  border-top: 1px solid var(--gray-light);
 }
 
 .footer-inner {
@@ -279,13 +296,13 @@
   margin: 0 auto;
 }
 
-/* 왼쪽 – 기관 정보 */
+/* 왼쪽 – 기관 정보 (row: 로고 | 텍스트) */
 .footer-info {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-size: var(--text-sm);
-  line-height: 1.7;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 28px;
+  flex: 1;
 }
 .footer-logo-text {
   font-size: var(--text-md);
@@ -294,32 +311,50 @@
   margin-bottom: 4px;
   display: block;
 }
-.footer-info p { color: rgba(255,255,255,.7); }
-.footer-info a { color: rgba(255,255,255,.7); text-decoration: none; }
-.footer-info a:hover { color: #fff; }
 
-/* 정책 링크 (왼쪽 하단) */
+/* 로고 오른쪽 텍스트 묶음 */
+.footer-info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  padding-top: 4px;
+}
+.footer-info-text p { color: var(--gray-mid); }
+.footer-info-text a { color: var(--gray-mid); text-decoration: none; }
+.footer-info-text a:hover { color: var(--green-dark); }
+
+/* 정책 링크 (footer-info-text 상단) */
 .footer-links {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
-  margin-top: 10px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gray-light);
 }
 .footer-links a {
   font-size: var(--text-sm);
-  color: rgba(255,255,255,.55);
+  color: var(--gray-dark);
+  font-weight: 600;
   text-decoration: none;
   transition: var(--trans);
 }
-.footer-links a:hover { color: #fff; }
+.footer-links a:hover { color: var(--green-dark); }
 
-/* 오른쪽 – SNS + 패밀리사이트 */
+/* 오른쪽 – SNS + 구홈피 + 패밀리사이트 (세로 배열) */
 .footer-right {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
   flex-shrink: 0;
+}
+.footer-right-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* SNS 아이콘 */
@@ -329,19 +364,19 @@
   width: 36px; height: 36px;
   border-radius: 50%;
   text-decoration: none;
-  color: #fff;
+  color: var(--gray-dark);
   transition: var(--trans);
   flex-shrink: 0;
 }
-.footer-sns-btn:hover { transform: translateY(-2px); opacity: .85; }
-.footer-sns-naver  { background: rgba(255,255,255,.2); }
-.footer-sns-yt     { background: rgba(255,255,255,.2); }
-.footer-sns-insta  { background: rgba(255,255,255,.2); }
+.footer-sns-btn:hover { transform: translateY(-2px); }
+.footer-sns-naver  { background: #e8f5e9; color: var(--green-dark); }
+.footer-sns-yt     { background: #ffebee; color: #c62828; }
+.footer-sns-insta  { background: #fce4ec; color: #ad1457; }
 
 /* 푸터 로고 이미지 */
 .footer-logo-img-wrap {
   display: inline-block;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   text-decoration: none;
   flex-shrink: 0;
 }
@@ -350,8 +385,7 @@
   width: auto;
   object-fit: contain;
   display: block;
-  /* 흰색 배경 이미지를 푸터 다크 배경에서 보이게: brightness 필터 */
-  filter: brightness(0) invert(1);
+  /* 라이트그레이 배경이므로 필터 제거 — 원본 컬러 로고 그대로 표시 */
   opacity: .9;
 }
 
@@ -359,18 +393,83 @@
 .footer-old-site {
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px;
-  background: rgba(255,255,255,.1);
-  border: 1px solid rgba(255,255,255,.25);
+  padding: 7px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--gray-light);
   border-radius: var(--radius);
-  color: rgba(255,255,255,.85);
+  color: var(--gray-dark);
   font-size: var(--text-sm);
   font-weight: 600;
   white-space: nowrap;
   text-decoration: none;
   transition: var(--trans);
 }
-.footer-old-site:hover { background: rgba(255,255,255,.2); color: #fff; }
+.footer-old-site:hover {
+  border-color: var(--green-main);
+  color: var(--green-dark);
+  background: var(--green-pale);
+}
+
+/* 패밀리사이트 드롭다운 */
+.footer-family {
+  position: relative;
+}
+.footer-family-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--gray-light);
+  border-radius: var(--radius);
+  color: var(--gray-dark);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--trans);
+  white-space: nowrap;
+  min-width: 140px;
+  justify-content: space-between;
+}
+.footer-family-btn:hover {
+  border-color: var(--green-main);
+  color: var(--green-dark);
+}
+.footer-family-btn .family-arrow {
+  font-size: 10px;
+  transition: transform .2s;
+}
+.footer-family.open .family-arrow {
+  transform: rotate(180deg);
+}
+.footer-family-list {
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  min-width: 160px;
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  z-index: 50;
+}
+.footer-family.open .footer-family-list { display: block; }
+.footer-family-list a {
+  display: block;
+  padding: 9px 16px;
+  font-size: var(--text-sm);
+  color: var(--gray-dark);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gray-light);
+  transition: var(--trans);
+}
+.footer-family-list a:last-child { border-bottom: none; }
+.footer-family-list a:hover {
+  background: var(--green-pale);
+  color: var(--green-dark);
+}
 
 /* 유관기관 슬라이드 */
 .footer-related {
@@ -435,16 +534,15 @@
    .org-band — footer .related-* 와 prefix 분리
 ───────────────────────────────────────────── */
 .org-band {
-  /* full-width로 두어야 overflow:hidden 클리핑이 정확히 작동 */
   width: 100%;
-  border-top: 1px solid rgba(255,255,255,.15);
+  border-top: 1px solid var(--gray-light);
   padding: 18px 0 16px;
-  overflow: hidden;   /* 스크롤 트랙 좌우 클리핑 */
+  overflow: hidden;
 }
 .org-band-label {
   font-size: 11px;
   font-weight: 600;
-  color: rgba(255,255,255,.6);
+  color: var(--gray-mid);
   text-align: center;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -469,11 +567,11 @@
   justify-content: center;
   width: 180px;
   padding: 8px 14px;
-  background: rgba(255,255,255,.92);
-  border: 1.5px solid rgba(255,255,255,.5);
+  background: var(--white);
+  border: 1.5px solid var(--gray-light);
   border-radius: 6px;
   text-decoration: none;
-  color: var(--green-dark, #2d6a4f);
+  color: var(--gray-dark);
   font-size: 13px;
   font-weight: 600;
   flex-shrink: 0;
@@ -482,14 +580,15 @@
   white-space: nowrap;
 }
 .org-band-card:hover {
-  background: #fff;
-  border-color: var(--green-main, #52b788);
+  background: var(--green-pale);
+  border-color: var(--green-main);
+  color: var(--green-dark);
 }
 .footer-copy {
-  border-top: 1px solid rgba(255,255,255,.1);
+  border-top: 1px solid var(--gray-light);
   padding: 14px 0;
   font-size: var(--text-xs);
-  color: rgba(255,255,255,.45);
+  color: var(--gray-mid);
   text-align: center;
 }
 
